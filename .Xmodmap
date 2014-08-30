@@ -1,0 +1,44 @@
+keycode 24         = colon           asterisk        1               NoSymbol
+keycode 25         = comma           less            2               exclam
+keycode 26         = period          greater         3               quotedbl
+keycode 27         = p               P               4               numbersign
+keycode 28         = y               Y               5               NoSymbol
+keycode 29         = f               F               6               NoSymbol
+keycode 30         = g               G               7               apostrophe
+keycode 31         = c               C               8               underscore
+keycode 32         = r               R               9               ampersand
+keycode 33         = l               L               0               NoSymbol
+keycode 34         = slash           question        NoSymbol        NoSymbol
+keycode 38         = a               A               NoSymbol        NoSymbol
+keycode 39         = o               O               Escape          asciicircum
+keycode 40         = e               E               Return          braceleft
+keycode 41         = u               U               Tab             parenleft
+keycode 42         = i               I               NoSymbol        bracketleft
+keycode 43         = d               D               NoSymbol        bracketright
+keycode 44         = h               H               BackSpace       parenright
+keycode 45         = t               T               Up              braceright
+keycode 46         = n               N               Delete          dollar
+keycode 47         = s               S               Zenkaku_Hankaku asciitilde
+keycode 48         = minus           equal           backslash       NoSymbol
+keycode 49         = Zenkaku_Hankaku Zenkaku_Hankaku Zenkaku_Hankaku Zenkaku_Hankaku
+keycode 52         = semicolon       plus            NoSymbol        NoSymbol
+keycode 53         = q               Q               NoSymbol        NoSymbol
+keycode 54         = j               J               NoSymbol        percent
+keycode 55         = k               K               NoSymbol        at
+keycode 56         = x               X               NoSymbol        NoSymbol
+keycode 57         = b               B               Home            bar
+keycode 58         = m               M               Left            grave
+keycode 59         = w               W               Down            NoSymbol
+keycode 60         = v               V               Right           NoSymbol
+keycode 61         = z               Z               End             NoSymbol
+keycode 66         = Control_L       Control_L       Control_L       Control_L
+keycode 100        = Mode_switch     Mode_switch     Mode_switch     Mode_switch
+keycode 101        = Super_L         Super_L         Super_L         Super_L
+keycode 102        = Shift_L         Shift_L         Shift_L         Shift_L
+
+clear Lock
+clear Mod4
+add Shift    = Shift_L
+add Control  = Control_L
+add Mod4     = Super_L
+add Mod5     = Mode_switch
