@@ -247,6 +247,8 @@ NeoBundle 'osyo-manga/vim-textobj-blockwise'
 
 NeoBundle 'VOoM'
 
+NeoBundle 'idanarye/vim-vebugger'
+
 augroup general
     autocmd!
 
