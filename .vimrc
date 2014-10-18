@@ -263,6 +263,7 @@ augroup general
     autocmd BufLeave ?* if(!&readonly && &buftype == '') | w | endif
 
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 augroup END
 
 filetype plugin indent on
