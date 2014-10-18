@@ -2,7 +2,7 @@ if has('win32')
     set encoding=utf-8
     set guifont=Ricty:h12
 else
-    set guifont=Rounded-X\ M+\ 1mn\ Medium\ 11
+    set guifont=源柔ゴシックX等幅\ Medium\ 11
 endif
 
 set guicursor=a:blinkon0
