@@ -61,8 +61,10 @@ set spell
 let g:mapleader=","
 
 nnoremap zQ <NOP>
-nnoremap ,w :w<CR>
-" nnoremap <CR> o<ESC>
+nnoremap <Leader>w :write<CR>
+
+" 空行を追加
+nnoremap <silent> <CR> :<C-u>for i in range(1, v:count1) \| call append(line('.'),   '') \| endfor \| silent! call repeat#set("<CR>", v:count1)<CR>
 
 if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim/
