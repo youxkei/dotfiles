@@ -77,75 +77,100 @@ call neobundle#begin()
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'mopp/mopkai.vim'
-
 NeoBundle 'molokai'
-
 NeoBundle 'JesseKPhillips/d.vim'
-
 NeoBundle 'digitaltoad/vim-jade'
-
-" 重すぎ笑えない
-" NeoBundle 'Yggdroot/indentLine'
-" let g:indentLine_color_term = 111
-" let g:indentLine_color_gui = '#708090'
-" let g:indentLine_char = '|'
-
 NeoBundle 'thinca/vim-ambicmd'
+NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' , 'mac' : 'make -f make_mac.mak' } }
+NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/'    .'unite.vim'
+NeoBundle 'Shougo/'    .'unite-ssh'
+NeoBundle 'Shougo/'    .'unite-outline'
+NeoBundle 'Shougo/'    .'unite-session'
+NeoBundle 'Shougo/'    .      'neomru.vim'
+NeoBundle 'osyo-manga/'.'unite-fold'
+NeoBundle 'thinca/vim-'.'unite-history'
+NeoBundle 'mopp/'      .'unite-animemap'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'gregsexton/gitv'
+NeoBundle 'ujihisa/neco-look'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'kana/vim-smartchr'
+NeoBundle 'kana/vim-smartinput'
+NeoBundle 'kana/vim-submode'
+NeoBundle 'basyura/TweetVim'
+NeoBundle 'basyura/twibill.vim'
+NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'mattn/gist-vim'
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'LeafCage/yankround.vim'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-function'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-niceblock'
+NeoBundle 'mbbill/undotree'
+NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'thinca/vim-fontzoom'
+NeoBundle 'fcitx.vim'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'luochen1990/rainbow'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'osyo-manga/vim-textobj-blockwise'
+NeoBundle 'VOoM'
+NeoBundle 'idanarye/vim-vebugger'
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'thinca/vim-visualstar'
+NeoBundle 'deris/vim-rengbang'
+NeoBundle 'koron/codic-vim'
+NeoBundle 'osyo-manga/vim-brightest'
+NeoBundle 'osyo-manga/vim-over'
+NeoBundle 'rhysd/vim-textobj-word-column'
+NeoBundle 'sgur/vim-textobj-parameter'
+NeoBundle 'kana/vim-operator-replace'
+NeoBundle 'rhysd/vim-operator-surround'
+
+call neobundle#end()
+
+filetype plugin indent on
+
+
+" thinca/vim-ambicmd
 cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
 cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 
-NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' , 'mac' : 'make -f make_mac.mak' } }
-
-NeoBundle 'Shougo/neocomplete.vim'
-let g:neocomplete#enable_at_startup = 1
+" Shougo/neocomplete.vim
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+let g:neocomplete#enable_at_startup = 1
 
-NeoBundle 'Shougo/unite.vim'
+" Shougo/unite.vim
+nnoremap <silent> <Leader>uy :<C-u>Unite history/yank<CR>
+nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
+nnoremap <silent> <Leader>uf :<C-u>Unite -buffer-name=files file file/new<CR>
+nnoremap <silent> <Leader>uu :<C-u>Unite file_mru<CR>
+nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
 let g:unite_enable_start_insert=1
 let g:unite_source_history_yank_enable =1
-nnoremap <silent> ,uy :<C-u>Unite history/yank<CR>
-nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
-nnoremap <silent> ,uf :<C-u>Unite -buffer-name=files file file/new<CR>
-nnoremap <silent> ,uu :<C-u>Unite file_mru<CR>
-nnoremap <silent> ,ur :<C-u>Unite -buffer-name=register register<CR>
 
-NeoBundle     'Shougo/unite-ssh'
-NeoBundle 'osyo-manga/unite-fold'
-NeoBundle 'thinca/vim-unite-history'
-NeoBundle     'Shougo/unite-outline'
-NeoBundle     'Shougo/unite-session'
-NeoBundle           'Shougo/neomru.vim'
-
-NeoBundle 'Shougo/vimfiler.vim'
+" Shougo/vimfiler.vim
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_tree_indentation = 2
 let g:vimfiler_ignore_pattern = '^\(.git\|\.\|\.\.\)$'
 
-NeoBundle 'tpope/vim-surround'
-
-NeoBundle 'tpope/vim-fugitive'
-
-NeoBundle 'gregsexton/gitv'
-
-NeoBundle 'ujihisa/neco-look'
-
-NeoBundle 'Lokaltog/vim-easymotion'
-let g:EasyMotion_do_mapping = 0 "Disable default mappings
+" Lokaltog/vim-easymotion
 nmap s <Plug>(easymotion-s2)
 nmap g/ <Plug>(easymotion-sn)
+let g:EasyMotion_do_mapping = 0 "Disable default mappings
 let g:EasyMotion_enter_jump_first = 1
 
-" 古い
-" NeoBundle 'Rainbow-Parentheses-Improved-and2'
-" let g:rainbow_active = 1
-" let g:rainbow_operators = 1
-
-NeoBundle 'kana/vim-smartchr'
-
-NeoBundle 'kana/vim-smartinput'
-
-NeoBundle 'kana/vim-submode'
+" kana/vim-submode
 let g:submode_timeout = 0
 call submode#enter_with('winsize', 'n', '', '<Leader><Leader>w')
 call submode#map('winsize', 'n', '', '>', '<C-w>>')
@@ -153,18 +178,10 @@ call submode#map('winsize', 'n', '', '<', '<C-w><')
 call submode#map('winsize', 'n', '', '-', '<C-w>-')
 call submode#map('winsize', 'n', '', '+', '<C-w>+')
 
-NeoBundle 'basyura/TweetVim'
+" basyura/TweetVim
 let g:w3m#command = 'w3m'
 
-NeoBundle 'basyura/twibill.vim'
-
-NeoBundle 'tyru/open-browser.vim'
-
-NeoBundle 'mattn/gist-vim'
-
-NeoBundle 'mattn/webapi-vim'
-
-NeoBundle 'itchyny/lightline.vim'
+" itchyny/lightline.vim
 let g:lightline = {
 \   'colorscheme': 'wombat',
 \   'active' : {
@@ -180,55 +197,15 @@ let g:lightline = {
 \   'subseparator': { 'left': '|', 'right': '|' },
 \}
 
-NeoBundle 'kannokanno/previm'
-
-NeoBundle 'LeafCage/yankround.vim'
-let g:yankround_dir = '~/.vim/backup'
-let g:yankround_max_history = 100
+" LeafCage/yankround.vim
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
 nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
+let g:yankround_dir = '~/.vim/backup'
+let g:yankround_max_history = 100
 
-
-" Syntasticと相性が悪い
-" NeoBundle 'mopp/shinchoku.vim'
-
-NeoBundle 'kana/vim-textobj-user'
-
-" 何故か動かない
-" NeoBundle 'h1mesuke/textobj-wiw'
-" let g:textobj_wiw_default_key_mappings_prefix = ","
-
-NeoBundle 'kana/vim-textobj-function'
-
-NeoBundle 'kana/vim-textobj-indent'
-
-" いらない感すごい
-" NeoBundle 't9md/vim-quickhl'
-" let g:quickhl_cword_enable_at_startup = 2
-
-NeoBundle 'kana/vim-operator-user'
-
-NeoBundle 'mopp/unite-animemap'
-
-NeoBundle 'kana/vim-niceblock'
-
-" うーん、微妙に必要なさ気
-" NeoBundle 'osyo-manga/vim-anzu'
-" nmap n <Plug>(anzu-mode-n)
-" nmap N <Plug>(anzu-mode-N)
-
-
-NeoBundle 'mbbill/undotree'
-
-NeoBundle 'derekwyatt/vim-scala'
-
-NeoBundle 'thinca/vim-fontzoom'
-
-NeoBundle 'fcitx.vim'
-
-NeoBundle 'scrooloose/syntastic'
+" scrooloose/syntastic
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 1
 "let g:syntastic_auto_jump = 2
@@ -236,35 +213,18 @@ let g:syntastic_auto_jump = 0
 let g:syntastic_loc_list_height = 5
 let g:syntastic_d_compiler_options = '-unittest, -debug'
 
-NeoBundle 'kchmck/vim-coffee-script'
+" nathanaelkane/vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
 
-NeoBundle 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_enable_on_vim_startup=1
-
-" 別のに変える
-" NeoBundle 'oblitum/rainbow'
-NeoBundle 'luochen1990/rainbow'
+" luochen1990/rainbow
 let g:rainbow_active = 1
 
-NeoBundle 'tpope/vim-repeat'
+" osyo-manga/vim-brightest
+let g:brightest#highlight = { "group" : "BrightestUnderline" }
 
-NeoBundle 'rhysd/clever-f.vim'
+" rhysd/vim-operator-surround
+nmap <silent> zs <Plug>(operator-surround-append)
 
-NeoBundle 'osyo-manga/vim-textobj-blockwise'
-
-NeoBundle 'VOoM'
-
-NeoBundle 'idanarye/vim-vebugger'
-
-NeoBundle 'junegunn/vim-easy-align'
-
-NeoBundle 'thinca/vim-visualstar'
-
-NeoBundle 'deris/vim-rengbang'
-
-NeoBundleLazy 'koron/codic-vim'
-
-call neobundle#end()
 
 augroup general
     autocmd!
@@ -281,8 +241,6 @@ augroup general
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 augroup END
-
-filetype plugin indent on
 
 syntax enable
 
