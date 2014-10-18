@@ -241,7 +241,10 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup=1
 
-NeoBundle 'oblitum/rainbow'
+" 別のに変える
+" NeoBundle 'oblitum/rainbow'
+NeoBundle 'luochen1990/rainbow'
+let g:rainbow_active = 1
 
 NeoBundle 'tpope/vim-repeat'
 
