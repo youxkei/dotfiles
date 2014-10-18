@@ -253,6 +253,14 @@ NeoBundle 'VOoM'
 
 NeoBundle 'idanarye/vim-vebugger'
 
+NeoBundle 'junegunn/vim-easy-align'
+
+NeoBundle 'thinca/vim-visualstar'
+
+NeoBundle 'deris/vim-rengbang'
+
+NeoBundleLazy 'koron/codic-vim'
+
 augroup general
     autocmd!
 
