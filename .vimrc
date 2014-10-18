@@ -231,7 +231,8 @@ NeoBundle 'fcitx.vim'
 NeoBundle 'scrooloose/syntastic'
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_auto_jump = 2
+"let g:syntastic_auto_jump = 2
+let g:syntastic_auto_jump = 0
 let g:syntastic_loc_list_height = 5
 let g:syntastic_d_compiler_options = '-unittest, -debug'
 
