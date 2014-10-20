@@ -47,7 +47,7 @@ set sidescroll=1
 "set sidescrolloff=32
 set laststatus=2
 
-set viewoptions=cursor,folds
+set viewoptions=cursor
 set wildmenu
 
 set list
@@ -135,6 +135,7 @@ NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'rhysd/vim-operator-surround'
+NeoBundle 'osyo-manga/vim-textobj-multiblock'
 
 call neobundle#end()
 
@@ -224,6 +225,12 @@ let g:brightest#highlight = { "group" : "BrightestUnderline" }
 
 " rhysd/vim-operator-surround
 nmap <silent> zs <Plug>(operator-surround-append)
+
+" osyo-manga/vim-textobj-multiblock
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+vmap ab <Plug>(textobj-multiblock-a)
+vmap ib <Plug>(textobj-multiblock-i)
 
 
 augroup general
