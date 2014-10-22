@@ -232,6 +232,8 @@ omap ib <Plug>(textobj-multiblock-i)
 vmap ab <Plug>(textobj-multiblock-a)
 vmap ib <Plug>(textobj-multiblock-i)
 
+" nathanaelkane/vim-indent-guides
+let g:indent_guides_guide_size=1
 
 augroup general
     autocmd!
