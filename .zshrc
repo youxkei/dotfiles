@@ -16,7 +16,7 @@ HISTFILE=~/.zsh_history
 
 # Use modern completion system
 autoload -Uz compinit
-compinit
+compinit -C
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -49,3 +49,7 @@ alias open="xdg-open"
 alias tmux="tmux -2"
 
 function chpwd() { ls }
+
+if (which zprof > /dev/null) ;then
+    zprof | less
+fi
