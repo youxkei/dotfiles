@@ -136,6 +136,7 @@ NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'rhysd/vim-operator-surround'
 NeoBundle 'osyo-manga/vim-textobj-multiblock'
+NeoBundle 'kana/vim-textobj-entire'
 
 call neobundle#end()
 
