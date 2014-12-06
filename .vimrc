@@ -40,7 +40,6 @@ set nodigraph
 set noea
 set showcmd
 set backspace=indent,eol,start
-set cursorline
 
 set scrolloff=16
 set sidescroll=1
