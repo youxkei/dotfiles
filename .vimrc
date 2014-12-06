@@ -54,9 +54,6 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set t_Co=256
 
-set spelllang+=cjk
-set spell
-
 let g:mapleader=","
 
 nnoremap zQ <NOP>
