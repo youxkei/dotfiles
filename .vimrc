@@ -236,7 +236,7 @@ augroup general
     autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
     autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
-    autocmd BufLeave ?* if(!&readonly && &buftype == '') | w | endif
+    autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
