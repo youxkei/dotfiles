@@ -123,7 +123,6 @@ NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'deris/vim-rengbang'
 NeoBundle 'koron/codic-vim'
-NeoBundle 'osyo-manga/vim-brightest'
 NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
@@ -214,9 +213,6 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " luochen1990/rainbow
 let g:rainbow_active = 1
-
-" osyo-manga/vim-brightest
-let g:brightest#highlight = { "group" : "BrightestUnderline" }
 
 " rhysd/vim-operator-surround
 nmap <silent> zs <Plug>(operator-surround-append)
