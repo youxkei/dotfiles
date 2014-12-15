@@ -110,7 +110,6 @@ NeoBundle 'mbbill/undotree'
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
-NeoBundle 'scrooloose/syntastic'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'luochen1990/rainbow'
@@ -124,6 +123,14 @@ NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'deris/vim-rengbang'
 NeoBundle 'koron/codic-vim'
 NeoBundle 'osyo-manga/vim-over'
+NeoBundle "thinca/vim-quickrun"
+NeoBundle "Shougo/vimproc"
+NeoBundle "osyo-manga/shabadou.vim"
+NeoBundle "osyo-manga/vim-watchdogs"
+NeoBundle "cohama/vim-hier"
+NeoBundle "dannyob/quickfixstatus"
+NeoBundle 'KazuakiM/vim-qfstatusline'
+
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'kana/vim-operator-replace'
@@ -182,11 +189,18 @@ let g:lightline = {
 \   'active' : {
 \       'left' : [
 \           ['mode', 'paste'],
+\           ['syntaxcheck'],
 \           ['readonly', 'filename', 'modified']
-\       ]
+\       ],
 \   },
 \   'component': {
 \       'readonly': '%{&readonly?"⌬":""}',
+\   },
+\   'component_expand': {
+\       'syntaxcheck': 'qfstatusline#Update'
+\   },
+\   'component_type': {
+\       'syntaxcheck': 'error'
 \   },
 \   'separator': { 'left': '', 'right': '' },
 \   'subseparator': { 'left': '|', 'right': '|' },
@@ -225,6 +239,22 @@ vmap ib <Plug>(textobj-multiblock-i)
 
 " nathanaelkane/vim-indent-guides
 let g:indent_guides_guide_size=1
+
+" osyo-manga/watchdogs
+let g:watchdogs_check_BufWritePost_enable = 1
+let g:watchdogs_check_CursorHold_enable = 1
+let g:quickrun_config = {
+\   'watchdogs_checker/_' : {
+\       'outputter/quickfix/open_cmd' : '',
+\       'hook/qfstatusline_update/enable_exit' : 1,
+\       'hook/qfstatusline_update/priority_exit' : 4,
+\   }
+\ }
+
+call watchdogs#setup(g:quickrun_config)
+
+" KazuakiM/vim-qfstatusline
+let g:Qfstatusline#UpdateCmd = function('lightline#update')
 
 augroup general
     autocmd!
