@@ -126,6 +126,7 @@ NeoBundle "osyo-manga/vim-watchdogs"
 NeoBundle "cohama/vim-hier"
 NeoBundle "dannyob/quickfixstatus"
 NeoBundle 'KazuakiM/vim-qfstatusline'
+NeoBundle 'sudo.vim'
 
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
