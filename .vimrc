@@ -74,8 +74,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'molokai'
-NeoBundle 'JesseKPhillips/d.vim'
-NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' , 'mac' : 'make -f make_mac.mak' } }
 NeoBundle 'Shougo/neocomplete.vim'
@@ -107,10 +105,8 @@ NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-niceblock'
 NeoBundle 'mbbill/undotree'
-NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
-NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'luochen1990/rainbow'
 NeoBundle 'tpope/vim-repeat'
@@ -137,6 +133,11 @@ NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'rhysd/vim-operator-surround'
 NeoBundle 'osyo-manga/vim-textobj-multiblock'
 NeoBundle 'kana/vim-textobj-entire'
+
+NeoBundle 'JesseKPhillips/d.vim'
+NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'kchmck/vim-coffee-script'
 
 call neobundle#end()
 
