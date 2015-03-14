@@ -53,3 +53,6 @@ function chpwd() { ls }
 if (which zprof > /dev/null) ;then
     zprof | less
 fi
+
+# OPAM configuration
+. /home/youkei/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
