@@ -89,6 +89,10 @@ bar {
     status_command i3status
     position top
     binding_mode_indicator yes
+
+    font pango:DejaVu Sans Mono 16
+
+    tray_output DP1
 }
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
