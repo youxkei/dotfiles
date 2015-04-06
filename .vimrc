@@ -54,6 +54,8 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set t_Co=256
 
+set modeline
+
 let g:mapleader=","
 
 nnoremap zQ <NOP>
