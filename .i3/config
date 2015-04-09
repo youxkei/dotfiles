@@ -97,7 +97,6 @@ bar {
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
 
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
