@@ -106,7 +106,6 @@ NeoBundle 'kana/vim-textobj-function'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-niceblock'
-NeoBundle 'mbbill/undotree'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
 NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -129,6 +128,7 @@ NeoBundle "cohama/vim-hier"
 NeoBundle "dannyob/quickfixstatus"
 NeoBundle 'KazuakiM/vim-qfstatusline'
 NeoBundle 'sudo.vim'
+NeoBundle 'mbbill/undotree'
 
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
@@ -266,6 +266,9 @@ call watchdogs#setup(g:quickrun_config)
 
 " KazuakiM/vim-qfstatusline
 let g:Qfstatusline#UpdateCmd = function('lightline#update')
+
+" mbbill/undotree
+let g:undotree_WindowLayout = 3
 
 augroup general
     autocmd!
