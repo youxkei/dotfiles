@@ -108,7 +108,6 @@ NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-niceblock'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
-NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'luochen1990/rainbow'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'rhysd/clever-f.vim'
@@ -129,6 +128,7 @@ NeoBundle "dannyob/quickfixstatus"
 NeoBundle 'KazuakiM/vim-qfstatusline'
 NeoBundle 'sudo.vim'
 NeoBundle 'mbbill/undotree'
+NeoBundle 'Yggdroot/indentLine'
 
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
@@ -269,6 +269,12 @@ let g:Qfstatusline#UpdateCmd = function('lightline#update')
 
 " mbbill/undotree
 let g:undotree_WindowLayout = 3
+
+" Yggdroot/indentLine
+let g:indentLine_faster = 1
+
+" junegunn/vim-easy-align
+vmap <Enter> <Plug>(EasyAlign)
 
 augroup general
     autocmd!
