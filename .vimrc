@@ -187,6 +187,9 @@ call submode#map('winsize', 'n', '', '<', '<C-w><')
 call submode#map('winsize', 'n', '', '-', '<C-w>-')
 call submode#map('winsize', 'n', '', '+', '<C-w>+')
 
+nmap <Leader>l "ydi,ldi,F,Pw"yP
+nmap <Leader>h "ydi,bdi,wP`[F,"yP
+
 " basyura/TweetVim
 let g:w3m#command = 'w3m'
 
