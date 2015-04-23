@@ -181,7 +181,7 @@ let g:EasyMotion_enter_jump_first = 1
 
 " kana/vim-submode
 let g:submode_timeout = 0
-call submode#enter_with('winsize', 'n', '', '<Leader><Leader>w')
+call submode#enter_with('winsize', 'n', '', '<Leader>s')
 call submode#map('winsize', 'n', '', '>', '<C-w>>')
 call submode#map('winsize', 'n', '', '<', '<C-w><')
 call submode#map('winsize', 'n', '', '-', '<C-w>-')
