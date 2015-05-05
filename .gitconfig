@@ -12,3 +12,4 @@
 	user = youxkei
 [push]
 	default = simple
+	followTags = true
