@@ -65,10 +65,10 @@ mode $out {
     bindsym l exec --no-startup-id gnome-screensaver-command -l, mode "default"
     bindsym e exit, mode "default"
 
-    bindsym s exec --no-startup-id dbus-send --system --print-reply --dest="org.freedesktop.UPower"     /org/freedesktop/UPower             org.freedesktop.UPower.Suspend,             mode "default"
-    bindsym h exec --no-startup-id dbus-send --system --print-reply --dest="org.freedesktop.UPower"     /org/freedesktop/UPower             org.freedesktop.UPower.Hibernate,           mode "default"
-    bindsym r exec --no-startup-id dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart, mode "default"
-    bindsym p exec --no-startup-id dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop,    mode "default"
+    bindsym s exec --no-startup-id systemctl suspend,   mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot,    mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff,  mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
