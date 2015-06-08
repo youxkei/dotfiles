@@ -13,3 +13,5 @@
 [push]
 	default = simple
 	followTags = true
+[fetch]
+	prune = true
