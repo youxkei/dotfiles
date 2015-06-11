@@ -62,13 +62,13 @@ bindsym $mod+Shift+r restart
 set $out "(L)ock, (E)xit, (S)uspend, (H)ibernate, (R)eboot, (P)oweroff"
 bindsym $mod+Shift+e mode $out
 mode $out {
-    bindsym l exec --no-startup-id dm-tool lock, mode "default"
     bindsym e exit, mode "default"
 
-    bindsym s exec --no-startup-id systemctl suspend,   mode "default"
-    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot,    mode "default"
-    bindsym p exec --no-startup-id systemctl poweroff,  mode "default"
+    bindsym l exec --no-startup-id dm-tool lock,                        mode "default"
+    bindsym s exec --no-startup-id dm-tool lock && systemctl suspend,   mode "default"
+    bindsym h exec --no-startup-id dm-tool lock && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id                 systemctl reboot,    mode "default"
+    bindsym p exec --no-startup-id                 systemctl poweroff,  mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
