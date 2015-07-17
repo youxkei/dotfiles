@@ -1,6 +1,6 @@
 set $mod Mod1
 
-font pango:DejaVu Sans Mono 8
+font pango:ゆたぽん（コーディング）Backsl Bold 13
 
 floating_modifier $mod
 
@@ -99,7 +99,7 @@ bar {
     position top
     binding_mode_indicator yes
 
-    font pango:DejaVu Sans Mono 16
+    font pango:ゆたぽん（コーディング）Backsl Bold 16
 }
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
