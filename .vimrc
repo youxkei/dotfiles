@@ -1,3 +1,5 @@
+if 0 | endif
+
 filetype off
 
 let $PATH=system("echo \$PATH")
@@ -65,12 +67,16 @@ nnoremap <Leader>w :write<CR>
 nnoremap <silent> <CR> :<C-u>for i in range(1, v:count1) \| call append(line('.'),   '') \| endfor \| silent! call repeat#set("<CR>", v:count1)<CR>
 
 if has('vim_starting')
+    if &compatible
+        set nocompatible
+    endif
+
     set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 let g:neobundle#types#git#default_protocol = 'git'
 
-call neobundle#begin()
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
