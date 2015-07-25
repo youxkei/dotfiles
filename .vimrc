@@ -77,7 +77,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'molokai'
 NeoBundle 'thinca/vim-ambicmd'
-NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' , 'mac' : 'make -f make_mac.mak' } }
+NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' } }
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/'    .'unite.vim'
 NeoBundle 'Shougo/'    .'unite-ssh'
@@ -120,7 +120,6 @@ NeoBundle 'deris/vim-rengbang'
 NeoBundle 'koron/codic-vim'
 NeoBundle 'osyo-manga/vim-over'
 NeoBundle "thinca/vim-quickrun"
-NeoBundle "Shougo/vimproc"
 NeoBundle "osyo-manga/shabadou.vim"
 NeoBundle "osyo-manga/vim-watchdogs"
 NeoBundle "cohama/vim-hier"
