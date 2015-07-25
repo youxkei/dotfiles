@@ -168,9 +168,12 @@ let g:unite_source_history_yank_enable =1
 
 " Shougo/vimfiler.vim
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_tree_indentation = 2
 let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|.pyc$\|.o$'
+call vimfiler#custom#profile('default', 'context', {
+\ 'auto_cd': 1,
+\ 'safe': 0,
+\})
 
 " Lokaltog/vim-easymotion
 nmap s <Plug>(easymotion-s2)
