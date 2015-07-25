@@ -39,7 +39,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 setopt auto_cd
 setopt auto_pushd
 
-alias ls='ls -F --color=auto'
+alias ls='ls -hF --color=auto'
 alias ll='ls -al'
 alias la='ls -A'
 alias l='ls -CF'
