@@ -163,8 +163,16 @@ nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
 nnoremap <silent> <Leader>uf :<C-u>Unite -buffer-name=files file file/new<CR>
 nnoremap <silent> <Leader>uu :<C-u>Unite file_mru<CR>
 nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> <Leader>ug :<C-u>Unite grep:.<CR>
+call unite#custom#source('grep', 'max_candidates', 0)
 let g:unite_enable_start_insert=1
 let g:unite_source_history_yank_enable =1
+
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif
 
 " Shougo/vimfiler.vim
 let g:vimfiler_as_default_explorer = 1
