@@ -44,7 +44,6 @@ alias ll='ls -al'
 alias la='ls -A'
 alias l='ls -CF'
 alias ainst="sudo apt-get install"
-alias wget="curl -LO"
 alias open="xdg-open"
 alias tmux="tmux -2"
 
