@@ -4,10 +4,10 @@ filetype off
 
 let $PATH=system("echo \$PATH")
 
-if isdirectory(expand('~/.vim/backup'))
-    set backupdir=~/.vim/backup
-    set undodir=~/.vim/backup
-    set directory=~/.vim/backup
+if isdirectory(expand('~/.nvim/backup'))
+    set backupdir=~/.nvim/backup
+    set undodir=~/.nvim/backup
+    set directory=~/.nvim/backup
 
     set undofile
     set backup
@@ -71,12 +71,12 @@ if has('vim_starting')
         set nocompatible
     endif
 
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+    set runtimepath+=~/.nvim/bundle/neobundle.vim/
 endif
 
 let g:neobundle#types#git#default_protocol = 'git'
 
-call neobundle#begin(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.nvim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
@@ -242,7 +242,7 @@ xmap gp <Plug>(yankround-gp)
 nmap gP <Plug>(yankround-gP)
 nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
-let g:yankround_dir = '~/.vim/backup'
+let g:yankround_dir = '~/.nvim/backup'
 let g:yankround_max_history = 100
 
 " scrooloose/syntastic
@@ -303,8 +303,8 @@ augroup general
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 
     " 状態の保存と復元
-    autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
-    autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
+    "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
+    "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
     autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
