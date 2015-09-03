@@ -103,6 +103,7 @@ bar {
 }
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
+for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf"] floating enable
 
 exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
