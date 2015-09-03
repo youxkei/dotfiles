@@ -83,7 +83,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'molokai'
 NeoBundle 'thinca/vim-ambicmd'
-NeoBundle 'Shougo/vimproc.vim', {'build' : {'unix' : 'make -f make_unix.mak' } }
+NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make' } }
 "NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/'    .'unite.vim'
 NeoBundle 'Shougo/'    .'unite-ssh'
