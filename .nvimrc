@@ -80,8 +80,7 @@ call neobundle#begin(expand('~/.nvim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'mopp/mopkai.vim'
-NeoBundle 'molokai'
+NeoBundle 'tomasr/molokai'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make' } }
 "NeoBundle 'Shougo/neocomplete.vim'
@@ -314,4 +313,4 @@ augroup END
 
 syntax enable
 
-color mopkai
+colorscheme molokai
