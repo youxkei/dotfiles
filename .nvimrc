@@ -1,5 +1,3 @@
-if 0 | endif
-
 filetype off
 
 let $PATH=system("echo \$PATH")
