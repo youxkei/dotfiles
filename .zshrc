@@ -55,3 +55,8 @@ fi
 
 # OPAM configuration
 . /home/youkei/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# enhancd
+if [ -f "/home/youxkei/.enhancd/zsh/enhancd.zsh" ]; then
+    source "/home/youxkei/.enhancd/zsh/enhancd.zsh"
+fi
