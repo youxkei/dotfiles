@@ -1,8 +1,8 @@
 # Set up the prompt
 
-autoload -Uz promptinit
-promptinit
-prompt adam1
+# autoload -Uz promptinit
+# promptinit
+# prompt adam1
 
 setopt histignorealldups sharehistory
 
@@ -56,7 +56,15 @@ fi
 # OPAM configuration
 . /home/youkei/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-# enhancd
-if [ -f "/home/youxkei/.enhancd/zsh/enhancd.zsh" ]; then
-    source "/home/youxkei/.enhancd/zsh/enhancd.zsh"
+if [[ -f ~/.ghq/github.com/zsh-users/antigen/antigen.zsh ]]; then
+    source ~/.ghq/github.com/zsh-users/antigen/antigen.zsh
+
+    antigen use oh-my-zsh
+
+    antigen bundle b4b4r07/enhancd
+    antigen bundle mollifier/anyframe
+
+    antigen theme ys
+
+    antigen apply
 fi
