@@ -108,5 +108,5 @@ for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf
 exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
-exec --no-startup-id gnome-sound-applet
-exec --no-startup-id compton --config .compton.conf
+# exec --no-startup-id gnome-sound-applet
+# exec --no-startup-id compton --config .compton.conf
