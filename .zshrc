@@ -54,7 +54,7 @@ if (which zprof > /dev/null) ;then
 fi
 
 # OPAM configuration
-. /home/youkei/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+. ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 if [[ -f ~/.ghq/github.com/zsh-users/antigen/antigen.zsh ]]; then
     source ~/.ghq/github.com/zsh-users/antigen/antigen.zsh
