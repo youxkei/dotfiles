@@ -149,6 +149,7 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'gf3/peg.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'mxw/vim-jsx'
+NeoBundle 'elzr/vim-json'
 
 call neobundle#end()
 
@@ -291,6 +292,7 @@ let g:undotree_WindowLayout = 3
 
 " Yggdroot/indentLine
 let g:indentLine_faster = 1
+let g:indentLine_noConcealCursor=""
 
 " junegunn/vim-easy-align
 vmap <Enter> <Plug>(EasyAlign)
