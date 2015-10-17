@@ -81,7 +81,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make' } }
-"NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/deoplete.nvim'
 NeoBundle 'Shougo/'    .'unite.vim'
 NeoBundle 'Shougo/'    .'unite-ssh'
 NeoBundle 'Shougo/'    .'unite-outline'
@@ -159,9 +159,9 @@ filetype plugin indent on
 cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
 cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 
-" Shougo/neocomplete.vim
+" Shougo/deoplete.vim
 "inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-"let g:neocomplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
 
 " Shougo/unite.vim
 nnoremap <silent> <Leader>uy :<C-u>Unite history/yank<CR>
