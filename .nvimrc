@@ -70,6 +70,8 @@ if has('vim_starting')
     endif
 
     set runtimepath+=~/.nvim/bundle/neobundle.vim/
+
+    command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
 endif
 
 let g:neobundle#types#git#default_protocol = 'git'
@@ -316,3 +318,5 @@ augroup END
 syntax enable
 
 colorscheme molokai
+
+Guifont Ubuntu Mono:h13
