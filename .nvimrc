@@ -247,17 +247,6 @@ nmap <C-n> <Plug>(yankround-next)
 let g:yankround_dir = '~/.nvim/backup'
 let g:yankround_max_history = 100
 
-" scrooloose/syntastic
-let g:syntastic_check_on_open = 1
-let g:syntastic_auto_loc_list = 1
-"let g:syntastic_auto_jump = 2
-let g:syntastic_auto_jump = 0
-let g:syntastic_loc_list_height = 5
-let g:syntastic_d_compiler_options = '-unittest, -debug'
-
-" nathanaelkane/vim-indent-guides
-let g:indent_guides_enable_on_vim_startup = 1
-
 " luochen1990/rainbow
 let g:rainbow_active = 1
 
@@ -269,9 +258,6 @@ omap ab <Plug>(textobj-multiblock-a)
 omap ib <Plug>(textobj-multiblock-i)
 vmap ab <Plug>(textobj-multiblock-a)
 vmap ib <Plug>(textobj-multiblock-i)
-
-" nathanaelkane/vim-indent-guides
-let g:indent_guides_guide_size=1
 
 " osyo-manga/watchdogs
 let g:watchdogs_check_BufWritePost_enable = 1
