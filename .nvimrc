@@ -28,7 +28,7 @@ set fileformats=unix,mac,dos
 set nofoldenable
 set foldmethod=indent
 
-set ambiwidth=single
+set ambiwidth=double
 set cmdheight=2
 
 set number
