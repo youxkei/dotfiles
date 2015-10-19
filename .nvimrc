@@ -82,7 +82,6 @@ call neobundle#begin(expand('~/.nvim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'tomasr/molokai'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make' } }
 NeoBundle 'Shougo/deoplete.nvim'
@@ -154,6 +153,8 @@ NeoBundle 'gf3/peg.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'mxw/vim-jsx'
 NeoBundle 'elzr/vim-json'
+
+NeoBundle 'freeo/vim-kalisi'
 
 call neobundle#end()
 
@@ -305,6 +306,7 @@ augroup END
 
 syntax enable
 
-colorscheme molokai
+colorscheme kalisi
+set background=dark
 
 Guifont Ubuntu Mono:h13
