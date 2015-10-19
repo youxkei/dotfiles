@@ -8,6 +8,7 @@
 	excludesfile = ~/.gitignore
 [alias]
     tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    ag = !git ls-files | xargs ag
 [github]
 	user = youxkei
 [push]
