@@ -154,6 +154,7 @@ NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'mxw/vim-jsx'
 NeoBundle 'elzr/vim-json'
 
+NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'freeo/vim-kalisi'
 
 call neobundle#end()
@@ -306,7 +307,6 @@ augroup END
 
 syntax enable
 
-colorscheme kalisi
-set background=dark
+colorscheme mopkai
 
 Guifont Ubuntu Mono:h13
