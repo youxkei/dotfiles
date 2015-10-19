@@ -56,6 +56,8 @@ set t_Co=256
 
 set modeline
 
+let loaded_matchparen = 1
+
 let g:mapleader=","
 
 nnoremap zQ <NOP>
