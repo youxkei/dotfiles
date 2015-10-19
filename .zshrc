@@ -61,6 +61,7 @@ if [[ -f ~/.ghq/github.com/zsh-users/antigen/antigen.zsh ]]; then
 
     antigen use oh-my-zsh
 
+    export ENHANCD_COMMAND="ecd"
     antigen bundle b4b4r07/enhancd
     antigen bundle mollifier/anyframe
 
