@@ -13,3 +13,5 @@ export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
 eval "$(anyenv init -)"
 export GOPATH="$HOME/.go"
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+export ANDROID_HOME="$HOME/Android/Sdk"
