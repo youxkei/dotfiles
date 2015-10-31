@@ -129,7 +129,7 @@ NeoBundle 'osyo-manga/vim-over'
 NeoBundle "thinca/vim-quickrun"
 NeoBundle "osyo-manga/shabadou.vim"
 NeoBundle "osyo-manga/vim-watchdogs"
-NeoBundle "cohama/vim-hier"
+NeoBundle 'KazuakiM/vim-qfsigns'
 NeoBundle "dannyob/quickfixstatus"
 NeoBundle 'KazuakiM/vim-qfstatusline'
 NeoBundle 'sudo.vim'
@@ -269,6 +269,8 @@ let g:watchdogs_check_CursorHold_enable = 1
 let g:quickrun_config = {
 \   'watchdogs_checker/_' : {
 \       'outputter/quickfix/open_cmd' : '',
+\       'hook/qfsigns_update/enable_exit': 1,
+\       'hook/qfsigns_update/priority_exit': 4,
 \       'hook/qfstatusline_update/enable_exit' : 1,
 \       'hook/qfstatusline_update/priority_exit' : 4,
 \   }
