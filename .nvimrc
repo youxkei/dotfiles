@@ -153,6 +153,7 @@ NeoBundle 'gf3/peg.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'mxw/vim-jsx'
 NeoBundle 'elzr/vim-json'
+NeoBundle 'leafgarland/typescript-vim'
 
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'freeo/vim-kalisi'
