@@ -137,6 +137,7 @@ NeoBundle 'mbbill/undotree'
 NeoBundle 'Yggdroot/indentLine'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'lervag/vimtex'
+NeoBundle 'rhysd/try-colorscheme.vim'
 
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
