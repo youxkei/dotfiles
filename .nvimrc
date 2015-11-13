@@ -139,6 +139,7 @@ NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'lervag/vimtex'
 NeoBundle 'rhysd/try-colorscheme.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'bkad/CamelCaseMotion'
 
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
