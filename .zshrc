@@ -64,8 +64,12 @@ if [[ -f ~/.ghq/github.com/zsh-users/antigen/antigen.zsh ]]; then
     export ENHANCD_COMMAND="ecd"
     antigen bundle b4b4r07/enhancd
     antigen bundle mollifier/anyframe
+    antigen bundle zsh-users/zsh-history-substring-search
 
     antigen theme ys
 
     antigen apply
+
+    bindkey -M emacs '^P' history-substring-search-up
+    bindkey -M emacs '^N' history-substring-search-down
 fi
