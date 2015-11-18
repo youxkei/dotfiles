@@ -131,6 +131,7 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
 NeoBundle 'csscomb/vim-csscomb'
 NeoBundle 'wakatime/vim-wakatime'
+NeoBundle 'rhysd/committia.vim'
 
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-function'
