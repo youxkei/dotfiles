@@ -61,6 +61,7 @@ let g:mapleader=","
 nnoremap zQ <NOP>
 nnoremap <Leader>w :write<CR>
 inoremap <C-V> <C-r>+
+vnoremap <C-C> "+y
 
 if has('vim_starting')
     set runtimepath+=~/.nvim/bundle/neobundle.vim/
