@@ -130,6 +130,7 @@ NeoBundle 'bkad/CamelCaseMotion'
 NeoBundle 'AndrewRadev/inline_edit.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
+NeoBundle 'csscomb/vim-csscomb'
 
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-function'
