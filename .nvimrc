@@ -62,9 +62,6 @@ nnoremap zQ <NOP>
 nnoremap <Leader>w :write<CR>
 inoremap <C-V> <C-r>+
 
-" 空行を追加
-nnoremap <silent> <CR> :<C-u>for i in range(1, v:count1) \| call append(line('.'),   '') \| endfor \| silent! call repeat#set("<CR>", v:count1)<CR>
-
 if has('vim_starting')
     set runtimepath+=~/.nvim/bundle/neobundle.vim/
 
