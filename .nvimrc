@@ -127,6 +127,7 @@ NeoBundle 'lervag/vimtex'
 NeoBundle 'rhysd/try-colorscheme.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'bkad/CamelCaseMotion'
+NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
 
 NeoBundle 'kana/vim-textobj-user'
@@ -286,6 +287,9 @@ let g:indentLine_noConcealCursor=""
 
 " junegunn/vim-easy-align
 vmap <Enter> <Plug>(EasyAlign)
+
+" airblade/vim-gitgutter
+let g:gitgutter_map_keys = 0
 
 augroup general
     autocmd!
