@@ -52,8 +52,6 @@ set wildmenu
 set list
 set listchars=tab:»-,trail:-,nbsp:%
 
-set t_Co=256
-
 set modeline
 
 let loaded_matchparen = 1
@@ -68,10 +66,6 @@ inoremap <C-V> <C-r>+
 nnoremap <silent> <CR> :<C-u>for i in range(1, v:count1) \| call append(line('.'),   '') \| endfor \| silent! call repeat#set("<CR>", v:count1)<CR>
 
 if has('vim_starting')
-    if &compatible
-        set nocompatible
-    endif
-
     set runtimepath+=~/.nvim/bundle/neobundle.vim/
 
     command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
