@@ -127,6 +127,7 @@ NeoBundle 'lervag/vimtex'
 NeoBundle 'rhysd/try-colorscheme.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'bkad/CamelCaseMotion'
+NeoBundle 'AndrewRadev/inline_edit.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
 
@@ -290,6 +291,9 @@ vmap <Enter> <Plug>(EasyAlign)
 
 " airblade/vim-gitgutter
 let g:gitgutter_map_keys = 0
+
+" AndrewRadev/inline_edit.vim
+let g:inline_edit_autowrite = 1
 
 augroup general
     autocmd!
