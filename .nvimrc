@@ -59,7 +59,6 @@ let loaded_matchparen = 1
 let g:mapleader=","
 
 nnoremap zQ <NOP>
-nnoremap <Leader>w :write<CR>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 
@@ -69,8 +68,6 @@ if has('vim_starting')
     command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
 endif
 
-let g:neobundle#types#git#default_protocol = 'git'
-
 call neobundle#begin(expand('~/.nvim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -78,6 +75,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'Shougo/vimproc.vim', {'build' : {'linux' : 'make' } }
 NeoBundle 'Shougo/deoplete.nvim'
+NeoBundle 'ujihisa/neco-look'
+NeoBundle 'Shougo/neco-syntax'
 NeoBundle     'Shougo/unite.vim'
 NeoBundle     'Shougo/unite-ssh'
 NeoBundle     'Shougo/unite-outline'
@@ -89,7 +88,6 @@ NeoBundle    'ujihisa/unite-colorscheme'
 NeoBundle      'rhysd/unite-codic.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimfiler.vim'
-NeoBundle 'ujihisa/neco-look'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'kana/vim-submode'
 NeoBundle 'basyura/TweetVim'
@@ -106,7 +104,6 @@ NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
 NeoBundle 'luochen1990/rainbow'
 NeoBundle 'tpope/vim-repeat'
-"NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'VOoM'
 NeoBundle 'idanarye/vim-vebugger'
 NeoBundle 'junegunn/vim-easy-align'
@@ -114,11 +111,11 @@ NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'deris/vim-rengbang'
 NeoBundle 'koron/codic-vim'
 NeoBundle 'osyo-manga/vim-over'
-NeoBundle "thinca/vim-quickrun"
-NeoBundle "osyo-manga/shabadou.vim"
-NeoBundle "osyo-manga/vim-watchdogs"
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'osyo-manga/shabadou.vim'
+NeoBundle 'osyo-manga/vim-watchdogs'
 NeoBundle 'KazuakiM/vim-qfsigns'
-NeoBundle "dannyob/quickfixstatus"
+NeoBundle 'dannyob/quickfixstatus'
 NeoBundle 'KazuakiM/vim-qfstatusline'
 NeoBundle 'sudo.vim'
 NeoBundle 'mbbill/undotree'
@@ -140,9 +137,9 @@ NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'rhysd/vim-operator-surround'
-NeoBundle 'osyo-manga/vim-textobj-multiblock'
 NeoBundle 'kana/vim-textobj-entire'
 NeoBundle 'osyo-manga/vim-textobj-blockwise'
+NeoBundle 'rhysd/vim-textobj-anyblock'
 
 NeoBundle 'JesseKPhillips/d.vim'
 NeoBundle 'digitaltoad/vim-jade'
@@ -156,146 +153,160 @@ NeoBundle 'leafgarland/typescript-vim'
 
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'freeo/vim-kalisi'
+NeoBundle 'joshdick/onedark.vim'
 
 call neobundle#end()
 
 filetype plugin indent on
 
 
-" thinca/vim-ambicmd
-cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
-cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-
-" Shougo/deoplete.vim
-"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-let g:deoplete#enable_at_startup = 1
-
-" Shougo/unite.vim
-nnoremap <silent> <Leader>uy :<C-u>Unite history/yank<CR>
-nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
-nnoremap <silent> <Leader>uf :<C-u>Unite -buffer-name=files file file/new<CR>
-nnoremap <silent> <Leader>uu :<C-u>Unite file_mru<CR>
-nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> <Leader>ug :<C-u>Unite grep:.<CR>
-"call unite#custom#source('grep', 'max_candidates', 0)
-let g:unite_enable_start_insert=1
-let g:unite_source_history_yank_enable =1
-
-if executable('ag')
-  "let g:unite_source_grep_command = 'ag'
-  "let g:unite_source_grep_default_opts = '-i --nogroup --nocolor -S'
-  "let g:unite_source_grep_recursive_opt = ''
+if neobundle#is_sourced('vim-ambicmd')
+    cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
+    cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 endif
 
-" Shougo/vimfiler.vim
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_tree_indentation = 2
-let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|.pyc$\|.o$'
-call vimfiler#custom#profile('default', 'context', {
-\ 'auto_cd': 1,
-\ 'safe': 0,
-\})
+if neobundle#is_sourced('deoplete.nvim')
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#omni_patterns = {}
+endif
 
-" Lokaltog/vim-easymotion
-nmap s <Plug>(easymotion-s2)
-nmap g/ <Plug>(easymotion-sn)
-let g:EasyMotion_do_mapping = 0 "Disable default mappings
-let g:EasyMotion_enter_jump_first = 1
+if neobundle#is_sourced('unite.vim')
+    nnoremap <silent> <Leader>uy :<C-u>Unite history/yank<CR>
+    nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
+    nnoremap <silent> <Leader>uf :<C-u>Unite -buffer-name=files file file/new<CR>
+    nnoremap <silent> <Leader>uu :<C-u>Unite file_mru<CR>
+    nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
+    nnoremap <silent> <Leader>ug :<C-u>Unite grep:.<CR>
+    "call unite#custom#source('grep', 'max_candidates', 0)
+    let g:unite_enable_start_insert=1
+    let g:unite_source_history_yank_enable =1
 
-" kana/vim-submode
-let g:submode_timeout = 0
-call submode#enter_with('winsize', 'n', '', '<Leader>s')
-call submode#map('winsize', 'n', '', '>', '<C-w>>')
-call submode#map('winsize', 'n', '', '<', '<C-w><')
-call submode#map('winsize', 'n', '', '-', '<C-w>-')
-call submode#map('winsize', 'n', '', '+', '<C-w>+')
+    if executable('ag')
+      "let g:unite_source_grep_command = 'ag'
+      "let g:unite_source_grep_default_opts = '-i --nogroup --nocolor -S'
+      "let g:unite_source_grep_recursive_opt = ''
+    endif
+endif
 
-nmap <Leader>l "ydi,ldi,F,Pw"yP
-nmap <Leader>h "ydi,bdi,wP`[F,"yP
+if neobundle#is_sourced('vimfiler.vim')
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_tree_indentation = 2
+    let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|.pyc$\|.o$'
+    call vimfiler#custom#profile('default', 'context', { 'auto_cd': 1,  'safe': 0 })
+endif
 
-" basyura/TweetVim
-let g:w3m#command = 'w3m'
+if neobundle#is_sourced('vim-easymotion')
+    nmap s <Plug>(easymotion-s2)
+    nmap g/ <Plug>(easymotion-sn)
+    let g:EasyMotion_do_mapping = 0 "Disable default mappings
+    let g:EasyMotion_enter_jump_first = 1
+endif
 
-" itchyny/lightline.vim
-let g:lightline = {
-\   'colorscheme': 'wombat',
-\   'active' : {
-\       'left' : [
-\           ['mode', 'paste'],
-\           ['syntaxcheck'],
-\           ['readonly', 'filename', 'modified']
-\       ],
-\   },
-\   'component': {
-\       'readonly': '%{&readonly?"⌬":""}',
-\   },
-\   'component_expand': {
-\       'syntaxcheck': 'qfstatusline#Update'
-\   },
-\   'component_type': {
-\       'syntaxcheck': 'error'
-\   },
-\   'separator': { 'left': '', 'right': '' },
-\   'subseparator': { 'left': '|', 'right': '|' },
-\}
+if neobundle#is_sourced('vim-submode')
+    let g:submode_timeout = 0
+    call submode#enter_with('winsize', 'n', '', '<Leader>s')
+    call submode#map('winsize', 'n', '', '>', '<C-w>>')
+    call submode#map('winsize', 'n', '', '<', '<C-w><')
+    call submode#map('winsize', 'n', '', '-', '<C-w>-')
+    call submode#map('winsize', 'n', '', '+', '<C-w>+')
+endif
 
-" LeafCage/yankround.vim
-nmap p <Plug>(yankround-p)
-xmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap gp <Plug>(yankround-gp)
-xmap gp <Plug>(yankround-gp)
-nmap gP <Plug>(yankround-gP)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
-let g:yankround_dir = '~/.nvim/backup'
-let g:yankround_max_history = 100
+if neobundle#is_sourced('TweetVim')
+    let g:w3m#command = 'w3m'
+endif
 
-" luochen1990/rainbow
-let g:rainbow_active = 1
+if neobundle#is_sourced('lightline.vim')
+    let g:lightline = {
+    \   'colorscheme': 'wombat',
+    \   'active' : {
+    \       'left' : [
+    \           ['mode', 'paste'],
+    \           ['syntaxcheck'],
+    \           ['readonly', 'filename', 'modified']
+    \       ],
+    \   },
+    \   'component': {
+    \       'readonly': '%{&readonly?"⌬":""}',
+    \   },
+    \   'component_expand': {
+    \       'syntaxcheck': 'qfstatusline#Update'
+    \   },
+    \   'component_type': {
+    \       'syntaxcheck': 'error'
+    \   },
+    \   'separator': { 'left': '', 'right': '' },
+    \   'subseparator': { 'left': '|', 'right': '|' },
+    \}
+endif
 
-" rhysd/vim-operator-surround
-nmap <silent> zs <Plug>(operator-surround-append)
+if neobundle#is_sourced('yankround.vim')
+    nmap p <Plug>(yankround-p)
+    xmap p <Plug>(yankround-p)
+    nmap P <Plug>(yankround-P)
+    nmap gp <Plug>(yankround-gp)
+    xmap gp <Plug>(yankround-gp)
+    nmap gP <Plug>(yankround-gP)
+    nmap <C-p> <Plug>(yankround-prev)
+    nmap <C-n> <Plug>(yankround-next)
+    let g:yankround_dir = '~/.nvim/backup'
+    let g:yankround_max_history = 100
+endif
 
-" osyo-manga/vim-textobj-multiblock
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-vmap ab <Plug>(textobj-multiblock-a)
-vmap ib <Plug>(textobj-multiblock-i)
+if neobundle#is_sourced('rainbow')
+    let g:rainbow_active = 1
+endif
 
-" osyo-manga/watchdogs
-let g:watchdogs_check_BufWritePost_enable = 1
-let g:watchdogs_check_CursorHold_enable = 1
-let g:quickrun_config = {
-\   'watchdogs_checker/_' : {
-\       'outputter/quickfix/open_cmd' : '',
-\       'hook/qfsigns_update/enable_exit': 1,
-\       'hook/qfsigns_update/priority_exit': 4,
-\       'hook/qfstatusline_update/enable_exit' : 1,
-\       'hook/qfstatusline_update/priority_exit' : 4,
-\   }
-\ }
+if neobundle#is_sourced('vim-operator-surround')
+    map <silent>sa <Plug>(operator-surround-append)
+    map <silent>sd <Plug>(operator-surround-delete)
+    map <silent>sr <Plug>(operator-surround-replace)
 
-call watchdogs#setup(g:quickrun_config)
+    if neobundle#is_sourced('vim-textobj-anyblock')
+        nmap <silent>sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+        nmap <silent>srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+    endif
+endif
 
-" KazuakiM/vim-qfstatusline
-let g:Qfstatusline#UpdateCmd = function('lightline#update')
+if neobundle#is_sourced('watchdogs')
+    let g:watchdogs_check_BufWritePost_enable = 1
+    let g:watchdogs_check_CursorHold_enable = 1
+    let g:quickrun_config = {
+    \   'watchdogs_checker/_' : {
+    \       'outputter/quickfix/open_cmd' : '',
+    \       'hook/qfsigns_update/enable_exit': 1,
+    \       'hook/qfsigns_update/priority_exit': 4,
+    \       'hook/qfstatusline_update/enable_exit' : 1,
+    \       'hook/qfstatusline_update/priority_exit' : 4,
+    \   }
+    \ }
 
-" mbbill/undotree
-let g:undotree_WindowLayout = 3
+    call watchdogs#setup(g:quickrun_config)
+endif
 
-" Yggdroot/indentLine
-let g:indentLine_faster = 1
-let g:indentLine_noConcealCursor=""
+if neobundle#is_sourced('vim-qfstatusline')
+    let g:Qfstatusline#UpdateCmd = function('lightline#update')
+endif
 
-" junegunn/vim-easy-align
-vmap <Enter> <Plug>(EasyAlign)
+if neobundle#is_sourced('undotree')
+    let g:undotree_WindowLayout = 3
+endif
 
-" airblade/vim-gitgutter
-let g:gitgutter_map_keys = 0
+if neobundle#is_sourced('indentLine')
+    let g:indentLine_faster = 1
+    let g:indentLine_noConcealCursor=""
+endif
 
-" AndrewRadev/inline_edit.vim
-let g:inline_edit_autowrite = 1
+if neobundle#is_sourced('vim-easy-align')
+    vmap <Enter> <Plug>(EasyAlign)
+endif
+
+if neobundle#is_sourced('vim-gitgutter')
+    let g:gitgutter_map_keys = 0
+endif
+
+if neobundle#is_sourced('inline_edit.vim')
+    let g:inline_edit_autowrite = 1
+endif
 
 augroup general
     autocmd!
@@ -307,7 +318,7 @@ augroup general
     "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
     "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
-    autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
+    " autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
@@ -315,6 +326,8 @@ augroup END
 
 syntax enable
 
-colorscheme mopkai
+if neobundle#is_sourced('mopkai.vim')
+    colorscheme mopkai
+endif
 
-Guifont Ubuntu Mono:h13
+Guifont Ubuntu Mono:h10
