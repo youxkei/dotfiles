@@ -129,6 +129,7 @@ NeoBundle 'AndrewRadev/inline_edit.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
 NeoBundle 'csscomb/vim-csscomb'
+NeoBundle 'wakatime/vim-wakatime'
 
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-function'
