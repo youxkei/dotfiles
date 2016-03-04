@@ -58,7 +58,9 @@ set modeline
 let loaded_matchparen = 1
 
 let g:mapleader=","
+let g:tex_conceal=''
 
+nnoremap <Leader>w :w<CR>
 nnoremap zQ <NOP>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
@@ -114,7 +116,7 @@ NeoBundle 'koron/codic-vim'
 NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'osyo-manga/shabadou.vim'
-NeoBundle 'osyo-manga/vim-watchdogs'
+"NeoBundle 'osyo-manga/vim-watchdogs'
 NeoBundle 'KazuakiM/vim-qfsigns'
 NeoBundle 'dannyob/quickfixstatus'
 NeoBundle 'KazuakiM/vim-qfstatusline'
@@ -122,7 +124,7 @@ NeoBundle 'sudo.vim'
 NeoBundle 'mbbill/undotree'
 NeoBundle 'Yggdroot/indentLine'
 NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'lervag/vimtex'
+"NeoBundle 'lervag/vimtex'
 NeoBundle 'rhysd/try-colorscheme.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'bkad/CamelCaseMotion'
@@ -131,6 +133,8 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'lambdalisue/vim-gita'
 NeoBundle 'csscomb/vim-csscomb'
 NeoBundle 'wakatime/vim-wakatime'
+"NeoBundle 'scrooloose/syntastic'
+NeoBundle 'Shougo/vinarise.vim'
 NeoBundle 'rhysd/committia.vim'
 
 NeoBundle 'kana/vim-textobj-user'
@@ -143,6 +147,7 @@ NeoBundle 'rhysd/vim-operator-surround'
 NeoBundle 'kana/vim-textobj-entire'
 NeoBundle 'osyo-manga/vim-textobj-blockwise'
 NeoBundle 'rhysd/vim-textobj-anyblock'
+NeoBundle 'haya14busa/vim-operator-flashy'
 
 NeoBundle 'JesseKPhillips/d.vim'
 NeoBundle 'digitaltoad/vim-jade'
@@ -157,6 +162,7 @@ NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'freeo/vim-kalisi'
 NeoBundle 'joshdick/onedark.vim'
+NeoBundle 'NLKNguyen/papercolor-theme'
 
 call neobundle#end()
 
@@ -311,6 +317,22 @@ if neobundle#is_sourced('inline_edit.vim')
     let g:inline_edit_autowrite = 1
 endif
 
+if neobundle#is_sourced('vim-textobj-parameter')
+    nmap <Leader>l "adi,"bdw"cdi,"cP"bp"ap
+endif
+
+if neobundle#is_sourced('vim-operator-flashy')
+    map y <Plug>(operator-flashy)
+    nmap Y <Plug>(operator-flashy)$
+endif
+
+if neobundle#is_sourced('syntastic')
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 0
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 1
+endif
+
 augroup general
     autocmd!
 
@@ -321,7 +343,7 @@ augroup general
     "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
     "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
-    " autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
+    autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
@@ -329,8 +351,13 @@ augroup END
 
 syntax enable
 
+"if neobundle#is_sourced('papercolor-theme')
+"    set background=dark
+"    colorscheme PaperColor
+"endif
+
 if neobundle#is_sourced('mopkai.vim')
     colorscheme mopkai
 endif
 
-Guifont Ubuntu Mono:h10
+Guifont Ubuntu Mono:h8
