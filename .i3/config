@@ -1,6 +1,6 @@
 set $mod Mod1
 
-font pango:ゆたぽん（コーディング）Backsl Bold 13
+font pango:NasuM 13
 
 floating_modifier $mod
 
@@ -99,7 +99,7 @@ bar {
     position top
     binding_mode_indicator yes
 
-    font pango:ゆたぽん（コーディング）Backsl Bold 16
+    font pango:NasuM 16
 
     tray_output primary
 }
