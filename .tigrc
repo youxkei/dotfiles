@@ -2,4 +2,4 @@ set commit-order = topo
 set vertical-split = false
 set line-graphics = default
 
-set main-view	= line-number:display=no id:display=no date:display=no author:display=abbreviated commit-title:display=yes,graph=v1,refs,overflow=no
+set main-view	= line-number:display=no id:display=no date:display=no author:display=abbreviated commit-title:display=yes,graph,refs,overflow=no
