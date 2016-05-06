@@ -55,8 +55,8 @@ fi
 # OPAM configuration
 . ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-if [[ -f ~/.ghq/github.com/zsh-users/antigen/antigen.zsh ]]; then
-    source ~/.ghq/github.com/zsh-users/antigen/antigen.zsh
+if [[ -f ~/repo/antigen/antigen.zsh ]]; then
+    source ~/repo/antigen/antigen.zsh
 
     antigen use oh-my-zsh
 
