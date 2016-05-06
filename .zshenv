@@ -12,6 +12,8 @@ path=(
     $path
 )
 
+eval "$(hub alias -s)"
+
 export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
 export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
 
