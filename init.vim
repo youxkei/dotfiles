@@ -163,6 +163,7 @@ NeoBundle 'mopp/mopkai.vim'
 NeoBundle 'freeo/vim-kalisi'
 NeoBundle 'joshdick/onedark.vim'
 NeoBundle 'NLKNguyen/papercolor-theme'
+NeoBundle 'morhetz/gruvbox'
 
 call neobundle#end()
 
@@ -356,8 +357,9 @@ syntax enable
 "    colorscheme PaperColor
 "endif
 
-if neobundle#is_sourced('mopkai.vim')
-    colorscheme mopkai
+if neobundle#is_sourced('gruvbox')
+    set background=dark
+    colorscheme gruvbox
 endif
 
 Guifont Ubuntu Mono:h8
