@@ -334,6 +334,10 @@ if neobundle#is_sourced('syntastic')
     let g:syntastic_check_on_wq = 1
 endif
 
+if neobundle#is_sourced('vim-multiple-cursors')
+    let g:multi_cursor_start_key='<F6>'
+end
+
 augroup general
     autocmd!
 
