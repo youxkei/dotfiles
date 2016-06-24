@@ -55,6 +55,8 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set modeline
 
+set clipboard=unnamed
+
 let loaded_matchparen = 1
 
 let g:mapleader=","
