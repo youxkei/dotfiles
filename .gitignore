@@ -2,3 +2,4 @@
 *.swo
 *.o
 .dub/*
+.bundle/cache
