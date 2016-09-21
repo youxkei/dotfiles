@@ -1,7 +1,6 @@
 filetype off
 
-let $PATH=system("echo \$PATH")
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
 
 if isdirectory(expand('~/.nvim/backup'))
     set backupdir=~/.nvim/backup
