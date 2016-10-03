@@ -63,7 +63,7 @@ let g:mapleader=","
 let g:tex_conceal=''
 
 nnoremap <Leader>w :w<CR>
-nnoremap zQ <NOP>
+nnoremap Q <NOP>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
@@ -209,15 +209,15 @@ if neobundle#is_sourced('vimfiler.vim')
 endif
 
 if neobundle#is_sourced('vim-easymotion')
-    nmap s <Plug>(easymotion-s2)
-    nmap g/ <Plug>(easymotion-sn)
+    nmap <Leader>s <Plug>(easymotion-s2)
+    nmap <Leader>gs <Plug>(easymotion-sn)
     let g:EasyMotion_do_mapping = 0 "Disable default mappings
     let g:EasyMotion_enter_jump_first = 1
 endif
 
 if neobundle#is_sourced('vim-submode')
     let g:submode_timeout = 0
-    call submode#enter_with('winsize', 'n', '', '<Leader>s')
+    call submode#enter_with('winsize', 'n', '', '<Leader>ws')
     call submode#map('winsize', 'n', '', 'h', '<C-w><')
     call submode#map('winsize', 'n', '', 'j', '<C-w>-')
     call submode#map('winsize', 'n', '', 'k', '<C-w>+')
