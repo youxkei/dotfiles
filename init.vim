@@ -217,10 +217,10 @@ endif
 if neobundle#is_sourced('vim-submode')
     let g:submode_timeout = 0
     call submode#enter_with('winsize', 'n', '', '<Leader>s')
-    call submode#map('winsize', 'n', '', '>', '<C-w>>')
-    call submode#map('winsize', 'n', '', '<', '<C-w><')
-    call submode#map('winsize', 'n', '', '-', '<C-w>-')
-    call submode#map('winsize', 'n', '', '+', '<C-w>+')
+    call submode#map('winsize', 'n', '', 'h', '<C-w><')
+    call submode#map('winsize', 'n', '', 'j', '<C-w>-')
+    call submode#map('winsize', 'n', '', 'k', '<C-w>+')
+    call submode#map('winsize', 'n', '', 'l', '<C-w>>')
 endif
 
 if neobundle#is_sourced('TweetVim')
