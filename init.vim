@@ -54,6 +54,9 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set modeline
 
+set cursorline
+set cursorcolumn
+
 let loaded_matchparen = 1
 
 let g:mapleader=","
