@@ -113,5 +113,5 @@ exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id rescuetime
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 # exec --no-startup-id compton --config .compton.conf
-# exec --no-startup-id gnome-sound-applet
