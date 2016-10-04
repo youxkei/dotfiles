@@ -139,6 +139,8 @@ NeoBundle 'wakatime/vim-wakatime'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/vinarise.vim'
 NeoBundle 'rhysd/committia.vim'
+NeoBundle 'derekwyatt/vim-fswitch'
+NeoBundle 'jiangmiao/auto-pairs'
 
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-function'
@@ -341,20 +343,30 @@ if neobundle#is_sourced('vim-multiple-cursors')
     let g:multi_cursor_start_key='<F6>'
 end
 
+if neobundle#is_sourced('vim-fswitch')
+    nnoremap <silent><Leader>f :FSHere<CR>
+endif
+
 augroup general
-    autocmd!
+    au!
 
     " .vimrc
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+    au BufWritePost $MYVIMRC nested source $MYVIMRC
 
     " 状態の保存と復元
     "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
     "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
-    autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
+    au BufEnter *.h let b:fswitchdst  = 'cpp,c'
+    au BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
 
-    autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
-    autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    au BufEnter *.cpp let b:fswitchdst  = 'h'
+    au BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
+
+    au BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
+
+    au FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    au FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 augroup END
 
 syntax enable
