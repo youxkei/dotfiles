@@ -367,12 +367,14 @@ augroup general
     "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
     "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
 
+    " fswitch
     au BufEnter *.h let b:fswitchdst  = 'cpp,c'
     au BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
 
     au BufEnter *.cpp let b:fswitchdst  = 'h'
     au BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
 
+    " auto save
     au BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
     au FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
