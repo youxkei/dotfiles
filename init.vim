@@ -180,8 +180,6 @@ NeoBundle 'morhetz/gruvbox'
 
 call neobundle#end()
 
-NeoBundleInstall
-
 filetype plugin indent on
 
 
