@@ -112,7 +112,6 @@ NeoBundle 'mattn/webapi-vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'kannokanno/previm'
 NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-niceblock'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundle 'fcitx.vim'
@@ -155,11 +154,12 @@ NeoBundle 'kana/vim-textobj-function'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'rhysd/vim-textobj-word-column'
 NeoBundle 'sgur/vim-textobj-parameter'
-NeoBundle 'kana/vim-operator-replace'
-NeoBundle 'rhysd/vim-operator-surround'
 NeoBundle 'kana/vim-textobj-entire'
 NeoBundle 'osyo-manga/vim-textobj-blockwise'
 NeoBundle 'rhysd/vim-textobj-anyblock'
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-operator-replace'
+NeoBundle 'rhysd/vim-operator-surround'
 NeoBundle 'haya14busa/vim-operator-flashy'
 
 NeoBundle 'JesseKPhillips/d.vim'
@@ -271,7 +271,7 @@ if neobundle#is_sourced('yankround.vim')
     nmap gP <Plug>(yankround-gP)
     nmap <C-p> <Plug>(yankround-prev)
     nmap <C-n> <Plug>(yankround-next)
-    let g:yankround_dir = '~/.nvim/backup'
+    let g:yankround_dir = '~/.cache/nvim/yankround'
     let g:yankround_max_history = 100
 endif
 
