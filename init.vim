@@ -2,16 +2,20 @@ filetype off
 
 set termguicolors
 
-if isdirectory(expand('~/.nvim/backup'))
-    set backupdir=~/.nvim/backup
-    set undodir=~/.nvim/backup
-    set directory=~/.nvim/backup
-
-    set undofile
-    set backup
-    set writebackup
-    set swapfile
+if !isdirectory(expand('~/.cache/nvim'))
+    call mkdir(expand('~/.cache/nvim/backup'), 'p')
+    call mkdir(expand('~/.cache/nvim/undo'),   'p')
+    call mkdir(expand('~/.cache/nvim/swap'),   'p')
 endif
+
+set backupdir=~/.cache/nvim/backup
+set undodir  =~/.cache/nvim/undo
+set directory=~/.cache/nvim/swap
+
+set undofile
+set backup
+set writebackup
+set swapfile
 
 set cindent
 set cinoptions=L0,(0,U1,m1
@@ -69,12 +73,16 @@ vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 
 if has('vim_starting')
-    set runtimepath+=~/.nvim/bundle/neobundle.vim/
+    if !isdirectory(expand('~/.cache/nvim/bundle/neobundle.vim'))
+        call mkdir(expand('~/.cache/nvim/bundle'), 'p')
+        !git clone https://github.com/Shougo/neobundle.vim ~/.cache/nvim/bundle/neobundle.vim
+    endif
+    set runtimepath+=~/.cache/nvim/bundle/neobundle.vim/
 
     command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
 endif
 
-call neobundle#begin(expand('~/.nvim/bundle/'))
+call neobundle#begin(expand('~/.cache/nvim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
@@ -171,6 +179,8 @@ NeoBundle 'NLKNguyen/papercolor-theme'
 NeoBundle 'morhetz/gruvbox'
 
 call neobundle#end()
+
+NeoBundleInstall
 
 filetype plugin indent on
 
