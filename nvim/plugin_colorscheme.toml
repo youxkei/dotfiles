@@ -1,0 +1,14 @@
+[[plugins]]
+repo = 'mopp/mopkai.vim'
+
+[[plugins]]
+repo = 'freeo/vim-kalisi'
+
+[[plugins]]
+repo = 'joshdick/onedark.vim'
+
+[[plugins]]
+repo = 'NLKNguyen/papercolor-theme'
+
+[[plugins]]
+repo = 'morhetz/gruvbox'

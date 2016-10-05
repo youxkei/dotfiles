@@ -1,0 +1,26 @@
+[[plugins]]
+repo = 'JesseKPhillips/d.vim'
+
+[[plugins]]
+repo = 'digitaltoad/vim-jade'
+
+[[plugins]]
+repo = 'derekwyatt/vim-scala'
+
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+
+[[plugins]]
+repo = 'gf3/peg.vim'
+
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+
+[[plugins]]
+repo = 'mxw/vim-jsx'
+
+[[plugins]]
+repo = 'elzr/vim-json'
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'

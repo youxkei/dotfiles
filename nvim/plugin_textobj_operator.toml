@@ -1,0 +1,58 @@
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'kana/vim-textobj-function'
+
+[[plugins]]
+repo = 'kana/vim-textobj-indent'
+
+[[plugins]]
+repo = 'rhysd/vim-textobj-word-column'
+
+[[plugins]]
+repo = 'sgur/vim-textobj-parameter'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+add_hook = '''
+'''
+
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+add_hook = '''
+'''
+[[plugins]]
+repo = 'rhysd/vim-operator-surround'
+add_hook = '''
+    map <silent>sa <Plug>(operator-surround-append)
+    map <silent>sd <Plug>(operator-surround-delete)
+    map <silent>sr <Plug>(operator-surround-replace)
+
+    if dein#is_sourced('vim-textobj-anyblock')
+        nmap <silent>sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+        nmap <silent>srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+    endif
+'''
+
+[[plugins]]
+repo = 'kana/vim-textobj-entire'
+add_hook = '''
+'''
+
+[[plugins]]
+repo = 'osyo-manga/vim-textobj-blockwise'
+add_hook = '''
+'''
+
+[[plugins]]
+repo = 'rhysd/vim-textobj-anyblock'
+add_hook = '''
+'''
+
+[[plugins]]
+repo = 'haya14busa/vim-operator-flashy'
+add_hook = '''
+    map y <Plug>(operator-flashy)
+    nmap Y <Plug>(operator-flashy)$
+'''
