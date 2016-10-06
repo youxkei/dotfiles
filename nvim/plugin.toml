@@ -280,6 +280,9 @@ repo = 'rhysd/committia.vim'
 
 [[plugins]]
 repo = 'derekwyatt/vim-fswitch'
+hook_add = '''
+	nmap <silent> <Leader>f :FSHere<CR>
+'''
 
 [[plugins]]
 repo = 'jiangmiao/auto-pairs'
