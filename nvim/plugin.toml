@@ -1,4 +1,7 @@
 [[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
 repo = 'thinca/vim-ambicmd'
 hook_add = '''
     cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
