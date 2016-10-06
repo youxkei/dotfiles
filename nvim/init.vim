@@ -72,7 +72,7 @@ inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 
-let s:plugin_directory = expand('~/.cache/dein')
+let s:plugin_directory = expand('~/.cache/nvim/dein')
 let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
 
 if has('vim_starting')
@@ -115,7 +115,6 @@ augroup general
     " fswitch
     autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
     autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
-
     autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
     autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
 
