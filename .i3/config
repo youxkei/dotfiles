@@ -4,7 +4,7 @@ font pango:NasuM 13
 
 floating_modifier $mod
 
-focus_follows_mouse yes
+focus_follows_mouse no
 
 bindsym $mod+Shift+Return  exec i3-sensible-terminal
 bindsym $mod+Shift+q       kill
