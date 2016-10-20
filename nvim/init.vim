@@ -118,6 +118,11 @@ augroup general
     autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
     autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
 
+    autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
+    autocmd BufEnter *.smi let b:fswitchlocs  = '.'
+    autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
+    autocmd BufEnter *.sml let b:fswitchlocs  = '.'
+
     " auto save
     autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
 
