@@ -281,7 +281,7 @@ repo = 'rhysd/committia.vim'
 [[plugins]]
 repo = 'derekwyatt/vim-fswitch'
 hook_add = '''
-	nmap <silent> <Leader>f :FSHere<CR>
+    nmap <silent> <Leader>f :FSHere<CR>
 '''
 
 [[plugins]]
