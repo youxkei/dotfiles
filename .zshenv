@@ -21,6 +21,4 @@ export GOPATH="$HOME/.go"
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 
-if [ $XDG_CURRENT_DESKTOP="i3" ]; then
-    XDG_CURRENT_DESKTOP="Unity"
-fi
+export XDG_CURRENT_DESKTOP="Unity"
