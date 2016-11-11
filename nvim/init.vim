@@ -61,6 +61,8 @@ set modeline
 set cursorline
 set cursorcolumn
 
+set inccommand=nosplit
+
 let loaded_matchparen = 1
 
 let g:mapleader=","
