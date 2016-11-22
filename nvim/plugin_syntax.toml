@@ -24,3 +24,6 @@ repo = 'elzr/vim-json'
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
