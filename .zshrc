@@ -66,6 +66,7 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-syntax-highlighting
+    antigen bundle soimort/translate-shell
 
     antigen theme ys
 
