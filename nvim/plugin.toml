@@ -236,7 +236,7 @@ hook_add = '''
 repo = 'Yggdroot/indentLine'
 hook_add = '''
     let g:indentLine_faster = 1
-    let g:indentLine_noConcealCursor=""
+    let g:indentLine_setConceal = 0
 '''
 
 [[plugins]]
