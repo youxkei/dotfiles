@@ -125,9 +125,6 @@ augroup general
     autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
     autocmd BufEnter *.sml let b:fswitchlocs  = '.'
 
-    " auto save
-    autocmd BufLeave ?* if(!&readonly && &buftype == '' && filewritable(expand("%:p"))) | w | endif
-
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 augroup END
