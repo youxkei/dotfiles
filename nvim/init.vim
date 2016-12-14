@@ -18,7 +18,7 @@ set writebackup
 set swapfile
 
 set cindent
-set cinoptions=L0,(0,U1,m1
+set cinoptions=L0,(4,U1,m1
 set expandtab
 set shiftwidth=4
 set softtabstop=4
