@@ -203,9 +203,6 @@ repo = 'deris/vim-rengbang'
 repo = 'koron/codic-vim'
 
 [[plugins]]
-repo = 'osyo-manga/vim-over'
-
-[[plugins]]
 repo = 'thinca/vim-quickrun'
 
 [[plugins]]
