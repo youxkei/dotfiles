@@ -63,6 +63,8 @@ set cursorcolumn
 
 set inccommand=nosplit
 
+set autoread
+
 let loaded_matchparen = 1
 
 let g:mapleader=","
@@ -127,6 +129,8 @@ augroup general
 
     autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
+
+    autocmd BufEnter * checktime
 augroup END
 
 syntax enable
