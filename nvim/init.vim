@@ -109,12 +109,9 @@ filetype plugin indent on
 augroup general
     autocmd!
 
-    " .vimrc
+    " autosource
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-
-    " 状態の保存と復元
-    "autocmd BufWinLeave ?* if(bufname('%')!='') | silent mkview! | endif
-    "autocmd BufWinEnter ?* if(bufname('%')!='') | silent loadview | endif
+    autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
 
     " fswitch
     autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
@@ -144,5 +141,3 @@ if dein#is_sourced('gruvbox')
     set background=dark
     colorscheme gruvbox
 endif
-
-Guifont Ubuntu Mono:h8
