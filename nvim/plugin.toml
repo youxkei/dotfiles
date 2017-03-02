@@ -289,3 +289,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'Shougo/deol.nvim'
+
+[[plugins]]
+repo = 'equalsraf/neovim-qt'
+rtp = 'src/gui/runtime'
