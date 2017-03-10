@@ -13,6 +13,8 @@ path=(
 )
 
 eval "$(hub alias -s)"
+unalias git
+function git() { hub $@; }
 
 export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
 export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
