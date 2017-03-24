@@ -42,15 +42,10 @@ alias ls='ls -hF --color=auto'
 alias ll='ls -al'
 alias la='ls -A'
 alias l='ls -CF'
-alias ainst="sudo apt-get install"
 alias open="xdg-open"
 alias tmux="tmux -2"
 
 function chpwd() { ls }
-
-if (which zprof > /dev/null) ;then
-    zprof | less
-fi
 
 # OPAM configuration
 . ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
