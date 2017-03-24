@@ -59,6 +59,7 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
     source ~/repo/antigen/antigen.zsh
 
     antigen use oh-my-zsh
+    antigen bundle gitfast
 
     export ENHANCD_COMMAND="ecd"
     antigen bundle b4b4r07/enhancd
@@ -66,6 +67,7 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-syntax-highlighting
+    antigen bundle zsh-users/zsh-completions
     antigen bundle soimort/translate-shell
 
     antigen theme ys
