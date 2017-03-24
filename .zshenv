@@ -1,9 +1,7 @@
 #zmodload zsh/zprof && zprof
 
-path=(~/.anyenv/bin $path)
-eval "$(anyenv init -)"
-
 path=(
+    ~/.anyenv/bin
     ~/.go/bin
     ~/Android/Sdk/platform-tools
     ~/android-studio/bin
@@ -11,9 +9,12 @@ path=(
     $path
 )
 
-eval "$(hub alias -s)"
-unalias git
-function git() { hub $@; }
+(( ${+commands[anyenv]} )) && eval "$(anyenv init -)"
+if (( ${+commands[hub]} )); then
+    eval "$(hub alias -s)"
+    unalias git
+    function git() { hub $@; }
+fi
 
 export GOPATH="$HOME/.go"
 
