@@ -84,8 +84,6 @@ if has('vim_starting')
         execute '!git clone https://github.com/Shougo/dein.vim' s:dein_directory
     endif
     execute 'set runtimepath+=' . s:dein_directory
-
-    command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
 endif
 
 if dein#load_state(s:plugin_directory)
