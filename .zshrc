@@ -58,7 +58,6 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
 
     export ENHANCD_COMMAND="ecd"
     antigen bundle b4b4r07/enhancd
-    antigen bundle mollifier/anyframe
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-syntax-highlighting
