@@ -15,6 +15,9 @@ repo = 'gf3/peg.vim'
 
 [[plugins]]
 repo = 'pangloss/vim-javascript'
+hook_add = '''
+    let g:javascript_plugin_flow = 1
+'''
 
 [[plugins]]
 repo = 'mxw/vim-jsx'
