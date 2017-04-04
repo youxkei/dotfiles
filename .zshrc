@@ -1,10 +1,3 @@
-# Set up the prompt
-
-# autoload -Uz promptinit
-# promptinit
-# prompt adam1
-
-# Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
 setopt histignorealldups sharehistory
@@ -13,7 +6,6 @@ HISTSIZE=1000
 SAVEHIST=100000
 HISTFILE=~/.zsh_history
 
-# Use modern completion system
 autoload -Uz compinit
 compinit -C
 
@@ -47,7 +39,6 @@ alias tmux="tmux -2"
 
 function chpwd() { ls }
 
-# OPAM configuration
 . ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 if [[ -f ~/repo/antigen/antigen.zsh ]]; then

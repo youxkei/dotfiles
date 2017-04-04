@@ -1,5 +1,3 @@
-#zmodload zsh/zprof && zprof
-
 path=(
     ~/.anyenv/bin
     ~/.go/bin
