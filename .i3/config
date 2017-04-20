@@ -8,7 +8,7 @@ focus_follows_mouse no
 
 bindsym $mod+Shift+Return  exec i3-sensible-terminal
 bindsym $mod+Shift+q       kill
-bindsym $mod+d             exec $SHELL -c 'rofi -show run -font "NasuM 10"'
+bindsym $mod+d             exec /bin/zsh -c 'rofi -show run -font "NasuM 10"'
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -116,6 +116,33 @@ exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id rescuetime
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
+exec_always --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 # exec --no-startup-id compton --config .compton.conf
-exec --no-startup-id $SHELL -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
+exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
+
+set_from_resource $left_monitor   i3wm.left_monitor
+set_from_resource $center_monitor i3wm.center_monitor
+set_from_resource $right_monitor  i3wm.right_monitor
+
+workspace  1 output $left_monitor
+workspace  2 output $center_monitor
+workspace  3 output $center_monitor
+workspace  4 output $center_monitor
+workspace  5 output $center_monitor
+workspace  6 output $right_monitor
+workspace  7 output $right_monitor
+workspace  8 output $right_monitor
+workspace  9 output $right_monitor
+workspace 10 output $right_monitor
+
+assign [class="^Slack$"] 1
+exec --no-startup-id slack
+
+assign [class="^nvim-qt$"] 2
+exec --no-startup-id nvim-qt
+
+assign [class="^Gnome-terminal$"] 3
+exec --no-startup-id gnome-terminal
+
+assign [class="^Google-chrome$"] 6
+exec --no-startup-id google-chrome
