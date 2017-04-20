@@ -18,4 +18,4 @@ export GOPATH="$HOME/.go"
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 
-export XDG_CURRENT_DESKTOP="Unity"
+export XDG_CURRENT_DESKTOP="Unity:Unity7"
