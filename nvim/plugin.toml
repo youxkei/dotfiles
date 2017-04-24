@@ -75,30 +75,30 @@ repo = 'Shougo/neomru.vim'
 [[plugins]]
 repo = 'Shougo/vimfiler.vim'
 hook_add = '''
-    let g:vimfiler_as_default_explorer = 1
-    let g:vimfiler_tree_indentation = 2
-    let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|\.pyc$\|\.o$'
-    call vimfiler#custom#profile('default', 'context', { 'auto_cd': 1,  'safe': 0 })
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_tree_indentation = 2
+let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|\.pyc$\|\.o$'
+call vimfiler#custom#profile('default', 'context', { 'auto_cd': 1,  'safe': 0 })
 '''
 
 [[plugins]]
 repo = 'Lokaltog/vim-easymotion'
 hook_add = '''
-    nmap s <Plug>(easymotion-s2)
-    nmap gs <Plug>(easymotion-sn)
-    let g:EasyMotion_do_mapping = 0 "Disable default mappings
-    let g:EasyMotion_enter_jump_first = 1
+nmap s <Plug>(easymotion-s2)
+nmap gs <Plug>(easymotion-sn)
+let g:EasyMotion_do_mapping = 0 "Disable default mappings
+let g:EasyMotion_enter_jump_first = 1
 '''
 
 [[plugins]]
 repo = 'kana/vim-submode'
 hook_add = '''
-    let g:submode_timeout = 0
-    call submode#enter_with('winsize', 'n', '', '<Leader>s')
-    call submode#map('winsize', 'n', '', 'h', '<C-w><')
-    call submode#map('winsize', 'n', '', 'j', '<C-w>-')
-    call submode#map('winsize', 'n', '', 'k', '<C-w>+')
-    call submode#map('winsize', 'n', '', 'l', '<C-w>>')
+let g:submode_timeout = 0
+call submode#enter_with('winsize', 'n', '', '<Leader>s')
+call submode#map('winsize', 'n', '', 'h', '<C-w><')
+call submode#map('winsize', 'n', '', 'j', '<C-w>-')
+call submode#map('winsize', 'n', '', 'k', '<C-w>+')
+call submode#map('winsize', 'n', '', 'l', '<C-w>>')
 '''
 
 [[plugins]]
@@ -122,27 +122,27 @@ repo = 'mattn/webapi-vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
-    let g:lightline = {
-    \   'colorscheme': 'wombat',
-    \   'active' : {
-    \       'left' : [
-    \           ['mode', 'paste'],
-    \           ['syntaxcheck'],
-    \           ['readonly', 'filename', 'modified']
-    \       ],
-    \   },
-    \   'component': {
-    \       'readonly': '%{&readonly?"⌬":""}',
-    \   },
-    \   'component_expand': {
-    \       'syntaxcheck': 'qfstatusline#Update'
-    \   },
-    \   'component_type': {
-    \       'syntaxcheck': 'error'
-    \   },
-    \   'separator': { 'left': '', 'right': '' },
-    \   'subseparator': { 'left': '|', 'right': '|' },
-    \}
+let g:lightline = {
+\   'colorscheme': 'wombat',
+\   'active' : {
+\       'left' : [
+\           ['mode', 'paste'],
+\           ['syntaxcheck'],
+\           ['readonly', 'filename', 'modified']
+\       ],
+\   },
+\   'component': {
+\       'readonly': '%{&readonly?"⌬":""}',
+\   },
+\   'component_expand': {
+\       'syntaxcheck': 'qfstatusline#Update'
+\   },
+\   'component_type': {
+\       'syntaxcheck': 'error'
+\   },
+\   'separator': { 'left': '', 'right': '' },
+\   'subseparator': { 'left': '|', 'right': '|' },
+\}
 '''
 
 [[plugins]]
@@ -151,16 +151,16 @@ repo = 'kannokanno/previm'
 [[plugins]]
 repo = 'LeafCage/yankround.vim'
 hook_add = '''
-    nmap p <Plug>(yankround-p)
-    xmap p <Plug>(yankround-p)
-    nmap P <Plug>(yankround-P)
-    nmap gp <Plug>(yankround-gp)
-    xmap gp <Plug>(yankround-gp)
-    nmap gP <Plug>(yankround-gP)
-    nmap <C-p> <Plug>(yankround-prev)
-    nmap <C-n> <Plug>(yankround-next)
-    let g:yankround_dir = '~/.cache/nvim/yankround'
-    let g:yankround_max_history = 100
+nmap p <Plug>(yankround-p)
+xmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap gp <Plug>(yankround-gp)
+xmap gp <Plug>(yankround-gp)
+nmap gP <Plug>(yankround-gP)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
+let g:yankround_dir = '~/.cache/nvim/yankround'
+let g:yankround_max_history = 100
 '''
 
 [[plugins]]
@@ -175,7 +175,7 @@ repo = 'fcitx.vim'
 [[plugins]]
 repo = 'luochen1990/rainbow'
 hook_add = '''
-    let g:rainbow_active = 1
+let g:rainbow_active = 1
 '''
 
 [[plugins]]
@@ -190,7 +190,7 @@ repo = 'idanarye/vim-vebugger'
 [[plugins]]
 repo = 'junegunn/vim-easy-align'
 hook_add = '''
-    vmap <Enter> <Plug>(EasyAlign)
+vmap <Enter> <Plug>(EasyAlign)
 '''
 
 [[plugins]]
@@ -214,7 +214,7 @@ repo = 'dannyob/quickfixstatus'
 [[plugins]]
 repo = 'KazuakiM/vim-qfstatusline'
 hook_add = '''
-    let g:Qfstatusline#UpdateCmd = function('lightline#update')
+let g:Qfstatusline#UpdateCmd = function('lightline#update')
 '''
 
 [[plugins]]
@@ -223,14 +223,14 @@ repo = 'sudo.vim'
 [[plugins]]
 repo = 'mbbill/undotree'
 hook_add = '''
-    let g:undotree_WindowLayout = 3
+let g:undotree_WindowLayout = 3
 '''
 
 [[plugins]]
 repo = 'Yggdroot/indentLine'
 hook_add = '''
-    let g:indentLine_faster = 1
-    let g:indentLine_setConceal = 0
+let g:indentLine_faster = 1
+let g:indentLine_setConceal = 0
 '''
 
 [[plugins]]
@@ -245,29 +245,29 @@ repo = 'terryma/vim-multiple-cursors'
 [[plugins]]
 repo = 'bkad/CamelCaseMotion'
 hook_add = '''
-    map <silent> ;w <Plug>CamelCaseMotion_w
-    map <silent> ;b <Plug>CamelCaseMotion_b
-    map <silent> ;e <Plug>CamelCaseMotion_e
-    map <silent> ;ge <Plug>CamelCaseMotion_ge
+map <silent> ;w <Plug>CamelCaseMotion_w
+map <silent> ;b <Plug>CamelCaseMotion_b
+map <silent> ;e <Plug>CamelCaseMotion_e
+map <silent> ;ge <Plug>CamelCaseMotion_ge
 
-    omap <silent> ;iw <Plug>CamelCaseMotion_iw
-    xmap <silent> ;iw <Plug>CamelCaseMotion_iw
-    omap <silent> ;ib <Plug>CamelCaseMotion_ib
-    xmap <silent> ;ib <Plug>CamelCaseMotion_ib
-    omap <silent> ;ie <Plug>CamelCaseMotion_ie
-    xmap <silent> ;ie <Plug>CamelCaseMotion_ie
+omap <silent> ;iw <Plug>CamelCaseMotion_iw
+xmap <silent> ;iw <Plug>CamelCaseMotion_iw
+omap <silent> ;ib <Plug>CamelCaseMotion_ib
+xmap <silent> ;ib <Plug>CamelCaseMotion_ib
+omap <silent> ;ie <Plug>CamelCaseMotion_ie
+xmap <silent> ;ie <Plug>CamelCaseMotion_ie
 '''
 
 [[plugins]]
 repo = 'AndrewRadev/inline_edit.vim'
 hook_add = '''
-    let g:inline_edit_autowrite = 1
+let g:inline_edit_autowrite = 1
 '''
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 hook_add = '''
-    let g:gitgutter_map_keys = 0
+let g:gitgutter_map_keys = 0
 '''
 
 [[plugins]]
@@ -288,7 +288,7 @@ repo = 'rhysd/committia.vim'
 [[plugins]]
 repo = 'derekwyatt/vim-fswitch'
 hook_add = '''
-    nmap <silent> <Leader>f :FSHere<CR>
+nmap <silent> <Leader>f :FSHere<CR>
 '''
 
 [[plugins]]
@@ -301,9 +301,9 @@ rtp = 'src/gui/runtime'
 [[plugins]]
 repo = 'rhysd/vim-grammarous'
 hook_add = '''
-    let g:grammarous#default_comments_only_filetypes = {
-        \ '*' : 1, 'help' : 0, 'markdown' : 0,
-    \ }
+let g:grammarous#default_comments_only_filetypes = {
+    \ '*' : 1, 'help' : 0, 'markdown' : 0,
+\ }
 '''
 
 [[plugins]]
