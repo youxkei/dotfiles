@@ -46,6 +46,17 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add= '''
+nnoremap <silent> <Leader>uf :<C-u>Denite buffer file_rec<CR>
+'''
+hook_post_source='''
+if executable('ag')
+    call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+endif
+'''
+
+[[plugins]]
 repo = 'Shougo/unite-ssh'
 
 [[plugins]]
