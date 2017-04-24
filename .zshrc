@@ -47,7 +47,7 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
     antigen use oh-my-zsh
     antigen bundle gitfast
 
-    export ENHANCD_COMMAND="ecd"
+    export ENHANCD_COMMAND="cd"
     export ENHANCD_FILTER=fzy
 
     antigen bundle b4b4r07/enhancd
