@@ -47,13 +47,17 @@ hook_add = '''
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
-hook_add= '''
-nnoremap <silent> <Leader>uf :<C-u>Denite buffer file_rec<CR>
-'''
-hook_post_source='''
+hook_add='''
+call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
+
 if executable('ag')
     call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 endif
+
+nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
+nnoremap <silent> <Leader>ug :<C-u>Denite buffer file_rec/git<CR>
+nnoremap <silent> <Leader>uf :<C-u>Denite file_rec<CR>
 '''
 
 [[plugins]]
