@@ -260,10 +260,15 @@ repo = 'terryma/vim-multiple-cursors'
 [[plugins]]
 repo = 'bkad/CamelCaseMotion'
 hook_add = '''
-map <silent> ;w <Plug>CamelCaseMotion_w
-map <silent> ;b <Plug>CamelCaseMotion_b
-map <silent> ;e <Plug>CamelCaseMotion_e
-map <silent> ;ge <Plug>CamelCaseMotion_ge
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+
+noremap <silent> ;w w
+noremap <silent> ;b b
+noremap <silent> ;e e
+noremap <silent> ;ge ge
 
 omap <silent> ;iw <Plug>CamelCaseMotion_iw
 xmap <silent> ;iw <Plug>CamelCaseMotion_iw
