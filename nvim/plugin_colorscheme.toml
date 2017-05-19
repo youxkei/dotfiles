@@ -12,3 +12,6 @@ repo = 'NLKNguyen/papercolor-theme'
 
 [[plugins]]
 repo = 'morhetz/gruvbox'
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
