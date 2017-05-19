@@ -138,7 +138,12 @@ syntax enable
 "    colorscheme PaperColor
 "endif
 
-if dein#is_sourced('gruvbox')
+"if dein#is_sourced('gruvbox')
+"    set background=dark
+"    colorscheme gruvbox
+"endif
+
+if dein#is_sourced('iceberg.vim')
     set background=dark
-    colorscheme gruvbox
+    colorscheme iceberg
 endif
