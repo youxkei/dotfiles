@@ -1,1 +1,1 @@
-GuiFont! NasuM:h11
+GuiFont! Inziu Iosevka J:h11
