@@ -36,6 +36,7 @@ alias la='ls -A'
 alias l='ls -CF'
 alias open="xdg-open"
 alias tmux="tmux -2"
+alias tig="tig --all"
 
 function chpwd() { ls }
 
