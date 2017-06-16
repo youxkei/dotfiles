@@ -185,7 +185,7 @@ repo = 'kana/vim-niceblock'
 repo = 'thinca/vim-fontzoom'
 
 [[plugins]]
-repo = 'fcitx.vim'
+repo = 'vim-scripts/fcitx.vim'
 
 [[plugins]]
 repo = 'luochen1990/rainbow'
@@ -197,7 +197,7 @@ let g:rainbow_active = 1
 repo = 'tpope/vim-repeat'
 
 [[plugins]]
-repo = 'VOoM'
+repo = 'vim-scripts/VOoM'
 
 [[plugins]]
 repo = 'idanarye/vim-vebugger'
@@ -233,7 +233,7 @@ let g:Qfstatusline#UpdateCmd = function('lightline#update')
 '''
 
 [[plugins]]
-repo = 'sudo.vim'
+repo = 'vim-scripts/sudo.vim'
 
 [[plugins]]
 repo = 'mbbill/undotree'
