@@ -18,3 +18,5 @@
 	followTags = true
 [fetch]
 	prune = true
+[rebase]
+	autostash = true
