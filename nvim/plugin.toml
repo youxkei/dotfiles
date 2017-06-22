@@ -150,7 +150,7 @@ let g:lightline = {
 \       'left' : [
 \           ['mode', 'paste'],
 \           ['syntaxcheck'],
-\           ['readonly', 'filename', 'modified']
+\           ['readonly', 'filename', 'modified', 'ale']
 \       ],
 \   },
 \   'component': {
@@ -161,6 +161,9 @@ let g:lightline = {
 \   },
 \   'component_type': {
 \       'syntaxcheck': 'error'
+\   },
+\   'component_function': {
+\       'ale': 'ALEGetStatusLine'
 \   },
 \   'separator': { 'left': '', 'right': '' },
 \   'subseparator': { 'left': '|', 'right': '|' },
@@ -358,7 +361,10 @@ nmap  <Leader>-  <Plug>(choosewin)
 repo = 'w0rp/ale'
 hook_add = '''
 let g:ale_sign_column_always = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
 let g:ale_linters = {
 \   'javascript': ['flow'],
+\   'cpp': [],
 \}
 '''
