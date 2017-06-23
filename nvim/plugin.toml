@@ -149,18 +149,11 @@ let g:lightline = {
 \   'active' : {
 \       'left' : [
 \           ['mode', 'paste'],
-\           ['syntaxcheck'],
 \           ['readonly', 'filename', 'modified', 'ale']
 \       ],
 \   },
 \   'component': {
 \       'readonly': '%{&readonly?"⌬":""}',
-\   },
-\   'component_expand': {
-\       'syntaxcheck': 'qfstatusline#Update'
-\   },
-\   'component_type': {
-\       'syntaxcheck': 'error'
 \   },
 \   'component_function': {
 \       'ale': 'ALEGetStatusLine'
