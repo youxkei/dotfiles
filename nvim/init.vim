@@ -58,8 +58,8 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set modeline
 
-set nocursorline
-set nocursorcolumn
+set cursorline
+set cursorcolumn
 
 set inccommand=nosplit
 
@@ -126,9 +126,6 @@ augroup general
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     autocmd BufEnter * checktime
-
-    autocmd CursorMoved,CursorMovedI,WinLeave * setlocal nocursorline nocursorcolumn
-    autocmd CursorHold,CursorHoldI,WinEnter * setlocal cursorline cursorcolumn
 augroup END
 
 syntax enable
