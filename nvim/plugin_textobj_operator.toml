@@ -1,8 +1,8 @@
 [[plugins]]
 repo = 'kana/vim-textobj-user'
 
-[[plugins]]
-repo = 'kana/vim-textobj-function'
+#[[plugins]]
+#repo = 'kana/vim-textobj-function'
 
 [[plugins]]
 repo = 'kana/vim-textobj-indent'
