@@ -58,9 +58,6 @@ set listchars=tab:»-,trail:-,nbsp:%
 
 set modeline
 
-set cursorline
-set cursorcolumn
-
 set inccommand=nosplit
 
 set autoread
