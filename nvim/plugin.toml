@@ -150,7 +150,7 @@ let g:lightline = {
 \   'active' : {
 \       'left' : [
 \           ['mode', 'paste'],
-\           ['readonly', 'filename', 'modified', 'ale']
+\           ['readonly', 'relativepath', 'modified', 'ale']
 \       ],
 \   },
 \   'component': {
