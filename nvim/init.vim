@@ -75,6 +75,7 @@ nnoremap Q <NOP>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
+nnoremap <Leader>d <C-w>s<C-w>s<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>t<C-w>=
 
 let s:plugin_directory = expand('~/.cache/nvim/dein')
 let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
