@@ -128,17 +128,4 @@ augroup END
 
 syntax enable
 
-"if dein#is_sourced('papercolor-theme')
-"    set background=dark
-"    colorscheme PaperColor
-"endif
-
-"if dein#is_sourced('gruvbox')
-"    set background=dark
-"    colorscheme gruvbox
-"endif
-
-if dein#is_sourced('iceberg.vim')
-    set background=dark
-    colorscheme iceberg
-endif
+colorscheme moonfly
