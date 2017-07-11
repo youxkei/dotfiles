@@ -14,15 +14,6 @@ repo = 'kchmck/vim-coffee-script'
 repo = 'gf3/peg.vim'
 
 [[plugins]]
-repo = 'pangloss/vim-javascript'
-hook_add = '''
-    let g:javascript_plugin_flow = 1
-'''
-
-[[plugins]]
-repo = 'mxw/vim-jsx'
-
-[[plugins]]
 repo = 'elzr/vim-json'
 
 [[plugins]]
@@ -30,3 +21,9 @@ repo = 'leafgarland/typescript-vim'
 
 [[plugins]]
 repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+
+[[plugins]]
+repo = 'MaxMEllon/vim-jsx-pretty'
