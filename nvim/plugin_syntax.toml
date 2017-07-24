@@ -26,4 +26,4 @@ repo = 'cespare/vim-toml'
 repo = 'pangloss/vim-javascript'
 
 [[plugins]]
-repo = 'MaxMEllon/vim-jsx-pretty'
+repo = 'mxw/vim-jsx'
