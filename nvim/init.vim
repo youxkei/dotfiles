@@ -120,7 +120,8 @@ augroup general
     autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
     autocmd BufEnter *.sml let b:fswitchlocs  = '.'
 
-    autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2
+    autocmd FileType vimfiler setlocal shiftwidth=2 softtabstop=2 tabstop=2
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     autocmd BufEnter * checktime
