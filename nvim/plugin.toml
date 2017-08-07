@@ -111,6 +111,8 @@ nmap s <Plug>(easymotion-s2)
 nmap gs <Plug>(easymotion-sn)
 let g:EasyMotion_do_mapping = 0 "Disable default mappings
 let g:EasyMotion_enter_jump_first = 1
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_use_smartsign_jp = 1
 '''
 
 [[plugins]]
