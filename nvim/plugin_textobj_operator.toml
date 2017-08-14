@@ -1,46 +1,45 @@
 [[plugins]]
-repo = 'kana/vim-textobj-user'
+repo = "kana/vim-textobj-user"
 
 [[plugins]]
-repo = 'kana/vim-textobj-indent'
+repo = "kana/vim-textobj-indent"
 
 [[plugins]]
-repo = 'rhysd/vim-textobj-word-column'
+repo = "rhysd/vim-textobj-word-column"
 
 [[plugins]]
-repo = 'sgur/vim-textobj-parameter'
+repo = "sgur/vim-textobj-parameter"
 
 [[plugins]]
-repo = 'kana/vim-operator-user'
+repo = "kana/vim-operator-user"
 
 [[plugins]]
-repo = 'kana/vim-operator-replace'
+repo = "kana/vim-operator-replace"
 
 [[plugins]]
-repo = 'rhysd/vim-operator-surround'
-hook_add = '''
-    map <silent><Leader>ra <Plug>(operator-surround-append)
-    map <silent><Leader>rd <Plug>(operator-surround-delete)
-    map <silent><Leader>rr <Plug>(operator-surround-replace)
+repo = "rhysd/vim-operator-surround"
+depends = ["vim-textobj-anyblock"]
+hook_add = """
+map <silent><Leader>ra <Plug>(operator-surround-append)
+map <silent><Leader>rd <Plug>(operator-surround-delete)
+map <silent><Leader>rr <Plug>(operator-surround-replace)
 
-    if dein#is_sourced('vim-textobj-anyblock')
-        nmap <silent><Leader>rdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-        nmap <silent><Leader>rrr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
-    endif
-'''
-
-[[plugins]]
-repo = 'kana/vim-textobj-entire'
+nmap <silent><Leader>rdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+nmap <silent><Leader>rrr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+"""
 
 [[plugins]]
-repo = 'osyo-manga/vim-textobj-blockwise'
+repo = "kana/vim-textobj-entire"
 
 [[plugins]]
-repo = 'rhysd/vim-textobj-anyblock'
+repo = "osyo-manga/vim-textobj-blockwise"
 
 [[plugins]]
-repo = 'haya14busa/vim-operator-flashy'
-hook_add = '''
-    map y <Plug>(operator-flashy)
-    nmap Y <Plug>(operator-flashy)$
-'''
+repo = "rhysd/vim-textobj-anyblock"
+
+[[plugins]]
+repo = "haya14busa/vim-operator-flashy"
+hook_add = """
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
+"""

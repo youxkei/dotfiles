@@ -1,11 +1,11 @@
 [[plugins]]
-repo = 'sheerun/vim-polyglot'
+repo = "sheerun/vim-polyglot"
 
 [[plugins]]
-repo = 'JesseKPhillips/d.vim'
+repo = "JesseKPhillips/d.vim"
 
 [[plugins]]
-repo = 'digitaltoad/vim-jade'
+repo = "digitaltoad/vim-jade"
 
 [[plugins]]
-repo = 'gf3/peg.vim'
+repo = "gf3/peg.vim"

@@ -1,53 +1,42 @@
 [[plugins]]
-repo = 'Shougo/dein.vim'
+repo = "Shougo/dein.vim"
 
 [[plugins]]
-repo = 'thinca/vim-ambicmd'
-hook_add = '''
-    cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
-    cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-'''
+repo = "thinca/vim-ambicmd"
+hook_add = """
+cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
+cnoremap <expr> <Space> ambicmd#expand("\<Space>")
+"""
 
 [[plugins]]
-repo = 'Shougo/vimproc.vim'
-build = 'make'
+repo = "Shougo/vimproc.vim"
+build = "make"
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = '''
+repo = "Shougo/deoplete.nvim"
+hook_add = """
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#omni_patterns = {}
-'''
+"""
 
 [[plugins]]
-repo = 'ujihisa/neco-look'
+repo = "ujihisa/neco-look"
 
 [[plugins]]
-repo = 'Shougo/neco-syntax'
+repo = "Shougo/neco-syntax"
 
 [[plugins]]
-repo = 'Shougo/unite.vim'
-hook_add = '''
-"nnoremap <silent> <Leader>uy :<C-u>Unite history/yank<CR>
-"nnoremap <silent> <Leader>ub :<C-u>Unite buffer<CR>
-"nnoremap <silent> <Leader>uf :<C-u>Unite -buffer-name=files file file/new<CR>
-"nnoremap <silent> <Leader>uu :<C-u>Unite file_mru<CR>
-"nnoremap <silent> <Leader>ur :<C-u>Unite -buffer-name=register register<CR>
-"nnoremap <silent> <Leader>ug :<C-u>Unite grep:.<CR>
-""call unite#custom#source('grep', 'max_candidates', 0)
-"let g:unite_enable_start_insert=1
-"let g:unite_source_history_yank_enable =1
-"
-"if executable('ag')
-"  "let g:unite_source_grep_command = 'ag'
-"  "let g:unite_source_grep_default_opts = '-i --nogroup --nocolor -S'
-"  "let g:unite_source_grep_recursive_opt = ''
-"endif
-'''
+repo = "wokalski/autocomplete-flow"
 
 [[plugins]]
-repo = 'Shougo/denite.nvim'
-hook_add='''
+repo = "fszymanski/deoplete-emoji"
+
+[[plugins]]
+repo = "Shougo/unite.vim"
+
+[[plugins]]
+repo = "Shougo/denite.nvim"
+hook_add="""
 call denite#custom#alias('source', 'file_rec/git', 'file_rec')
 call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
 
@@ -66,87 +55,63 @@ nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
 nnoremap <silent> <Leader>ug :<C-u>Denite grep<CR>
 nnoremap <silent> <Leader>uf :<C-u>Denite buffer file_rec<CR>
 nnoremap <silent> <Leader>ul :<C-u>Denite line<CR>
-'''
+"""
 
 [[plugins]]
-repo = 'Shougo/unite-ssh'
+repo = "Shougo/neomru.vim"
 
 [[plugins]]
-repo = 'Shougo/unite-outline'
-
-[[plugins]]
-repo = 'Shougo/unite-session'
-
-[[plugins]]
-repo = 'osyo-manga/unite-fold'
-
-[[plugins]]
-repo = 'thinca/vim-unite-history'
-
-[[plugins]]
-repo = 'mopp/unite-animemap'
-
-[[plugins]]
-repo = 'ujihisa/unite-colorscheme'
-
-[[plugins]]
-repo = 'rhysd/unite-codic.vim'
-
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-
-[[plugins]]
-repo = 'Shougo/vimfiler.vim'
-hook_add = '''
+repo = "Shougo/vimfiler.vim"
+hook_add = """
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_tree_indentation = 2
 let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|\.pyc$\|\.o$'
 call vimfiler#custom#profile('default', 'context', { 'auto_cd': 1,  'safe': 0 })
-'''
+"""
 
 [[plugins]]
-repo = 'Lokaltog/vim-easymotion'
-hook_add = '''
+repo = "easymotion/vim-easymotion"
+hook_add = """
 nmap s <Plug>(easymotion-s2)
 nmap gs <Plug>(easymotion-sn)
+let g:EasyMotion_keys = 'aoeuidhtns,.pgcr'
 let g:EasyMotion_do_mapping = 0 "Disable default mappings
-let g:EasyMotion_enter_jump_first = 1
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_smartsign_jp = 1
-'''
+"""
 
 [[plugins]]
-repo = 'kana/vim-submode'
-hook_add = '''
+repo = "kana/vim-submode"
+hook_add = """
 "let g:submode_timeout = 0
 "call submode#enter_with('winsize', 'n', '', '<Leader>s')
 "call submode#map('winsize', 'n', '', 'h', '<C-w><')
 "call submode#map('winsize', 'n', '', 'j', '<C-w>-')
 "call submode#map('winsize', 'n', '', 'k', '<C-w>+')
 "call submode#map('winsize', 'n', '', 'l', '<C-w>>')
-'''
+"""
 
 [[plugins]]
-repo = 'basyura/TweetVim'
-hook_add = '''
+repo = "basyura/TweetVim"
+hook_add = """
     let g:w3m#command = 'w3m'
-'''
+"""
 
 [[plugins]]
-repo = 'basyura/twibill.vim'
+repo = "basyura/twibill.vim"
 
 [[plugins]]
-repo = 'tyru/open-browser.vim'
+repo = "tyru/open-browser.vim"
 
 [[plugins]]
-repo = 'mattn/gist-vim'
+repo = "mattn/gist-vim"
 
 [[plugins]]
-repo = 'mattn/webapi-vim'
+repo = "mattn/webapi-vim"
 
 [[plugins]]
-repo = 'itchyny/lightline.vim'
-hook_add = '''
+repo = "itchyny/lightline.vim"
+hook_add = """
 let g:lightline = {
 \   'active' : {
 \       'left' : [
@@ -163,14 +128,14 @@ let g:lightline = {
 \   'separator': { 'left': '', 'right': '' },
 \   'subseparator': { 'left': '|', 'right': '|' },
 \}
-'''
+"""
 
 [[plugins]]
-repo = 'kannokanno/previm'
+repo = "kannokanno/previm"
 
 [[plugins]]
-repo = 'LeafCage/yankround.vim'
-hook_add = '''
+repo = "LeafCage/yankround.vim"
+hook_add = """
 nmap p <Plug>(yankround-p)
 xmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
@@ -181,101 +146,101 @@ nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
 let g:yankround_dir = '~/.cache/nvim/yankround'
 let g:yankround_max_history = 100
-'''
+"""
 
 [[plugins]]
-repo = 'kana/vim-niceblock'
+repo = "kana/vim-niceblock"
 
 [[plugins]]
-repo = 'thinca/vim-fontzoom'
+repo = "thinca/vim-fontzoom"
 
 [[plugins]]
-repo = 'vim-scripts/fcitx.vim'
+repo = "vim-scripts/fcitx.vim"
 
 [[plugins]]
-repo = 'luochen1990/rainbow'
-hook_add = '''
+repo = "luochen1990/rainbow"
+hook_add = """
 let g:rainbow_active = 1
-'''
+"""
 
 [[plugins]]
-repo = 'tpope/vim-repeat'
+repo = "tpope/vim-repeat"
 
 [[plugins]]
-repo = 'vim-scripts/VOoM'
+repo = "vim-scripts/VOoM"
 
 [[plugins]]
-repo = 'idanarye/vim-vebugger'
+repo = "idanarye/vim-vebugger"
 
 [[plugins]]
-repo = 'junegunn/vim-easy-align'
-hook_add = '''
+repo = "junegunn/vim-easy-align"
+hook_add = """
 vmap <Enter> <Plug>(EasyAlign)
-'''
+"""
 
 [[plugins]]
-repo = 'thinca/vim-visualstar'
+repo = "thinca/vim-visualstar"
 
 [[plugins]]
-repo = 'deris/vim-rengbang'
+repo = "deris/vim-rengbang"
 
 [[plugins]]
-repo = 'koron/codic-vim'
+repo = "koron/codic-vim"
 
 [[plugins]]
-repo = 'osyo-manga/shabadou.vim'
+repo = "osyo-manga/shabadou.vim"
 
 [[plugins]]
-repo = 'KazuakiM/vim-qfsigns'
+repo = "KazuakiM/vim-qfsigns"
 
 [[plugins]]
-repo = 'dannyob/quickfixstatus'
+repo = "dannyob/quickfixstatus"
 
 [[plugins]]
-repo = 'KazuakiM/vim-qfstatusline'
-hook_add = '''
+repo = "KazuakiM/vim-qfstatusline"
+hook_add = """
 let g:Qfstatusline#UpdateCmd = function('lightline#update')
-'''
+"""
 
 [[plugins]]
-repo = 'vim-scripts/sudo.vim'
+repo = "vim-scripts/sudo.vim"
 
 [[plugins]]
-repo = 'mbbill/undotree'
-hook_add = '''
+repo = "mbbill/undotree"
+hook_add = """
 let g:undotree_WindowLayout = 3
-'''
+"""
 
 #[[plugins]]
-#repo = 'Yggdroot/indentLine'
-#hook_add = '''
+#repo = "Yggdroot/indentLine"
+#hook_add = """
 #let g:indentLine_faster = 1
 #let g:indentLine_setConceal = 0
-#'''
+#"""
 
 [[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
-hook_add = '''
+repo = "nathanaelkane/vim-indent-guides"
+hook_add = """
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 0
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=gray20
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=gray12
-'''
+"""
 
 [[plugins]]
-repo = 'thinca/vim-qfreplace'
+repo = "thinca/vim-qfreplace"
 
 [[plugins]]
-repo = 'rhysd/try-colorscheme.vim'
+repo = "rhysd/try-colorscheme.vim"
 
 [[plugins]]
-repo = 'terryma/vim-multiple-cursors'
+repo = "terryma/vim-multiple-cursors"
 
 [[plugins]]
-repo = 'bkad/CamelCaseMotion'
-hook_add = '''
+repo = "bkad/CamelCaseMotion"
+hook_add = """
 map <silent> w <Plug>CamelCaseMotion_w
 map <silent> b <Plug>CamelCaseMotion_b
 map <silent> e <Plug>CamelCaseMotion_e
@@ -292,68 +257,73 @@ omap <silent> ;ib <Plug>CamelCaseMotion_ib
 xmap <silent> ;ib <Plug>CamelCaseMotion_ib
 omap <silent> ;ie <Plug>CamelCaseMotion_ie
 xmap <silent> ;ie <Plug>CamelCaseMotion_ie
-'''
+"""
 
 [[plugins]]
-repo = 'AndrewRadev/inline_edit.vim'
-hook_add = '''
+repo = "AndrewRadev/inline_edit.vim"
+hook_add = """
 let g:inline_edit_autowrite = 1
-'''
+"""
 
 [[plugins]]
-repo = 'airblade/vim-gitgutter'
-hook_add = '''
+repo = "airblade/vim-gitgutter"
+hook_add = """
 let g:gitgutter_map_keys = 0
-'''
+"""
 
 [[plugins]]
-repo = 'lambdalisue/vim-gita'
+repo = "lambdalisue/vim-gita"
 
 [[plugins]]
-repo = 'csscomb/vim-csscomb'
+repo = "wakatime/vim-wakatime"
 
 [[plugins]]
-repo = 'wakatime/vim-wakatime'
+repo = "Shougo/vinarise.vim"
 
 [[plugins]]
-repo = 'Shougo/vinarise.vim'
+repo = "rhysd/committia.vim"
 
 [[plugins]]
-repo = 'rhysd/committia.vim'
-
-[[plugins]]
-repo = 'derekwyatt/vim-fswitch'
-hook_add = '''
+repo = "derekwyatt/vim-fswitch"
+hook_add = """
 nmap <silent> <Leader>f :FSHere<CR>
-'''
+"""
 
 [[plugins]]
-repo = 'Shougo/deol.nvim'
+repo = "Shougo/deol.nvim"
 
 [[plugins]]
-repo = 'equalsraf/neovim-qt'
-rtp = 'src/gui/runtime'
+repo = "equalsraf/neovim-gui-shim"
 
 [[plugins]]
-repo = 'rhysd/vim-grammarous'
-hook_add = '''
+repo = "rhysd/vim-grammarous"
+hook_add = """
 let g:grammarous#default_comments_only_filetypes = {
     \ '*' : 1, 'help' : 0, 'markdown' : 0,
 \ }
-'''
+"""
 
 [[plugins]]
-repo = 'Shougo/context_filetype.vim'
+repo = "Shougo/context_filetype.vim"
 
 [[plugins]]
-repo = 'osyo-manga/vim-precious'
+repo = "osyo-manga/vim-precious"
+hook_add = """
+let g:precious_enable_switch_CursorMoved = { "*" : 0 }
+let g:precious_enable_switch_CursorMoved_i = { "*" : 0 }
+augroup precious
+    autocmd!
+    autocmd InsertEnter * :PreciousSwitch
+    autocmd InsertLeave * :PreciousReset
+augroup END
+"""
 
 [[plugins]]
-repo = 'kana/vim-tabpagecd'
+repo = "kana/vim-tabpagecd"
 
 [[plugins]]
-repo = 't9md/vim-choosewin'
-hook_add = '''
+repo = "t9md/vim-choosewin"
+hook_add = """
 let g:choosewin_overlay_enable = 1
 let g:choosewin_overlay_clear_multibyte = 1
 let g:choosewin_blink_on_land = 0
@@ -361,11 +331,11 @@ let g:choosewin_statusline_replace = 0
 let g:choosewin_tabline_replace = 0
 
 nmap  <Leader>-  <Plug>(choosewin)
-'''
+"""
 
 [[plugins]]
-repo = 'w0rp/ale'
-hook_add = '''
+repo = "w0rp/ale"
+hook_add = """
 let g:ale_sign_column_always = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
@@ -375,4 +345,4 @@ let g:ale_linters = {
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-'''
+"""
