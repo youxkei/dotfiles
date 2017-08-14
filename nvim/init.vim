@@ -125,6 +125,7 @@ augroup general
     autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     autocmd BufEnter * checktime
+    autocmd BufEnter * execute ":lcd " . expand("%:p:h") 
 augroup END
 
 syntax enable
