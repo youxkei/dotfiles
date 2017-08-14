@@ -140,13 +140,13 @@ workspace  9 output $right_monitor
 workspace 10 output $right_monitor
 
 assign [class="^Rambox$"] 1
-exec --no-startup-id rambox
+exec --no-startup-id sleep 1s; rambox
 
 assign [class="^nvim-qt$"] 2
-exec --no-startup-id nvim-qt
+exec --no-startup-id sleep 1s; nvim-qt
 
 assign [class="^Gnome-terminal$"] 3
-exec --no-startup-id gnome-terminal
+exec --no-startup-id sleep 1s; gnome-terminal
 
 assign [class="^Google-chrome$"] 6
-exec --no-startup-id google-chrome
+exec --no-startup-id sleep 1s; google-chrome
