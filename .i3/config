@@ -120,7 +120,7 @@ exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec --no-startup-id rescuetime
-exec_always --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
+exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 # exec --no-startup-id compton --config .compton.conf
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 
