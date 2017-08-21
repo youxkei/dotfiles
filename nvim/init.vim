@@ -130,4 +130,5 @@ augroup END
 
 syntax enable
 
-colorscheme moonfly
+set bg=dark
+colorscheme gruvbox
