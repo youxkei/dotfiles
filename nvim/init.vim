@@ -3,9 +3,9 @@ filetype off
 set termguicolors
 
 if !isdirectory(expand('~/.cache/nvim'))
-    call mkdir(expand('~/.cache/nvim/backup'), 'p')
-    call mkdir(expand('~/.cache/nvim/undo'),   'p')
-    call mkdir(expand('~/.cache/nvim/swap'),   'p')
+  call mkdir(expand('~/.cache/nvim/backup'), 'p')
+  call mkdir(expand('~/.cache/nvim/undo'),   'p')
+  call mkdir(expand('~/.cache/nvim/swap'),   'p')
 endif
 
 set backupdir=~/.cache/nvim/backup
@@ -78,50 +78,50 @@ let s:plugin_directory = expand('~/.cache/nvim/dein')
 let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
 
 if has('vim_starting')
-    if !isdirectory(s:dein_directory)
-        execute '!git clone https://github.com/Shougo/dein.vim' s:dein_directory
-    endif
-    execute 'set runtimepath+=' . s:dein_directory
+  if !isdirectory(s:dein_directory)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_directory
+  endif
+  execute 'set runtimepath+=' . s:dein_directory
 endif
 
 if dein#load_state(s:plugin_directory)
-    call dein#begin(s:plugin_directory)
+  call dein#begin(s:plugin_directory)
 
-    call dein#load_toml(expand('~/.config/nvim/plugin.toml'))
-    call dein#load_toml(expand('~/.config/nvim/plugin_textobj_operator.toml'))
-    call dein#load_toml(expand('~/.config/nvim/plugin_syntax.toml'))
-    call dein#load_toml(expand('~/.config/nvim/plugin_colorscheme.toml'))
+  call dein#load_toml(expand('~/.config/nvim/plugin.toml'))
+  call dein#load_toml(expand('~/.config/nvim/plugin_textobj_operator.toml'))
+  call dein#load_toml(expand('~/.config/nvim/plugin_syntax.toml'))
+  call dein#load_toml(expand('~/.config/nvim/plugin_colorscheme.toml'))
 
-    call dein#end()
-    call dein#save_state()
+  call dein#end()
+  call dein#save_state()
 endif
 
 if dein#check_install()
-    call dein#install()
+  call dein#install()
 endif
 
 filetype plugin indent on
 
 augroup general
-    autocmd!
+  autocmd!
 
-    " autosource
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-    autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
+  " autosource
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
 
-    " fswitch
-    autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
-    autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
-    autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
-    autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
+  " fswitch
+  autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
+  autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
+  autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
+  autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
 
-    autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
-    autocmd BufEnter *.smi let b:fswitchlocs  = '.'
-    autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
-    autocmd BufEnter *.sml let b:fswitchlocs  = '.'
+  autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
+  autocmd BufEnter *.smi let b:fswitchlocs  = '.'
+  autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
+  autocmd BufEnter *.sml let b:fswitchlocs  = '.'
 
-    autocmd BufEnter * checktime
-    autocmd BufEnter * execute ":lcd " . expand("%:p:h") 
+  autocmd BufEnter * checktime
+  autocmd BufEnter * execute ":lcd " . expand("%:p:h") 
 augroup END
 
 syntax enable

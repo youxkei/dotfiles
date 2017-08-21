@@ -15,8 +15,8 @@ build = "make"
 [[plugins]]
 repo = "Shougo/deoplete.nvim"
 hook_add = """
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#omni_patterns = {}
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni_patterns = {}
 """
 
 [[plugins]]
@@ -41,14 +41,14 @@ call denite#custom#alias('source', 'file_rec/git', 'file_rec')
 call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
 
 if executable('ag')
-    call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
-    call denite#custom#var('grep', 'command', ['ag'])
-    call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-    call denite#custom#var('grep', 'recursive_opts', [])
-    call denite#custom#var('grep', 'pattern_opt', [])
-    call denite#custom#var('grep', 'separator', ['--'])
-    call denite#custom#var('grep', 'final_opts', [])
+  call denite#custom#var('grep', 'command', ['ag'])
+  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', [])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'final_opts', [])
 endif
 
 nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
@@ -94,7 +94,7 @@ hook_add = """
 [[plugins]]
 repo = "basyura/TweetVim"
 hook_add = """
-    let g:w3m#command = 'w3m'
+  let g:w3m#command = 'w3m'
 """
 
 [[plugins]]
@@ -113,20 +113,20 @@ repo = "mattn/webapi-vim"
 repo = "itchyny/lightline.vim"
 hook_add = """
 let g:lightline = {
-\   'active' : {
-\       'left' : [
-\           ['mode', 'paste'],
-\           ['readonly', 'relativepath', 'modified', 'ale']
-\       ],
-\   },
-\   'component': {
-\       'readonly': '%{&readonly?"⌬":""}',
-\   },
-\   'component_function': {
-\       'ale': 'ALEGetStatusLine'
-\   },
-\   'separator': { 'left': '', 'right': '' },
-\   'subseparator': { 'left': '|', 'right': '|' },
+\ 'active' : {
+\   'left' : [
+\     ['mode', 'paste'],
+\     ['readonly', 'relativepath', 'modified', 'ale']
+\   ],
+\ },
+\ 'component': {
+\   'readonly': '%{&readonly?"⌬":""}',
+\ },
+\ 'component_function': {
+\   'ale': 'ALEGetStatusLine'
+\ },
+\ 'separator': { 'left': '', 'right': '' },
+\ 'subseparator': { 'left': '|', 'right': '|' },
 \}
 """
 
@@ -297,7 +297,7 @@ repo = "equalsraf/neovim-gui-shim"
 repo = "rhysd/vim-grammarous"
 hook_add = """
 let g:grammarous#default_comments_only_filetypes = {
-    \ '*' : 1, 'help' : 0, 'markdown' : 0,
+  \ '*' : 1, 'help' : 0, 'markdown' : 0,
 \ }
 """
 
@@ -310,9 +310,9 @@ hook_add = """
 let g:precious_enable_switch_CursorMoved = { "*" : 0 }
 let g:precious_enable_switch_CursorMoved_i = { "*" : 0 }
 augroup precious
-    autocmd!
-    autocmd InsertEnter * :PreciousSwitch
-    autocmd InsertLeave * :PreciousReset
+  autocmd!
+  autocmd InsertEnter * :PreciousSwitch
+  autocmd InsertLeave * :PreciousReset
 augroup END
 """
 
@@ -338,7 +338,7 @@ let g:ale_sign_column_always = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_linters = {
-\   'cpp': [],
+\ 'cpp': [],
 \}
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
