@@ -1,11 +1,2 @@
 [[plugins]]
-repo = "NLKNguyen/papercolor-theme"
-
-[[plugins]]
 repo = "morhetz/gruvbox"
-
-[[plugins]]
-repo = "cocopon/iceberg.vim"
-
-[[plugins]]
-repo = "bluz71/vim-moonfly-colors"
