@@ -344,3 +344,11 @@ let g:ale_linters = {
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 """
+
+[[plugins]]
+repo = "machakann/vim-swap"
+hook_add = """
+let g:swap_no_default_key_mappings = 1
+
+nmap gs <Plug>(swap-interactive)
+"""
