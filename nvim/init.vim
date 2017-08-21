@@ -18,12 +18,12 @@ set writebackup
 set swapfile
 
 set cindent
-set cinoptions=L0,(4,U1,m1
+set cinoptions=L0,(2,U1,m1
 set expandtab
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set smarttab
-set tabstop=4
+set tabstop=2
 
 "set encoding=utf-8
 set fileencodings=utf-8,sjis,cp932,euc-jp
@@ -119,10 +119,6 @@ augroup general
     autocmd BufEnter *.smi let b:fswitchlocs  = '.'
     autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
     autocmd BufEnter *.sml let b:fswitchlocs  = '.'
-
-    autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2
-    autocmd FileType vimfiler setlocal shiftwidth=2 softtabstop=2 tabstop=2
-    autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     autocmd BufEnter * checktime
     autocmd BufEnter * execute ":lcd " . expand("%:p:h") 
