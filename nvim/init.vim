@@ -121,7 +121,6 @@ augroup general
   autocmd BufEnter *.sml let b:fswitchlocs  = '.'
 
   autocmd BufEnter * checktime
-  autocmd BufEnter * execute ":lcd " . expand("%:p:h") 
 augroup END
 
 syntax enable
