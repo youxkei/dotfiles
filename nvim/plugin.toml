@@ -26,9 +26,6 @@ repo = "ujihisa/neco-look"
 repo = "Shougo/neco-syntax"
 
 [[plugins]]
-repo = "wokalski/autocomplete-flow"
-
-[[plugins]]
 repo = "fszymanski/deoplete-emoji"
 
 [[plugins]]
