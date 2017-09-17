@@ -122,8 +122,8 @@ let g:lightline = {
 \ 'component_function': {
 \   'ale': 'ALEGetStatusLine'
 \ },
-\ 'separator': { 'left': '', 'right': '' },
-\ 'subseparator': { 'left': '|', 'right': '|' },
+\ 'separator': { 'left': '', 'right': '' },
+\ 'subseparator': { 'left': '', 'right': '' },
 \}
 """
 
