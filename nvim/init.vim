@@ -126,4 +126,4 @@ augroup END
 syntax enable
 
 set bg=dark
-colorscheme nord
+colorscheme gruvbox
