@@ -43,3 +43,12 @@ hook_add = """
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
 """
+
+[[plugins]]
+repo = "mopp/vim-operator-convert-case"
+hook_add = """
+nmap <Leader>cl <Plug>(operator-convert-case-lower-camel)
+nmap <Leader>cu <Plug>(operator-convert-case-upper-camel)
+nmap <Leader>sl <Plug>(operator-convert-case-lower-snake)
+nmap <Leader>su <Plug>(operator-convert-case-upper-snake)
+"""
