@@ -33,7 +33,7 @@ repo = "Shougo/unite.vim"
 
 [[plugins]]
 repo = "Shougo/denite.nvim"
-hook_add="""
+hook_add = """
 call denite#custom#alias('source', 'file_rec/git', 'file_rec')
 call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
 
@@ -50,7 +50,8 @@ endif
 
 nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
 nnoremap <silent> <Leader>ug :<C-u>Denite grep<CR>
-nnoremap <silent> <Leader>uf :<C-u>Denite buffer file_rec<CR>
+nnoremap <silent> <Leader>uf :<C-u>Denite file_rec<CR>
+nnoremap <silent> <Leader>ub :<C-u>Denite buffer<CR>
 nnoremap <silent> <Leader>ul :<C-u>Denite line<CR>
 """
 
