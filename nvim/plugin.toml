@@ -312,15 +312,6 @@ repo = "Shougo/context_filetype.vim"
 
 [[plugins]]
 repo = "osyo-manga/vim-precious"
-hook_add = """
-let g:precious_enable_switch_CursorMoved = { "*" : 0 }
-let g:precious_enable_switch_CursorMoved_i = { "*" : 0 }
-augroup precious
-  autocmd!
-  autocmd InsertEnter * :PreciousSwitch
-  autocmd InsertLeave * :PreciousReset
-augroup END
-"""
 
 [[plugins]]
 repo = "kana/vim-tabpagecd"
