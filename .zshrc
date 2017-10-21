@@ -49,7 +49,8 @@ if [[ -f ~/repo/antigen/antigen.zsh ]]; then
     antigen bundle gitfast
 
     export ENHANCD_COMMAND="cd"
-    export ENHANCD_FILTER=fzy
+    export ENHANCD_FILTER="fzy"
+    export ENHANCD_DISABLE_DOT=1
 
     antigen bundle b4b4r07/enhancd
     antigen bundle zsh-users/zsh-history-substring-search
