@@ -111,7 +111,7 @@ repo = "mattn/webapi-vim"
 repo = "itchyny/lightline.vim"
 hook_add = """
 let g:lightline = {
-\ 'colorscheme': 'PaperColor',
+\ 'colorscheme': 'nord',
 \ 'active' : {
 \   'left' : [
 \     ['mode', 'paste'],

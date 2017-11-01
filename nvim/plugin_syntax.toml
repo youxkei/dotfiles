@@ -13,6 +13,3 @@ repo = "digitaltoad/vim-jade"
 
 [[plugins]]
 repo = "gf3/peg.vim"
-
-[[plugins]]
-repo = "NLKNguyen/papercolor-theme"
