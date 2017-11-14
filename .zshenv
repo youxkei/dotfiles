@@ -9,8 +9,6 @@ path=(
     $path
 )
 
-eval "$(anyenv init -)"
-
 export GOPATH="$HOME/.go"
 
 export ANDROID_HOME="$HOME/Android/Sdk"

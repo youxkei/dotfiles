@@ -41,6 +41,8 @@ function chpwd() { ls }
 
 source ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
+
+
 if (( ${+commands[hub]} )); then
   eval "$(hub alias -s)"
   unalias git
@@ -56,7 +58,10 @@ source ~/.zplug/init.zsh
 
 # command
 zplug "jhawthorn/fzy", as:command, use:fzy, hook-build:make
+
 zplug "soimort/translate-shell", at:stable, as:command, use:"build/*", hook-build:"make build"
+
+zplug "creationix/nvm", use:nvm.sh
 
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
