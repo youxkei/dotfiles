@@ -271,9 +271,6 @@ let g:gitgutter_map_keys = 0
 repo = "lambdalisue/vim-gita"
 
 [[plugins]]
-repo = "wakatime/vim-wakatime"
-
-[[plugins]]
 repo = "Shougo/vinarise.vim"
 
 [[plugins]]
@@ -341,3 +338,6 @@ let g:swap_no_default_key_mappings = 1
 
 nmap gs <Plug>(swap-interactive)
 """
+
+[[plugins]]
+repo = "henrik/vim-indexed-search"
