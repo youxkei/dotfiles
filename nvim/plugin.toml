@@ -253,10 +253,6 @@ xmap <silent> iw <Plug>CamelCaseMotion_iw
 
 onoremap <silent> ;iw iw
 xnoremap <silent> ;iw iw
-onoremap <silent> ;ib ib
-xnoremap <silent> ;ib ib
-onoremap <silent> ;ie ie
-xnoremap <silent> ;ie ie
 """
 
 [[plugins]]
