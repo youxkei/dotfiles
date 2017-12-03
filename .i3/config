@@ -59,8 +59,8 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
-bindsym XF86MonBrightnessDown exec --no-startup-id light -U 2.0
-bindsym XF86MonBrightnessUp   exec --no-startup-id light -A 2.0
+bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.zplug/bin/light -U 2.0
+bindsym XF86MonBrightnessUp   exec --no-startup-id $HOME/.zplug/bin/light -A 2.0
 
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -2%
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2%

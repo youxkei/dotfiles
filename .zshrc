@@ -60,6 +60,8 @@ zplug "creationix/nvm", use:nvm.sh
 
 zplug "github/hub", from:gh-r, as:command, rename-to:hub
 
+zplug "haikarainen/light", as:command, use:light, hook-build:make
+
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
 
