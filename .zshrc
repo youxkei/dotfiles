@@ -79,6 +79,7 @@ zplug "zsh-users/zsh-completions", defer:2
 # theme
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K_DIR_HOME_BACKGROUND="027"
 POWERLEVEL9K_DIR_HOME_FOREGROUND="015"
 POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="027"
