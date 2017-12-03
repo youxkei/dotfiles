@@ -43,11 +43,6 @@ source ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 
 
-if (( ${+commands[hub]} )); then
-  eval "$(hub alias -s)"
-  unalias git
-  function git() { hub $@; }
-fi
 
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
@@ -62,6 +57,8 @@ zplug "jhawthorn/fzy", as:command, use:fzy, hook-build:make
 zplug "soimort/translate-shell", at:stable, as:command, use:"build/*", hook-build:"make build"
 
 zplug "creationix/nvm", use:nvm.sh
+
+zplug "github/hub", from:gh-r, as:command, rename-to:hub
 
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
@@ -102,6 +99,12 @@ if ! zplug check; then
 fi
 
 zplug load
+
+if (( ${+commands[hub]} )); then
+  eval "$(hub alias -s)"
+  unalias git
+  function git() { hub $@; }
+fi
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
