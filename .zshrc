@@ -78,6 +78,8 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 zplug "zsh-users/zsh-completions", defer:2
 
+zplug "momo-lab/zsh-abbrev-alias"
+
 # theme
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -108,6 +110,8 @@ if (( ${+commands[hub]} )); then
   unalias git
   function git() { hub $@; }
 fi
+
+abbrev-alias -f CI="git tree | fzy -l50 | grep -Po '\\w.*$' | awk '{print \$1}'"
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
