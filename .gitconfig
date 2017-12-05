@@ -7,10 +7,11 @@
 	editor = nvim
 	excludesfile = ~/.gitignore
 [alias]
-    tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    tree = log --all --graph --oneline --decorate
     ag = !git ls-files | xargs ag
     wipush = !git add --all && git commit -m "wip" && git branch wip/$(git rev-parse --abbrev-ref HEAD) && git push -u origin wip/$(git rev-parse --abbrev-ref HEAD) && git reset --hard HEAD^
     wipull = !git fetch && git reset --hard origin/wip/$(git rev-parse --abbrev-ref HEAD) && git reset HEAD^ && git push origin :wip/$(git rev-parse --abbrev-ref HEAD) && git fetch
+    co = checkout
 [github]
 	user = youxkei
 [push]
