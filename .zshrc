@@ -62,13 +62,16 @@ zplug "github/hub", from:gh-r, as:command, rename-to:hub
 
 zplug "haikarainen/light", as:command, use:light, hook-build:make
 
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+export FZF_DEFAULT_OPTS="--reverse --ansi"
+
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
 
 zplug "b4b4r07/enhancd", use:init.sh
-ENHANCD_COMMAND="cd"
-ENHANCD_FILTER="fzy"
-ENHANCD_DISABLE_DOT=1
+export ENHANCD_COMMAND="cd"
+export ENHANCD_FILTER="fzf --height=20%"
+export ENHANCD_DISABLE_DOT=1
 
 zplug "zsh-users/zsh-history-substring-search"
 
@@ -82,22 +85,22 @@ zplug "momo-lab/zsh-abbrev-alias"
 
 # theme
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-POWERLEVEL9K_DIR_HOME_BACKGROUND="027"
-POWERLEVEL9K_DIR_HOME_FOREGROUND="015"
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="027"
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="015"
-POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="027"
-POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="015"
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="$ "
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="027"
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="015"
-POWERLEVEL9K_EXECUTION_TIME_ICON="s"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs time)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time root_indicator background_jobs history)
+export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+export POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+export POWERLEVEL9K_DIR_HOME_BACKGROUND="027"
+export POWERLEVEL9K_DIR_HOME_FOREGROUND="015"
+export POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="027"
+export POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="015"
+export POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="027"
+export POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="015"
+export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+export POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="$ "
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="027"
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="015"
+export POWERLEVEL9K_EXECUTION_TIME_ICON="s"
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs time)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time root_indicator background_jobs history)
 
 if ! zplug check; then
   echo; zplug install
@@ -111,14 +114,14 @@ if (( ${+commands[hub]} )); then
   function git() { hub $@; }
 fi
 
-abbrev-alias -f CI="git tree | fzy -l50 | grep -Po '\\w.*$' | awk '{print \$1}'"
+abbrev-alias -f CI="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
 re-prompt() {
-    zle .reset-prompt
-    zle .accept-line
+  zle .reset-prompt
+  zle .accept-line
 }
 
 zle -N accept-line re-prompt
