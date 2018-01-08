@@ -63,7 +63,7 @@ repo = "Shougo/vimfiler.vim"
 hook_add = """
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_tree_indentation = 2
-let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|\.pyc$\|\.o$'
+let g:vimfiler_ignore_pattern = '\(^\(\.git\|\.\|\.\.\)$\)\|\.pyc$\|\.o$\|\.aux$'
 call vimfiler#custom#profile('default', 'context', { 'auto_cd': 1,  'safe': 0 })
 """
 
