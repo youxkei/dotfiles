@@ -202,9 +202,6 @@ let g:Qfstatusline#UpdateCmd = function('lightline#update')
 """
 
 [[plugins]]
-repo = "vim-scripts/sudo.vim"
-
-[[plugins]]
 repo = "mbbill/undotree"
 hook_add = """
 let g:undotree_WindowLayout = 3
@@ -341,3 +338,6 @@ nmap gs <Plug>(swap-interactive)
 
 [[plugins]]
 repo = "henrik/vim-indexed-search"
+
+[[plugins]]
+repo = "lambdalisue/suda.vim"
