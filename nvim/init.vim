@@ -64,8 +64,9 @@ set autoread
 
 let loaded_matchparen = 1
 
-let g:mapleader=","
-let g:tex_conceal=''
+let g:mapleader = ','
+let g:tex_conceal = ''
+let g:tex_flavor = 'latex'
 
 nnoremap <Leader>w :w<CR>
 nnoremap Q <NOP>
