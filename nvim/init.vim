@@ -85,13 +85,19 @@ if has('vim_starting')
   execute 'set runtimepath+=' . s:dein_directory
 endif
 
+let s:dein_toml_sources = [
+\ fnamemodify($MYVIMRC, ':p:h').'/plugin.toml',
+\ fnamemodify($MYVIMRC, ':p:h').'/plugin_textobj_operator.toml',
+\ fnamemodify($MYVIMRC, ':p:h').'/plugin_syntax.toml',
+\ fnamemodify($MYVIMRC, ':p:h').'/plugin_colorscheme.toml'
+\]
+
 if dein#load_state(s:plugin_directory)
   call dein#begin(s:plugin_directory)
 
-  call dein#load_toml(expand('~/.config/nvim/plugin.toml'))
-  call dein#load_toml(expand('~/.config/nvim/plugin_textobj_operator.toml'))
-  call dein#load_toml(expand('~/.config/nvim/plugin_syntax.toml'))
-  call dein#load_toml(expand('~/.config/nvim/plugin_colorscheme.toml'))
+  for toml_source in s:dein_toml_sources
+    call dein#load_toml(toml_source)
+  endfor
 
   call dein#end()
   call dein#save_state()
@@ -109,6 +115,7 @@ augroup general
   " autosource
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
+  autocmd BufWritePost *.toml nested if count(s:dein_toml_sources, expand('%:p')) != 0 | source $MYVIMRC | endif
 
   " fswitch
   autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
