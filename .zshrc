@@ -114,7 +114,8 @@ if (( ${+commands[hub]} )); then
   function git() { hub $@; }
 fi
 
-abbrev-alias -f CI="git tree --color 2>/dev/null | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
+abbrev-alias -f CI="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
+abbrev-alias -f B="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
