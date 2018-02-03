@@ -65,6 +65,8 @@ zplug "haikarainen/light", as:command, use:light, hook-build:make
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 export FZF_DEFAULT_OPTS="--reverse --ansi"
 
+zplug "greymd/tmux-xpanes", as:command, use:"bin/*"
+
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
 
