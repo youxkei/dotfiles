@@ -341,3 +341,6 @@ repo = "henrik/vim-indexed-search"
 
 [[plugins]]
 repo = "lambdalisue/suda.vim"
+
+[[plugins]]
+repo = "sgur/vim-editorconfig"
