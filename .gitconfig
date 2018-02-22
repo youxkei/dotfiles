@@ -22,3 +22,5 @@
 	autosquash = true
 [pull]
 	rebase = true
+[diff]
+	algorithm = histogram
