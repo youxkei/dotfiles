@@ -92,15 +92,6 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
-bindsym $mod+o mode "opacity"
-mode "opacity" {
-    bindsym h exec --no-startup-id compton-trans -c -- -2
-    bindsym l exec --no-startup-id compton-trans -c +4
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
 bar {
     status_command i3status | ~/.i3/add_status
     position top
@@ -121,7 +112,6 @@ exec --no-startup-id unity-settings-daemon
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
-# exec --no-startup-id compton --config .compton.conf
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 
 set_from_resource $left_monitor   i3wm.left_monitor
