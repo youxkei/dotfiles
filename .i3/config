@@ -29,7 +29,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen
 
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+s layout toggle split
 
 bindsym $mod+Shift+space floating toggle
 
