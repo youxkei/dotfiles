@@ -99,6 +99,8 @@ consonantVowelToKana.each do |consonant, kanas|
 end
 
 romajiToKana.merge!({
+  'thi':  ['', 'てぃ'],
+  'dhi':  ['', 'でぃ'],
   'xx':   ['x', 'っ' ],
   'xa':   ['', 'ぁ' ],
   'xe':   ['', 'ぇ' ],
