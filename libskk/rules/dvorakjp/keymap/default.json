@@ -6,7 +6,6 @@
             "C-m": "commit-unhandled",
             "\b": "delete",
             "l": "abbrev",
-            "\\": "kuten",
             " ": "next-candidate",
             "\t": "complete",
             "C-i": "complete",
