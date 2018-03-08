@@ -129,6 +129,8 @@ augroup general
   autocmd BufEnter *.sml let b:fswitchlocs  = '.'
 
   autocmd BufEnter * checktime
+
+  autocmd InsertLeave * call system('fcitx-remote -c')
 augroup END
 
 syntax enable

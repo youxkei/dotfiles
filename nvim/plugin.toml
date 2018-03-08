@@ -154,9 +154,6 @@ repo = "kana/vim-niceblock"
 repo = "thinca/vim-fontzoom"
 
 [[plugins]]
-repo = "vim-scripts/fcitx.vim"
-
-[[plugins]]
 repo = "luochen1990/rainbow"
 hook_add = """
 let g:rainbow_active = 1
