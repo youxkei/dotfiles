@@ -15,6 +15,9 @@ repo = "kana/vim-operator-user"
 
 [[plugins]]
 repo = "kana/vim-operator-replace"
+hook_add = """
+map _  <Plug>(operator-replace)
+"""
 
 [[plugins]]
 repo = "rhysd/vim-operator-surround"
