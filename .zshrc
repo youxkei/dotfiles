@@ -1,6 +1,8 @@
 bindkey -e
 
-setopt histignorealldups sharehistory
+setopt histignorealldups
+setopt sharehistory
+setopt inc_append_history
 setopt hist_ignore_space
 HISTSIZE=1000
 SAVEHIST=100000
