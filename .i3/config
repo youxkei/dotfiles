@@ -131,8 +131,8 @@ workspace  8 output $right_monitor
 workspace  9 output $right_monitor
 workspace 10 output $right_monitor
 
-assign [class="^Rambox$"] 1
-exec --no-startup-id sleep 1s; rambox
+assign [class="^Station$"] 1
+exec --no-startup-id sleep 1s; station
 
 assign [class="^nvim-qt$"] 2
 exec --no-startup-id sleep 1s; nvim-qt
