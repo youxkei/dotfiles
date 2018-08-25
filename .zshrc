@@ -73,6 +73,8 @@ zplug "BurntSushi/ripgrep", from:gh-r, as:command, rename-to:rg, use:"*x86_64*un
 
 zplug "sharkdp/fd", from:gh-r, as:command, rename-to:fd, use:"*x86_64*unknown-linux-musl*"
 
+zplug "ogham/exa", from:gh-r, as:command, rename-to:exa, use:"*linux-x86_64*"
+
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
 
