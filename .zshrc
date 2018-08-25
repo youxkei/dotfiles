@@ -69,7 +69,9 @@ export FZF_DEFAULT_OPTS="--reverse --ansi"
 
 zplug "greymd/tmux-xpanes", as:command, use:"bin/*"
 
-zplug "BurntSushi/ripgrep", from:gh-r, as:command, rename-to:rg, use:"*x86_64*unknown-linux*"
+zplug "BurntSushi/ripgrep", from:gh-r, as:command, rename-to:rg, use:"*x86_64*unknown-linux-musl*"
+
+zplug "sharkdp/fd", from:gh-r, as:command, rename-to:fd, use:"*x86_64*unknown-linux-musl*"
 
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
