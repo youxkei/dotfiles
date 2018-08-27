@@ -49,6 +49,7 @@ if executable('ag')
 endif
 
 nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
+nnoremap <silent> <Leader>ud :<C-u>Denite directory_mru<CR>
 nnoremap <silent> <Leader>ug :<C-u>Denite grep<CR>
 nnoremap <silent> <Leader>uf :<C-u>Denite file_rec<CR>
 nnoremap <silent> <Leader>ub :<C-u>Denite buffer<CR>
