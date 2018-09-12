@@ -5,7 +5,7 @@
 	excludesfile = ~/.gitignore
 [alias]
     tree = log --all --graph --oneline --decorate
-    ag = !git ls-files | xargs ag
+    rg = !git ls-files | xargs rg
     co = checkout
 [github]
 	user = youxkei
@@ -21,5 +21,9 @@
 	rebase = true
 [diff]
 	algorithm = histogram
+	compactionHeuristic = true
+	indentHeuristic = true
 [user]
 	useConfigOnly = true
+[grep]
+	lineNumber = true
