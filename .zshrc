@@ -80,7 +80,7 @@ zplug "zplug/zplug", hook-build:"zplug --self-manage"
 
 zplug "b4b4r07/enhancd", use:init.sh
 export ENHANCD_COMMAND="cd"
-export ENHANCD_FILTER="fzf --height=20%"
+export ENHANCD_FILTER="fzf"
 export ENHANCD_DISABLE_DOT=1
 
 zplug "zsh-users/zsh-history-substring-search"
