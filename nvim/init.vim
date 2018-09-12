@@ -131,6 +131,8 @@ augroup general
 
   autocmd BufEnter * checktime
 
+  autocmd BufEnter *.erl set sw=4 ts=4 sts=4
+
   autocmd InsertLeave * call system('fcitx-remote -c')
 augroup END
 
