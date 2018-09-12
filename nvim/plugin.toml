@@ -346,3 +346,6 @@ repo = "sgur/vim-editorconfig"
 [[plugins]]
 repo = "raghur/vim-ghost"
 hook_post_update = ":GhostInstall"
+
+[[plugins]]
+repo = "prakashdanish/vim-githubinator"
