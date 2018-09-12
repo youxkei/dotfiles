@@ -263,9 +263,6 @@ let g:gitgutter_map_keys = 0
 """
 
 [[plugins]]
-repo = "lambdalisue/vim-gita"
-
-[[plugins]]
 repo = "Shougo/vinarise.vim"
 
 [[plugins]]
@@ -349,3 +346,6 @@ hook_post_update = ":GhostInstall"
 
 [[plugins]]
 repo = "prakashdanish/vim-githubinator"
+
+[[plugins]]
+repo = "lambdalisue/gina.vim"
