@@ -106,7 +106,7 @@ bar {
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
 for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf"] floating enable
 
-new_window pixel 8
+new_window pixel 16
 
 exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
