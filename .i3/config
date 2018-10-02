@@ -16,7 +16,6 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 bindsym $mod+a focus parent
 bindsym $mod+z focus child
-bindsym $mod+g focus mode_toggle
 
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
