@@ -62,7 +62,7 @@ zplug "creationix/nvm", use:nvm.sh
 
 zplug "github/hub", from:gh-r, as:command, rename-to:hub
 
-zplug "haikarainen/light", as:command, use:light, hook-build:make
+zplug "haikarainen/light", as:command, use:"src/light", hook-build:"./autogen.sh && ./configure && make"
 
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 export FZF_DEFAULT_OPTS="--reverse --ansi"
