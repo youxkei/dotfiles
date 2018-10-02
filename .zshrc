@@ -54,8 +54,6 @@ source ~/.zplug/init.zsh
 
 
 # command
-zplug "jhawthorn/fzy", as:command, use:fzy, hook-build:make
-
 zplug "soimort/translate-shell", at:stable, as:command, use:"build/*", hook-build:"make build"
 
 zplug "creationix/nvm", use:nvm.sh
