@@ -344,6 +344,9 @@ repo = "sgur/vim-editorconfig"
 [[plugins]]
 repo = "raghur/vim-ghost"
 hook_post_update = ":GhostInstall"
+hook_add = """
+let g:ghost_cmd = 'tabedit'
+"""
 
 [[plugins]]
 repo = "prakashdanish/vim-githubinator"
