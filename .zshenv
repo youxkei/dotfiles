@@ -1,7 +1,7 @@
 path=(
     ~/.zplug/bin
     ~/.anyenv/bin
-    ~/.go/bin
+    ~/go/bin
     ~/.cabal/bin
     ~/Android/Sdk/platform-tools
     ~/android-studio/bin
