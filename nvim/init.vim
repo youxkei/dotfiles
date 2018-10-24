@@ -84,6 +84,7 @@ vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 nnoremap <Leader>d <C-w>s<C-w>s<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>t<C-w>=
 nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
+nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
 nnoremap <C-+> :call ChangeFontSize(1)<CR>
 nnoremap <C--> :call ChangeFontSize(-1)<CR>
 nnoremap <C-0> :call SetFontSize(10)<CR>
