@@ -1,3 +1,7 @@
+export EDITOR=nvim
+export VISUAL=nvim
+export MANPAGER='nvim -c MANPAGER -'
+
 path=(
     ~/.zplug/bin
     ~/.anyenv/bin
