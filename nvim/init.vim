@@ -88,6 +88,21 @@ nnoremap <C-+> :call ChangeFontSize(1)<CR>
 nnoremap <C--> :call ChangeFontSize(-1)<CR>
 nnoremap <C-0> :call SetFontSize(10)<CR>
 
+augroup general
+  autocmd!
+
+  " autosource
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
+  autocmd BufWritePost *.toml nested if count(s:dein_toml_sources, expand('%:p')) != 0 | source $MYVIMRC | endif
+
+  autocmd BufEnter * checktime
+
+  autocmd BufEnter *.erl set sw=4 ts=4 sts=4
+
+  autocmd InsertLeave * call system('fcitx-remote -c')
+augroup END
+
 let s:plugin_directory = expand('~/.cache/nvim/dein')
 let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
 
@@ -120,35 +135,9 @@ if dein#check_install()
   call dein#install()
 endif
 
-filetype plugin indent on
-
-augroup general
-  autocmd!
-
-  " autosource
-  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-  autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
-  autocmd BufWritePost *.toml nested if count(s:dein_toml_sources, expand('%:p')) != 0 | source $MYVIMRC | endif
-
-  " fswitch
-  autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
-  autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
-  autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
-  autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
-
-  autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
-  autocmd BufEnter *.smi let b:fswitchlocs  = '.'
-  autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
-  autocmd BufEnter *.sml let b:fswitchlocs  = '.'
-
-  autocmd BufEnter * checktime
-
-  autocmd BufEnter *.erl set sw=4 ts=4 sts=4
-
-  autocmd InsertLeave * call system('fcitx-remote -c')
-augroup END
-
 syntax enable
 
 set bg=dark
 colorscheme gruvbox
+
+filetype plugin indent on
