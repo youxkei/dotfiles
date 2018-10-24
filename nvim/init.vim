@@ -68,6 +68,15 @@ let g:mapleader = ','
 let g:tex_conceal = ''
 let g:tex_flavor = 'latex'
 
+function! SetFontSize(point)
+  call GuiFont(join([split(g:GuiFont, "h")[0], a:point], "h"), 1)
+endfunction
+
+function! ChangeFontSize(point_diff)
+  let split = split(g:GuiFont, "h")
+  call GuiFont(join([split[0], split[1] + a:point_diff], "h"), 1)
+endfunction
+
 nnoremap <Leader>w :w<CR>
 nnoremap Q <NOP>
 inoremap <C-V> <C-r>+
@@ -75,6 +84,9 @@ vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 nnoremap <Leader>d <C-w>s<C-w>s<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>j<C-w>v<C-w>v<C-w>t<C-w>=
 nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
+nnoremap <C-+> :call ChangeFontSize(1)<CR>
+nnoremap <C--> :call ChangeFontSize(-1)<CR>
+nnoremap <C-0> :call SetFontSize(10)<CR>
 
 let s:plugin_directory = expand('~/.cache/nvim/dein')
 let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
