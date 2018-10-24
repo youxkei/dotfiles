@@ -272,6 +272,23 @@ repo = "rhysd/committia.vim"
 repo = "derekwyatt/vim-fswitch"
 hook_add = """
 nmap <silent> <Leader>f :FSHere<CR>
+
+augroup general
+  autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
+  autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
+  autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
+  autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
+
+  autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
+  autocmd BufEnter *.smi let b:fswitchlocs  = '.'
+  autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
+  autocmd BufEnter *.sml let b:fswitchlocs  = '.'
+
+  autocmd BufEnter *.mli let b:fswitchdst  = 'ml'
+  autocmd BufEnter *.mli let b:fswitchlocs  = '.'
+  autocmd BufEnter *.ml let b:fswitchdst  = 'mli'
+  autocmd BufEnter *.ml let b:fswitchlocs  = '.'
+augroup END
 """
 
 [[plugins]]
