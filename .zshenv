@@ -2,18 +2,21 @@ export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim -c MANPAGER -'
 
+typeset -U path
+
 path=(
-    ~/.zplug/bin
-    ~/.anyenv/bin
-    ~/go/bin
-    ~/.cabal/bin
-    ~/Android/Sdk/platform-tools
-    ~/android-studio/bin
-    ~/bin
+    ~/.local/bin(N-/)
+    ~/.zplug/bin(N-/)
+    ~/.erlenv/bin(N-/)
+    ~/go/bin(N-/)
+    ~/.cabal/bin(N-/)
+    ~/.cargo/bin(N-/)
+    ~/Android/Sdk/platform-tools(N-/)
+    ~/android-studio/bin(N-/)
+    ~/bin(N-/)
+    ~/repo/vdmc/bin(N-/)
     $path
 )
-
-export GOPATH="$HOME/.go"
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 
