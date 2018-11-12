@@ -1,3 +1,44 @@
+# zplugin {{{
+
+if [[ ! -d $ZPLG_HOME/bin ]]; then
+  if whence git > /dev/null; then
+    git clone --depth 1 https://github.com/zdharma/zplugin.git $ZPLG_HOME/bin
+  fi
+fi
+
+if [[ ! -d $ZPFX ]]; then
+  mkdir -p $ZPFX/bin
+fi
+
+if [[ ! -d $ZPLG_HOME/misc ]]; then
+  mkdir -p $ZPLG_HOME/misc
+fi
+
+source $ZPLG_HOME/bin/zplugin.zsh
+
+# command {{{
+zplugin ice lucid from"gh-r" wait"0" as"program" bpick"*x86_64*musl*" mv"tokei -> ${ZPFX}/bin/tokei"
+zplugin light Aaronepower/tokei
+
+zplugin ice lucid wait"0" from"gh-r" as"program" mv"fzf -> ${ZPFX}/bin/fzf"
+zplugin light junegunn/fzf-bin
+export FZF_DEFAULT_OPTS="--reverse --ansi"
+
+zplugin ice lucid from"gh-r" wait"0" as"program" bpick"*x86_64*musl*" mv"ripgrep*/rg -> ${ZPFX}/bin/rg"
+zplugin light BurntSushi/ripgrep
+
+zplugin ice lucid from"gh-r" wait"0" as"program" bpick"*linux*amd64*" mv"hub*/bin/hub -> ${ZPFX}/bin/hub"
+zplugin light github/hub
+
+zplugin ice lucid from"gh-r" wait"0" as"program" bpick"*x86_64*musl*" mv"fd*/fd -> ${ZPFX}/bin/fd"
+zplugin light sharkdp/fd
+
+zplugin ice lucid from"gh-r" wait"0" as"program" bpick"*linux*x86_64*" mv"exa* -> ${ZPFX}/bin/exa"
+zplugin light ogham/exa
+# command }}}
+
+# zplugin }}}
+
 bindkey -e
 
 setopt histignorealldups
@@ -58,20 +99,6 @@ zplug "soimort/translate-shell", at:stable, as:command, use:"build/*", hook-buil
 
 zplug "creationix/nvm", use:nvm.sh
 
-zplug "github/hub", from:gh-r, as:command, rename-to:hub
-
-zplug "haikarainen/light", as:command, use:"src/light", hook-build:"./autogen.sh && ./configure && make"
-
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-export FZF_DEFAULT_OPTS="--reverse --ansi"
-
-zplug "greymd/tmux-xpanes", as:command, use:"bin/*"
-
-zplug "BurntSushi/ripgrep", from:gh-r, as:command, rename-to:rg, use:"*x86_64*unknown-linux-musl*"
-
-zplug "sharkdp/fd", from:gh-r, as:command, rename-to:fd, use:"*x86_64*unknown-linux-musl*"
-
-zplug "ogham/exa", from:gh-r, as:command, rename-to:exa, use:"*linux-x86_64*"
 
 # extension
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
@@ -134,3 +161,4 @@ re-prompt() {
 }
 
 zle -N accept-line re-prompt
+# vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
