@@ -6,7 +6,6 @@ typeset -U path
 
 path=(
     ~/.local/bin(N-/)
-    ~/.zplug/bin(N-/)
     ~/.erlenv/bin(N-/)
     ~/go/bin(N-/)
     ~/.cabal/bin(N-/)
@@ -17,6 +16,8 @@ path=(
     ~/repo/vdmc/bin(N-/)
     $path
 )
+
+ZPLG_HOME=$HOME/.zplugin
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 
