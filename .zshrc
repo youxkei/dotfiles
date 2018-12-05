@@ -77,6 +77,9 @@ zplugin light sharkdp/fd
 zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*x86_64*" mv"exa* -> exa"
 zplugin light ogham/exa
 
+zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*amd64*"
+zplugin light tomnomnom/gron
+
 zplugin ice lucid wait"0"
 zplugin light zdharma/zsh-diff-so-fancy
 
