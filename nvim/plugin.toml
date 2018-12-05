@@ -376,3 +376,6 @@ repo = "lambdalisue/gina.vim"
 repo = "lambdalisue/vim-manpager"
 lazy = 1
 on_cmd = "MANPAGER"
+
+[[plugins]]
+repo = "majutsushi/tagbar"
