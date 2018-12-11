@@ -22,6 +22,8 @@ source $ZPLG_HOME/bin/zplugin.zsh
 zplugin light momo-lab/zsh-abbrev-alias
 abbrev-alias -f CI="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
 abbrev-alias -f B="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
+abbrev-alias -f PS="ps aux | tail -n +2 | fzf | awk '{print \$2}'"
+abbrev-alias -f DP="docker ps | tail -n +2 | fzf | awk '{print \$1}'"
 
 zplugin light bhilburn/powerlevel9k
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
