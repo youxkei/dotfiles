@@ -333,10 +333,13 @@ hook_add = """
 let g:ale_sign_column_always = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
-let g:ale_linters = {
-\ 'cpp': [],
-\}
 let g:ale_erlang_erlc_options = '-I./deps/*/include'
+
+let g:ale_fixers = {
+\ '*': ['remove_trailing_lines', 'trim_whitespace'],
+\ 'rust': ['rustfmt'],
+\}
+let g:ale_fix_on_save = 1
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -379,3 +382,14 @@ on_cmd = "MANPAGER"
 
 [[plugins]]
 repo = "majutsushi/tagbar"
+
+[[plugins]]
+repo = "autozimu/LanguageClient-neovim"
+depends = "deoplete.nvim"
+build = "./install.sh"
+hook_source = """
+let g:LanguageClient_serverCommands = {
+\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+\}
+let g:LanguageClient_autoStart = 1
+"""
