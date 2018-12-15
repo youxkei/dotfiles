@@ -35,6 +35,7 @@ set foldmethod=indent
 set ambiwidth=single
 set cmdheight=2
 
+set hidden
 set number
 set showmatch
 set nowrap
