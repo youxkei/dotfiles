@@ -114,6 +114,8 @@ exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
 exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
+exec --no-startup-id compton
+exec --no-startup-id sleep 1s; guake
 
 set_from_resource $left_monitor   i3wm.left_monitor
 set_from_resource $center_monitor i3wm.center_monitor
