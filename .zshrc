@@ -20,10 +20,10 @@ source $ZPLG_HOME/bin/zplugin.zsh
 
 # sync {{{
 zplugin light momo-lab/zsh-abbrev-alias
-abbrev-alias -f CI="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
-abbrev-alias -f B="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
-abbrev-alias -f PS="ps aux | tail -n +2 | fzf | awk '{print \$2}'"
-abbrev-alias -f DP="docker ps | tail -n +2 | fzf | awk '{print \$1}'"
+abbrev-alias -f CI="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}'"
+abbrev-alias -f B="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
+abbrev-alias -f PS="ps aux | tail -n +2 | sk | awk '{print \$2}'"
+abbrev-alias -f DP="docker ps | tail -n +2 | sk | awk '{print \$1}'"
 
 zplugin light bhilburn/powerlevel9k
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -56,47 +56,16 @@ zplugin ice lucid wait"0"
 zplugin light zsh-users/zsh-completions
 # sync }}}
 
-# command {{{
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*amd64*" mv"hub*/bin/hub -> hub"
-zplugin light github/hub
-function git() { hub $@; }
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*x86_64*musl*"
-zplugin light Aaronepower/tokei
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*amd64*"
-zplugin light junegunn/fzf-bin
-export FZF_DEFAULT_OPTS="--reverse --ansi"
-alias fzf20="fzf --height=20%"
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*x86_64*musl*" mv"ripgrep*/rg -> rg"
-zplugin light BurntSushi/ripgrep
-
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*x86_64*musl*" mv"fd*/fd -> fd"
-zplugin light sharkdp/fd
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*x86_64*" mv"exa* -> exa"
-zplugin light ogham/exa
-
-zplugin ice lucid wait"0" from"gh-r" as"program" bpick"*linux*amd64*"
-zplugin light tomnomnom/gron
-
-zplugin ice lucid wait"0"
-zplugin light zdharma/zsh-diff-so-fancy
-
-zplugin ice lucid wait"0"
-zplugin light soimort/translate-shell
-
+# async {{{
 zplugin ice lucid wait"0" pick"nvm.sh"
 zplugin light creationix/nvm
 
 zplugin ice lucid wait"0" pick"init.sh"
 zplugin light b4b4r07/enhancd
 export ENHANCD_COMMAND="cd"
-export ENHANCD_FILTER="fzf20"
+export ENHANCD_FILTER="sk20"
 export ENHANCD_DISABLE_DOT=1
-# command }}}
+# async }}}
 
 # zplugin }}}
 
@@ -132,6 +101,7 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+export SKIM_DEFAULT_OPTIONS="--reverse --ansi"
 
 alias ls='ls -hF --color=auto'
 alias ll='ls -al'
@@ -140,6 +110,7 @@ alias l='ls -CF'
 alias open="xdg-open"
 alias tmux="tmux -2"
 alias tig="tig --all"
+alias sk20="sk --height=20%"
 
 function chpwd() { ls }
 

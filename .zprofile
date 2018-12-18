@@ -1,3 +1,5 @@
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
+
 export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim -c MANPAGER -'
@@ -6,19 +8,16 @@ typeset -U path
 
 path=(
     ~/.local/bin(N-/)
-    ~/.erlenv/bin(N-/)
     ~/go/bin(N-/)
-    ~/.cabal/bin(N-/)
     ~/.cargo/bin(N-/)
-    ~/Android/Sdk/platform-tools(N-/)
-    ~/android-studio/bin(N-/)
     ~/bin(N-/)
-    ~/repo/vdmc/bin(N-/)
     $path
 )
 
-ZPLG_HOME=$HOME/.zplugin
+export ZPLG_HOME=$HOME/.zplugin
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 
-export XDG_CURRENT_DESKTOP="Unity:Unity7"
+if [ -e /home/youxkei/.nix-profile/etc/profile.d/nix.sh ]; then
+  source /home/youxkei/.nix-profile/etc/profile.d/nix.sh
+fi
