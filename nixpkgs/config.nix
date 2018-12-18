@@ -1,6 +1,6 @@
 {
   allowUnfree = true;
-  packageOverrides = pkgs: with pkgs; {
+  packageOverrides = pkgs: with pkgs; rec {
     all = buildEnv {
       name = "all";
       paths = [
@@ -29,6 +29,8 @@
 
         erlangR21
         rustup
+        go
+        ldc
       ];
     };
   };
