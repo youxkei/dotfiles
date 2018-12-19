@@ -113,6 +113,7 @@ alias tig="tig --all"
 alias sk20="sk --height=20%"
 
 function chpwd() { ls }
+function git() { hub $@ }
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
