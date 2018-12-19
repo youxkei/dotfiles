@@ -31,6 +31,7 @@
         rustup
         go
         ldc
+        nodejs-10_x
       ];
     };
   };

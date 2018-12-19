@@ -57,9 +57,6 @@ zplugin light zsh-users/zsh-completions
 # sync }}}
 
 # async {{{
-zplugin ice lucid wait"0" pick"nvm.sh"
-zplugin light creationix/nvm
-
 zplugin ice lucid wait"0" pick"init.sh"
 zplugin light b4b4r07/enhancd
 export ENHANCD_COMMAND="cd"
