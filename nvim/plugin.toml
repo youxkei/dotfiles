@@ -353,9 +353,6 @@ let g:swap_no_default_key_mappings = 1
 nmap gs <Plug>(swap-interactive)
 """
 
-#[[plugins]]
-#repo = "henrik/vim-indexed-search"
-
 [[plugins]]
 repo = "lambdalisue/suda.vim"
 
