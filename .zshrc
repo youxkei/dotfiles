@@ -114,8 +114,6 @@ alias sk20="sk --height=20%"
 
 function chpwd() { ls }
 
-source ~/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
