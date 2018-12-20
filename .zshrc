@@ -21,7 +21,7 @@ source $ZPLG_HOME/bin/zplugin.zsh
 # sync {{{
 zplugin light momo-lab/zsh-abbrev-alias
 abbrev-alias -f CI="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}'"
-abbrev-alias -f B="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
+abbrev-alias -f B="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | sk -0 -1 | cut -c3- | awk '{print \\\$1}'\""
 abbrev-alias -f PS="ps aux | tail -n +2 | sk | awk '{print \$2}'"
 abbrev-alias -f DP="docker ps | tail -n +2 | sk | awk '{print \$1}'"
 
