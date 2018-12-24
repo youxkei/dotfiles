@@ -70,11 +70,11 @@ bindsym $mod+Shift+e mode $out
 mode $out {
     bindsym e exit, mode "default"
 
-    bindsym l exec --no-startup-id dm-tool lock,        mode "default"
-    bindsym s exec --no-startup-id systemctl suspend,   mode "default"
-    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot,    mode "default"
-    bindsym p exec --no-startup-id systemctl poweroff,  mode "default"
+    bindsym l exec --no-startup-id gnome-screensaver-command -l, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend,            mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate,          mode "default"
+    bindsym r exec --no-startup-id systemctl reboot,             mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff,           mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
