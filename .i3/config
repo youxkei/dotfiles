@@ -115,7 +115,7 @@ exec --no-startup-id nm-applet
 exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 exec --no-startup-id compton
-exec --no-startup-id sleep 1s; guake
+exec --no-startup-id sleep 2s; guake
 
 set_from_resource $left_monitor   i3wm.left_monitor
 set_from_resource $center_monitor i3wm.center_monitor
@@ -137,9 +137,6 @@ exec --no-startup-id sleep 1s; station
 
 assign [class="^nvim-qt$"] 2
 exec --no-startup-id sleep 1s; nvim-qt
-
-assign [class="^Gnome-terminal$"] 3
-exec --no-startup-id sleep 1s; gnome-terminal
 
 assign [class="^Google-chrome$"] 6
 exec --no-startup-id sleep 1s; google-chrome
