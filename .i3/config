@@ -82,10 +82,10 @@ mode $out {
 
 bindsym $mod+r mode "resize"
 mode "resize" {
-    bindsym h resize shrink width  1 px or 1 ppt
-    bindsym j resize grow   height 1 px or 1 ppt
-    bindsym k resize shrink height 1 px or 1 ppt
-    bindsym l resize grow   width  1 px or 1 ppt
+    bindsym w resize grow   width  1 px or 1 ppt
+    bindsym n resize shrink width  1 px or 1 ppt
+    bindsym t resize grow   height 1 px or 1 ppt
+    bindsym s resize shrink height 1 px or 1 ppt
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
