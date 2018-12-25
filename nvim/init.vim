@@ -79,6 +79,8 @@ function! ChangeFontSize(point_diff)
 endfunction
 
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>v :VimFilerExplorer -winwidth=70<CR>
+
 nnoremap Q <NOP>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
