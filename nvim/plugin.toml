@@ -42,6 +42,9 @@ nnoremap <silent> <Leader>ub :<C-u>Denite buffer<CR>
 nnoremap <silent> <Leader>ul :<C-u>Denite line<CR>
 """
 hook_post_source = """
+call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
+
 call denite#custom#alias('source', 'file_rec/git', 'file_rec')
 call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
 
