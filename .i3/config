@@ -70,11 +70,11 @@ bindsym $mod+Shift+e mode $out
 mode $out {
     bindsym e exit, mode "default"
 
-    bindsym l exec --no-startup-id gnome-screensaver-command -l, mode "default"
-    bindsym s exec --no-startup-id systemctl suspend,            mode "default"
-    bindsym h exec --no-startup-id systemctl hibernate,          mode "default"
-    bindsym r exec --no-startup-id systemctl reboot,             mode "default"
-    bindsym p exec --no-startup-id systemctl poweroff,           mode "default"
+    bindsym l exec --no-startup-id xscreensaver-command --lock, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend,           mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate,         mode "default"
+    bindsym r exec --no-startup-id systemctl reboot,            mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff,          mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -116,6 +116,7 @@ exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/wart
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 exec --no-startup-id compton
 exec --no-startup-id sleep 2s; guake
+exec --no-startup-id xscreensaver -nosplash
 
 set_from_resource $left_monitor   i3wm.left_monitor
 set_from_resource $center_monitor i3wm.center_monitor
