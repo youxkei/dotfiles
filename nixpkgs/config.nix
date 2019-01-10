@@ -26,6 +26,7 @@
         gron
         translate-shell
         powertop
+        protobuf
 
         erlangR21
         rustup
@@ -35,6 +36,7 @@
 
         go
         dep
+        go-protobuf
       ];
     };
   };
