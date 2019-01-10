@@ -29,10 +29,12 @@
 
         erlangR21
         rustup
-        go
         ldc
         nodejs-10_x
         opam
+
+        go
+        dep
       ];
     };
   };
