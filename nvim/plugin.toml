@@ -184,9 +184,6 @@ vmap <Enter> <Plug>(EasyAlign)
 """
 
 [[plugins]]
-repo = "thinca/vim-visualstar"
-
-[[plugins]]
 repo = "deris/vim-rengbang"
 
 [[plugins]]
