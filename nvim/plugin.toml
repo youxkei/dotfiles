@@ -61,6 +61,10 @@ endif
 """
 
 [[plugins]]
+repo = "notomo/denite-keymap"
+depends = "denite.nvim"
+
+[[plugins]]
 repo = "Shougo/neomru.vim"
 
 [[plugins]]
