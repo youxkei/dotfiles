@@ -345,6 +345,7 @@ let g:ale_erlang_erlc_options = '-I./deps/*/include'
 let g:ale_fixers = {
 \ '*': ['remove_trailing_lines', 'trim_whitespace'],
 \ 'rust': ['rustfmt'],
+\ 'go': ['gofmt']
 \}
 let g:ale_fix_on_save = 1
 
