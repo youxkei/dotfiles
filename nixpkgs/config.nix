@@ -31,12 +31,14 @@
         erlangR21
         rustup
         ldc
-        nodejs-10_x
         opam
 
         go
         dep
         go-protobuf
+
+        nodejs-10_x
+        nodePackages.ocaml-language-server
       ];
     };
   };
