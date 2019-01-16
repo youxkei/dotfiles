@@ -91,6 +91,7 @@ nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
 nnoremap <C-+> :call ChangeFontSize(1)<CR>
 nnoremap <C--> :call ChangeFontSize(-1)<CR>
 nnoremap <C-0> :call SetFontSize(10)<CR>
+nnoremap <C-]> :ALEGoToDefinition<CR>
 
 augroup general
   autocmd!
