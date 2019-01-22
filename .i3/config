@@ -101,6 +101,20 @@ bar {
     tray_output primary
 }
 
+set_from_resource $left_monitor   i3wm.left_monitor
+set_from_resource $center_monitor i3wm.center_monitor
+set_from_resource $right_monitor  i3wm.right_monitor
+
+workspace  1 output $left_monitor
+workspace  2 output $center_monitor
+workspace  3 output $center_monitor
+workspace  4 output $center_monitor
+workspace  5 output $center_monitor
+workspace  6 output $right_monitor
+workspace  7 output $right_monitor
+workspace  8 output $right_monitor
+workspace  9 output $right_monitor
+workspace 10 output $right_monitor
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
 for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf"] floating enable
