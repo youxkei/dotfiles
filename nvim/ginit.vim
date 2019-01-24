@@ -1,1 +1,2 @@
-GuiFont! 更紗等幅ゴシック J:h10
+call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
+call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
