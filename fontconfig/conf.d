@@ -6,7 +6,7 @@
       <string>monospace</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>更紗等幅ゴシック J</string>
+      <string>Cica</string>
     </edit>
   </match>
   <match target="pattern">
@@ -14,7 +14,7 @@
       <string>Courier New</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>更紗等幅ゴシック J</string>
+      <string>Cica</string>
     </edit>
   </match>
 </fontconfig>
