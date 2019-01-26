@@ -1,5 +1,3 @@
-filetype off
-
 set termguicolors
 
 if !isdirectory(expand('~/.cache/nvim'))
