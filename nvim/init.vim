@@ -51,6 +51,8 @@ set laststatus=2
 
 set viewoptions=cursor
 set wildmenu
+set signcolumn=yes
+set completeopt-=preview
 
 set list
 set listchars=tab:»-,trail:-,nbsp:%
@@ -89,7 +91,7 @@ nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
 nnoremap <C-+> :call ChangeFontSize(1)<CR>
 nnoremap <C--> :call ChangeFontSize(-1)<CR>
 nnoremap <C-0> :call SetFontSize(10)<CR>
-nnoremap <C-]> :ALEGoToDefinition<CR>
+nnoremap <C-]> :call LanguageClient#textDocument_definition()<CR>
 
 augroup general
   autocmd!

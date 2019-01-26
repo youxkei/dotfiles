@@ -428,3 +428,12 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 [[plugins]]
 repo = "scrooloose/nerdtree"
+
+[[plugins]]
+repo = "autozimu/LanguageClient-neovim"
+build = "./install.sh"
+hook_add = """
+let g:LanguageClient_serverCommands = {
+\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+\}
+"""
