@@ -68,7 +68,6 @@ let loaded_matchparen = 1
 let g:mapleader = ','
 let g:tex_conceal = ''
 let g:tex_flavor = 'latex'
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 
 function! SetFontSize(point)
   call GuiFont(join([split(g:GuiFont, "h")[0], a:point], "h"), 1)
@@ -91,7 +90,6 @@ nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
 nnoremap <C-+> :call ChangeFontSize(1)<CR>
 nnoremap <C--> :call ChangeFontSize(-1)<CR>
 nnoremap <C-0> :call SetFontSize(10)<CR>
-nnoremap <C-]> :call LanguageClient#textDocument_definition()<CR>
 
 augroup general
   autocmd!
@@ -133,11 +131,6 @@ if dein#load_state(s:plugin_directory)
   for toml_source in s:dein_toml_sources
     call dein#load_toml(toml_source)
   endfor
-
-  if isdirectory(g:opamshare)
-    call dein#add(g:opamshare.'/merlin/vim', {'on_ft' : ['ocaml']})
-    call dein#add('copy/deoplete-ocaml', {'on_ft' : ['ocaml']})
-  endif
 
   call dein#end()
   call dein#save_state()

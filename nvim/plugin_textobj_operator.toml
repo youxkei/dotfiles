@@ -3,6 +3,7 @@ repo = "kana/vim-textobj-user"
 
 [[plugins]]
 repo = "kana/vim-textobj-indent"
+depends = "vim-textobj-user"
 
 [[plugins]]
 repo = "rhysd/vim-textobj-word-column"
