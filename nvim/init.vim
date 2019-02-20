@@ -40,7 +40,6 @@ set nowrap
 set eol
 set hls
 set nodigraph
-set noea
 set showcmd
 set backspace=indent,eol,start
 
