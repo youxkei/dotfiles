@@ -1,5 +1,10 @@
 [[plugins]]
 repo = "Shougo/dein.vim"
+hook_add="""
+augroup general
+  autocmd VimEnter * call dein#call_hook('post_source')
+augroup END
+"""
 
 [[plugins]]
 repo = "thinca/vim-ambicmd"

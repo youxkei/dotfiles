@@ -94,8 +94,6 @@ nnoremap <C-0> :call SetFontSize(10)<CR>
 augroup general
   autocmd!
 
-  autocmd VimEnter * call dein#call_hook('post_source')
-
   " autosource
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
