@@ -80,14 +80,14 @@ endfunction
 nnoremap <Leader>w :w<CR>
 
 nnoremap Q <NOP>
+nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
+nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
+nnoremap <silent> <C-+> :call ChangeFontSize(1)<CR>
+nnoremap <silent> <C--> :call ChangeFontSize(-1)<CR>
+nnoremap <silent> <C-0> :call SetFontSize(11)<CR>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
-nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
-nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
-nnoremap <C-+> :call ChangeFontSize(1)<CR>
-nnoremap <C--> :call ChangeFontSize(-1)<CR>
-nnoremap <C-0> :call SetFontSize(10)<CR>
 
 augroup general
   autocmd!
