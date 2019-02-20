@@ -84,10 +84,10 @@ nnoremap <Leader>w :w<CR>
 nnoremap Q <NOP>
 nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
 nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
-nnoremap <silent> <C-+> :call ChangeFontSize(1)<CR>
-nnoremap <silent> <C--> :call ChangeFontSize(-1)<CR>
-nnoremap <silent> <C-0> :call SetFontSize(11)<CR>
-inoremap <C-V> <C-r>+
+nnoremap <silent> <C-+> :<C-U>call ChangeFontSize(1)<CR>
+nnoremap <silent> <C--> :<C-U>call ChangeFontSize(-1)<CR>
+nnoremap <silent> <C-0> :<C-U>call SetFontSize(11)<CR>
+inoremap <C-V> <C-R>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
