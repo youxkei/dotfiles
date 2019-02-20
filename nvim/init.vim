@@ -62,6 +62,8 @@ set inccommand=nosplit
 
 set autoread
 
+set scrollback=2000
+
 let loaded_matchparen = 1
 
 let g:mapleader = ','
@@ -88,6 +90,13 @@ nnoremap <silent> <C-0> :call SetFontSize(11)<CR>
 inoremap <C-V> <C-r>+
 vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
+tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
+tnoremap <C-W><C-J> <C-\><C-N><C-W><C-J>
+tnoremap <C-W><C-K> <C-\><C-N><C-W><C-K>
+tnoremap <C-W><C-L> <C-\><C-N><C-W><C-L>
+tnoremap <C-W><C-T> <C-\><C-N><C-W><C-T>
+tnoremap <C-W><C-V> <C-\><C-N><C-W><C-V>
+tnoremap <C-W><C-S> <C-\><C-N><C-W><C-S>
 
 augroup general
   autocmd!
