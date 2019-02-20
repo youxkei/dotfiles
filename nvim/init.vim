@@ -78,7 +78,6 @@ function! ChangeFontSize(point_diff)
 endfunction
 
 nnoremap <Leader>w :w<CR>
-nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
 
 nnoremap Q <NOP>
 inoremap <C-V> <C-r>+

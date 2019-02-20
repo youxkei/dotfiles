@@ -359,6 +359,9 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 [[plugins]]
 repo = "scrooloose/nerdtree"
+hook_add = """
+nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
+"""
 
 [[plugins]]
 repo = "autozimu/LanguageClient-neovim"
