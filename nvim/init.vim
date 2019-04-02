@@ -92,8 +92,6 @@ nnoremap <expr> a empty(getline('.')) ? "cc" : "a"
 nnoremap <silent> <C-+> :<C-U>call ChangeFontSize(1)<CR>
 nnoremap <silent> <C--> :<C-U>call ChangeFontSize(-1)<CR>
 nnoremap <silent> <C-0> :<C-U>call SetFontSize(11)<CR>
-inoremap <C-V> <C-R>+
-vnoremap <C-C> "+y
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
 tnoremap <C-W><C-J> <C-\><C-N><C-W><C-J>
