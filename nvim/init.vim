@@ -103,6 +103,10 @@ tnoremap <C-W><C-L> <C-\><C-N><C-W><C-L>
 tnoremap <C-W><C-T> <C-\><C-N><C-W><C-T>
 tnoremap <C-W><C-V> <C-\><C-N><C-W><C-V>
 tnoremap <C-W><C-S> <C-\><C-N><C-W><C-S>
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
 
 augroup general
   " autosource
