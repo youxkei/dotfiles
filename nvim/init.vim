@@ -68,6 +68,7 @@ set inccommand=nosplit
 set autoread
 
 set scrollback=2000
+set synmaxcol=512
 
 let loaded_matchparen = 1
 
