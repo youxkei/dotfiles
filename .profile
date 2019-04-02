@@ -14,3 +14,5 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 
 source ~/.nix-profile/etc/profile.d/nix.sh >/dev/null 2>/dev/null || true
 source ~/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
+
+export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive
