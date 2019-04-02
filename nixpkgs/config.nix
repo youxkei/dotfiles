@@ -19,6 +19,7 @@
         rofi
         feh
         compton-git
+        glibcLocales
 
         gitAndTools.gitFull
         gitAndTools.hub
