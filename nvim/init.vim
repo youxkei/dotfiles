@@ -41,6 +41,7 @@ set eol
 set hls
 set nodigraph
 set showcmd
+set showtabline=2
 set backspace=indent,eol,start
 
 set scrolloff=16
