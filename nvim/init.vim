@@ -87,8 +87,8 @@ endfunction
 nnoremap <Leader>w :w<CR>
 
 nnoremap Q <NOP>
-nnoremap <expr> i len(getline('.')) == 0 ? "cc" : "i"
-nnoremap <expr> a len(getline('.')) == 0 ? "cc" : "a"
+nnoremap <expr> i empty(getline('.')) ? "cc" : "i"
+nnoremap <expr> a empty(getline('.')) ? "cc" : "a"
 nnoremap <silent> <C-+> :<C-U>call ChangeFontSize(1)<CR>
 nnoremap <silent> <C--> :<C-U>call ChangeFontSize(-1)<CR>
 nnoremap <silent> <C-0> :<C-U>call SetFontSize(11)<CR>
