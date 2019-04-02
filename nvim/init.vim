@@ -1,3 +1,7 @@
+augroup general
+  autocmd!
+augroup END
+
 set termguicolors
 
 if !isdirectory(expand('~/.cache/nvim'))
@@ -100,8 +104,6 @@ tnoremap <C-W><C-V> <C-\><C-N><C-W><C-V>
 tnoremap <C-W><C-S> <C-\><C-N><C-W><C-S>
 
 augroup general
-  autocmd!
-
   " autosource
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
