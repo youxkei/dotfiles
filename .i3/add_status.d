@@ -1,9 +1,11 @@
-import std.algorithm : map, each, startsWith;
+import std.algorithm : map, each, startsWith, substitute;
 import std.stdio : File, stdin, stdout;
 import std.json : JSONValue, parseJSON, toJSON;
-import std.range : enumerate;
+import std.range : enumerate, take;
 import std.format : format;
 import std.math : round;
+import std.process : execute;
+import std.conv : to;
 
 void main()
 {
@@ -52,11 +54,17 @@ static this()
 JSONValue addStatuses(JSONValue json)
 {
     CpuTimes cpuTimes = readCpuTimesFromProcStat();
+    string clipboard = format!"Clip: %s"(execute(["xsel", "-bo"]).output).substitute('\n', ' ').take(128).to!string();
     string cpuUsage = format!"CPU: %02d%%"(cast(int)round(100.0 * (0.0 + cpuTimes.used   - previousCpuTimes.used) / (cpuTimes.total - previousCpuTimes.total)));
     string iowait   = format!"iowait: %02d%%"(cast(int)round(100.0 * (0.0 + cpuTimes.iowait - previousCpuTimes.iowait) / (cpuTimes.total - previousCpuTimes.total)));
     previousCpuTimes = cpuTimes;
 
     return JSONValue([
+        JSONValue([
+            "name": "clip",
+            "markup": "none",
+            "full_text": clipboard,
+        ]),
         JSONValue([
             "name": "cpu_usage",
             "markup": "none",
