@@ -59,7 +59,7 @@ set signcolumn=yes
 set completeopt-=preview
 
 set list
-set listchars=tab:»-,trail:-,nbsp:%
+set listchars=tab:\|\ ,trail:-,nbsp:%
 
 set modeline
 

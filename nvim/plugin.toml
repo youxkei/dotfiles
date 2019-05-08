@@ -172,13 +172,19 @@ hook_add = """
 let g:undotree_WindowLayout = 3
 """
 
+#[[plugins]]
+#repo = "nathanaelkane/vim-indent-guides"
+#hook_add = """
+#let g:indent_guides_enable_on_vim_startup = 1
+#let g:indent_guides_start_level = 1
+#let g:indent_guides_guide_size = 0
+#let g:indent_guides_auto_colors = 0
+#"""
+
 [[plugins]]
-repo = "nathanaelkane/vim-indent-guides"
+repo = "Yggdroot/indentLine"
 hook_add = """
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 0
-let g:indent_guides_auto_colors = 0
+let g:indentLine_char = '┊'
 """
 
 [[plugins]]
