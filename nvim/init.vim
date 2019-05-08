@@ -22,10 +22,10 @@ set swapfile
 set cindent
 set cinoptions=L0,(2,U1,m1
 set expandtab
-set shiftwidth=2
-set softtabstop=2
+set shiftwidth=4
+set softtabstop=4
 set smarttab
-set tabstop=2
+set tabstop=4
 
 "set encoding=utf-8
 set fileencodings=utf-8,sjis,cp932,euc-jp
