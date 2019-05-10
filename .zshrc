@@ -62,6 +62,9 @@ zplugin light b4b4r07/enhancd
 export ENHANCD_COMMAND="cd"
 export ENHANCD_FILTER="fzf20"
 export ENHANCD_DISABLE_DOT=1
+
+zplugin ice lucid wait"0" from"gh-r" as"program"
+zplugin light dalance/procs
 # async }}}
 
 # zplugin }}}
@@ -101,6 +104,8 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"
 export FZF_DEFAULT_OPTS="--reverse --ansi"
+
+export LESS='-SR'
 
 alias ls='exa -h --color=auto'
 alias ll='ls -al'
