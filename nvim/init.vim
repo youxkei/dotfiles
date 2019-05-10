@@ -69,6 +69,8 @@ set autoread
 set scrollback=2000
 set synmaxcol=512
 
+set updatetime=100
+
 let loaded_matchparen = 1
 
 let g:mapleader = ','
