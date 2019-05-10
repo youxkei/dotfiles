@@ -16,3 +16,6 @@ repo = "gf3/peg.vim"
 
 [[plugins]]
 repo = "vim-scripts/lojban"
+
+[[plugins]]
+repo = "qnighy/satysfi.vim"
