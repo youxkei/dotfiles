@@ -2,6 +2,9 @@
 repo = "kana/vim-textobj-user"
 
 [[plugins]]
+repo = "kana/vim-operator-user"
+
+[[plugins]]
 repo = "kana/vim-textobj-indent"
 depends = "vim-textobj-user"
 
@@ -12,34 +15,13 @@ repo = "rhysd/vim-textobj-word-column"
 repo = "sgur/vim-textobj-parameter"
 
 [[plugins]]
-repo = "kana/vim-operator-user"
-
-[[plugins]]
 repo = "kana/vim-operator-replace"
 hook_add = """
 map _  <Plug>(operator-replace)
 """
 
 [[plugins]]
-repo = "rhysd/vim-operator-surround"
-depends = ["vim-textobj-anyblock"]
-hook_add = """
-map <silent><Leader>ra <Plug>(operator-surround-append)
-map <silent><Leader>rd <Plug>(operator-surround-delete)
-map <silent><Leader>rr <Plug>(operator-surround-replace)
-
-nmap <silent><Leader>rdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-nmap <silent><Leader>rrr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
-"""
-
-[[plugins]]
 repo = "kana/vim-textobj-entire"
-
-[[plugins]]
-repo = "osyo-manga/vim-textobj-blockwise"
-
-[[plugins]]
-repo = "rhysd/vim-textobj-anyblock"
 
 [[plugins]]
 repo = "haya14busa/vim-operator-flashy"
@@ -55,4 +37,10 @@ nmap <Leader>cl <Plug>(operator-convert-case-lower-camel)
 nmap <Leader>cu <Plug>(operator-convert-case-upper-camel)
 nmap <Leader>sl <Plug>(operator-convert-case-lower-snake)
 nmap <Leader>su <Plug>(operator-convert-case-upper-snake)
+"""
+
+[[plugins]]
+repo = "machakann/vim-sandwich"
+hook_post_source = """
+let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 """
