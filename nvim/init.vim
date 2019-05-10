@@ -156,6 +156,6 @@ endif
 syntax enable
 
 set bg=dark
-colorscheme gruvbox
+colorscheme hybrid
 
 filetype plugin indent on

@@ -6,3 +6,6 @@ repo = "arcticicestudio/nord-vim"
 
 [[plugins]]
 repo = "NLKNguyen/papercolor-theme"
+
+[[plugins]]
+repo = "w0ng/vim-hybrid"
