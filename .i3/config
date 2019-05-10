@@ -65,6 +65,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2%
 bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle
 
+gaps inner 20
+
 set $out "(L)ock, (E)xit, (S)uspend, (H)ibernate, (R)eboot, (P)oweroff"
 bindsym $mod+Shift+e mode $out
 mode $out {

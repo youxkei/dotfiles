@@ -1,10 +1,20 @@
 {
   allowUnfree = true;
-  packageOverrides = pkgs: with pkgs; rec {
+  packageOverrides = super: with super; let
+    modified-i3-gaps = i3-gaps.overrideAttrs (oldAttrs : rec {
+      version = "4.16.1";
+      releaseDate = "2019-01-28";
+
+      src = fetchurl {
+        url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
+        sha256 = "1jvyd8p8dfsidfy2yy7adydynzvaf72lx67x71r13hrk8w77hp0k";
+      };
+    });
+  in rec {
     all = buildEnv {
       name = "all";
       paths = [
-        i3
+        modified-i3-gaps
         i3status
         rofi
         feh
