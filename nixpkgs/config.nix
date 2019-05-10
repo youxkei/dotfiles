@@ -19,7 +19,6 @@
         neovim
         tokei
         xsel
-        skim
         ripgrep
         fd
         exa
@@ -27,6 +26,7 @@
         translate-shell
         powertop
         protobuf
+        fzf
 
         erlangR21
         rustup

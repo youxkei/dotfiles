@@ -20,10 +20,10 @@ source $ZPLG_HOME/bin/zplugin.zsh
 
 # sync {{{
 zplugin light momo-lab/zsh-abbrev-alias
-abbrev-alias -f CI="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}'"
-abbrev-alias -f B="git tree --color | sk | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | sk -0 -1 | cut -c3- | awk '{print \\\$1}'\""
-abbrev-alias -f PS="ps aux | tail -n +2 | sk | awk '{print \$2}'"
-abbrev-alias -f DP="docker ps | tail -n +2 | sk | awk '{print \$1}'"
+abbrev-alias -f CI="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}'"
+abbrev-alias -f B="git tree --color | fzf | grep -Po '\\w.*$' | awk '{print \$1}' | xargs -I{} bash -c \"git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk '{print \\\$1}'\""
+abbrev-alias -f PS="ps aux | tail -n +2 | fzf | awk '{print \$2}'"
+abbrev-alias -f DP="docker ps | tail -n +2 | fzf | awk '{print \$1}'"
 
 zplugin light bhilburn/powerlevel9k
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -60,7 +60,7 @@ zplugin light zsh-users/zsh-completions
 zplugin ice lucid wait"0" pick"init.sh"
 zplugin light b4b4r07/enhancd
 export ENHANCD_COMMAND="cd"
-export ENHANCD_FILTER="sk20"
+export ENHANCD_FILTER="fzf20"
 export ENHANCD_DISABLE_DOT=1
 # async }}}
 
@@ -100,14 +100,14 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"
-export SKIM_DEFAULT_OPTIONS="--reverse --ansi"
+export FZF_DEFAULT_OPTS="--reverse --ansi"
 
 alias ls='exa -h --color=auto'
 alias ll='ls -al'
 alias open="xdg-open"
 alias tmux="tmux -2"
 alias tig="tig --all"
-alias sk20="sk --height=20%"
+alias fzf20="fzf --height=20%"
 
 function chpwd() { ls }
 function git() { hub $@ }
