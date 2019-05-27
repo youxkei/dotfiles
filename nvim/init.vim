@@ -158,6 +158,10 @@ endif
 syntax enable
 
 set bg=dark
-colorscheme hybrid
+colorscheme nord
+
+if g:colors_name == 'nord'
+  hi Comment guifg=#6a7894
+endif
 
 filetype plugin indent on
