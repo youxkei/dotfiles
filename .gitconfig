@@ -27,3 +27,7 @@
 	useConfigOnly = true
 [grep]
 	lineNumber = true
+[mergetool "neovim"]
+	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+[merge]
+	tool = neovim
