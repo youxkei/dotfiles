@@ -37,6 +37,7 @@
         translate-shell
         powertop
         protobuf
+        figlet
         fzf
 
         erlangR21
