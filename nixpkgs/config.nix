@@ -10,7 +10,7 @@
         sha256 = "1jvyd8p8dfsidfy2yy7adydynzvaf72lx67x71r13hrk8w77hp0k";
       };
     });
-  in rec {
+  in {
     all = buildEnv {
       name = "all";
       paths = [
@@ -43,15 +43,15 @@
 
         erlangR21
         rustup
-        ldc
         opam
 
         go
         dep
-        go-protobuf
 
         nodejs-10_x
         nodePackages.ocaml-language-server
+
+        ldc
       ];
     };
   };
