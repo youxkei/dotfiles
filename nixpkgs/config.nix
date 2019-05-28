@@ -39,6 +39,7 @@
         protobuf
         figlet
         fzf
+        jq
 
         erlangR21
         rustup
