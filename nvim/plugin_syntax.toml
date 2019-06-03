@@ -18,3 +18,11 @@ repo = "vim-scripts/lojban"
 
 [[plugins]]
 repo = "qnighy/satysfi.vim"
+
+[[plugins]]
+repo = "plasticboy/vim-markdown"
+hook_add = """
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_no_default_key_mappings = 1
+"""
