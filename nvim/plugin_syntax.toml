@@ -1,11 +1,4 @@
 [[plugins]]
-repo = "sheerun/vim-polyglot"
-hook_add = """
-let g:jsx_ext_required = 1
-let g:polyglot_disabled = ['latex']
-"""
-
-[[plugins]]
 repo = "JesseKPhillips/d.vim"
 
 [[plugins]]
