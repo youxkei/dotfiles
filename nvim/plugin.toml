@@ -19,6 +19,10 @@ hook_add = """
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni_patterns = {}
 """
+hook_post_source = """
+call deoplete#custom#source('tabnine', 'rank', 1001)
+call deoplete#custom#source('lsp', 'rank', 1002)
+"""
 
 [[plugins]]
 repo = "tbodt/deoplete-tabnine"
