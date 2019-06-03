@@ -412,3 +412,10 @@ depends = "vim-lsp"
 depends = "deoplete"
 hook_add = """
 """
+
+[[plugins]]
+repo = "junegunn/fzf"
+
+[[plugins]]
+repo = "junegunn/fzf.vim"
+depends = "fzf"
