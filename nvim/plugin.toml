@@ -370,12 +370,25 @@ nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
 """
 
 [[plugins]]
-repo = "autozimu/LanguageClient-neovim"
-build = "./install.sh"
-hook_add = """
-let g:LanguageClient_serverCommands = {
-\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-\}
+repo = "prabirshrestha/async.vim"
 
-nnoremap <C-]> :call LanguageClient#textDocument_definition()<CR>
+[[plugins]]
+repo = "prabirshrestha/vim-lsp"
+depends = "async.vim"
+hook_post_source = """
+if executable('gopls')
+  autocmd general User lsp_setup call lsp#register_server({
+  \ 'name': 'gopls',
+  \ 'cmd': {server_info->['gopls']},
+  \ 'whitelist': ['go'],
+  \ })
+  autocmd general FileType go nnoremap <silent><buffer> <C-]> :<C-U>LspDefinition<CR>
+endif
+"""
+
+[[plugins]]
+repo = "lighttiger2505/deoplete-vim-lsp"
+depends = "vim-lsp"
+depends = "deoplete"
+hook_add = """
 """
