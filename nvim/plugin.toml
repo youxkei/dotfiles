@@ -419,3 +419,6 @@ repo = "junegunn/fzf"
 [[plugins]]
 repo = "junegunn/fzf.vim"
 depends = "fzf"
+
+[[plugins]]
+repo = "tpope/vim-fugitive"
