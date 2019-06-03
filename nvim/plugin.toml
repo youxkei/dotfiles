@@ -221,9 +221,13 @@ noremap <silent> ;ge ge
 
 omap <silent> iw <Plug>CamelCaseMotion_iw
 xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> aw <Plug>CamelCaseMotion_aw
+xmap <silent> aw <Plug>CamelCaseMotion_aw
 
-onoremap <silent> ;iw iw
-xnoremap <silent> ;iw iw
+onoremap <silent> i;w iw
+xnoremap <silent> i;w iw
+onoremap <silent> a;w aw
+xnoremap <silent> a;w aw
 """
 
 [[plugins]]
