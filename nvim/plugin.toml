@@ -109,21 +109,32 @@ repo = "itchyny/lightline.vim"
 hook_add = """
 let g:lightline = {
 \ 'colorscheme': 'nord',
-\ 'active' : {
-\   'left' : [
-\     ['mode', 'paste'],
+\ 'active': {
+\   'left': [
+\     ['cwd', 'mode', 'paste'],
 \     ['readonly', 'relativepath', 'modified', 'ale']
 \   ],
 \ },
+\ 'tab': {
+\   'active': ['tabnum', 'cwd'],
+\   'inactive': ['tabnum', 'cwd'],
+\  },
 \ 'component': {
 \   'readonly': '%{&readonly?"⌬":""}',
 \ },
 \ 'component_function': {
 \   'ale': 'ALEGetStatusLine'
 \ },
+\ 'tab_component_function': {
+\   'cwd': 'LightlineCWD',
+\ },
 \ 'separator': { 'left': '', 'right': '' },
 \ 'subseparator': { 'left': '', 'right': '' },
 \}
+function! LightlineCWD(n) abort
+  let cwd = gettabvar(a:n, 'cwd')
+  return fnamemodify(empty(cwd) ? getcwd() : cwd, ":t")
+endfunction
 """
 
 [[plugins]]
