@@ -199,6 +199,8 @@ let g:undotree_WindowLayout = 3
 repo = "Yggdroot/indentLine"
 hook_add = """
 let g:indentLine_char = '┊'
+let g:indentLine_conceallevel = 1
+let g:indentLine_concealcursor = ""
 """
 
 [[plugins]]
