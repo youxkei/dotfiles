@@ -422,3 +422,6 @@ depends = "fzf"
 
 [[plugins]]
 repo = "tpope/vim-fugitive"
+
+[[plugins]]
+repo = "tmsvg/pear-tree"
