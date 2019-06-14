@@ -18,7 +18,6 @@
         i3status
         rofi
         feh
-        compton-git
         glibcLocales
 
         gitAndTools.gitFull
