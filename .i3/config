@@ -8,7 +8,7 @@ focus_follows_mouse no
 
 bindsym $mod+Shift+Return  exec i3-sensible-terminal
 bindsym $mod+Shift+q       kill
-bindsym $mod+d             exec rofi -show run -font "更紗等幅ゴシック J 10"
+bindsym $mod+d             exec rofi -show run -font "monospace 10"
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -98,7 +98,7 @@ bar {
     position top
     binding_mode_indicator yes
 
-    font pango:更紗等幅ゴシック J 16
+    font pango:monospace 16
 
     tray_output primary
 }
