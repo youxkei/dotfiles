@@ -44,12 +44,12 @@ depends = "deoplete.nvim"
 [[plugins]]
 repo = "Shougo/denite.nvim"
 hook_add = """
-nnoremap <silent> <Leader>uu :<C-u>Denite file_mru<CR>
-nnoremap <silent> <Leader>ud :<C-u>Denite directory_mru<CR>
-nnoremap <silent> <Leader>ug :<C-u>Denite grep<CR>
-nnoremap <silent> <Leader>uf :<C-u>Denite file_rec<CR>
-nnoremap <silent> <Leader>ub :<C-u>Denite buffer<CR>
-nnoremap <silent> <Leader>ul :<C-u>Denite line<CR>
+nnoremap <silent> <Leader><Leader>uu :<C-u>Denite file_mru<CR>
+nnoremap <silent> <Leader><Leader>ud :<C-u>Denite directory_mru<CR>
+nnoremap <silent> <Leader><Leader>ug :<C-u>Denite grep<CR>
+nnoremap <silent> <Leader><Leader>uf :<C-u>Denite file_rec<CR>
+nnoremap <silent> <Leader><Leader>ub :<C-u>Denite buffer<CR>
+nnoremap <silent> <Leader><Leader>ul :<C-u>Denite line<CR>
 """
 hook_post_source = """
 call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
