@@ -207,30 +207,6 @@ let g:indentLine_concealcursor = ""
 repo = "terryma/vim-multiple-cursors"
 
 [[plugins]]
-repo = "bkad/CamelCaseMotion"
-hook_add = """
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
-map <silent> ge <Plug>CamelCaseMotion_ge
-
-noremap <silent> ;w w
-noremap <silent> ;b b
-noremap <silent> ;e e
-noremap <silent> ;ge ge
-
-omap <silent> iw <Plug>CamelCaseMotion_iw
-xmap <silent> iw <Plug>CamelCaseMotion_iw
-omap <silent> aw <Plug>CamelCaseMotion_aw
-xmap <silent> aw <Plug>CamelCaseMotion_aw
-
-onoremap <silent> i;w iw
-xnoremap <silent> i;w iw
-onoremap <silent> a;w aw
-xnoremap <silent> a;w aw
-"""
-
-[[plugins]]
 repo = "AndrewRadev/inline_edit.vim"
 hook_add = """
 let g:inline_edit_autowrite = 1
@@ -414,3 +390,9 @@ repo = "tpope/vim-fugitive"
 
 [[plugins]]
 repo = "tmsvg/pear-tree"
+
+[[plugins]]
+repo = "chaoren/vim-wordmotion"
+hook_add = """
+let g:wordmotion_spaces = '_-.'
+"""
