@@ -10,7 +10,7 @@
 [github]
 	user = youxkei
 [push]
-	default = simple
+	default = current
 	followTags = true
 [fetch]
 	prune = true
