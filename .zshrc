@@ -54,6 +54,9 @@ zplugin light zsh-users/zsh-syntax-highlighting
 
 zplugin ice lucid wait"0"
 zplugin light zsh-users/zsh-completions
+
+zplugin ice lucid wait"0" src"git-escape-magic"
+zplugin light knu/zsh-git-escape-magic
 # sync }}}
 
 # async {{{
