@@ -103,6 +103,7 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+eval "$(direnv hook zsh)"
 
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"

@@ -39,6 +39,7 @@
         figlet
         fzf
         jq
+        direnv
 
         erlangR21
         rustup
