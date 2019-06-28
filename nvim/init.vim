@@ -114,7 +114,6 @@ augroup general
   " autosource
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost $MYGVIMRC nested source $MYGVIMRC
-  autocmd BufWritePost *.toml nested if count(s:dein_toml_sources, expand('%:p')) != 0 | source $MYVIMRC | endif
 
   autocmd BufEnter * checktime
 
@@ -123,45 +122,341 @@ augroup general
   autocmd InsertLeave * call system('fcitx-remote -c')
 augroup END
 
-let s:plugin_directory = expand('~/.cache/nvim/dein')
-let s:dein_directory = s:plugin_directory . '/repos/github.com/Shougo/dein.vim'
-
-if has('vim_starting')
-  if !isdirectory(s:dein_directory)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_directory
-  endif
-  execute 'set runtimepath+=' . s:dein_directory
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-let s:dein_toml_sources = [
-\ fnamemodify($MYVIMRC, ':p:h').'/plugin.toml',
-\ fnamemodify($MYVIMRC, ':p:h').'/plugin_textobj_operator.toml',
-\ fnamemodify($MYVIMRC, ':p:h').'/plugin_syntax.toml',
-\ fnamemodify($MYVIMRC, ':p:h').'/plugin_colorscheme.toml'
-\]
+call plug#begin('~/.cache/nvim/vim-plug')
 
-if dein#load_state(s:plugin_directory)
-  call dein#begin(s:plugin_directory)
+Plug 'thinca/vim-ambicmd'
 
-  for toml_source in s:dein_toml_sources
-    call dein#load_toml(toml_source)
-  endfor
+Plug 'Shougo/deoplete.nvim'
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni_patterns = {}
 
-  call dein#end()
-  call dein#save_state()
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+
+Plug 'ujihisa/neco-look'
+
+Plug 'Shougo/neco-syntax'
+
+Plug 'fszymanski/deoplete-emoji'
+
+Plug 'Shougo/denite.nvim', { 'tag': '2.1' }
+nnoremap <silent> <Leader><Leader>uu :<C-u>Denite file_mru<CR>
+nnoremap <silent> <Leader><Leader>ud :<C-u>Denite directory_mru<CR>
+nnoremap <silent> <Leader><Leader>ug :<C-u>Denite grep<CR>
+nnoremap <silent> <Leader><Leader>uf :<C-u>Denite file_rec<CR>
+nnoremap <silent> <Leader><Leader>ub :<C-u>Denite buffer<CR>
+nnoremap <silent> <Leader><Leader>ul :<C-u>Denite line<CR>
+
+Plug 'notomo/denite-keymap'
+
+Plug 'Shougo/neomru.vim'
+
+Plug 'raghur/fruzzy', { 'do': 'call fruzzy#install()'}
+
+Plug 'easymotion/vim-easymotion'
+let g:EasyMotion_keys = 'aoeuidhtns,.pgcr'
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_use_smartsign_jp = 1
+
+nmap <Leader>s <Plug>(easymotion-s2)
+
+Plug 'tyru/open-browser.vim'
+
+Plug 'mattn/webapi-vim'
+
+Plug 'mattn/gist-vim'
+
+Plug 'itchyny/lightline.vim'
+let g:lightline = {
+\ 'colorscheme': 'nord',
+\ 'active': {
+\   'left': [
+\     ['cwd', 'mode', 'paste'],
+\     ['readonly', 'relativepath', 'modified', 'ale']
+\   ],
+\ },
+\ 'tab': {
+\   'active': ['tabnum', 'cwd'],
+\   'inactive': ['tabnum', 'cwd'],
+\  },
+\ 'component': {
+\   'readonly': '%{&readonly?"⌬":""}',
+\ },
+\ 'component_function': {
+\   'ale': 'ALEGetStatusLine'
+\ },
+\ 'tab_component_function': {
+\   'cwd': 'LightlineCWD',
+\ },
+\ 'separator': { 'left': '', 'right': '' },
+\ 'subseparator': { 'left': '', 'right': '' },
+\}
+function! LightlineCWD(n) abort
+  let cwd = gettabvar(a:n, 'cwd')
+  return fnamemodify(empty(cwd) ? getcwd() : cwd, ":t")
+endfunction
+
+Plug 'kannokanno/previm'
+
+Plug 'LeafCage/yankround.vim'
+let g:yankround_dir = '~/.cache/nvim/yankround'
+let g:yankround_max_history = 100
+
+nmap p <Plug>(yankround-p)
+xmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap gp <Plug>(yankround-gp)
+xmap gp <Plug>(yankround-gp)
+nmap gP <Plug>(yankround-gP)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
+
+Plug 'kana/vim-niceblock'
+
+Plug 'luochen1990/rainbow'
+let g:rainbow_active = 1
+
+Plug 'tpope/vim-repeat'
+
+Plug 'vim-scripts/VOoM'
+
+Plug 'junegunn/vim-easy-align'
+vmap <Enter> <Plug>(EasyAlign)
+
+Plug 'deris/vim-rengbang'
+
+Plug 'mbbill/undotree'
+let g:undotree_WindowLayout = 3
+
+Plug 'Yggdroot/indentLine'
+let g:indentLine_char = '┊'
+let g:indentLine_conceallevel = 1
+let g:indentLine_concealcursor = ""
+
+Plug 'terryma/vim-multiple-cursors'
+
+Plug 'AndrewRadev/inline_edit.vim'
+let g:inline_edit_autowrite = 1
+
+Plug 'airblade/vim-gitgutter'
+let g:gitgutter_map_keys = 0
+
+Plug 'Shougo/vinarise.vim'
+
+Plug 'rhysd/committia.vim'
+
+Plug 'derekwyatt/vim-fswitch'
+nmap <silent> <Leader>f :FSHere<CR>
+
+augroup general
+  autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
+  autocmd BufEnter *.h let b:fswitchlocs = 'reg:/include/src/'
+  autocmd BufEnter *.cpp let b:fswitchdst  = 'h'
+  autocmd BufEnter *.cpp let b:fswitchlocs = 'reg:/src/include/'
+
+  autocmd BufEnter *.smi let b:fswitchdst  = 'sml'
+  autocmd BufEnter *.smi let b:fswitchlocs  = '.'
+  autocmd BufEnter *.sml let b:fswitchdst  = 'smi'
+  autocmd BufEnter *.sml let b:fswitchlocs  = '.'
+
+  autocmd BufEnter *.mli let b:fswitchdst  = 'ml'
+  autocmd BufEnter *.mli let b:fswitchlocs  = '.'
+  autocmd BufEnter *.ml let b:fswitchdst  = 'mli'
+  autocmd BufEnter *.ml let b:fswitchlocs  = '.'
+augroup END
+
+Plug 'Shougo/context_filetype.vim'
+
+Plug 'osyo-manga/vim-precious'
+
+Plug 'kana/vim-tabpagecd'
+
+Plug 't9md/vim-choosewin'
+let g:choosewin_overlay_enable = 1
+let g:choosewin_overlay_clear_multibyte = 1
+let g:choosewin_blink_on_land = 0
+let g:choosewin_statusline_replace = 0
+let g:choosewin_tabline_replace = 0
+
+nmap  <Leader>-  <Plug>(choosewin)
+
+Plug 'w0rp/ale'
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_erlang_erlc_options = '-I./deps/*/include'
+
+let g:ale_linters = {
+\ 'rust': [],
+\}
+
+let g:ale_fixers = {
+\ '*': ['remove_trailing_lines', 'trim_whitespace'],
+\ 'rust': ['rustfmt'],
+\ 'go': ['gofmt', 'goimports']
+\}
+let g:ale_fix_on_save = 1
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+Plug 'machakann/vim-swap'
+let g:swap_no_default_key_mappings = 1
+
+nmap gs <Plug>(swap-interactive)
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
+
+Plug 'lambdalisue/suda.vim'
+
+Plug 'sgur/vim-editorconfig'
+
+Plug 'prakashdanish/vim-githubinator'
+
+Plug 'lambdalisue/gina.vim'
+
+Plug 'lambdalisue/vim-manpager', { 'on': 'MANPAGER' }
+
+Plug 'majutsushi/tagbar'
+
+Plug 'rhysd/clever-f.vim'
+
+Plug 'haya14busa/is.vim'
+
+Plug 'haya14busa/vim-asterisk'
+map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
+map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
+map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
+map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+
+let g:asterisk#keeppos = 1
+
+Plug 'osyo-manga/vim-anzu'
+map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
+map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
+
+Plug 'scrooloose/nerdtree'
+nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
+
+Plug 'prabirshrestha/async.vim'
+
+Plug 'prabirshrestha/vim-lsp'
+if executable('gopls')
+  autocmd general User lsp_setup call lsp#register_server({
+  \ 'name': 'gopls',
+  \ 'cmd': {server_info->['gopls', '-logfile', '/tmp/gopls.log', '-rpc.trace']},
+  \ 'whitelist': ['go'],
+  \ })
+  autocmd general FileType go nnoremap <silent><buffer> <C-]> :<C-U>LspDefinition<CR>
 endif
 
-if dein#check_install()
-  call dein#install()
+Plug 'lighttiger2505/deoplete-vim-lsp'
+
+Plug 'junegunn/fzf'
+
+Plug 'junegunn/fzf.vim'
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'tmsvg/pear-tree'
+
+Plug 'liuchengxu/vista.vim'
+
+Plug 'Shougo/deol.nvim'
+
+Plug 'chaoren/vim-wordmotion'
+let g:wordmotion_spaces = '_-.'
+
+Plug 'arcticicestudio/nord-vim'
+
+Plug 'JesseKPhillips/d.vim'
+
+Plug 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
+
+Plug 'vim-scripts/lojban'
+
+Plug 'qnighy/satysfi.vim'
+
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_no_default_key_mappings = 1
+
+Plug 'kana/vim-textobj-user'
+
+Plug 'kana/vim-operator-user'
+
+Plug 'kana/vim-textobj-indent'
+
+Plug 'rhysd/vim-textobj-word-column'
+
+Plug 'sgur/vim-textobj-parameter'
+
+Plug 'kana/vim-operator-replace'
+map _  <Plug>(operator-replace)
+
+Plug 'kana/vim-textobj-entire'
+
+Plug 'haya14busa/vim-operator-flashy'
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
+
+Plug 'mopp/vim-operator-convert-case'
+nmap <Leader>cl <Plug>(operator-convert-case-lower-camel)
+nmap <Leader>cu <Plug>(operator-convert-case-upper-camel)
+nmap <Leader>sl <Plug>(operator-convert-case-lower-snake)
+nmap <Leader>su <Plug>(operator-convert-case-upper-snake)
+
+Plug 'machakann/vim-sandwich'
+
+call plug#end()
+
+function! s:is_installed(name)
+  return exists('g:plugs') && has_key(g:plugs, a:name) && isdirectory(g:plugs[a:name].dir)
+endfunction
+
+if s:is_installed('vim-ambicmd')
+  cnoremap <expr> <CR>    ambicmd#expand("\<CR>")
+  cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 endif
 
-syntax enable
+if s:is_installed('deoplete.nvim')
+  call deoplete#custom#source('tabnine', 'rank', 1001)
+  call deoplete#custom#source('lsp', 'rank', 1002)
+endif
 
-set bg=dark
-colorscheme nord
+if s:is_installed('denite.nvim')
+  call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
 
-if g:colors_name == 'nord'
+  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+  call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
+
+  call denite#custom#var('file_rec', 'command', ['fd', '--type', 'f', '.*'])
+
+  call denite#custom#var('grep', 'command', ['rg'])
+  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', [])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'final_opts', [])
+
+  call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
+endif
+
+if s:is_installed('nord-vim')
+  colorscheme nord
   hi Comment guifg=#6a7894
 endif
 
-filetype plugin indent on
+if s:is_installed('vim-sandwich')
+    let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+endif
