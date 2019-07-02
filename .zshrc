@@ -42,6 +42,17 @@ export POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="015"
 export POWERLEVEL9K_EXECUTION_TIME_ICON="s"
 export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs time)
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time root_indicator background_jobs history)
+# sync }}}
+
+# async {{{
+zplugin ice lucid wait"0" pick"init.sh"
+zplugin light b4b4r07/enhancd
+export ENHANCD_COMMAND="cd"
+export ENHANCD_FILTER="fzf20"
+export ENHANCD_DISABLE_DOT=1
+
+zplugin ice lucid wait"0" from"gh-r" as"program"
+zplugin light dalance/procs
 
 zplugin ice lucid wait"0"
 zplugin light zsh-users/zsh-history-substring-search
@@ -57,17 +68,7 @@ zplugin light zsh-users/zsh-completions
 
 zplugin ice lucid wait"0" src"git-escape-magic"
 zplugin light knu/zsh-git-escape-magic
-# sync }}}
 
-# async {{{
-zplugin ice lucid wait"0" pick"init.sh"
-zplugin light b4b4r07/enhancd
-export ENHANCD_COMMAND="cd"
-export ENHANCD_FILTER="fzf20"
-export ENHANCD_DISABLE_DOT=1
-
-zplugin ice lucid wait"0" from"gh-r" as"program"
-zplugin light dalance/procs
 # async }}}
 
 # zplugin }}}
