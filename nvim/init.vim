@@ -221,6 +221,10 @@ Plug 'kana/vim-niceblock'
 
 Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1
+let g:rainbow_conf = {
+\ 'guifgs': ['darkorange3', 'seagreen3', 'firebrick'],
+\ 'ctermfgs': ['lightyellow', 'lightcyan', 'lightmagenta'],
+\}
 
 Plug 'tpope/vim-repeat'
 
