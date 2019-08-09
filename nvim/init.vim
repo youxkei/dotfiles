@@ -369,8 +369,6 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'tpope/vim-fugitive'
 
-Plug 'tmsvg/pear-tree'
-
 Plug 'liuchengxu/vista.vim'
 
 Plug 'Shougo/deol.nvim'
