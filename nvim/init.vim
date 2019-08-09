@@ -164,7 +164,7 @@ let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_smartsign_jp = 1
 
-nmap <Leader>s <Plug>(easymotion-s2)
+nmap s <Plug>(easymotion-overwin-f2)
 
 Plug 'tyru/open-browser.vim'
 
@@ -420,7 +420,18 @@ nmap <Leader>sl <Plug>(operator-convert-case-lower-snake)
 nmap <Leader>su <Plug>(operator-convert-case-upper-snake)
 
 Plug 'machakann/vim-sandwich'
+let g:sandwich_no_default_key_mappings = 1
+let g:operator_sandwich_no_default_key_mappings = 1
 
+nmap <silent> <Leader>sd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+nmap <silent> <Leader>sr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+nmap <silent> <Leader>sdb <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+nmap <silent> <Leader>srb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+nmap <Leader>sa <Plug>(operator-sandwich-add)
+xmap <Leader>sa <Plug>(operator-sandwich-add)
+omap <Leader>sa <Plug>(operator-sandwich-g@)
+xmap <Leader>sd <Plug>(operator-sandwich-delete)
+xmap <Leader>sr <Plug>(operator-sandwich-replace)
 call plug#end()
 
 function! s:is_installed(name)
