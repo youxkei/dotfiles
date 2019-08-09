@@ -432,6 +432,10 @@ xmap <Leader>sa <Plug>(operator-sandwich-add)
 omap <Leader>sa <Plug>(operator-sandwich-g@)
 xmap <Leader>sd <Plug>(operator-sandwich-delete)
 xmap <Leader>sr <Plug>(operator-sandwich-replace)
+
+Plug 'tyru/caw.vim'
+let g:caw_operator_keymappings = 1
+
 call plug#end()
 
 function! s:is_installed(name)
