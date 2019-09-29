@@ -31,6 +31,7 @@
         jq
         yq
         direnv
+        unar
 
         erlangR21
         rustup
