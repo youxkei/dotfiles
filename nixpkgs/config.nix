@@ -32,6 +32,7 @@
         yq
         direnv
         unar
+        httpie
 
         erlangR21
         rustup
