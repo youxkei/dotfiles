@@ -38,9 +38,6 @@
         go
         dep
 
-        nodejs-10_x
-        nodePackages.ocaml-language-server
-
         ldc
       ];
     };
