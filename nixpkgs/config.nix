@@ -33,6 +33,7 @@
         direnv
         unar
         httpie
+        jid
 
         erlangR21
         rustup
