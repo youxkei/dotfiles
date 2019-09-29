@@ -12,10 +12,6 @@ if [[ ! -d $ZPFX ]]; then
   mkdir -p $ZPFX/bin
 fi
 
-if [[ ! -d $ZPLG_HOME/misc ]]; then
-  mkdir -p $ZPLG_HOME/misc
-fi
-
 source $ZPLG_HOME/bin/zplugin.zsh
 
 # sync {{{
