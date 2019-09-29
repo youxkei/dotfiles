@@ -29,6 +29,7 @@
         figlet
         fzf
         jq
+        yq
         direnv
 
         erlangR21
