@@ -156,7 +156,8 @@ Plug 'notomo/denite-keymap'
 
 Plug 'Shougo/neomru.vim'
 
-Plug 'raghur/fruzzy', { 'do': 'call fruzzy#install()'}
+Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
+let g:fruzzy#usenative = 1
 
 Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_keys = 'aoeuidhtns,.pgcr'
