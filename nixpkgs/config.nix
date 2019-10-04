@@ -25,7 +25,6 @@
         gron
         translate-shell
         powertop
-        protobuf
         figlet
         fzf
         jq
