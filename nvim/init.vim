@@ -380,6 +380,12 @@ Plug 'Shougo/deol.nvim'
 Plug 'chaoren/vim-wordmotion'
 let g:wordmotion_spaces = '_-.'
 
+Plug 'takac/vim-hardtime'
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_buffer_patterns = ["NERD.*"]
+let g:hardtime_allow_different_key = 1
+let g:hardtime_maxcount = 5
+
 " plugins }}}
 
 " colorschemes {{{
