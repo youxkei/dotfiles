@@ -122,6 +122,8 @@ augroup general
   autocmd InsertLeave * call system('fcitx-remote -c')
 augroup END
 
+" vim-plug {{{
+
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -130,6 +132,7 @@ endif
 
 call plug#begin('~/.cache/nvim/vim-plug')
 
+" plugins {{{
 Plug 'thinca/vim-ambicmd'
 
 Plug 'Shougo/deoplete.nvim'
@@ -377,7 +380,15 @@ Plug 'Shougo/deol.nvim'
 Plug 'chaoren/vim-wordmotion'
 let g:wordmotion_spaces = '_-.'
 
+" plugins }}}
+
+" colorschemes {{{
+
 Plug 'arcticicestudio/nord-vim'
+
+" colorschemes }}}
+
+" syntax {{{
 
 Plug 'JesseKPhillips/d.vim'
 
@@ -392,6 +403,10 @@ Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_conceal = 0
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_no_default_key_mappings = 1
+
+" syntax }}}
+
+" text objects & operators {{{
 
 Plug 'kana/vim-textobj-user'
 
@@ -447,6 +462,8 @@ xmap <Leader>sr <Plug>(operator-sandwich-replace)
 Plug 'tyru/caw.vim'
 let g:caw_operator_keymappings = 1
 
+" text objects & operators }}}
+
 call plug#end()
 
 function! s:is_installed(name)
@@ -490,3 +507,7 @@ endif
 if s:is_installed('vim-sandwich')
     let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 endif
+
+" vim-plug }}}
+
+" vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
