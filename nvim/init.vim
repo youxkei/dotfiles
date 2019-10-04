@@ -400,6 +400,18 @@ Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-indent'
 
 Plug 'rhysd/vim-textobj-word-column'
+nnoremap <silent> W w
+nnoremap <silent> B b
+nnoremap <silent> E e
+nnoremap <silent> GE ge
+xnoremap iW iw
+onoremap iW iw
+xnoremap aW aw
+onoremap aW aw
+onoremap W w
+onoremap B b
+onoremap E e
+onoremap GE ge
 
 Plug 'sgur/vim-textobj-parameter'
 
