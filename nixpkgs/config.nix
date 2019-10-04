@@ -35,7 +35,7 @@
         unar
         httpie
 
-        erlangR21
+        erlangR18
         rustup
         opam
 
