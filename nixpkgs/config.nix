@@ -29,10 +29,11 @@
         fzf
         jq
         yq
+        jo
+        jid
         direnv
         unar
         httpie
-        jid
 
         erlangR21
         rustup
