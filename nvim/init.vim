@@ -299,6 +299,7 @@ let g:ale_lint_on_text_changed = 0
 let g:ale_erlang_erlc_options = '-I./deps/*/include'
 
 let g:ale_linters = {
+\ 'go': [],
 \ 'rust': [],
 \}
 
@@ -356,12 +357,16 @@ Plug 'prabirshrestha/async.vim'
 
 Plug 'prabirshrestha/vim-lsp'
 if executable('gopls')
-  autocmd general User lsp_setup call lsp#register_server({
-  \ 'name': 'gopls',
-  \ 'cmd': {server_info->['gopls', '-logfile', '/tmp/gopls.log', '-rpc.trace']},
-  \ 'whitelist': ['go'],
-  \ })
-  autocmd general FileType go nnoremap <silent><buffer> <C-]> :<C-U>LspDefinition<CR>
+  augroup general
+    autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'gopls',
+    \ 'cmd': {server_info->['gopls', '-logfile', '/tmp/gopls.log', '-rpc.trace']},
+    \ 'whitelist': ['go'],
+    \ })
+    autocmd FileType go nmap <silent><buffer> gd <plug>(lsp-definition)
+    autocmd FileType go nmap <silent><buffer> <C-j> <plug>(lsp-next-error)
+    autocmd FileType go nmap <silent><buffer> <C-k> <plug>(lsp-previous-error)
+  augroup END
 endif
 
 Plug 'lighttiger2505/deoplete-vim-lsp'
