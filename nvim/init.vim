@@ -245,7 +245,6 @@ let g:undotree_WindowLayout = 3
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '┊'
 let g:indentLine_conceallevel = 1
-let g:indentLine_concealcursor = ""
 
 Plug 'terryma/vim-multiple-cursors'
 
