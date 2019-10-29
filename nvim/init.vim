@@ -382,6 +382,8 @@ let g:wordmotion_spaces = '_-.'
 Plug 'tmsvg/pear-tree'
 let g:pear_tree_repeatable_expand = 0
 
+Plug 'AndrewRadev/linediff.vim'
+
 " plugins }}}
 
 " colorschemes {{{
