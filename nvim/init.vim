@@ -369,6 +369,21 @@ if executable('gopls')
   augroup END
 endif
 
+if executable('rls')
+  augroup general
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+    autocmd FileType rust nmap <silent><buffer> gd <plug>(lsp-definition)
+    autocmd FileType rust nmap <silent><buffer> <C-j> <plug>(lsp-next-error)
+    autocmd FileType rust nmap <silent><buffer> <C-k> <plug>(lsp-previous-error)
+  augroup END
+endif
+
+
 Plug 'lighttiger2505/deoplete-vim-lsp'
 
 Plug 'junegunn/fzf'
