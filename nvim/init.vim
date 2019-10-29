@@ -384,6 +384,8 @@ let g:pear_tree_repeatable_expand = 0
 
 Plug 'AndrewRadev/linediff.vim'
 
+Plug 'thinca/vim-qfreplace'
+
 " plugins }}}
 
 " colorschemes {{{
