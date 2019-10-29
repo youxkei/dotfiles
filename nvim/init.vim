@@ -380,6 +380,9 @@ Plug 'Shougo/deol.nvim'
 Plug 'chaoren/vim-wordmotion'
 let g:wordmotion_spaces = '_-.'
 
+Plug 'tmsvg/pear-tree'
+let g:pear_tree_repeatable_expand = 0
+
 " plugins }}}
 
 " colorschemes {{{
