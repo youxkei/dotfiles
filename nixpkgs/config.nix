@@ -34,6 +34,7 @@
         direnv
         unar
         httpie
+        universal-ctags
 
         erlangR18
         rustup
