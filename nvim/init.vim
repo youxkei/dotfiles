@@ -2,13 +2,15 @@ augroup general
   autocmd!
 augroup END
 
-set termguicolors
-
 if !isdirectory(expand('~/.cache/nvim'))
   call mkdir(expand('~/.cache/nvim/backup'), 'p')
   call mkdir(expand('~/.cache/nvim/undo'),   'p')
   call mkdir(expand('~/.cache/nvim/swap'),   'p')
 endif
+
+" set {{{
+
+set termguicolors
 
 set backupdir=~/.cache/nvim/backup
 set undodir  =~/.cache/nvim/undo
@@ -77,6 +79,10 @@ let g:mapleader = ','
 let g:tex_conceal = ''
 let g:tex_flavor = 'latex'
 
+" set }}}
+
+" map {{{
+
 function! SetFontSize(point)
   call GuiFont(join([split(g:GuiFont, "h")[0], a:point], "h"), 1)
 endfunction
@@ -110,6 +116,10 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
+" map }}}
+
+" autocmd {{{
+
 augroup general
   " autosource
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
@@ -121,6 +131,8 @@ augroup general
 
   autocmd InsertLeave * call system('fcitx-remote -c')
 augroup END
+
+" autocmd }}}
 
 " vim-plug {{{
 
