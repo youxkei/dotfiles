@@ -159,13 +159,30 @@ Plug 'Shougo/neco-syntax'
 
 Plug 'fszymanski/deoplete-emoji'
 
-Plug 'Shougo/denite.nvim', { 'tag': '2.1' }
+Plug 'Shougo/denite.nvim'
 nnoremap <silent> <Leader><Leader>uu :<C-u>Denite file_mru<CR>
 nnoremap <silent> <Leader><Leader>ud :<C-u>Denite directory_mru<CR>
 nnoremap <silent> <Leader><Leader>ug :<C-u>Denite grep<CR>
 nnoremap <silent> <Leader><Leader>uf :<C-u>Denite file_rec<CR>
 nnoremap <silent> <Leader><Leader>ub :<C-u>Denite buffer<CR>
 nnoremap <silent> <Leader><Leader>ul :<C-u>Denite line<CR>
+
+augroup general
+  autocmd FileType denite call s:set_mappings_for_denite()
+  function! s:set_mappings_for_denite() abort
+    nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> d denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select').'j'
+  endfunction
+
+  autocmd FileType denite-filter call s:set_mappings_for_denite_filter()
+  function! s:set_mappings_for_denite_filter() abort
+    imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+  endfunction
+augroup END
 
 Plug 'notomo/denite-keymap'
 
@@ -521,11 +538,7 @@ if s:is_installed('deoplete.nvim')
 endif
 
 if s:is_installed('denite.nvim')
-  call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-  call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
-
-  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-  call denite#custom#var('file_rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
+  call denite#custom#option('default', {'split': 'floating'})
 
   call denite#custom#var('file_rec', 'command', ['fd', '--type', 'f', '.*'])
 
@@ -535,8 +548,6 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
-
-  call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 endif
 
 if s:is_installed('nord-vim')
