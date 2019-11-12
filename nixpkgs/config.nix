@@ -36,6 +36,8 @@
         httpie
         universal-ctags
 
+        gcc
+
         erlangR18
         rustup
         opam
