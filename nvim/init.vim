@@ -149,7 +149,6 @@ Plug 'thinca/vim-ambicmd'
 
 Plug 'Shougo/deoplete.nvim'
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#omni_patterns = {}
 
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
@@ -175,12 +174,11 @@ augroup general
     nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
     nnoremap <silent><buffer><expr> q denite#do_map('quit')
     nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select').'j'
   endfunction
 
   autocmd FileType denite-filter call s:set_mappings_for_denite_filter()
   function! s:set_mappings_for_denite_filter() abort
-    imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+    imap <silent><buffer> <ESC> <Plug>(denite_filter_quit)
   endfunction
 augroup END
 
@@ -412,7 +410,6 @@ if executable('rls')
   augroup END
 endif
 
-
 Plug 'lighttiger2505/deoplete-vim-lsp'
 
 Plug 'junegunn/fzf'
@@ -430,6 +427,7 @@ let g:wordmotion_spaces = '_-.'
 
 Plug 'tmsvg/pear-tree'
 let g:pear_tree_repeatable_expand = 0
+let g:pear_tree_ft_disabled = ['denite-filter']
 
 Plug 'AndrewRadev/linediff.vim'
 
