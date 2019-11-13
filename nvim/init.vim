@@ -209,7 +209,7 @@ let g:lightline = {
 \ 'active': {
 \   'left': [
 \     ['cwd', 'mode', 'paste'],
-\     ['readonly', 'relativepath', 'modified', 'ale']
+\     ['readonly', 'relativepath', 'modified', 'ale_wornings', 'ale_errors']
 \   ],
 \ },
 \ 'tab': {
@@ -219,8 +219,13 @@ let g:lightline = {
 \ 'component': {
 \   'readonly': '%{&readonly?"⌬":""}',
 \ },
-\ 'component_function': {
-\   'ale': 'ALEGetStatusLine'
+\ 'component_expand': {
+\   'ale_warnings': 'lightline#ale#warnings',
+\   'ale_errors': 'lightline#ale#errors',
+\ },
+\ 'component_type': {
+\   'ale_warnings': 'warning',
+\   'ale_errors': 'error',
 \ },
 \ 'tab_component_function': {
 \   'cwd': 'LightlineCWD',
@@ -232,6 +237,8 @@ function! LightlineCWD(n) abort
   let cwd = gettabvar(a:n, 'cwd')
   return fnamemodify(empty(cwd) ? getcwd() : cwd, ":t")
 endfunction
+
+Plug 'maximbaz/lightline-ale'
 
 Plug 'kannokanno/previm'
 
@@ -322,12 +329,13 @@ nmap  <Leader>-  <Plug>(choosewin)
 
 Plug 'w0rp/ale'
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_text_changed = 1
 let g:ale_erlang_erlc_options = '-I./deps/*/include'
 
 let g:ale_linters = {
 \ 'go': [],
 \ 'rust': [],
+\ 'erlang': ['syntaxerl'],
 \}
 
 let g:ale_fixers = {
