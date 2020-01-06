@@ -430,6 +430,8 @@ Plug 'AndrewRadev/linediff.vim'
 
 Plug 'thinca/vim-qfreplace'
 
+Plug 'youxkei/vim-erlang-tags'
+
 " plugins }}}
 
 " colorschemes {{{
