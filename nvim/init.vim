@@ -456,6 +456,8 @@ let g:vim_markdown_no_default_key_mappings = 1
 
 Plug 'vim-erlang/vim-erlang-runtime'
 
+Plug 'LnL7/vim-nix'
+
 " syntax }}}
 
 " text objects & operators {{{
