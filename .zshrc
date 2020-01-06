@@ -64,11 +64,6 @@ zplugin light zsh-users/zsh-completions
 
 zplugin ice lucid wait"0" src"git-escape-magic"
 zplugin light knu/zsh-git-escape-magic
-
-zplugin ice lucid wait"0"
-zplugin light marzocchi/zsh-notify
-zstyle ':notify:*' error-sound "/usr/share/sounds/gnome/default/alerts/sonar.ogg"
-zstyle ':notify:*' success-sound "/usr/share/sounds/gnome/default/alerts/sonar.ogg"
 # async }}}
 
 # zplugin }}}
