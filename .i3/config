@@ -129,7 +129,7 @@ exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 exec --no-startup-id gnome-power-manager
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id gnome-flashback
-exec --no-startup-id nm-applet
+exec --no-startup-id sudo nm-applet
 exec_always --no-startup-id sleep 1s; feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 exec --no-startup-id compton
