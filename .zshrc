@@ -127,4 +127,8 @@ re-prompt() {
 }
 
 zle -N accept-line re-prompt
+
+function rcd() {
+  cd ~/repo/$(ls ~/repo | fzf20)
+}
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
