@@ -99,6 +99,9 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+autoload -Uz zmv
+alias zmv='noglob zmv -W'
+
 eval "$(direnv hook zsh)"
 
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
