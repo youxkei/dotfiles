@@ -147,12 +147,12 @@ Plug 'Shougo/neco-syntax'
 Plug 'fszymanski/deoplete-emoji'
 
 Plug 'Shougo/denite.nvim'
-nnoremap <silent> <Leader>eu :<C-u>Denite file_mru<CR>
-nnoremap <silent> <Leader>ed :<C-u>Denite directory_mru<CR>
-nnoremap <silent> <Leader>eg :<C-u>Denite grep<CR>
-nnoremap <silent> <Leader>ef :<C-u>Denite file/rec<CR>
-nnoremap <silent> <Leader>eb :<C-u>Denite buffer file/rec<CR>
-nnoremap <silent> <Leader>el :<C-u>Denite line<CR>
+nnoremap <silent> <Leader>eu :<C-u>Denite file_mru -start-filter<CR>
+nnoremap <silent> <Leader>ed :<C-u>Denite directory_mru -start-filter<CR>
+nnoremap <silent> <Leader>eg :<C-u>Denite grep -start-filter<CR>
+nnoremap <silent> <Leader>ef :<C-u>Denite file/rec -start-filter<CR>
+nnoremap <silent> <Leader>eb :<C-u>Denite buffer file/rec -start-filter<CR>
+nnoremap <silent> <Leader>el :<C-u>Denite line -start-filter<CR>
 
 augroup general
   autocmd FileType denite call s:set_mappings_for_denite()
