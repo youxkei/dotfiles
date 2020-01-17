@@ -47,7 +47,6 @@
           jo
           jid
           direnv
-          unar
           httpie
           sysstat
           universal-ctags
