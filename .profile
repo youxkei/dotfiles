@@ -11,6 +11,7 @@ export PATH
 export ZPLG_HOME=~/.zplugin
 export ANDROID_HOME=~/Android/Sdk
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export QT_SCALE_FACTOR=1.3
 
 source ~/.nix-profile/etc/profile.d/nix.sh >/dev/null 2>/dev/null || true
 source ~/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
