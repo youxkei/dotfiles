@@ -61,6 +61,9 @@ zplugin light zsh-users/zsh-completions
 
 zplugin ice lucid wait"0" src"git-escape-magic"
 zplugin light knu/zsh-git-escape-magic
+
+zplugin ice lucid wait"0"
+zplugin light zpm-zsh/undollar
 # async }}}
 
 # zplugin }}}
