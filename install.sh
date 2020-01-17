@@ -9,6 +9,7 @@ declare -a DOTFILES=(
   .gitignore
   .i3status.conf
   .profile
+  .zprofile
   .tigrc
   .zshrc
 )
