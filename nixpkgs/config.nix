@@ -51,6 +51,7 @@
           sysstat
           universal-ctags
           progress
+          procs
 
           gcc
 

@@ -47,9 +47,6 @@ export ENHANCD_COMMAND="cd"
 export ENHANCD_FILTER="fzf20"
 export ENHANCD_DISABLE_DOT=1
 
-zplugin ice lucid wait"0" from"gh-r" as"program"
-zplugin light dalance/procs
-
 zplugin ice lucid wait"0"
 zplugin light zsh-users/zsh-history-substring-search
 
