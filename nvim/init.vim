@@ -380,32 +380,8 @@ nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
 Plug 'prabirshrestha/async.vim'
 
 Plug 'prabirshrestha/vim-lsp'
-if executable('gopls')
-  augroup general
-    autocmd User lsp_setup call lsp#register_server({
-    \ 'name': 'gopls',
-    \ 'cmd': {server_info->['gopls', '-logfile', '/tmp/gopls.log', '-rpc.trace']},
-    \ 'whitelist': ['go'],
-    \ })
-    autocmd FileType go nmap <silent><buffer> gd <plug>(lsp-definition)
-    autocmd FileType go nmap <silent><buffer> <C-j> <plug>(lsp-next-error)
-    autocmd FileType go nmap <silent><buffer> <C-k> <plug>(lsp-previous-error)
-  augroup END
-endif
 
-if executable('rls')
-  augroup general
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
-    autocmd FileType rust nmap <silent><buffer> gd <plug>(lsp-definition)
-    autocmd FileType rust nmap <silent><buffer> <C-j> <plug>(lsp-next-error)
-    autocmd FileType rust nmap <silent><buffer> <C-k> <plug>(lsp-previous-error)
-  augroup END
-endif
+Plug 'mattn/vim-lsp-settings'
 
 Plug 'lighttiger2505/deoplete-vim-lsp'
 
