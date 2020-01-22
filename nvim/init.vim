@@ -282,7 +282,6 @@ Plug 'Shougo/vinarise.vim'
 Plug 'rhysd/committia.vim'
 
 Plug 'derekwyatt/vim-fswitch'
-nmap <silent> <Leader>f :FSHere<CR>
 
 augroup general
   autocmd BufEnter *.h let b:fswitchdst  = 'cpp,c'
@@ -375,7 +374,7 @@ map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
 map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 Plug 'scrooloose/nerdtree'
-nnoremap <silent> <Leader>v :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>f :<C-U>NERDTreeToggle<CR>
 
 Plug 'prabirshrestha/async.vim'
 
@@ -392,6 +391,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 
 Plug 'liuchengxu/vista.vim'
+nnoremap <silent> <Leader>v :<C-U>Vista finder<CR>
 
 Plug 'Shougo/deol.nvim'
 
