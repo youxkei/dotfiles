@@ -18,7 +18,7 @@ source $ZPLG_HOME/bin/zplugin.zsh
 zplugin light momo-lab/zsh-abbrev-alias
 abbrev-alias -g -e CI='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}")'
 abbrev-alias -g -e B='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}" | xargs -I{} bash -c "git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk \"{print \\\$1}\"")'
-abbrev-alias -g -e PS='$(ps aux | tail -n +2 | fzf | awk "{print \$2}")'
+abbrev-alias -g -e PS='$(procs -c always | fzf --header-lines 1 | awk "{print \$1}")'
 abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
 
 zplugin light bhilburn/powerlevel9k
