@@ -52,6 +52,7 @@
           universal-ctags
           progress
           procs
+          unar
 
           gcc
 
