@@ -12,6 +12,6 @@ endfunction
 
 nnoremap <silent> <C-+> :<C-U>call ChangeFontSize(1)<CR>
 nnoremap <silent> <C--> :<C-U>call ChangeFontSize(-1)<CR>
-nnoremap <silent> <C-0> :<C-U>call SetFontSize(14)<CR>
+nnoremap <silent> <C-0> :<C-U>call SetFontSize(11)<CR>
 
 call SetFontSize(11)
