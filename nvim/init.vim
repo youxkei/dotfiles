@@ -153,6 +153,7 @@ nnoremap <silent> <Leader>eg :<C-u>Denite grep -start-filter<CR>
 nnoremap <silent> <Leader>ef :<C-u>Denite file/rec -start-filter<CR>
 nnoremap <silent> <Leader>eb :<C-u>Denite buffer file/rec -start-filter<CR>
 nnoremap <silent> <Leader>el :<C-u>Denite line -start-filter<CR>
+nnoremap <silent> <Leader>er :<C-u>Denite -resume -refresh<CR>
 
 augroup general
   autocmd FileType denite call s:set_mappings_for_denite()
