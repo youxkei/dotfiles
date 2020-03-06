@@ -56,7 +56,7 @@
 
           gcc
 
-          erlangR18
+          erlangR21
           rebar3
 
           rustup
