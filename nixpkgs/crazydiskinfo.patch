@@ -1,0 +1,10 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cebc142..4a43520 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,4 +7,4 @@ SET_TARGET_PROPERTIES(CrazyDiskInfo PROPERTIES OUTPUT_NAME crazy)
+ target_link_libraries(CrazyDiskInfo atasmart)
+ target_link_libraries(CrazyDiskInfo tinfow)
+ target_link_libraries(CrazyDiskInfo ncursesw)
+-INSTALL(TARGETS CrazyDiskInfo RUNTIME DESTINATION /usr/sbin)
++INSTALL(TARGETS CrazyDiskInfo RUNTIME DESTINATION bin)

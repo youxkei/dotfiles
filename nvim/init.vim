@@ -49,6 +49,9 @@ set showcmd
 set showtabline=2
 set backspace=indent,eol,start
 
+set cursorline
+set cursorcolumn
+
 set scrolloff=16
 set sidescroll=1
 "set sidescrolloff=32
@@ -73,6 +76,8 @@ set synmaxcol=512
 
 set updatetime=100
 
+set iskeyword=@,48-57,_,192-255,$,@-@,-
+
 let loaded_matchparen = 1
 
 let g:mapleader = ','
@@ -89,7 +94,6 @@ nnoremap Q <NOP>
 nnoremap <expr> i empty(getline('.')) ? "cc" : "i"
 nnoremap <expr> a empty(getline('.')) ? "cc" : "a"
 nnoremap <silent> <C-H> ^
-nnoremap <silent> <C-L> $
 vnoremap <slient> <C-G> <NOP>
 tnoremap <ESC> <C-\><C-N>
 tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
@@ -172,12 +176,12 @@ augroup general
   endfunction
 augroup END
 
+Plug 'raghur/fruzzy', {'do': { -> fruzzy#install() }}
+let g:fruzzy#usenative = 1
+
 Plug 'notomo/denite-keymap'
 
 Plug 'Shougo/neomru.vim'
-
-Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
-let g:fruzzy#usenative = 1
 
 Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_keys = 'aoeuidhtns,.pgcr'
@@ -388,6 +392,10 @@ Plug 'lighttiger2505/deoplete-vim-lsp'
 Plug 'junegunn/fzf'
 
 Plug 'junegunn/fzf.vim'
+nmap <silent> <c-tab> <plug>(fzf-maps-n)
+imap <silent> <c-tab> <plug>(fzf-maps-i)
+xmap <silent> <c-tab> <plug>(fzf-maps-x)
+omap <silent> <c-tab> <plug>(fzf-maps-o)
 
 Plug 'tpope/vim-fugitive'
 
@@ -398,6 +406,30 @@ Plug 'Shougo/deol.nvim'
 
 Plug 'chaoren/vim-wordmotion'
 let g:wordmotion_spaces = '_-.'
+let g:wordmotion_mappings = {
+\ 'W' : '',
+\ 'B' : '',
+\ 'E' : '',
+\ 'GE' : '',
+\ 'aW' : '',
+\ 'iW' : ''
+\ }
+nnoremap W w
+nnoremap B b
+nnoremap E e
+nnoremap GE ge
+onoremap W w
+xnoremap W w
+onoremap B b
+xnoremap B b
+onoremap E e
+xnoremap E e
+onoremap GE ge
+xnoremap GE ge
+xnoremap iW iw
+onoremap iW iw
+xnoremap aW aw
+onoremap aW aw
 
 Plug 'tmsvg/pear-tree'
 let g:pear_tree_repeatable_expand = 0
@@ -448,22 +480,6 @@ Plug 'kana/vim-operator-user'
 Plug 'kana/vim-textobj-indent'
 
 Plug 'rhysd/vim-textobj-word-column'
-nnoremap W w
-nnoremap B b
-nnoremap E e
-nnoremap GE ge
-onoremap W w
-xnoremap W w
-onoremap B b
-xnoremap B b
-onoremap E e
-xnoremap E e
-onoremap GE ge
-xnoremap GE ge
-xnoremap iW iw
-onoremap iW iw
-xnoremap aW aw
-onoremap aW aw
 
 Plug 'sgur/vim-textobj-parameter'
 
@@ -528,6 +544,8 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
+
+  call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 endif
 
 if s:is_installed('nord-vim')

@@ -1,0 +1,72 @@
+theme = "solarized-dark"
+icons = "awesome"
+
+[[block]]
+block = "custom"
+interval = 1
+command = 'echo  $(xsel -bo | head -n 1 | colrm 75)'
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GiB"
+interval = 20
+warning = 20.0
+alert = 10.0
+
+[[block]]
+block = "disk_space"
+path = "/home"
+alias = "/home"
+info_type = "available"
+unit = "GiB"
+interval = 20
+warning = 20.0
+alert = 10.0
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{Mup}%"
+format_swap = "{SUp}%"
+
+[[block]]
+block = "cpu"
+interval = 1
+format = "{utilization}% {frequency}GHz"
+
+[[block]]
+block = "temperature"
+collapsed = false
+interval = 1
+format = "{min}°"
+idle = 80
+info = 90
+chip = "k10temp-*"
+
+[[block]]
+block = "load"
+interval = 1
+format = "{1m}"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "weather"
+format = "{temp}℃"
+service = { name = "openweathermap", units = "metric" }
+
+
+[[block]]
+block = "custom"
+interval = 60
+command = 'curl -sS "https://map.yahooapis.jp/weather/V1/place?coordinates=139.7699064,35.6714754&output=json&appid=$YAHOO_APPID" | jq ".Feature[0].Property.WeatherList.Weather[1:6][].Rainfall" | xargs echo '
+
+
+[[block]]
+block = "custom"
+interval = 1
+command = 'echo  $(date "+%Y(%EC%Ey)年%m月%d日%A %H時%M分%S秒")'

@@ -13,5 +13,5 @@ export ANDROID_HOME=~/Android/Sdk
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_SCALE_FACTOR=1.3
 
-if [ -e /home/youxkei/.nix-profile/etc/profile.d/nix.sh ]; then . /home/youxkei/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-if [ -e /home/youxkei/.nix-profile/etc/profile.d/nix.sh ]; then export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive; fi
+if [ -x "$(which nix-build)" ]; then export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive; fi
+if [ -e ~/.profile_host ]; then . ~/.profile_host; fi

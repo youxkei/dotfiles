@@ -3,14 +3,8 @@ set -eu pipefail
 SCRIPT_DIR=$(cd $(dirname $0); pwd)
 
 declare -a DOTFILES=(
-  .i3
-  .compton.conf
-  .gitconfig
-  .gitignore
-  .i3status.conf
   .profile
   .zprofile
-  .tigrc
   .zshrc
 )
 
@@ -18,15 +12,23 @@ declare -a TEMPLATE_FILES=(
   .Xresources.template
 )
 
-declare -a CONFIG_DIRS=(
+declare -a CONFIG_PATHS=(
   fontconfig
   nixpkgs
   nvim
+  i3
+  i3status-rust
+  git
+  tig
+  tmux
+  procs
+  alacritty
+  compton.conf
 )
 
 
-# Check whether the $DOTFILES, $TEMPLATE_FILES, and $CONFIG_DIRS exist in $SCRIPT_DIR
-for dotfile in ${DOTFILES[@]} ${TEMPLATE_FILES[@]} ${CONFIG_DIRS[@]}; do
+# Check whether the $DOTFILES, $TEMPLATE_FILES, and $CONFIG_PATHS exist in $SCRIPT_DIR
+for dotfile in ${DOTFILES[@]} ${TEMPLATE_FILES[@]} ${CONFIG_PATHS[@]}; do
   if [[ ! -e $dotfile ]]; then
     echo "$dotfile does not exist in $SCRIPT_DIR" >&2
     exit 1
@@ -48,23 +50,20 @@ done
 for template_file in ${TEMPLATE_FILES[@]}; do
   dotfile=${template_file%.template}
 
-  # Remove existing file, directory, or link
-  if [[ -e $HOME/$dotfile ]]; then
-    rm -rf $HOME/$dotfile
+  if [[ ! -e $HOME/$dotfile ]]; then
+      cp $SCRIPT_DIR/$template_file $HOME/$dotfile
   fi
-
-  cp $SCRIPT_DIR/$template_file $HOME/$dotfile
 done
 
 
-# Create symlinks for $CONFIG_DIRS
-for config_dir in ${CONFIG_DIRS[@]}; do
+# Create symlinks for $CONFIG_PATHS
+for config_path in ${CONFIG_PATHS[@]}; do
   # Remove existing file, directory, or link
-  if [[ -e $HOME/.config/$config_dir ]]; then
-    rm -rf $HOME/.config/$config_dir
+  if [[ -e $HOME/.config/$config_path ]]; then
+    rm -rf $HOME/.config/$config_path
   fi
 
-  ln -s $SCRIPT_DIR/$config_dir $HOME/.config
+  ln -s $SCRIPT_DIR/$config_path $HOME/.config
 done
 
 echo "Plese edit following config files for this host:"

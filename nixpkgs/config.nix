@@ -1,26 +1,29 @@
 {
   allowUnfree = true;
   packageOverrides = nixpkgs: let
-    nix-npm-install = nixpkgs.writeScriptBin "nix-npm-install" ''
-          #!/usr/bin/env bash
-          tempdir="/tmp/nix-npm-install/$1"
-          mkdir -p $tempdir
-          pushd $tempdir
-          # note the differences here:
-          ${nixpkgs.nodePackages.node2nix}/bin/node2nix --nodejs-12 --input <( echo "[\"$1\"]")
-          nix-env --install --file .
-          popd
-    '';
-
     allPackages = nixpkgs // packages;
     callPackage = nixpkgs.lib.callPackageWith allPackages;
 
     packages = rec {
+      gore = callPackage ./gore.nix {};
+      mockgen = callPackage ./mockgen.nix {};
+      wire = callPackage ./wire.nix {};
+      errcheck = callPackage ./errcheck.nix {};
+      syntaxerl = callPackage ./syntaxerl.nix {};
+      countdown = callPackage ./countdown.nix {};
+      evans = callPackage ./evans.nix {};
+      teip = callPackage ./teip.nix {};
+      gitqlite = callPackage ./gitqlite.nix {};
+
+      erlang = nixpkgs.erlangR20;
+      rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
+
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
           i3-gaps
           i3status
+          i3status-rust
           rofi
           feh
           glibcLocales
@@ -29,6 +32,8 @@
           gitAndTools.hub
           gitAndTools.tig
           gitAndTools.diff-so-fancy
+          gitAndTools.gh
+
           rlwrap
           trash-cli
           neovim
@@ -53,25 +58,43 @@
           progress
           procs
           unar
+          grpcurl
+          pup
+          youtube-dl
+          zenith
+          tmux
+          protobuf
+          qpdf
+          stress-ng
+          speedtest-cli
+          light
+          mysql80
+          countdown
+          hugo
+          evans
+          inotify-tools
 
-          gcc
-
-          erlangR21
+          erlang
           rebar3
+          syntaxerl
 
           rustup
+          wasm-pack
 
           opam
 
           nodejs
-          nix-npm-install
 
           go
-          dep
+          gopls
+          goimports
+          gore
+          errcheck
+          go-protobuf
+          mockgen
+          wire
 
           ldc
-
-          ruby
         ];
       };
     };

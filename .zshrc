@@ -68,6 +68,10 @@ zplugin light zpm-zsh/undollar
 
 # zplugin }}}
 
+stty intr '^\'
+stty quit undef
+stty lnext undef
+
 setopt auto_pushd
 setopt auto_cd
 setopt hist_ignore_space
@@ -75,7 +79,7 @@ setopt histignorealldups
 setopt inc_append_history
 setopt sharehistory
 
-HISTSIZE=1000
+HISTSIZE=100000
 SAVEHIST=100000
 HISTFILE=~/.zsh_history
 
@@ -133,5 +137,14 @@ zle -N accept-line re-prompt
 
 function rcd() {
   cd ~/repo/$(ls ~/repo | fzf20)
+}
+
+function timer() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 3m"
+    return 1
+  fi
+
+  countdown $1 && mplayer -really-quiet ~/pCloudDrive/music/Sound\ Horizon/Chronicle\ 2nd/ch2ex/sound/bar.wav
 }
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
