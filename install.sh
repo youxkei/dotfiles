@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd $(dirname $0); pwd)
 declare -a DOTFILES=(
   .profile
   .zprofile
-  .zshrc
 )
 
 declare -a TEMPLATE_FILES=(
@@ -13,6 +12,7 @@ declare -a TEMPLATE_FILES=(
 )
 
 declare -a CONFIG_PATHS=(
+  zsh
   fontconfig
   nixpkgs
   nvim

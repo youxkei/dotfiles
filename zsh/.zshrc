@@ -1,21 +1,22 @@
 bindkey -e
 
-# zplugin {{{
+# zinit {{{
+declare -A ZINIT
+ZINIT=(
+  BIN_DIR $XDG_CACHE_HOME/zinit/bin
+  HOME_DIR $XDG_CACHE_HOME/zinit
+)
 
-if [[ ! -d $ZPLG_HOME/bin ]]; then
+if [[ ! -d $ZINIT[BIN_DIR] ]]; then
   if whence git > /dev/null; then
-    git clone --depth 1 https://github.com/zdharma/zplugin.git $ZPLG_HOME/bin
+    git clone --depth 1 https://github.com/zdharma/zinit.git $ZINIT[BIN_DIR]
   fi
 fi
 
-if [[ ! -d $ZPFX ]]; then
-  mkdir -p $ZPFX/bin
-fi
-
-source $ZPLG_HOME/bin/zplugin.zsh
+source $ZINIT[BIN_DIR]/zinit.zsh
 
 # sync {{{
-zplugin light momo-lab/zsh-abbrev-alias
+zinit light momo-lab/zsh-abbrev-alias
 abbrev-alias -g -e CI='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}")'
 abbrev-alias -g -e B='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}" | xargs -I{} bash -c "git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk \"{print \\\$1}\"")'
 abbrev-alias -g -e PS='$(procs -c always | fzf --header-lines 1 | awk "{print \$1}")'
@@ -41,32 +42,32 @@ abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
 # sync }}}
 
 # async {{{
-zplugin ice lucid wait"0" pick"init.sh"
-zplugin light b4b4r07/enhancd
+zinit ice lucid wait"0" pick"init.sh" nocompletions
+zinit light b4b4r07/enhancd
 export ENHANCD_COMMAND="cd"
 export ENHANCD_FILTER="fzf20"
 export ENHANCD_DISABLE_DOT=1
 
-zplugin ice lucid wait"0"
-zplugin light zsh-users/zsh-history-substring-search
+zinit ice lucid wait"0"
+zinit light zsh-users/zsh-history-substring-search
 
-zplugin ice lucid wait"0" atload'_zsh_autosuggest_start'
-zplugin light zsh-users/zsh-autosuggestions
+zinit ice lucid wait"0" atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
 
-zplugin ice lucid wait"0"
-zplugin light zsh-users/zsh-syntax-highlighting
+zinit ice lucid wait"0"
+zinit light zsh-users/zsh-syntax-highlighting
 
-zplugin ice lucid wait"0"
-zplugin light zsh-users/zsh-completions
+zinit ice lucid wait"0"
+zinit light zsh-users/zsh-completions
 
-zplugin ice lucid wait"0" src"git-escape-magic"
-zplugin light knu/zsh-git-escape-magic
+zinit ice lucid wait"0" src"git-escape-magic"
+zinit light knu/zsh-git-escape-magic
 
-zplugin ice lucid wait"0"
-zplugin light zpm-zsh/undollar
+zinit ice lucid wait"0"
+zinit light zpm-zsh/undollar
 # async }}}
 
-# zplugin }}}
+# zinit }}}
 
 eval "$(starship init zsh)"
 
@@ -83,10 +84,11 @@ setopt sharehistory
 
 HISTSIZE=100000
 SAVEHIST=100000
-HISTFILE=~/.zsh_history
+HISTFILE=$XDG_DATA_HOME/zsh/history
 
-autoload -Uz compinit
-compinit -C
+[[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
+
+autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/compdump
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -149,4 +151,6 @@ function timer() {
 
   countdown $1 && mplayer -really-quiet ~/pCloudDrive/music/Sound\ Horizon/Chronicle\ 2nd/ch2ex/sound/bar.wav
 }
+
+[[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
