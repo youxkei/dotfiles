@@ -73,6 +73,7 @@
           hugo
           evans
           inotify-tools
+          starship
 
           erlang
           rebar3

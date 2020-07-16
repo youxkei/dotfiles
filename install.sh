@@ -24,6 +24,7 @@ declare -a CONFIG_PATHS=(
   procs
   alacritty
   compton.conf
+  starship.toml
 )
 
 

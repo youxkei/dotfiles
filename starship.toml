@@ -1,0 +1,25 @@
+prompt_order = [
+    "username",
+    "hostname",
+    "directory",
+    "git_branch",
+    "git_status",
+    "git_commit",
+    "git_state",
+    "cmd_duration",
+    "line_break",
+    "character",
+]
+
+[directory]
+truncate_to_repo = false
+
+[git_commit]
+only_detached = false
+
+[cmd_duration]
+min_time = 0
+prefix = ""
+
+[character]
+symbol = "$"
