@@ -52,9 +52,6 @@ interval = 1
 format = "{1m}"
 
 [[block]]
-block = "sound"
-
-[[block]]
 block = "weather"
 format = "{temp}℃"
 service = { name = "openweathermap", units = "metric" }
