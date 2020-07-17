@@ -21,24 +21,6 @@ abbrev-alias -g -e CI='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{prin
 abbrev-alias -g -e B='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}" | xargs -I{} bash -c "git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk \"{print \\\$1}\"")'
 abbrev-alias -g -e PS='$(procs -c always | fzf --header-lines 1 | awk "{print \$1}")'
 abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
-
-# zplugin light bhilburn/powerlevel9k
-# export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-# export POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-# export POWERLEVEL9K_DIR_HOME_BACKGROUND="027"
-# export POWERLEVEL9K_DIR_HOME_FOREGROUND="015"
-# export POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="027"
-# export POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="015"
-# export POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="027"
-# export POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="015"
-# export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-# export POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="$ "
-# export POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-# export POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="027"
-# export POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="015"
-# export POWERLEVEL9K_EXECUTION_TIME_ICON="s"
-# export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs time)
-# export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time root_indicator background_jobs history)
 # sync }}}
 
 # async {{{
