@@ -502,6 +502,7 @@ font:
 # at once.
 key_bindings:
   # (Windows, Linux, and BSD only)
+  - { key: Tab,      mods:  Control,       action: ReceiveChar      }
   - { key: C,        mods:  Control,       action: Copy             }
   - { key: V,        mods:  Control,       action: Paste            }
   - { key: C,        mods:  Control|Shift, action: ReceiveChar      }
