@@ -74,6 +74,7 @@
           evans
           inotify-tools
           starship
+          tree-sitter
 
           erlang
           rebar3
