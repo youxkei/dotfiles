@@ -36,6 +36,7 @@
           gitAndTools.tig
           gitAndTools.diff-so-fancy
           gitAndTools.gh
+          gitqlite
 
           rlwrap
           trash-cli

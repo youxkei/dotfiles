@@ -11,5 +11,7 @@ buildGoModule rec {
     sha256 = "1arb0w26wnhpqk15dk42fgynjksa0s3cmp6flc8zph0zkw1nslvh";
   };
 
+  buildFlags = ["-tags" "sqlite_vtable"];
+
   vendorSha256 = "0dmry4pi0k3aqmclnn5c354p210w217947js57xr9qj8v8g0f9iz";
 }
