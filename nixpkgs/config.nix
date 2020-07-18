@@ -18,6 +18,9 @@
       erlang = nixpkgs.erlangR20;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
 
+      nodejs = nixpkgs.nodejs-14_x;
+      prettier = (nixpkgs.nodePackages.override { nodejs = nodejs; }).prettier;
+
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
@@ -86,6 +89,7 @@
           opam
 
           nodejs
+          prettier
 
           go
           gopls
