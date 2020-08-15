@@ -11,12 +11,12 @@ bindsym $mod+Shift+q       kill
 bindsym $mod+d             exec rofi -show run -font "Monospace 14" -matching fuzzy
 bindsym $mod+t             exec wmfocus
 
-bindsym $mod+h exec --no-startup-id $HOME/.config/i3/move.sh "focus left"
-bindsym $mod+j exec --no-startup-id $HOME/.config/i3/move.sh "focus down"
-bindsym $mod+k exec --no-startup-id $HOME/.config/i3/move.sh "focus up"
-bindsym $mod+l exec --no-startup-id $HOME/.config/i3/move.sh "focus right"
-bindsym $mod+a exec --no-startup-id $HOME/.config/i3/move.sh "focus parent"
-bindsym $mod+z exec --no-startup-id $HOME/.config/i3/move.sh "focus child"
+bindsym $mod+h exec --no-startup-id i3_move.sh "focus left"
+bindsym $mod+j exec --no-startup-id i3_move.sh "focus down"
+bindsym $mod+k exec --no-startup-id i3_move.sh "focus up"
+bindsym $mod+l exec --no-startup-id i3_move.sh "focus right"
+#bindsym $mod+a exec --no-startup-id i3_move.sh "focus parent"
+#bindsym $mod+z exec --no-startup-id i3_move.sh "focus child"
 
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
@@ -33,29 +33,53 @@ bindsym $mod+s layout toggle split
 
 bindsym $mod+Shift+space floating toggle
 
-bindsym $mod+1 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 1"
-bindsym $mod+2 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 2"
-bindsym $mod+3 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 3"
-bindsym $mod+4 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 4"
-bindsym $mod+5 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 5"
-bindsym $mod+6 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 6"
-bindsym $mod+7 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 7"
-bindsym $mod+8 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 8"
-bindsym $mod+9 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 9"
-bindsym $mod+0 exec --no-startup-id $HOME/.config/i3/move.sh "workspace 10"
+bindsym $mod+1 exec --no-startup-id i3_move.sh "workspace 1"
+bindsym $mod+2 exec --no-startup-id i3_move.sh "workspace 2"
+bindsym $mod+3 exec --no-startup-id i3_move.sh "workspace 3"
+bindsym $mod+4 exec --no-startup-id i3_move.sh "workspace 4"
+bindsym $mod+5 exec --no-startup-id i3_move.sh "workspace 5"
+bindsym $mod+6 exec --no-startup-id i3_move.sh "workspace 6"
+bindsym $mod+7 exec --no-startup-id i3_move.sh "workspace 7"
+bindsym $mod+8 exec --no-startup-id i3_move.sh "workspace 8"
+bindsym $mod+9 exec --no-startup-id i3_move.sh "workspace 9"
+bindsym $mod+0 exec --no-startup-id i3_move.sh "workspace 10"
 
-bindsym $mod+Shift+1 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 1"
-bindsym $mod+Shift+2 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 2"
-bindsym $mod+Shift+3 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 3"
-bindsym $mod+Shift+4 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 4"
-bindsym $mod+Shift+5 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 5"
-bindsym $mod+Shift+6 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 6"
-bindsym $mod+Shift+7 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 7"
-bindsym $mod+Shift+8 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 8"
-bindsym $mod+Shift+9 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 9"
-bindsym $mod+Shift+0 exec --no-startup-id $HOME/.config/i3/move.sh "move container to workspace 10"
+bindsym $mod+a exec --no-startup-id i3_move.sh "workspace a"
+bindsym $mod+o exec --no-startup-id i3_move.sh "workspace o"
+bindsym $mod+e exec --no-startup-id i3_move.sh "workspace e"
+bindsym $mod+u exec --no-startup-id i3_move.sh "workspace u"
+bindsym $mod+i exec --no-startup-id i3_move.sh "workspace i"
 
-bindsym $mod+Shift+c reload
+bindcode $mod+48 exec --no-startup-id i3_move.sh "workspace :"
+bindcode $mod+59 exec --no-startup-id i3_move.sh "workspace comma"
+bindcode $mod+60 exec --no-startup-id i3_move.sh "workspace ."
+bindsym  $mod+p  exec --no-startup-id i3_move.sh "workspace p"
+bindsym  $mod+y  exec --no-startup-id i3_move.sh "workspace y"
+
+bindsym $mod+Shift+1 exec --no-startup-id i3_move.sh "move container to workspace 1"
+bindsym $mod+Shift+2 exec --no-startup-id i3_move.sh "move container to workspace 2"
+bindsym $mod+Shift+3 exec --no-startup-id i3_move.sh "move container to workspace 3"
+bindsym $mod+Shift+4 exec --no-startup-id i3_move.sh "move container to workspace 4"
+bindsym $mod+Shift+5 exec --no-startup-id i3_move.sh "move container to workspace 5"
+bindsym $mod+Shift+6 exec --no-startup-id i3_move.sh "move container to workspace 6"
+bindsym $mod+Shift+7 exec --no-startup-id i3_move.sh "move container to workspace 7"
+bindsym $mod+Shift+8 exec --no-startup-id i3_move.sh "move container to workspace 8"
+bindsym $mod+Shift+9 exec --no-startup-id i3_move.sh "move container to workspace 9"
+bindsym $mod+Shift+0 exec --no-startup-id i3_move.sh "move container to workspace 10"
+
+bindsym $mod+Shift+a exec --no-startup-id i3_move.sh "move container to workspace a"
+bindsym $mod+Shift+o exec --no-startup-id i3_move.sh "move container to workspace o"
+bindsym $mod+Shift+e exec --no-startup-id i3_move.sh "move container to workspace e"
+bindsym $mod+Shift+u exec --no-startup-id i3_move.sh "move container to workspace u"
+bindsym $mod+Shift+i exec --no-startup-id i3_move.sh "move container to workspace i"
+
+bindcode $mod+Shift+48 exec --no-startup-id i3_move.sh "move container to workspace :"
+bindcode $mod+Shift+59 exec --no-startup-id i3_move.sh "move container to workspace comma"
+bindcode $mod+Shift+60 exec --no-startup-id i3_move.sh "move container to workspace ."
+bindsym  $mod+Shift+p  exec --no-startup-id i3_move.sh "move container to workspace p"
+bindsym  $mod+Shift+y  exec --no-startup-id i3_move.sh "move container to workspace y"
+
+#bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 
@@ -69,7 +93,7 @@ bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   @DEFAULT
 gaps inner 20
 
 set $out "(L)ock, (E)xit, (S)uspend, (H)ibernate, (R)eboot, (P)oweroff"
-bindsym $mod+Shift+e mode $out
+bindsym $mod+Shift+c mode $out
 mode $out {
     bindsym e exit, mode "default"
 
@@ -118,14 +142,25 @@ set_from_resource $up_monitor     i3wm.up_monitor
 set_from_resource $center_monitor i3wm.center_monitor
 set_from_resource $right_monitor  i3wm.right_monitor
 
+workspace a output $left_monitor
+workspace o output $up_monitor
+workspace e output $center_monitor
+workspace u output $right_monitor
+
+workspace :     output $left_monitor
+workspace comma output $up_monitor
+workspace .     output $center_monitor
+workspace p     output $right_monitor
+
 workspace  1 output $left_monitor
 workspace  2 output $up_monitor
 workspace  3 output $up_monitor
-workspace  4 output $center_monitor
+workspace  4 output $up_monitor
 workspace  5 output $center_monitor
 workspace  6 output $center_monitor
-workspace  7 output $right_monitor
+workspace  7 output $center_monitor
 workspace  8 output $right_monitor
+workspace  9 output $right_monitor
 workspace 10 output $right_monitor
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
@@ -142,8 +177,8 @@ exec --no-startup-id sudo nm-applet
 exec_always --no-startup-id sleep 1s; feh --no-fehbg --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png
 exec --no-startup-id /bin/sh -c 'eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)'
 exec --no-startup-id compton
-# exec --no-startup-id sleep 2s; guake
 
+exec --no-startup-id start_jack.sh
 exec --no-startup-id sleep 1s; alacritty -e nvim
 exec --no-startup-id sleep 1s; google-chrome
 exec --no-startup-id sleep 1s; discord
