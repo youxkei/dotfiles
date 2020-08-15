@@ -537,7 +537,7 @@ endif
 if s:is_installed('denite.nvim')
   call denite#custom#option('default', {'split': 'floating'})
 
-  call denite#custom#var('file/rec', 'command', ['fd', '-H', '-E', '.git', '--type', 'f', '.*'])
+  call denite#custom#var('file/rec', 'command', ['fd', '-H', '-E', '.git', '--type', 'f', '.'])
 
   call denite#custom#var('grep', 'command', ['rg'])
   call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
