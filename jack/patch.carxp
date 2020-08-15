@@ -45,7 +45,7 @@
     <Index>6</Index>
     <Name>Threshold</Name>
     <Symbol>threshold</Symbol>
-    <Value>0.0559390708804131</Value>
+    <Value>0.0312500037252903</Value>
    </Parameter>
 
    <Parameter>
@@ -59,28 +59,28 @@
     <Index>8</Index>
     <Name>Attack</Name>
     <Symbol>attack</Symbol>
-    <Value>20</Value>
+    <Value>1.50387442111969</Value>
    </Parameter>
 
    <Parameter>
     <Index>9</Index>
     <Name>Release</Name>
     <Symbol>release</Symbol>
-    <Value>250</Value>
+    <Value>1999.99987792969</Value>
    </Parameter>
 
    <Parameter>
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>5.6411919593811</Value>
+    <Value>15.8235349655151</Value>
    </Parameter>
 
    <Parameter>
     <Index>11</Index>
     <Name>Knee</Name>
     <Symbol>knee</Symbol>
-    <Value>2.82842993736267</Value>
+    <Value>1.12349987030029</Value>
    </Parameter>
 
    <Parameter>
