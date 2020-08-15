@@ -19,6 +19,7 @@
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
       gitqlite = callPackage ./gitqlite.nix {};
+      bottom = callPackage ./bottom.nix {};
 
       erlang = nixpkgs.erlangR18;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
@@ -85,6 +86,14 @@
           inotify-tools
           starship
           tree-sitter
+          redis
+          bandwhich
+          ytop
+          dust
+          tealdeer
+          zoxide
+          watchexec
+          bottom
 
           erlang
           rebar3
@@ -97,6 +106,8 @@
 
           nodejs
           prettier
+
+          bs-platform
 
           go
           gopls

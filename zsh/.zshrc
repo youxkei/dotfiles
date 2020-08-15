@@ -52,13 +52,13 @@ zinit light zpm-zsh/undollar
 # zinit }}}
 
 eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
 
 stty intr '^\'
 stty quit undef
 stty lnext undef
 
 setopt auto_pushd
-setopt auto_cd
 setopt hist_ignore_space
 setopt histignorealldups
 setopt inc_append_history
