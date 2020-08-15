@@ -94,6 +94,7 @@
           zoxide
           watchexec
           bottom
+          parallel
 
           erlang
           rebar3
