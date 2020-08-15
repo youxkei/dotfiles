@@ -1,5 +1,10 @@
 {
   allowUnfree = true;
+
+  permittedInsecurePackages = [
+    "openssl-1.0.2u"
+  ];
+
   packageOverrides = nixpkgs: let
     allPackages = nixpkgs // packages;
     callPackage = nixpkgs.lib.callPackageWith allPackages;
@@ -15,7 +20,7 @@
       teip = callPackage ./teip.nix {};
       gitqlite = callPackage ./gitqlite.nix {};
 
-      erlang = nixpkgs.erlangR20;
+      erlang = nixpkgs.erlangR18;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
 
       nodejs = nixpkgs.nodejs-14_x;
