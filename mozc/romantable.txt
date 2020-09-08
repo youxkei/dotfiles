@@ -9,11 +9,40 @@ vi	ゔぃ
 vu	ゔ
 ve	ゔぇ
 vo	ゔぉ
+v:	ゔぁい
+v,	ゔぉう
+v.	ゔぇい
+v;	ゔぁん
+vq	ゔぉん
+vj	ゔぇん
+vk	ゔん
+vx	ゔぃん
 vya	ゔゃ
 vyi	ゔぃ
 vyu	ゔゅ
 vye	ゔぇ
 vyo	ゔょ
+vha	ゔゃ
+vhi	ゔぃ
+vhu	ゔゅ
+vhe	ゔぇ
+vho	ゔょ
+vy:	ゔゃい
+vy,	ゔょう
+vy.	ゔぇい
+vy;	ゔぁん
+vyq	ゔぉん
+vyj	ゔぇん
+vyk	ゔゅん
+vyx	ゔぃん
+vh:	ゔゃい
+vh,	ゔょう
+vh.	ゔぇい
+vh;	ゔぁん
+vhq	ゔぉん
+vhj	ゔぇん
+vhk	ゔゅん
+vhx	ゔぃん
 qq	っ	q
 vv	っ	v
 ll	っ	l
