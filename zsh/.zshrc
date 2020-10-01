@@ -106,7 +106,7 @@ alias open="xdg-open"
 alias tmux="tmux -2"
 alias tig="tig --all"
 alias fzf20="fzf --height=20%"
-alias cp="rsync -P"
+alias cp="xcp"
 
 function chpwd() { ls }
 function git() { hub $@ }

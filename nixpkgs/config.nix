@@ -20,6 +20,7 @@
       teip = callPackage ./teip.nix {};
       askgit = callPackage ./askgit.nix {};
       bottom = callPackage ./bottom.nix {};
+      xcp = callPackage ./xcp.nix {};
 
       erlang = nixpkgs.erlangR18;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
@@ -95,6 +96,7 @@
           watchexec
           bottom
           parallel
+          xcp
 
           erlang
           rebar3
