@@ -11,4 +11,4 @@ pacmd load-module module-virtual-surround-sink sink_name=surround sink_propertie
 pacmd set-default-sink surround
 pacmd set-default-source jack_in
 
-carla ~/repo/dotfiles/jack/patch.carxp
+chrt 95 carla ~/repo/dotfiles/jack/patch.carxp
