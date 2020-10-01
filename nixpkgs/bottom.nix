@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "0vj113j9cn62p8q624lgamj7gyvzpdwnnyhhrp04mampndqfd46p";
+    sha256 = "178z9f2z861rni8zqrp4w45jmr8g325jfgwz5765sbvvf7jhjdxc";
   };
 
-  cargoSha256 = "1mndc8q26p0z97cxj87naxcaw1xpmayr9z7mj3dqdrd1d034ks10";
+  cargoSha256 = "10z3ycl36sfhb2d1zdxrylcygw021ackavdaf4k6zsqsrm0gmrax";
 
   doCheck = false;
 }
