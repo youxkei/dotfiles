@@ -18,7 +18,7 @@
       countdown = callPackage ./countdown.nix {};
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
-      gitqlite = callPackage ./gitqlite.nix {};
+      askgit = callPackage ./askgit.nix {};
       bottom = callPackage ./bottom.nix {};
 
       erlang = nixpkgs.erlangR18;
@@ -43,7 +43,7 @@
           gitAndTools.tig
           gitAndTools.diff-so-fancy
           gitAndTools.gh
-          gitqlite
+          askgit
 
           rlwrap
           trash-cli
