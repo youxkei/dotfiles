@@ -1,15 +1,17 @@
-{ buildGoModule, fetchFromGitHub }:
+{ buildGoModule, fetchFromGitHub, vim }:
 
 buildGoModule rec {
   pname = "evans";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ktr0731";
     repo = pname;
     rev = version;
-    sha256 = "10kfb4vaysdblbf8cri1wvkb1shlgaqw8ka6g0q9cj7bbk4axwf2";
+    sha256 = "0nyzgaw3igki6scxsxmjv0wb2m1fjz58fz7nfa5y1w0vwjs0fhvy";
   };
 
-  vendorSha256 = "1yiqrpmvmr3w3f7wzrflm53h06w3547ds13kf1n680fy9r23msbc";
+  doCheck = false;
+
+  vendorSha256 = "11yvsfj3kkwm0z17695rmycvgdgfrc8dnd41r1z0430zv6x67b9f";
 }
