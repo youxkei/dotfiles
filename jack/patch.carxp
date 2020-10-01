@@ -73,7 +73,7 @@
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>25.2113246917725</Value>
+    <Value>10.0980167388916</Value>
    </Parameter>
 
    <Parameter>
@@ -130,7 +130,7 @@
     <Index>1</Index>
     <Name>Input</Name>
     <Symbol>level_in</Symbol>
-    <Value>0.497235119342804</Value>
+    <Value>0.568014681339264</Value>
    </Parameter>
 
    <Parameter>
@@ -144,7 +144,7 @@
     <Index>3</Index>
     <Name>Amount</Name>
     <Symbol>amount</Symbol>
-    <Value>2.03354930877686</Value>
+    <Value>1.78015148639679</Value>
    </Parameter>
 
    <Parameter>
