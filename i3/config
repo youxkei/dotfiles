@@ -163,6 +163,7 @@ workspace 10 output $right_monitor
 
 for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
 for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf"] floating enable
+for_window [class="qjackctl"] floating enable
 
 new_window pixel 16
 
