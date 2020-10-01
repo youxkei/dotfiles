@@ -2,9 +2,6 @@ export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim -c MANPAGER -'
 
-PATH=~/.local/bin:$PATH
-PATH=~/go/bin:$PATH
-PATH=~/.cargo/bin:$PATH
 PATH=~/bin:$PATH
 export PATH
 
