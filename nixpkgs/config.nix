@@ -28,6 +28,16 @@
       nodejs = nixpkgs.nodejs-14_x;
       prettier = (nixpkgs.nodePackages.override { nodejs = nodejs; }).prettier;
 
+      statik = nixpkgs.statik.overrideAttrs (oldAttrs: rec {
+        version = "0.1.7";
+        src = nixpkgs.fetchFromGitHub rec {
+          owner = "rakyll";
+          repo = "statik";
+          rev = "v${version}";
+          sha256 = "0y0kbzma55vmyqhyrw9ssgvxn6nw7d0zg72a7nz8vp1zly4hs6va";
+        };
+      });
+
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
@@ -120,6 +130,7 @@
           go-protobuf
           mockgen
           wire
+          statik
 
           ldc
         ];
