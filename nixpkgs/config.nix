@@ -115,6 +115,7 @@
           rustup
           wasm-pack
           cargo-edit
+          cargo-insta
 
           opam
 
