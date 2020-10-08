@@ -107,6 +107,7 @@
           bottom
           parallel
           xcp
+          docker-compose
 
           erlang
           rebar3
