@@ -108,6 +108,7 @@
           parallel
           xcp
           docker-compose
+          diskonaut
 
           erlang
           rebar3
