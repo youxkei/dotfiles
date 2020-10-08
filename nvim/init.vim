@@ -78,6 +78,8 @@ set updatetime=100
 
 set iskeyword=@,48-57,_,192-255,$,@-@,-
 
+set clipboard=unnamedplus
+
 let loaded_matchparen = 1
 
 let g:mapleader = ','
