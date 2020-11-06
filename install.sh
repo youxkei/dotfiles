@@ -63,6 +63,8 @@ for path in ${!PATHS[@]}; do
     fi
 done
 
+declare -a copied_templates=()
+
 # Copy $TEMPLATE_FILES to $HOME
 for template_path in ${!TEMPLATE_PATHS[@]}; do
     src=$SCRIPT_DIR/$template_path
@@ -73,10 +75,14 @@ for template_path in ${!TEMPLATE_PATHS[@]}; do
     else
         echo "Copy $src -> $dst"
         cp $src $dst
+
+        copied_templates+=(dst)
     fi
 done
 
-echo "Please edit following config files for this host:"
-for template_path in ${!TEMPLATE_PATHS[@]}; do
-    echo ${TEMPLATE_PATHS[$template_path]}
-done
+if [[ ${#copied_templates[@]} -gt 0 ]]; then
+    echo "\nPlease edit following config files for this host:"
+    for copied_template in ${copied_templates[@]}; do
+        echo $copied_templates
+    done
+fi
