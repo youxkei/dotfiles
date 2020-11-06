@@ -1,0 +1,6 @@
+export OPENWEATHERMAP_API_KEY=""
+export OPENWEATHERMAP_CITY_ID=""
+
+export YAHOO_APPID=""
+
+export TIMER_ALERM_FILE=""

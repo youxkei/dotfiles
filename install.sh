@@ -29,6 +29,7 @@ declare -A PATHS=(
 # source path (relative to $SCRIPT_DIR) -> destination path
 declare -A TEMPLATE_PATHS=(
     [.Xresources.template]=~/.Xresources
+    [.profile_host.template]=~/.profile_host
 )
 
 # Check whether the source paths exist in $SCRIPT_DIR
