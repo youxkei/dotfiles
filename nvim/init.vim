@@ -445,6 +445,8 @@ Plug 'thinca/vim-qfreplace'
 
 Plug 'youxkei/vim-erlang-tags'
 
+Plug 'vim-scripts/multisearch.vim'
+
 " plugins }}}
 
 " colorschemes {{{
