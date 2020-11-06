@@ -23,12 +23,6 @@ abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
 # sync }}}
 
 # async {{{
-zinit ice lucid wait"0" pick"init.sh" nocompletions
-zinit light b4b4r07/enhancd
-export ENHANCD_COMMAND="cd"
-export ENHANCD_FILTER="fzf20"
-export ENHANCD_DISABLE_DOT=1
-
 zinit ice lucid wait"0"
 zinit light zsh-users/zsh-history-substring-search
 
@@ -49,6 +43,9 @@ zinit light zpm-zsh/undollar
 # async }}}
 
 # zinit }}}
+
+# zi is introduced by zinit
+unalias zi
 
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
