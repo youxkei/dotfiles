@@ -105,7 +105,7 @@ alias fzf20="fzf --height=20%"
 alias cp="xcp"
 
 function chpwd() { ls }
-function git() { hub $@ }
+# function git() { hub $@ }
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
