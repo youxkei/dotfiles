@@ -475,6 +475,8 @@ Plug 'vim-erlang/vim-erlang-runtime'
 
 Plug 'LnL7/vim-nix'
 
+Plug 'amiralies/vim-rescript'
+
 " syntax }}}
 
 " text objects & operators {{{
