@@ -18,7 +18,7 @@
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>Calf Compressor</Name>
+   <Name>output comp</Name>
    <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
   </Info>
 
@@ -45,7 +45,7 @@
     <Index>6</Index>
     <Name>Threshold</Name>
     <Symbol>threshold</Symbol>
-    <Value>0.0312500037252903</Value>
+    <Value>0.0100267669185996</Value>
    </Parameter>
 
    <Parameter>
@@ -59,7 +59,7 @@
     <Index>8</Index>
     <Name>Attack</Name>
     <Symbol>attack</Symbol>
-    <Value>1.50387442111969</Value>
+    <Value>0.00999999977648258</Value>
    </Parameter>
 
    <Parameter>
@@ -73,14 +73,14 @@
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>10.0980167388916</Value>
+    <Value>31.8230476379395</Value>
    </Parameter>
 
    <Parameter>
     <Index>11</Index>
     <Name>Knee</Name>
     <Symbol>knee</Symbol>
-    <Value>1.12349987030029</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
@@ -130,7 +130,7 @@
     <Index>1</Index>
     <Name>Input</Name>
     <Symbol>level_in</Symbol>
-    <Value>0.568014681339264</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
@@ -144,7 +144,7 @@
     <Index>3</Index>
     <Name>Amount</Name>
     <Symbol>amount</Symbol>
-    <Value>1.78015148639679</Value>
+    <Value>1.42602574825287</Value>
    </Parameter>
 
    <Parameter>
@@ -191,13 +191,13 @@
   </Data>
  </Plugin>
 
- <!-- Noise Suppressor for Voice (Stereo) -->
+ <!-- Noise Suppressor for Voice (Mono) -->
  <Plugin>
   <Info>
    <Type>LADSPA</Type>
-   <Name>Noise Suppressor for Voice (Stereo)</Name>
+   <Name>Noise Suppressor for Voice (Mono)</Name>
    <Binary>/usr/local/lib/ladspa/librnnoise_ladspa.so</Binary>
-   <Label>noise_suppressor_stereo</Label>
+   <Label>noise_suppressor_mono</Label>
    <UniqueID>9354877</UniqueID>
   </Info>
 
@@ -214,12 +214,12 @@
   </Data>
  </Plugin>
 
- <!-- Calf Compressor -->
+ <!-- Calf Mono Compressor -->
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>Calf Compressor (2)</Name>
-   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+   <Name>input comp</Name>
+   <URI>http://calf.sourceforge.net/plugins/MonoCompressor</URI>
   </Info>
 
   <Data>
@@ -245,7 +245,7 @@
     <Index>6</Index>
     <Name>Threshold</Name>
     <Symbol>threshold</Symbol>
-    <Value>0.0559390746057034</Value>
+    <Value>0.0250334348529577</Value>
    </Parameter>
 
    <Parameter>
@@ -259,46 +259,32 @@
     <Index>8</Index>
     <Name>Attack</Name>
     <Symbol>attack</Symbol>
-    <Value>20</Value>
+    <Value>0.00999999977648258</Value>
    </Parameter>
 
    <Parameter>
     <Index>9</Index>
     <Name>Release</Name>
     <Symbol>release</Symbol>
-    <Value>250</Value>
+    <Value>1999.99987792969</Value>
    </Parameter>
 
    <Parameter>
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>5.64119243621826</Value>
+    <Value>19.9732894897461</Value>
    </Parameter>
 
    <Parameter>
     <Index>11</Index>
     <Name>Knee</Name>
     <Symbol>knee</Symbol>
-    <Value>2.82842993736267</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>12</Index>
-    <Name>Detection</Name>
-    <Symbol>detection</Symbol>
-    <Value>0</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
     <Index>13</Index>
-    <Name>Stereo Link</Name>
-    <Symbol>stereo_link</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>15</Index>
     <Name>Mix</Name>
     <Symbol>mix</Symbol>
     <Value>1</Value>
@@ -309,26 +295,22 @@
  <ExternalPatchbay>
   <Connection>
    <Source>system:capture_1</Source>
-   <Target>Noise Suppressor for Voice (Stereo):Input (L)</Target>
-  </Connection>
-  <Connection>
-   <Source>system:capture_2</Source>
-   <Target>Noise Suppressor for Voice (Stereo):Input (R)</Target>
+   <Target>Noise Suppressor for Voice (Mono):Input</Target>
   </Connection>
   <Connection>
    <Source>PulseAudio JACK Sink:front-left</Source>
-   <Target>Calf Compressor:In L</Target>
+   <Target>output comp:In L</Target>
   </Connection>
   <Connection>
    <Source>PulseAudio JACK Sink:front-right</Source>
-   <Target>Calf Compressor:In R</Target>
+   <Target>output comp:In R</Target>
   </Connection>
   <Connection>
-   <Source>Calf Compressor:Out L</Source>
+   <Source>output comp:Out L</Source>
    <Target>Calf Bass Enhancer:In L</Target>
   </Connection>
   <Connection>
-   <Source>Calf Compressor:Out R</Source>
+   <Source>output comp:Out R</Source>
    <Target>Calf Bass Enhancer:In R</Target>
   </Connection>
   <Connection>
@@ -340,19 +322,15 @@
    <Target>system:playback_2</Target>
   </Connection>
   <Connection>
-   <Source>Noise Suppressor for Voice (Stereo):Output (L)</Source>
-   <Target>Calf Compressor (2):In L</Target>
+   <Source>Noise Suppressor for Voice (Mono):Output</Source>
+   <Target>input comp:In L</Target>
   </Connection>
   <Connection>
-   <Source>Noise Suppressor for Voice (Stereo):Output (R)</Source>
-   <Target>Calf Compressor (2):In R</Target>
-  </Connection>
-  <Connection>
-   <Source>Calf Compressor (2):Out L</Source>
+   <Source>input comp:Out L</Source>
    <Target>PulseAudio JACK Source:front-left</Target>
   </Connection>
   <Connection>
-   <Source>Calf Compressor (2):Out R</Source>
+   <Source>input comp:Out L</Source>
    <Target>PulseAudio JACK Source:front-right</Target>
   </Connection>
  </ExternalPatchbay>
