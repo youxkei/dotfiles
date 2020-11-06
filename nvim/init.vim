@@ -553,7 +553,7 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
 
-  call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
+  "call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 endif
 
 if s:is_installed('nord-vim')
