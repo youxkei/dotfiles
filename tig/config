@@ -1,8 +1,11 @@
 set commit-order = topo
 set vertical-split = false
 set line-graphics = utf-8
-set refresh-mode = auto
+set refresh-mode = after-command
+set start-on-head = true
 
 set main-view	= line-number:display=no id:display=no date:display=no author:display=abbreviated commit-title:display=yes,graph,refs,overflow=no
 
 set diff-options = --histogram
+
+bind status + !git commit --amend
