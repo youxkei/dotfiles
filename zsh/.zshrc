@@ -1,10 +1,9 @@
 bindkey -e
 
 # zinit {{{
-declare -A ZINIT
-ZINIT=(
-  BIN_DIR $XDG_CACHE_HOME/zinit/bin
-  HOME_DIR $XDG_CACHE_HOME/zinit
+declare -A ZINIT=(
+  [BIN_DIR]=$XDG_CACHE_HOME/zinit/bin
+  [HOME_DIR]=$XDG_CACHE_HOME/zinit
 )
 
 if [[ ! -d $ZINIT[BIN_DIR] ]]; then
