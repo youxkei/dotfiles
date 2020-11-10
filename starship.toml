@@ -20,11 +20,13 @@ only_detached = false
 
 [cmd_duration]
 min_time = 0
+format = "⏱  [$duration]($style) "
 
 [time]
 disabled = false
 time_format = "%T"
 utc_time_offset = "+9"
+format = "🕒 [$time]($style)"
 
 [character]
 success_symbol = "[\\$](bold green)"
