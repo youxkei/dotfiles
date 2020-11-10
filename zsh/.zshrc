@@ -111,6 +111,7 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
 re-prompt() {
+  starship_precmd
   zle .reset-prompt
   zle .accept-line
 }
