@@ -99,7 +99,6 @@
           tree-sitter
           redis
           bandwhich
-          ytop
           dust
           tealdeer
           zoxide
