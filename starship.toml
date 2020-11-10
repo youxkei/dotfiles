@@ -1,16 +1,16 @@
-prompt_order = [
-    "username",
-    "hostname",
-    "directory",
-    "git_branch",
-    "git_status",
-    "git_commit",
-    "git_state",
-    "cmd_duration",
-    "time",
-    "line_break",
-    "character",
-]
+format = """\
+    $username\
+    $hostname\
+    $directory\
+    $git_branch\
+    $git_status\
+    $git_commit\
+    $git_state\
+    $cmd_duration\
+    $time\
+    $line_break\
+    $character\
+"""
 
 [directory]
 truncate_to_repo = false
@@ -23,8 +23,10 @@ min_time = 0
 
 [time]
 disabled = false
-format = "%T"
+time_format = "%T"
 utc_time_offset = "+9"
 
 [character]
-symbol = "$"
+success_symbol = "[\\$](bold green)"
+error_symbol = "[\\$](bold red)"
+vicmd_symbol = "[>](bold green)"
