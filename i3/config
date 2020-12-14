@@ -9,7 +9,6 @@ focus_follows_mouse yes
 #bindsym $mod+Shift+Return  exec i3-sensible-terminal
 bindsym $mod+Shift+q       kill
 bindsym $mod+d             exec rofi -show run -font "Monospace 14" -matching fuzzy
-#bindsym $mod+t             exec wmfocus
 
 bindsym $mod+h exec --no-startup-id i3_move.sh "focus left"
 bindsym $mod+j exec --no-startup-id i3_move.sh "focus down"
@@ -116,14 +115,14 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
-#bindsym $mod+t mode "transparency"
-#mode "transparency" {
-#    bindsym h exec --no-startup-id compton-trans -c -- -2
-#    bindsym l exec --no-startup-id compton-trans -c +4
-#
-#    bindsym Return mode "default"
-#    bindsym Escape mode "default"
-#}
+bindsym $mod+t mode "transparency"
+mode "transparency" {
+    bindsym h exec --no-startup-id compton-trans -c -- -2
+    bindsym l exec --no-startup-id compton-trans -c +4
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 bar {
     status_command i3status-rs

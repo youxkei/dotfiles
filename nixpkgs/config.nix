@@ -44,7 +44,6 @@
           i3-gaps
           i3status
           i3status-rust
-          wmfocus
           rofi
           feh
           glibcLocales
