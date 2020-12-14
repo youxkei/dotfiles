@@ -116,6 +116,7 @@
           wasm-bindgen-cli
           cargo-edit
           cargo-insta
+          cargo-generate
 
           opam
 
