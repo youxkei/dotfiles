@@ -49,7 +49,6 @@
           gitAndTools.tig
           gitAndTools.diff-so-fancy
           gitAndTools.gh
-          askgit
 
           rlwrap
           trash-cli
