@@ -143,11 +143,13 @@ workspace a output $left_monitor
 workspace o output $up_monitor
 workspace e output $center_monitor
 workspace u output $right_monitor
+workspace i output $right_monitor
 
 workspace :     output $left_monitor
 workspace comma output $up_monitor
 workspace .     output $center_monitor
 workspace p     output $right_monitor
+workspace y     output $right_monitor
 
 workspace  1 output $left_monitor
 workspace  2 output $up_monitor
