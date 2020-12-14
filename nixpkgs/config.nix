@@ -103,6 +103,8 @@
           xcp
           docker-compose
           diskonaut
+          traceroute
+          tcptraceroute
 
           erlang
           rebar3
