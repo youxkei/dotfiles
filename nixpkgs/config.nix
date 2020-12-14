@@ -106,6 +106,7 @@
           traceroute
           tcptraceroute
           netcat
+          shellcheck
 
           erlang
           rebar3
