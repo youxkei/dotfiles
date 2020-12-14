@@ -113,6 +113,7 @@
 
           rustup
           wasm-pack
+          wasm-bindgen-cli
           cargo-edit
           cargo-insta
 
