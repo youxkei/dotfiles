@@ -105,6 +105,7 @@
           diskonaut
           traceroute
           tcptraceroute
+          netcat
 
           erlang
           rebar3
