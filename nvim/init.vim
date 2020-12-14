@@ -445,7 +445,13 @@ Plug 'thinca/vim-qfreplace'
 
 Plug 'youxkei/vim-erlang-tags'
 
-Plug 'vim-scripts/multisearch.vim'
+Plug 'inkarkat/vim-ingo-library'
+Plug 'inkarkat/vim-mark'
+let g:mw_no_mappings = 1
+let g:mwDefaultHighlightingPalette = 'maximum'
+nmap <Leader>m <Plug>MarkSet
+vmap <Leader>m <Plug>MarkSet
+nmap <Leader>n <Plug>MarkAllClear
 
 " plugins }}}
 
