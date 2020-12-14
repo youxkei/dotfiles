@@ -73,7 +73,7 @@
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>31.8230476379395</Value>
+    <Value>25.2113265991211</Value>
    </Parameter>
 
    <Parameter>
@@ -87,14 +87,14 @@
     <Index>12</Index>
     <Name>Detection</Name>
     <Symbol>detection</Symbol>
-    <Value>0</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
     <Index>13</Index>
     <Name>Stereo Link</Name>
     <Symbol>stereo_link</Symbol>
-    <Value>0</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
@@ -318,8 +318,16 @@
    <Target>system:playback_1</Target>
   </Connection>
   <Connection>
+   <Source>Calf Bass Enhancer:Out L</Source>
+   <Target>PulseAudio_JACK_Source_2:front-left</Target>
+  </Connection>
+  <Connection>
    <Source>Calf Bass Enhancer:Out R</Source>
    <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
+   <Source>Calf Bass Enhancer:Out R</Source>
+   <Target>PulseAudio_JACK_Source_2:front-right</Target>
   </Connection>
   <Connection>
    <Source>Noise Suppressor for Voice (Mono):Output</Source>
