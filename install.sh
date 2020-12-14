@@ -24,6 +24,7 @@ declare -A PATHS=(
     [jack/start_jack.sh]=~/bin/start_jack.sh
     [i3/i3_move.sh]=~/bin/i3_move.sh
     [bin/talk]=~/bin/talk
+    [bin/mozc_config]=~/bin/mozc_config
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path

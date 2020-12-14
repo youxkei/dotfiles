@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/lib/mozc/mozc_tool --mode=config_dialog
