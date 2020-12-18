@@ -17,6 +17,7 @@
       askgit = callPackage ./askgit.nix {};
       bottom = callPackage ./bottom.nix {};
       xcp = callPackage ./xcp.nix {};
+      protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
 
       erlang = nixpkgs.erlangR20;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
@@ -134,6 +135,7 @@
           mockgen
           wire
           statik
+          protoc-gen-grpc-gateway
 
           ldc
         ];
