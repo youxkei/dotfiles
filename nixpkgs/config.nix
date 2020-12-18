@@ -107,6 +107,7 @@
           tcptraceroute
           netcat
           shellcheck
+          multitail
 
           erlang
           rebar3
