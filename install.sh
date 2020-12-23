@@ -26,6 +26,7 @@ declare -A PATHS=(
     [bin/talk]=~/bin/talk
     [bin/mozc_config]=~/bin/mozc_config
     [bin/clip]=~/bin/clip
+    [bin/focus_on_mouse]=~/bin/focus_on_mouse
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
