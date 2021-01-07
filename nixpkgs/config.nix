@@ -85,7 +85,7 @@
           stress-ng
           speedtest-cli
           light
-          mysql80
+          mysql57
           countdown
           hugo
           evans
