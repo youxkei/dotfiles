@@ -107,6 +107,7 @@
           netcat
           shellcheck
           multitail
+          pv
 
           erlang
           rebar3
