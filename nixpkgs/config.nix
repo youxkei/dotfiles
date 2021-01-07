@@ -94,7 +94,6 @@
           tree-sitter
           redis
           bandwhich
-          dust
           tealdeer
           zoxide
           watchexec
