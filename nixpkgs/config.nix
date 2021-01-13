@@ -107,6 +107,7 @@
           shellcheck
           multitail
           pv
+          wasmtime
 
           erlang
           rebar3
