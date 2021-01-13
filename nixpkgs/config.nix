@@ -137,8 +137,6 @@
           wire
           statik
           protoc-gen-grpc-gateway
-
-          ldc
         ];
       };
     };
