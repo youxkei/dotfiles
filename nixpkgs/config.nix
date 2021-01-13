@@ -15,7 +15,6 @@
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
       askgit = callPackage ./askgit.nix {};
-      bottom = callPackage ./bottom.nix {};
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
 
