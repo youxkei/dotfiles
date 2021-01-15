@@ -5,6 +5,8 @@
     allPackages = nixpkgs // packages;
     callPackage = nixpkgs.lib.callPackageWith allPackages;
 
+    nodePackages = callPackage ./node/default.nix {};
+
     packages = rec {
       gore = callPackage ./gore.nix {};
       mockgen = callPackage ./mockgen.nix {};
@@ -17,6 +19,8 @@
       askgit = callPackage ./askgit.nix {};
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
+
+      typescript-language-server = nodePackages.typescript-language-server;
 
       erlang = nixpkgs.erlangR20;
       rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
@@ -124,6 +128,7 @@
 
           nodejs
           prettier
+          typescript-language-server
 
           bs-platform
 
