@@ -27,6 +27,7 @@ declare -A PATHS=(
     [bin/mozc_config]=~/bin/mozc_config
     [bin/clip]=~/bin/clip
     [bin/focus_on_mouse]=~/bin/focus_on_mouse
+    [bin/git-fixup]=~/bin/git-fixup
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
