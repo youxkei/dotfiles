@@ -182,6 +182,8 @@ augroup END
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install() }}
 let g:fruzzy#usenative = 1
 
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+
 Plug 'notomo/denite-keymap'
 
 Plug 'Shougo/neomru.vim'
@@ -551,6 +553,10 @@ endif
 if s:is_installed('denite.nvim')
   call denite#custom#option('default', {'split': 'floating'})
 
+  call denite#custom#filter('matcher/clap', 'clap_path', expand('~/.cache/nvim/vim-plug/vim-clap'))
+  call denite#custom#source('_', 'matchers', ['matcher/clap'])
+  "call denite#custom#source('line', 'matchers', ['matcher/fuzzy'])
+
   call denite#custom#var('file/rec', 'command', ['fd', '-H', '-E', '.git', '--type', 'f', '.'])
 
   call denite#custom#var('grep', 'command', ['rg'])
@@ -561,9 +567,8 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('grep', 'final_opts', [])
 
   call denite#custom#alias('source', 'buffer/cd', 'buffer')
-  call denite#custom#source('buffer/cd', 'matchers', ['matcher/project_files'])
+  call denite#custom#source('buffer/cd', 'matchers', ['matcher/clap', 'matcher/project_files'])
 
-  "call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 endif
 
 if s:is_installed('nord-vim')
