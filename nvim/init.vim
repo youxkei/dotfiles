@@ -158,6 +158,7 @@ nnoremap <silent> <Leader>ed :<C-u>Denite directory_mru -start-filter<CR>
 nnoremap <silent> <Leader>eg :<C-u>Denite grep -start-filter<CR>
 nnoremap <silent> <Leader>ef :<C-u>Denite file/rec -start-filter<CR>
 nnoremap <silent> <Leader>eb :<C-u>Denite buffer -start-filter<CR>
+nnoremap <silent> <Leader>ec :<C-u>Denite buffer/cd file/rec -start-filter<CR>
 nnoremap <silent> <Leader>el :<C-u>Denite line -start-filter<CR>
 nnoremap <silent> <Leader>er :<C-u>Denite -resume -refresh<CR>
 
@@ -558,6 +559,9 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
+
+  call denite#custom#alias('source', 'buffer/cd', 'buffer')
+  call denite#custom#source('buffer/cd', 'matchers', ['matcher/project_files'])
 
   "call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 endif
