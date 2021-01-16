@@ -160,13 +160,31 @@ let
   };
 in
 {
+  typescript = nodeEnv.buildNodePackage {
+    name = "typescript";
+    packageName = "typescript";
+    version = "4.1.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/typescript/-/typescript-4.1.3.tgz";
+      sha512 = "B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "TypeScript is a language for application scale JavaScript development";
+      homepage = https://www.typescriptlang.org/;
+      license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   typescript-language-server = nodeEnv.buildNodePackage {
     name = "typescript-language-server";
     packageName = "typescript-language-server";
-    version = "0.4.0";
+    version = "0.5.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-0.4.0.tgz";
-      sha512 = "K8jNOmDFn+QfrCh8ujby2pGDs5rpjYZQn+zvQnf42rxG4IHbfw5CHoMvbGkWPK/J5Gw8/l5K3i03kVZC2IBElg==";
+      url = "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-0.5.1.tgz";
+      sha512 = "60Kguhwk/R1BB4pEIb6B9C7Ix7JzLzYnsODlmorYMPjMeEV0rCBqTR6FGAj4wVw/eHrHcpwLENmmURKUd8aybA==";
     };
     dependencies = [
       sources."command-exists-1.2.6"
@@ -190,6 +208,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Language Server Protocol (LSP) implementation for TypeScript using tsserver";
+      homepage = "https://github.com/theia-ide/typescript-language-server#readme";
       license = "Apache-2.0";
     };
     production = true;

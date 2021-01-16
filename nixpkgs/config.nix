@@ -20,6 +20,7 @@
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
 
+      typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
 
       erlang = nixpkgs.erlangR20;
@@ -128,6 +129,8 @@
 
           nodejs
           prettier
+
+          typescript
           typescript-language-server
 
           bs-platform
