@@ -96,7 +96,7 @@ nnoremap Q <NOP>
 nnoremap <expr> i empty(getline('.')) ? "cc" : "i"
 nnoremap <expr> a empty(getline('.')) ? "cc" : "a"
 nnoremap <silent> <C-H> ^
-vnoremap <slient> <C-G> <NOP>
+vnoremap <silent> <C-G> <NOP>
 tnoremap <ESC> <C-\><C-N>
 tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
 tnoremap <C-W><C-J> <C-\><C-N><C-W><C-J>
