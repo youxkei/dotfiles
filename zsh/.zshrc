@@ -116,7 +116,7 @@ re-prompt() {
   zle .accept-line
 }
 
-zle -N accept-line re-prompt
+# zle -N accept-line re-prompt
 
 function rcd() {
   cd ~/repo/$(ls ~/repo | fzf20)
