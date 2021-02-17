@@ -424,7 +424,7 @@ let g:wordmotion_mappings = {
 nnoremap W w
 nnoremap B b
 nnoremap E e
-nnoremap GE ge
+nnoremap gE ge
 onoremap W w
 xnoremap W w
 onoremap B b
