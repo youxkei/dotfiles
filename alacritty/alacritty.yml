@@ -502,24 +502,34 @@ font:
 # at once.
 key_bindings:
   # (Windows, Linux, and BSD only)
-  - { key: Tab,      mods:  Control,       action: ReceiveChar      }
-  - { key: C,        mods:  Control,       action: Copy             }
-  - { key: V,        mods:  Control,       action: Paste            }
-  - { key: C,        mods:  Control|Shift, action: ReceiveChar      }
-  - { key: V,        mods:  Control|Shift, action: ReceiveChar      }
-  - { key: Key0,     mods:  Control,       action: ResetFontSize    }
-  - { key: Equals,   mods:  Control,       action: IncreaseFontSize }
-  - { key: Plus,     mods:  Control|Shift, action: IncreaseFontSize }
-  - { key: Plus,     mods:  Control,       action: IncreaseFontSize }
-  - { key: Minus,    mods:  Control,       action: DecreaseFontSize }
-  - { key: Left,     chars: "\x1b[D",      mode:   ~AppCursor       }
-  - { key: Left,     chars: "\x1bOD",      mode:   AppCursor        }
-  - { key: Right,    chars: "\x1b[C",      mode:   ~AppCursor       }
-  - { key: Right,    chars: "\x1bOC",      mode:   AppCursor        }
-  - { key: Up,       chars: "\x1b[A",      mode:   ~AppCursor       }
-  - { key: Up,       chars: "\x1bOA",      mode:   AppCursor        }
-  - { key: Down,     chars: "\x1b[B",      mode:   ~AppCursor       }
-  - { key: Down,     chars: "\x1bOB",      mode:   AppCursor        }
+  - { key: Tab,    mods:  Control,       action: ReceiveChar      }
+  - { key: C,      mods:  Control,       action: Copy,            mode: ~Alt }
+  - { key: V,      mods:  Control,       action: Paste,           mode: ~Alt }
+  - { key: C,      mods:  Control|Shift, action: ReceiveChar      }
+  - { key: V,      mods:  Control|Shift, action: ReceiveChar      }
+  - { key: Key0,   mods:  Control,       action: ResetFontSize    }
+  - { key: Equals, mods:  Control,       action: IncreaseFontSize }
+  - { key: Plus,   mods:  Control|Shift, action: IncreaseFontSize }
+  - { key: Plus,   mods:  Control,       action: IncreaseFontSize }
+  - { key: Minus,  mods:  Control,       action: DecreaseFontSize }
+  - { key: Left,   chars: "\x1b[D",      mode:   ~AppCursor       }
+  - { key: Left,   chars: "\x1bOD",      mode:   AppCursor        }
+  - { key: Right,  chars: "\x1b[C",      mode:   ~AppCursor       }
+  - { key: Right,  chars: "\x1bOC",      mode:   AppCursor        }
+  - { key: Up,     chars: "\x1b[A",      mode:   ~AppCursor       }
+  - { key: Up,     chars: "\x1bOA",      mode:   AppCursor        }
+  - { key: Down,   chars: "\x1b[B",      mode:   ~AppCursor       }
+  - { key: Down,   chars: "\x1bOB",      mode:   AppCursor        }
+
+  - { key: Key1, mods: Control, chars: "1gt",              mode: Alt }
+  - { key: Key2, mods: Control, chars: "2gt",              mode: Alt }
+  - { key: Key3, mods: Control, chars: "3gt",              mode: Alt }
+  - { key: Key4, mods: Control, chars: "4gt",              mode: Alt }
+  - { key: Key5, mods: Control, chars: "5gt",              mode: Alt }
+  - { key: Key6, mods: Control, chars: "6gt",              mode: Alt }
+  - { key: Key7, mods: Control, chars: "7gt",              mode: Alt }
+  - { key: Key8, mods: Control, chars: "8gt",              mode: Alt }
+  - { key: Key9, mods: Control, chars: ":\x15tablast\x0d", mode: Alt }
 
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
