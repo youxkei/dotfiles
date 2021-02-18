@@ -97,6 +97,7 @@ nnoremap <expr> i empty(getline('.')) ? "cc" : "i"
 nnoremap <expr> a empty(getline('.')) ? "cc" : "a"
 nnoremap <silent> <C-H> ^
 vnoremap <silent> <C-G> <NOP>
+
 tnoremap <ESC> <C-\><C-N>
 tnoremap <C-W><C-H> <C-\><C-N><C-W><C-H>
 tnoremap <C-W><C-J> <C-\><C-N><C-W><C-J>
@@ -105,10 +106,30 @@ tnoremap <C-W><C-L> <C-\><C-N><C-W><C-L>
 tnoremap <C-W><C-T> <C-\><C-N><C-W><C-T>
 tnoremap <C-W><C-V> <C-\><C-N><C-W><C-V>
 tnoremap <C-W><C-S> <C-\><C-N><C-W><C-S>
+
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+
+noremap  <silent> <C-B>1 <ESC>1gt
+noremap! <silent> <C-B>1 <ESC>1gt
+noremap  <silent> <C-B>2 <ESC>2gt
+noremap! <silent> <C-B>2 <ESC>2gt
+noremap  <silent> <C-B>3 <ESC>3gt
+noremap! <silent> <C-B>3 <ESC>3gt
+noremap  <silent> <C-B>4 <ESC>4gt
+noremap! <silent> <C-B>4 <ESC>4gt
+noremap  <silent> <C-B>5 <ESC>5gt
+noremap! <silent> <C-B>5 <ESC>5gt
+noremap  <silent> <C-B>6 <ESC>6gt
+noremap! <silent> <C-B>6 <ESC>6gt
+noremap  <silent> <C-B>7 <ESC>7gt
+noremap! <silent> <C-B>7 <ESC>7gt
+noremap  <silent> <C-B>8 <ESC>8gt
+noremap! <silent> <C-B>8 <ESC>8gt
+noremap  <silent> <C-B>9 <ESC>:<C-U>tablast<CR>
+noremap! <silent> <C-B>9 <ESC>:<C-U>tablast<CR>
 
 " map }}}
 
@@ -399,10 +420,10 @@ Plug 'lighttiger2505/deoplete-vim-lsp'
 Plug 'junegunn/fzf'
 
 Plug 'junegunn/fzf.vim'
-nmap <silent> <c-tab> <plug>(fzf-maps-n)
-imap <silent> <c-tab> <plug>(fzf-maps-i)
-xmap <silent> <c-tab> <plug>(fzf-maps-x)
-omap <silent> <c-tab> <plug>(fzf-maps-o)
+nmap <silent> <C-B><Tab> <plug>(fzf-maps-n)
+imap <silent> <C-B><Tab> <plug>(fzf-maps-i)
+xmap <silent> <C-B><Tab> <plug>(fzf-maps-x)
+omap <silent> <C-B><Tab> <plug>(fzf-maps-o)
 
 Plug 'tpope/vim-fugitive'
 

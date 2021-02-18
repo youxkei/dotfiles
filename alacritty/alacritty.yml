@@ -521,15 +521,16 @@ key_bindings:
   - { key: Down,   chars: "\x1b[B",      mode:   ~AppCursor       }
   - { key: Down,   chars: "\x1bOB",      mode:   AppCursor        }
 
-  - { key: Key1, mods: Control, chars: "1gt",              mode: Alt }
-  - { key: Key2, mods: Control, chars: "2gt",              mode: Alt }
-  - { key: Key3, mods: Control, chars: "3gt",              mode: Alt }
-  - { key: Key4, mods: Control, chars: "4gt",              mode: Alt }
-  - { key: Key5, mods: Control, chars: "5gt",              mode: Alt }
-  - { key: Key6, mods: Control, chars: "6gt",              mode: Alt }
-  - { key: Key7, mods: Control, chars: "7gt",              mode: Alt }
-  - { key: Key8, mods: Control, chars: "8gt",              mode: Alt }
-  - { key: Key9, mods: Control, chars: ":\x15tablast\x0d", mode: Alt }
+  - { key: Tab,  mods: Control, chars: "\x02\x09", mode: Alt }
+  - { key: Key1, mods: Control, chars: "\x021",    mode: Alt }
+  - { key: Key2, mods: Control, chars: "\x022",    mode: Alt }
+  - { key: Key3, mods: Control, chars: "\x023",    mode: Alt }
+  - { key: Key4, mods: Control, chars: "\x024",    mode: Alt }
+  - { key: Key5, mods: Control, chars: "\x025",    mode: Alt }
+  - { key: Key6, mods: Control, chars: "\x026",    mode: Alt }
+  - { key: Key7, mods: Control, chars: "\x027",    mode: Alt }
+  - { key: Key8, mods: Control, chars: "\x028",    mode: Alt }
+  - { key: Key9, mods: Control, chars: "\x029",    mode: Alt }
 
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
