@@ -1,6 +1,6 @@
 #!/bin/bash
 set -eu pipefail
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 # source path (relative to $SCRIPT_DIR) -> destination path
 declare -A PATHS=(
@@ -37,7 +37,7 @@ declare -A TEMPLATE_PATHS=(
 )
 
 # Check whether the source paths exist in $SCRIPT_DIR
-for path in ${!PATHS[@]}; do
+for path in "${!PATHS[@]}"; do
     if [[ ! -e $SCRIPT_DIR/$path ]]; then
         echo "Error: $path does not exist in $SCRIPT_DIR" >&2
         exit 1
@@ -45,33 +45,33 @@ for path in ${!PATHS[@]}; do
 done
 
 # Create symlinks for $PATHS
-for path in ${!PATHS[@]}; do
+for path in "${!PATHS[@]}"; do
     src=$SCRIPT_DIR/$path
     dst=${PATHS[$path]}
 
     if [[ -e $dst ]]; then
         if [[ -L $dst ]]; then
             echo "Link $dst -> $src"
-            unlink $dst
-            ln -s $src $dst
+            rm "$dst"
+            ln -s "$src" "$dst"
         else
             echo "Error: $dst exists and is not a symlink" >&2
             exit 1
         fi
     else
-        if [[ ! -d $(dirname $dst) ]]; then
-            mkdir -p $(dirname $dst)
+        if [[ ! -d $(dirname "$dst") ]]; then
+            mkdir -p "$(dirname "$dst")"
         fi
 
         echo "Link $dst -> $src"
-        ln -s $src $dst
+        ln -s "$src" "$dst"
     fi
 done
 
 declare -a copied_templates=()
 
 # Copy $TEMPLATE_FILES to $HOME
-for template_path in ${!TEMPLATE_PATHS[@]}; do
+for template_path in "${!TEMPLATE_PATHS[@]}"; do
     src=$SCRIPT_DIR/$template_path
     dst=${TEMPLATE_PATHS[$template_path]}
 
@@ -79,15 +79,16 @@ for template_path in ${!TEMPLATE_PATHS[@]}; do
         echo "$dst already exists. Skip copying"
     else
         echo "Copy $src -> $dst"
-        cp $src $dst
+        cp "$src" "$dst"
 
-        copied_templates+=(dst)
+        copied_templates+=("$dst")
     fi
 done
 
 if [[ ${#copied_templates[@]} -gt 0 ]]; then
-    echo "\nPlease edit following config files for this host:"
-    for copied_template in ${copied_templates[@]}; do
-        echo $copied_templates
+    echo
+    echo "Please edit following config files for this host:"
+    for copied_template in "${copied_templates[@]}"; do
+        echo "$copied_template"
     done
 fi
