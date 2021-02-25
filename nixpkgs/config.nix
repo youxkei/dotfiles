@@ -113,6 +113,7 @@
           multitail
           pv
           wasmtime
+          valgrind
 
           erlang
           rebar3
