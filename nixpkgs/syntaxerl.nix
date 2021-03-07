@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "syntaxerl";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "ten0s";
     repo  = pname;
     rev = version;
-    sha256 = "07x74kbf48p31ighdlwwykgbmgj8vai0hv3sbs1iwbqq6yw8lhg9";
+    sha256 = "0b8h33vf5x40j0har0686nhf0vs5pna7d4z8awvrai1a8aldk5nz";
   };
 
   buildInputs = [ rebar3 ];
