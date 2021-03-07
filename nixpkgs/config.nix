@@ -20,6 +20,7 @@
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
       pueue = callPackage ./pueue.nix {};
+      dust = callPackage ./dust.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -116,6 +117,7 @@
           wasmtime
           valgrind
           pueue
+          dust
 
           erlang
           rebar3
