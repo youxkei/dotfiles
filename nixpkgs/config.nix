@@ -16,7 +16,6 @@
       countdown = callPackage ./countdown.nix {};
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
-      askgit = callPackage ./askgit.nix {};
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
       pueue = callPackage ./pueue.nix {};
