@@ -19,6 +19,7 @@
       askgit = callPackage ./askgit.nix {};
       xcp = callPackage ./xcp.nix {};
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
+      pueue = callPackage ./pueue.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -114,6 +115,7 @@
           pv
           wasmtime
           valgrind
+          pueue
 
           erlang
           rebar3
