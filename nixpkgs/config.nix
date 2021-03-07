@@ -55,6 +55,7 @@
           gitAndTools.tig
           gitAndTools.diff-so-fancy
           gitAndTools.gh
+          gitAndTools.delta
 
           nix-prefetch-git
 
