@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "wire";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z3nrccxsrhphpb6yrmc1hn4njy8qbayg3w6m9zsbi77yaiigxni";
+    sha256 = "038c7ss7fgihh76b4lnsm7dhhhq4kjwm06f8radw454g5jdg467p";
   };
 
   subPackages = ["cmd/wire"];
