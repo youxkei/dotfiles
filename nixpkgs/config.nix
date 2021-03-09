@@ -140,7 +140,7 @@
           typescript
           typescript-language-server
 
-          bs-platform
+          # bs-platform
 
           go
           gopls
