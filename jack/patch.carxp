@@ -191,6 +191,104 @@
   </Data>
  </Plugin>
 
+ <!-- Calf Compressor -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>voice comp</Name>
+   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x3f1</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Bypass</Name>
+    <Symbol>bypass</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Input</Name>
+    <Symbol>level_in</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Threshold</Name>
+    <Symbol>threshold</Symbol>
+    <Value>0.0100267669185996</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Ratio</Name>
+    <Symbol>ratio</Symbol>
+    <Value>20</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Attack</Name>
+    <Symbol>attack</Symbol>
+    <Value>0.00999999977648258</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Release</Name>
+    <Symbol>release</Symbol>
+    <Value>1999.99987792969</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Makeup Gain</Name>
+    <Symbol>makeup</Symbol>
+    <Value>28.8000621795654</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Knee</Name>
+    <Symbol>knee</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Detection</Name>
+    <Symbol>detection</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Stereo Link</Name>
+    <Symbol>stereo_link</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>15</Index>
+    <Name>Mix</Name>
+    <Symbol>mix</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
  <!-- Noise Suppressor for Voice (Mono) -->
  <Plugin>
   <Info>
@@ -289,6 +387,12 @@
     <Symbol>mix</Symbol>
     <Value>1</Value>
    </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
   </Data>
  </Plugin>
 
@@ -306,6 +410,14 @@
    <Target>output comp:In R</Target>
   </Connection>
   <Connection>
+   <Source>PulseAudio_JACK_Sink_2:front-left</Source>
+   <Target>voice comp:In L</Target>
+  </Connection>
+  <Connection>
+   <Source>PulseAudio_JACK_Sink_2:front-right</Source>
+   <Target>voice comp:In R</Target>
+  </Connection>
+  <Connection>
    <Source>output comp:Out L</Source>
    <Target>Calf Bass Enhancer:In L</Target>
   </Connection>
@@ -318,16 +430,8 @@
    <Target>system:playback_1</Target>
   </Connection>
   <Connection>
-   <Source>Calf Bass Enhancer:Out L</Source>
-   <Target>PulseAudio_JACK_Source_2:front-left</Target>
-  </Connection>
-  <Connection>
    <Source>Calf Bass Enhancer:Out R</Source>
    <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
-   <Source>Calf Bass Enhancer:Out R</Source>
-   <Target>PulseAudio_JACK_Source_2:front-right</Target>
   </Connection>
   <Connection>
    <Source>Noise Suppressor for Voice (Mono):Output</Source>
@@ -340,6 +444,14 @@
   <Connection>
    <Source>input comp:Out L</Source>
    <Target>PulseAudio JACK Source:front-right</Target>
+  </Connection>
+  <Connection>
+   <Source>voice comp:Out L</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>voice comp:Out R</Source>
+   <Target>system:playback_2</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>
