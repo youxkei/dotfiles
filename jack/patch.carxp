@@ -137,7 +137,7 @@
     <Index>2</Index>
     <Name>Output</Name>
     <Symbol>level_out</Symbol>
-    <Value>1</Value>
+    <Value>0.549427151679993</Value>
    </Parameter>
 
    <Parameter>
@@ -250,7 +250,7 @@
     <Index>10</Index>
     <Name>Makeup Gain</Name>
     <Symbol>makeup</Symbol>
-    <Value>28.8000621795654</Value>
+    <Value>64</Value>
    </Parameter>
 
    <Parameter>
