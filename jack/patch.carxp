@@ -434,6 +434,14 @@
    <Target>system:playback_2</Target>
   </Connection>
   <Connection>
+   <Source>voice comp:Out L</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>voice comp:Out R</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
    <Source>Noise Suppressor for Voice (Mono):Output</Source>
    <Target>input comp:In L</Target>
   </Connection>
@@ -444,14 +452,6 @@
   <Connection>
    <Source>input comp:Out L</Source>
    <Target>PulseAudio JACK Source:front-right</Target>
-  </Connection>
-  <Connection>
-   <Source>voice comp:Out L</Source>
-   <Target>system:playback_1</Target>
-  </Connection>
-  <Connection>
-   <Source>voice comp:Out R</Source>
-   <Target>system:playback_2</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>
