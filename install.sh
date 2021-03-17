@@ -18,6 +18,7 @@ declare -A PATHS=(
     [tmux]=$XDG_CONFIG_HOME/tmux
     [procs]=$XDG_CONFIG_HOME/procs
     [alacritty]=$XDG_CONFIG_HOME/alacritty
+    [dunst]=$XDG_CONFIG_HOME/dunst
     [compton.conf]=$XDG_CONFIG_HOME/compton.conf
     [starship.toml]=$XDG_CONFIG_HOME/starship.toml
 
