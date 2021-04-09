@@ -307,8 +307,8 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'AndrewRadev/inline_edit.vim'
 let g:inline_edit_autowrite = 1
 
-Plug 'airblade/vim-gitgutter'
-let g:gitgutter_map_keys = 0
+"Plug 'airblade/vim-gitgutter'
+"let g:gitgutter_map_keys = 0
 
 Plug 'Shougo/vinarise.vim'
 
