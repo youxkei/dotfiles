@@ -53,7 +53,7 @@ format = "{1m}"
 
 [[block]]
 block = "weather"
-format = "{temp}℃"
+format = "{temp}℃ {humidity}％"
 service = { name = "openweathermap", units = "metric" }
 
 [[block]]
