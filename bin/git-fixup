@@ -4,4 +4,4 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 
-git commit --fixup $1 && git rebase -i --autosquash "$1^"
+git commit --fixup $1 && git rebase -i --autosquash --committer-date-is-author-date "$1^"
