@@ -14,95 +14,72 @@
   <BeatsPerMinute>120</BeatsPerMinute>
  </Transport>
 
- <!-- Calf Compressor -->
+ <!-- Jimtel Limiter -->
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>output comp</Name>
-   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+   <Name>output limiter</Name>
+   <URI>https://github.com/youxkei/jimtel</URI>
   </Info>
 
   <Data>
    <Active>Yes</Active>
    <ControlChannel>1</ControlChannel>
-   <Options>0x3f1</Options>
+   <Options>0x0</Options>
 
    <Parameter>
     <Index>0</Index>
-    <Name>Bypass</Name>
-    <Symbol>bypass</Symbol>
-    <Value>0</Value>
+    <Name>InGain</Name>
+    <Symbol>in_gain</Symbol>
+    <Value>28</Value>
    </Parameter>
 
    <Parameter>
     <Index>1</Index>
-    <Name>Input</Name>
-    <Symbol>level_in</Symbol>
-    <Value>1</Value>
+    <Name>OutGain</Name>
+    <Symbol>out_gain</Symbol>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
-    <Index>6</Index>
-    <Name>Threshold</Name>
-    <Symbol>threshold</Symbol>
-    <Value>0.0100267669185996</Value>
+    <Index>2</Index>
+    <Name>Limit</Name>
+    <Symbol>limit</Symbol>
+    <Value>-18</Value>
    </Parameter>
 
    <Parameter>
-    <Index>7</Index>
-    <Name>Ratio</Name>
-    <Symbol>ratio</Symbol>
-    <Value>20</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>8</Index>
-    <Name>Attack</Name>
-    <Symbol>attack</Symbol>
-    <Value>0.00999999977648258</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>9</Index>
+    <Index>3</Index>
     <Name>Release</Name>
     <Symbol>release</Symbol>
-    <Value>1999.99987792969</Value>
+    <Value>2000</Value>
    </Parameter>
 
    <Parameter>
-    <Index>10</Index>
-    <Name>Makeup Gain</Name>
-    <Symbol>makeup</Symbol>
-    <Value>25.2113265991211</Value>
+    <Index>4</Index>
+    <Name>UseLoudness</Name>
+    <Symbol>use_loudness</Symbol>
+    <Value>0.800000011920929</Value>
    </Parameter>
 
    <Parameter>
-    <Index>11</Index>
-    <Name>Knee</Name>
-    <Symbol>knee</Symbol>
-    <Value>1</Value>
+    <Index>5</Index>
+    <Name>InfiniteSustain</Name>
+    <Symbol>infinite_sustain</Symbol>
+    <Value>0</Value>
    </Parameter>
 
-   <Parameter>
-    <Index>12</Index>
-    <Name>Detection</Name>
-    <Symbol>detection</Symbol>
-    <Value>1</Value>
-   </Parameter>
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
 
-   <Parameter>
-    <Index>13</Index>
-    <Name>Stereo Link</Name>
-    <Symbol>stereo_link</Symbol>
-    <Value>1</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>15</Index>
-    <Name>Mix</Name>
-    <Symbol>mix</Symbol>
-    <Value>1</Value>
-   </Parameter>
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkin</Key>
+    <Value>default</Value>
+   </CustomData>
   </Data>
  </Plugin>
 
@@ -188,6 +165,12 @@
     <Symbol>floor</Symbol>
     <Value>20</Value>
    </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
   </Data>
  </Plugin>
 
@@ -396,6 +379,104 @@
   </Data>
  </Plugin>
 
+ <!-- Calf Compressor -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>output comp</Name>
+   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x3f1</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Bypass</Name>
+    <Symbol>bypass</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Input</Name>
+    <Symbol>level_in</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Threshold</Name>
+    <Symbol>threshold</Symbol>
+    <Value>0.0100267669185996</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Ratio</Name>
+    <Symbol>ratio</Symbol>
+    <Value>20</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Attack</Name>
+    <Symbol>attack</Symbol>
+    <Value>0.00999999977648258</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Release</Name>
+    <Symbol>release</Symbol>
+    <Value>1999.99987792969</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Makeup Gain</Name>
+    <Symbol>makeup</Symbol>
+    <Value>25.2113265991211</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Knee</Name>
+    <Symbol>knee</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Detection</Name>
+    <Symbol>detection</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Stereo Link</Name>
+    <Symbol>stereo_link</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>15</Index>
+    <Name>Mix</Name>
+    <Symbol>mix</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
  <ExternalPatchbay>
   <Connection>
    <Source>system:capture_1</Source>
@@ -403,11 +484,11 @@
   </Connection>
   <Connection>
    <Source>PulseAudio JACK Sink:front-left</Source>
-   <Target>output comp:In L</Target>
+   <Target>output limiter:In L</Target>
   </Connection>
   <Connection>
    <Source>PulseAudio JACK Sink:front-right</Source>
-   <Target>output comp:In R</Target>
+   <Target>output limiter:In R</Target>
   </Connection>
   <Connection>
    <Source>PulseAudio_JACK_Sink_2:front-left</Source>
@@ -418,11 +499,11 @@
    <Target>voice comp:In R</Target>
   </Connection>
   <Connection>
-   <Source>output comp:Out L</Source>
+   <Source>output limiter:Out L</Source>
    <Target>Calf Bass Enhancer:In L</Target>
   </Connection>
   <Connection>
-   <Source>output comp:Out R</Source>
+   <Source>output limiter:Out R</Source>
    <Target>Calf Bass Enhancer:In R</Target>
   </Connection>
   <Connection>
@@ -452,6 +533,14 @@
   <Connection>
    <Source>input comp:Out L</Source>
    <Target>PulseAudio JACK Source:front-right</Target>
+  </Connection>
+  <Connection>
+   <Source>output comp:Out L</Source>
+   <Target>Calf Bass Enhancer:In L</Target>
+  </Connection>
+  <Connection>
+   <Source>output comp:Out R</Source>
+   <Target>Calf Bass Enhancer:In R</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>
