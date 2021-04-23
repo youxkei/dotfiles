@@ -76,7 +76,6 @@ bindcode $mod+Shift+60 exec --no-startup-id i3_move "move container to workspace
 bindsym  $mod+Shift+p  exec --no-startup-id i3_move "move container to workspace p"
 bindsym  $mod+Shift+y  exec --no-startup-id i3_move "move container to workspace y"
 
-#bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 
