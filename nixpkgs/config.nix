@@ -48,6 +48,7 @@
           i3status-rust
           rofi
           feh
+
           glibcLocales
 
           gitAndTools.gitFull
