@@ -126,7 +126,8 @@
           rebar3
           syntaxerl
 
-          rustup
+          #rustup
+          rust-analyzer
           wasm-pack
           wasm-bindgen-cli
           cargo-edit
