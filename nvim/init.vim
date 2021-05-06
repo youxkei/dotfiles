@@ -364,6 +364,11 @@ let g:ale_fixers = {
 \ 'rust': ['rustfmt'],
 \ 'go': ['gofmt', 'goimports'],
 \ 'javascript': ['prettier'],
+\ 'rescript': [
+\   {buffers -> {
+\     'command': 'npx bsc -color never -format %t'
+\   }},
+\ ],
 \}
 let g:ale_fix_on_save = 1
 
