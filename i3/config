@@ -1,10 +1,16 @@
+set_from_resource $center_monitor      monitor.center
+set_from_resource $left_monitor        monitor.left
+set_from_resource $up_monitor          monitor.up
+set_from_resource $right_monitor       monitor.right
+set_from_resource $focus_follows_mouse i3wm.focus_follows_mouse
+
 set $mod Mod1
 
 font pango:Monospace 13
 
 floating_modifier $mod
 
-focus_follows_mouse yes
+focus_follows_mouse $focus_follows_mouse
 no_focus [tiling]
 
 bindsym $mod+d exec rofi -show run -font "Monospace 14" -matching fuzzy && sleep 0.1s && focus_on_mouse
@@ -133,11 +139,6 @@ bar {
 
     tray_output primary
 }
-
-set_from_resource $left_monitor   i3wm.left_monitor
-set_from_resource $up_monitor     i3wm.up_monitor
-set_from_resource $center_monitor i3wm.center_monitor
-set_from_resource $right_monitor  i3wm.right_monitor
 
 workspace a output $left_monitor
 workspace o output $up_monitor

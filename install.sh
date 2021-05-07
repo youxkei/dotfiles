@@ -29,6 +29,8 @@ declare -A PATHS=(
     [bin/clip]=~/bin/clip
     [bin/focus_on_mouse]=~/bin/focus_on_mouse
     [bin/git-fixup]=~/bin/git-fixup
+    [bin/fullhd.sh]=~/bin/fullhd
+    [bin/4k.sh]=~/bin/4k
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
