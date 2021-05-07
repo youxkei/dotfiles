@@ -20,6 +20,7 @@
       protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
       pueue = callPackage ./pueue.nix {};
       dust = callPackage ./dust.nix {};
+      xgetres = callPackage ./xgetres.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -125,6 +126,7 @@
           erlang
           rebar3
           syntaxerl
+          xgetres
 
           #rustup
           rust-analyzer
