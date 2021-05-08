@@ -25,9 +25,6 @@
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
 
-      erlang = nixpkgs.erlangR20;
-      rebar3 = (nixpkgs.rebar3.override { erlang = erlang; });
-
       nodejs = nixpkgs.nodejs-14_x;
       prettier = (nixpkgs.nodePackages.override { nodejs = nodejs; }).prettier;
 
@@ -122,10 +119,6 @@
           valgrind
           pueue
           dust
-
-          erlang
-          rebar3
-          syntaxerl
           xgetres
 
           #rustup
