@@ -92,9 +92,9 @@ bindsym $mod+m               exec --no-startup-id pactl set-source-mute @DEFAULT
 
 gaps inner 20
 
-set $out "(L)ock, (E)xit, (S)uspend, (H)ibernate, (R)eboot, (P)oweroff"
-bindsym $mod+Shift+c mode $out
-mode $out {
+set $power "(L)ock, (E)xit, (S)uspend, (H)ibernate, (R)eboot, (P)oweroff"
+bindsym $mod+Shift+c mode $power
+mode $power {
     bindsym e exit, mode "default"
 
     bindsym l exec --no-startup-id gnome-screensaver-command -l, mode "default"
