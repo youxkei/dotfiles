@@ -28,11 +28,8 @@ bindsym $mod+Shift+l move right
 
 bindsym $mod+n split h
 bindsym $mod+v split v
-
-bindsym $mod+f fullscreen
-
 bindsym $mod+w layout tabbed
-bindsym $mod+s layout toggle split
+bindsym $mod+f fullscreen
 
 bindsym $mod+Shift+Return floating toggle
 
@@ -125,6 +122,16 @@ bindsym $mod+t mode "transparency"
 mode "transparency" {
     bindsym h exec --no-startup-id compton-trans -c -- -2
     bindsym l exec --no-startup-id compton-trans -c +4
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+set $screenshot "Screenshot: (W)indow, (A)rea"
+bindsym $mod+s mode $screenshot
+mode $screenshot {
+    bindsym w exec --no-startup-id screenshot -u -i "$(xdotool getactivewindow)", mode "default"
+    bindsym a exec --no-startup-id screenshot -u -s -b 16,                        mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"

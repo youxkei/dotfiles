@@ -31,6 +31,7 @@ declare -A PATHS=(
     [bin/git-fixup]=~/bin/git-fixup
     [bin/fullhd.sh]=~/bin/fullhd
     [bin/4k.sh]=~/bin/4k
+    [bin/screenshot.sh]=~/bin/screenshot
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
