@@ -194,4 +194,3 @@ exec --no-startup-id alacritty -e nvim
 exec --no-startup-id google-chrome
 exec --no-startup-id discord
 exec --no-startup-id gnome-terminal
-exec --no-startup-id gnome-terminal
