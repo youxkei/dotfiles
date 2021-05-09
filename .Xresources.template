@@ -1,7 +1,9 @@
-i3wm.center_monitor.name:
-i3wm.center_monitor.fullhd_mode_line:
-i3wm.center_monitor.rate:
-i3wm.left_monitor:
-i3wm.up_monitor:
-i3wm.right_monitor:
+monitor.center:
+monitor.center.fullhd_mode_line:
+monitor.center.rate:
+monitor.left:
+monitor.up:
+monitor.right:
+monitor.hdmi:
+
 i3wm.focus_follows_mouse: yes
