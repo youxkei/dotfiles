@@ -41,10 +41,19 @@ format = "{utilization} {frequency}"
 block = "temperature"
 collapsed = false
 interval = 1
-format = "{min}°"
+format = "CPU:{max}°"
 idle = 80
 info = 90
 chip = "k10temp-*"
+
+[[block]]
+block = "temperature"
+collapsed = false
+interval = 1
+format = "GPU:{max}°"
+idle = 80
+info = 90
+chip = "amdgpu-pci-0b00"
 
 [[block]]
 block = "load"
