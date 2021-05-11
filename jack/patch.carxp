@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE CARLA-PROJECT>
-<CARLA-PROJECT VERSION='2.0'>
+<CARLA-PROJECT VERSION='2.3'>
  <EngineSettings>
   <ForceStereo>false</ForceStereo>
   <PreferPluginBridges>false</PreferPluginBridges>
@@ -13,166 +13,6 @@
  <Transport>
   <BeatsPerMinute>120</BeatsPerMinute>
  </Transport>
-
- <!-- Jimtel Limiter -->
- <Plugin>
-  <Info>
-   <Type>LV2</Type>
-   <Name>output limiter</Name>
-   <URI>https://github.com/youxkei/jimtel</URI>
-  </Info>
-
-  <Data>
-   <Active>Yes</Active>
-   <ControlChannel>1</ControlChannel>
-   <Options>0x0</Options>
-
-   <Parameter>
-    <Index>0</Index>
-    <Name>InGain</Name>
-    <Symbol>in_gain</Symbol>
-    <Value>28</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>1</Index>
-    <Name>OutGain</Name>
-    <Symbol>out_gain</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>2</Index>
-    <Name>Limit</Name>
-    <Symbol>limit</Symbol>
-    <Value>-18</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>3</Index>
-    <Name>Release</Name>
-    <Symbol>release</Symbol>
-    <Value>2000</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>4</Index>
-    <Name>UseLoudness</Name>
-    <Symbol>use_loudness</Symbol>
-    <Value>0.800000011920929</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>5</Index>
-    <Name>InfiniteSustain</Name>
-    <Symbol>infinite_sustain</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <CustomData>
-    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
-    <Key>CarlaSkinIsCompacted</Key>
-    <Value>false</Value>
-   </CustomData>
-
-   <CustomData>
-    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
-    <Key>CarlaSkin</Key>
-    <Value>default</Value>
-   </CustomData>
-  </Data>
- </Plugin>
-
- <!-- Calf Bass Enhancer -->
- <Plugin>
-  <Info>
-   <Type>LV2</Type>
-   <Name>Calf Bass Enhancer</Name>
-   <URI>http://calf.sourceforge.net/plugins/BassEnhancer</URI>
-  </Info>
-
-  <Data>
-   <Active>Yes</Active>
-   <ControlChannel>1</ControlChannel>
-   <Options>0x3f1</Options>
-
-   <Parameter>
-    <Index>0</Index>
-    <Name>Bypass</Name>
-    <Symbol>bypass</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>1</Index>
-    <Name>Input</Name>
-    <Symbol>level_in</Symbol>
-    <Value>1</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>2</Index>
-    <Name>Output</Name>
-    <Symbol>level_out</Symbol>
-    <Value>0.549427151679993</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>3</Index>
-    <Name>Amount</Name>
-    <Symbol>amount</Symbol>
-    <Value>1.42602574825287</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>8</Index>
-    <Name>Harmonics</Name>
-    <Symbol>drive</Symbol>
-    <Value>10</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>9</Index>
-    <Name>Blend Harmonics</Name>
-    <Symbol>blend</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>11</Index>
-    <Name>Scope</Name>
-    <Symbol>freq</Symbol>
-    <Value>250</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>12</Index>
-    <Name>Listen</Name>
-    <Symbol>listen</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>13</Index>
-    <Name>Floor active</Name>
-    <Symbol>floor_active</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>14</Index>
-    <Name>Floor</Name>
-    <Symbol>floor</Symbol>
-    <Value>20</Value>
-   </Parameter>
-
-   <CustomData>
-    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
-    <Key>CarlaSkinIsCompacted</Key>
-    <Value>false</Value>
-   </CustomData>
-  </Data>
- </Plugin>
 
  <!-- Calf Compressor -->
  <Plugin>
@@ -272,29 +112,6 @@
   </Data>
  </Plugin>
 
- <!-- Noise Suppressor for Voice (Mono) -->
- <Plugin>
-  <Info>
-   <Type>LADSPA</Type>
-   <Name>Noise Suppressor for Voice (Mono)</Name>
-   <Binary>/usr/local/lib/ladspa/librnnoise_ladspa.so</Binary>
-   <Label>noise_suppressor_mono</Label>
-   <UniqueID>9354877</UniqueID>
-  </Info>
-
-  <Data>
-   <Active>Yes</Active>
-   <ControlChannel>1</ControlChannel>
-   <Options>0x0</Options>
-
-   <Parameter>
-    <Index>0</Index>
-    <Name>VAD Threshold</Name>
-    <Value>1</Value>
-   </Parameter>
-  </Data>
- </Plugin>
-
  <!-- Calf Mono Compressor -->
  <Plugin>
   <Info>
@@ -379,12 +196,36 @@
   </Data>
  </Plugin>
 
- <!-- Calf Compressor -->
+ <!-- Noise Suppressor for Voice (Mono) -->
+ <Plugin>
+  <Info>
+   <Type>LADSPA</Type>
+   <Name>Noise Suppressor for Voice (Mono)</Name>
+   <Binary>/usr/local/lib/ladspa/librnnoise_ladspa.so</Binary>
+   <Label>noise_suppressor_mono</Label>
+   <UniqueID>9354877</UniqueID>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <Volume>0.999871</Volume>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>VAD Threshold</Name>
+    <Value>1</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <!-- Calf Bass Enhancer -->
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>output comp</Name>
-   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+   <Name>bass enhancer</Name>
+   <URI>http://calf.sourceforge.net/plugins/BassEnhancer</URI>
   </Info>
 
   <Data>
@@ -407,140 +248,204 @@
    </Parameter>
 
    <Parameter>
-    <Index>6</Index>
-    <Name>Threshold</Name>
-    <Symbol>threshold</Symbol>
-    <Value>0.0100267669185996</Value>
+    <Index>2</Index>
+    <Name>Output</Name>
+    <Symbol>level_out</Symbol>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
-    <Index>7</Index>
-    <Name>Ratio</Name>
-    <Symbol>ratio</Symbol>
-    <Value>20</Value>
+    <Index>3</Index>
+    <Name>Amount</Name>
+    <Symbol>amount</Symbol>
+    <Value>1.42602574825287</Value>
    </Parameter>
 
    <Parameter>
     <Index>8</Index>
-    <Name>Attack</Name>
-    <Symbol>attack</Symbol>
-    <Value>0.00999999977648258</Value>
+    <Name>Harmonics</Name>
+    <Symbol>drive</Symbol>
+    <Value>10</Value>
    </Parameter>
 
    <Parameter>
     <Index>9</Index>
-    <Name>Release</Name>
-    <Symbol>release</Symbol>
-    <Value>1999.99987792969</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>10</Index>
-    <Name>Makeup Gain</Name>
-    <Symbol>makeup</Symbol>
-    <Value>25.2113265991211</Value>
+    <Name>Blend Harmonics</Name>
+    <Symbol>blend</Symbol>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
     <Index>11</Index>
-    <Name>Knee</Name>
-    <Symbol>knee</Symbol>
-    <Value>1</Value>
+    <Name>Scope</Name>
+    <Symbol>freq</Symbol>
+    <Value>250</Value>
    </Parameter>
 
    <Parameter>
     <Index>12</Index>
-    <Name>Detection</Name>
-    <Symbol>detection</Symbol>
-    <Value>1</Value>
+    <Name>Listen</Name>
+    <Symbol>listen</Symbol>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
     <Index>13</Index>
-    <Name>Stereo Link</Name>
-    <Symbol>stereo_link</Symbol>
-    <Value>1</Value>
+    <Name>Floor active</Name>
+    <Symbol>floor_active</Symbol>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
-    <Index>15</Index>
-    <Name>Mix</Name>
-    <Symbol>mix</Symbol>
-    <Value>1</Value>
+    <Index>14</Index>
+    <Name>Floor</Name>
+    <Symbol>floor</Symbol>
+    <Value>20</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <!-- Jimtel Loudness Limiter -->
+ <Plugin>
+  <Info>
+   <Type>VST2</Type>
+   <Name>output limiter</Name>
+   <Binary>/home/youxkei/.vst/libjimtel_loudness_limiter.so</Binary>
+   <UniqueID>2065809688</UniqueID>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>input_gain</Name>
+    <Value>0.600000023841858</Value>
    </Parameter>
 
-   <CustomData>
-    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
-    <Key>CarlaSkinIsCompacted</Key>
-    <Value>false</Value>
-   </CustomData>
+   <Parameter>
+    <Index>1</Index>
+    <Name>output_gain</Name>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>limit</Name>
+    <Value>0.699999988079071</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>hard_limit</Name>
+    <Value>0.875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>attack</Name>
+    <Value>0.00300000002607703</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>release</Name>
+    <Value>0.300000011920929</Value>
+   </Parameter>
   </Data>
  </Plugin>
 
  <ExternalPatchbay>
   <Connection>
-   <Source>system:capture_1</Source>
+   <Source>Scarlett Solo (3rd Gen.) Analog Stereo:capture_FL</Source>
    <Target>Noise Suppressor for Voice (Mono):Input</Target>
   </Connection>
   <Connection>
-   <Source>PulseAudio JACK Sink:front-left</Source>
-   <Target>output limiter:In L</Target>
-  </Connection>
-  <Connection>
-   <Source>PulseAudio JACK Sink:front-right</Source>
-   <Target>output limiter:In R</Target>
-  </Connection>
-  <Connection>
-   <Source>PulseAudio_JACK_Sink_2:front-left</Source>
-   <Target>voice comp:In L</Target>
-  </Connection>
-  <Connection>
-   <Source>PulseAudio_JACK_Sink_2:front-right</Source>
-   <Target>voice comp:In R</Target>
-  </Connection>
-  <Connection>
-   <Source>output limiter:Out L</Source>
-   <Target>Calf Bass Enhancer:In L</Target>
-  </Connection>
-  <Connection>
-   <Source>output limiter:Out R</Source>
-   <Target>Calf Bass Enhancer:In R</Target>
-  </Connection>
-  <Connection>
-   <Source>Calf Bass Enhancer:Out L</Source>
-   <Target>system:playback_1</Target>
-  </Connection>
-  <Connection>
-   <Source>Calf Bass Enhancer:Out R</Source>
-   <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
    <Source>voice comp:Out L</Source>
-   <Target>system:playback_1</Target>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
   </Connection>
   <Connection>
    <Source>voice comp:Out R</Source>
-   <Target>system:playback_2</Target>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
+  </Connection>
+  <Connection>
+   <Source>input comp:Out L</Source>
+   <Target>source Audio/Source/Virtual sink:input_1</Target>
+  </Connection>
+  <Connection>
+   <Source>input comp:Out L</Source>
+   <Target>source Audio/Source/Virtual sink:input_2</Target>
   </Connection>
   <Connection>
    <Source>Noise Suppressor for Voice (Mono):Output</Source>
    <Target>input comp:In L</Target>
   </Connection>
   <Connection>
-   <Source>input comp:Out L</Source>
-   <Target>PulseAudio JACK Source:front-left</Target>
+   <Source>bass enhancer:Out L</Source>
+   <Target>output limiter:input_1</Target>
   </Connection>
   <Connection>
-   <Source>input comp:Out L</Source>
-   <Target>PulseAudio JACK Source:front-right</Target>
+   <Source>bass enhancer:Out R</Source>
+   <Target>output limiter:input_2</Target>
   </Connection>
   <Connection>
-   <Source>output comp:Out L</Source>
-   <Target>Calf Bass Enhancer:In L</Target>
+   <Source>output limiter:output_1</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
   </Connection>
   <Connection>
-   <Source>output comp:Out R</Source>
-   <Target>Calf Bass Enhancer:In R</Target>
+   <Source>output limiter:output_2</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
   </Connection>
+  <Connection>
+   <Source>sink Audio/Sink sink Monitor:monitor_1</Source>
+   <Target>bass enhancer:In L</Target>
+  </Connection>
+  <Connection>
+   <Source>sink Audio/Sink sink Monitor:monitor_2</Source>
+   <Target>bass enhancer:In R</Target>
+  </Connection>
+  <Positions>
+   <Position x1="353" y1="1217" x2="1116" y2="1511">
+    <Name>Scarlett Solo (3rd Gen.) Analog Stereo</Name>
+   </Position>
+   <Position x1="423" y1="1296" x2="2048" y2="1348">
+    <Name>Cam Link 4K Analog Stereo</Name>
+   </Position>
+   <Position x1="1550" y1="1869" x2="1994" y2="1422">
+    <Name>Live Camera Mono</Name>
+   </Position>
+   <Position x1="888" y1="1405" pluginId="0">
+    <Name>voice comp</Name>
+   </Position>
+   <Position x1="1037" y1="1216" pluginId="1">
+    <Name>input comp</Name>
+   </Position>
+   <Position x1="725" y1="1216" pluginId="2">
+    <Name>Noise Suppressor for Voice (Mono)</Name>
+   </Position>
+   <Position x1="704" y1="1510" pluginId="3">
+    <Name>bass enhancer</Name>
+   </Position>
+   <Position x1="898" y1="1510" pluginId="4">
+    <Name>output limiter</Name>
+   </Position>
+   <Position x1="1550" y1="1274" x2="247" y2="1512">
+    <Name>sink Audio/Sink sink</Name>
+   </Position>
+   <Position x1="1550" y1="1570" x2="1552" y2="1571">
+    <Name>Navi 10 HDMI Audio Digital Stereo (HDMI 3)</Name>
+   </Position>
+   <Position x1="935" y1="2376" x2="1551" y2="1718">
+    <Name>HDA ATI HDMI Digital Stereo (HDMI)</Name>
+   </Position>
+   <Position x1="1550" y1="2014" x2="1269" y2="1215">
+    <Name>source Audio/Source/Virtual sink</Name>
+   </Position>
+   <Position x1="1550" y1="2022" x2="1551" y2="1808">
+    <Name>Midi-Bridge</Name>
+   </Position>
+  </Positions>
  </ExternalPatchbay>
 </CARLA-PROJECT>
