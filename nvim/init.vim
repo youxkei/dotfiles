@@ -588,7 +588,7 @@ if s:is_installed('denite.nvim')
   call denite#custom#var('file/rec', 'command', ['fd', '-H', '-E', '.git', '-t', 'f', '-t', 'l', '.'])
 
   call denite#custom#var('grep', 'command', ['rg'])
-  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep', '--pcre2'])
   call denite#custom#var('grep', 'recursive_opts', [])
   call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'separator', ['--'])
