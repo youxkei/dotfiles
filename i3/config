@@ -179,6 +179,7 @@ for_window [class="mousecross"] border none
 new_window pixel 16
 
 exec --no-startup-id xset -dpms
+exec --no-startup-id xkbset bo 50
 
 exec --no-startup-id gnome-power-manager
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
