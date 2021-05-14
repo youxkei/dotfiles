@@ -32,6 +32,7 @@ declare -A PATHS=(
     [bin/fullhd.sh]=~/bin/fullhd
     [bin/4k.sh]=~/bin/4k
     [bin/screenshot.sh]=~/bin/screenshot
+    [bin/backup.sh]=~/bin/backup
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path

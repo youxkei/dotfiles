@@ -178,6 +178,8 @@ for_window [class="mousecross"] border none
 
 new_window pixel 16
 
+exec --no-startup-id sudo ~/bin/backup
+
 exec --no-startup-id xset -dpms
 exec --no-startup-id xkbset bo 50
 
