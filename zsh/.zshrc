@@ -128,7 +128,7 @@ function timer() {
     return 1
   fi
 
-  countdown $1 && mplayer -really-quiet ~/pCloudDrive/music/Sound\ Horizon/Chronicle\ 2nd/ch2ex/sound/bar.wav
+  countdown $1 && mplayer -really-quiet $TIMER_ALERM_FILE
 }
 
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
