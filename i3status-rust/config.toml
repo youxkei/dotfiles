@@ -7,6 +7,12 @@ interval = 1
 command = 'echo  $(xsel -bo | head -n 1 | colrm 75)'
 
 [[block]]
+block = "net"
+device = "enp5s0"
+format = "{speed_up;K} {speed_down;K}"
+interval = 1
+
+[[block]]
 block = "disk_space"
 path = "/"
 info_type = "available"
