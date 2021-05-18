@@ -38,6 +38,16 @@
         };
       });
 
+      i3status-rust = nixpkgs.i3status-rust.overrideAttrs (oldAttrs: rec {
+        version = "0.20.1";
+        src = nixpkgs.fetchFromGitHub rec {
+          owner = "greshake";
+          repo = "i3status-rust";
+          rev = "v${version}";
+          sha256 = "00gzm3g297s9bfp13vnb623p7dfac3g6cdhz2b3lc6l0kmnnqs1s";
+        };
+      });
+
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
