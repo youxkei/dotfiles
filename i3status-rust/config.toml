@@ -8,15 +8,13 @@ command = 'echo  $(xsel -bo | head -n 1 | colrm 75)'
 
 [[block]]
 block = "net"
-device = "enp5s0"
-format = "{speed_up;K} {speed_down;K}"
+format = "{speed_up;K*_b}b/s {speed_down;K*_b}b/s"
 interval = 1
 
 [[block]]
 block = "disk_space"
 path = "/"
 info_type = "available"
-unit = "GB"
 interval = 20
 warning = 20.0
 alert = 10.0
@@ -26,7 +24,6 @@ format = "{path}{available}"
 block = "disk_space"
 path = "/home"
 info_type = "available"
-unit = "GB"
 interval = 20
 warning = 20.0
 alert = 10.0
