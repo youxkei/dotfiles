@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
 
-while read LINE; do
+while read -r LINE; do
     trans -speak -no-translate ja: "$LINE"
 done
