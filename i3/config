@@ -141,7 +141,7 @@ bar {
     position top
     binding_mode_indicator yes
 
-    font pango:Monospace 16
+    font pango:Monospace 14
 
     tray_output primary
 }

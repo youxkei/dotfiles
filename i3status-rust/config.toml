@@ -1,14 +1,22 @@
-theme = "solarized-dark"
-icons = "awesome"
+theme = "nord-dark"
+
+[icons]
+name = "awesome5"
+[icons.overrides]
+cpu = "\uf0e4"
+microphone_empty = "\uf130"
+microphone_full = "\uf130"
+microphone_half = "\uf130"
+microphone_muted = "\uf131"
 
 [[block]]
 block = "custom"
 interval = 1
-command = 'echo  $(xsel -bo | head -n 1 | colrm 75)'
+command = 'echo  $(xclip -o -sel clip | xargs | rg -o "^.{0,32}")'
 
 [[block]]
 block = "net"
-format = "{speed_up;K*_b}b/s {speed_down;K*_b}b/s"
+format = "{speed_down;K*b}{speed_up;K*b}"
 interval = 1
 
 [[block]]
