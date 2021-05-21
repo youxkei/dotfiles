@@ -521,6 +521,8 @@ key_bindings:
   - { key: Down,   chars: "\x1b[B",      mode:   ~AppCursor       }
   - { key: Down,   chars: "\x1bOB",      mode:   AppCursor        }
 
+  - { key: T, mods:  Control|Shift, command: { program: "alacritty" }, mode: ~Alt }
+
   - { key: Tab,  mods: Control, chars: "\x02\x09", mode: Alt }
   - { key: Key1, mods: Control, chars: "\x021",    mode: Alt }
   - { key: Key2, mods: Control, chars: "\x022",    mode: Alt }
