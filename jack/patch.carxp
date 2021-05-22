@@ -322,6 +322,52 @@
    <Parameter>
     <Index>0</Index>
     <Name>input_gain</Name>
+    <Value>0.700000047683716</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>output_gain</Name>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>limit</Name>
+    <Value>0.775000035762787</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>hard_limit</Name>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>release</Name>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <!-- Jimtel Loudness Limiter -->
+ <Plugin>
+  <Info>
+   <Type>VST2</Type>
+   <Name>mic limiter</Name>
+   <Binary>/home/youxkei/.vst/libjimtel_loudness_limiter.so</Binary>
+   <UniqueID>2065809688</UniqueID>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>input_gain</Name>
     <Value>0.600000023841858</Value>
    </Parameter>
 
@@ -334,25 +380,19 @@
    <Parameter>
     <Index>2</Index>
     <Name>limit</Name>
-    <Value>0.699999988079071</Value>
+    <Value>0.87500011920929</Value>
    </Parameter>
 
    <Parameter>
     <Index>3</Index>
     <Name>hard_limit</Name>
-    <Value>0.875</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
     <Index>4</Index>
-    <Name>attack</Name>
-    <Value>0.00300000002607703</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>5</Index>
     <Name>release</Name>
-    <Value>0.300000011920929</Value>
+    <Value>0.200000002980232</Value>
    </Parameter>
   </Data>
  </Plugin>
@@ -363,14 +403,6 @@
    <Target>Noise Suppressor for Voice (Mono):Input</Target>
   </Connection>
   <Connection>
-   <Source>voice comp:Out L</Source>
-   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
-  </Connection>
-  <Connection>
-   <Source>voice comp:Out R</Source>
-   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
-  </Connection>
-  <Connection>
    <Source>input comp:Out L</Source>
    <Target>source Audio/Source/Virtual sink:input_1</Target>
   </Connection>
@@ -379,24 +411,44 @@
    <Target>source Audio/Source/Virtual sink:input_2</Target>
   </Connection>
   <Connection>
-   <Source>Noise Suppressor for Voice (Mono):Output</Source>
-   <Target>input comp:In L</Target>
-  </Connection>
-  <Connection>
    <Source>bass enhancer:Out L</Source>
    <Target>output limiter:input_1</Target>
   </Connection>
   <Connection>
-   <Source>bass enhancer:Out R</Source>
-   <Target>output limiter:input_2</Target>
+   <Source>mic limiter:output_1</Source>
+   <Target>source Audio/Source/Virtual sink:input_1</Target>
+  </Connection>
+  <Connection>
+   <Source>output limiter:output_2</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
+  </Connection>
+  <Connection>
+   <Source>Noise Suppressor for Voice (Mono):Output</Source>
+   <Target>mic limiter:input_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Noise Suppressor for Voice (Mono):Output</Source>
+   <Target>mic limiter:input_2</Target>
   </Connection>
   <Connection>
    <Source>output limiter:output_1</Source>
    <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
   </Connection>
   <Connection>
-   <Source>output limiter:output_2</Source>
+   <Source>mic limiter:output_2</Source>
+   <Target>source Audio/Source/Virtual sink:input_2</Target>
+  </Connection>
+  <Connection>
+   <Source>bass enhancer:Out R</Source>
+   <Target>output limiter:input_2</Target>
+  </Connection>
+  <Connection>
+   <Source>voice comp:Out R</Source>
    <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
+  </Connection>
+  <Connection>
+   <Source>voice comp:Out L</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
   </Connection>
   <Connection>
    <Source>sink Audio/Sink sink Monitor:monitor_1</Source>
@@ -406,44 +458,55 @@
    <Source>sink Audio/Sink sink Monitor:monitor_2</Source>
    <Target>bass enhancer:In R</Target>
   </Connection>
+  <Connection>
+   <Source>direct_sink Audio/Sink sink Monitor:monitor_1</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FL</Target>
+  </Connection>
+  <Connection>
+   <Source>direct_sink Audio/Sink sink Monitor:monitor_2</Source>
+   <Target>Scarlett Solo (3rd Gen.) Analog Stereo:playback_FR</Target>
+  </Connection>
   <Positions>
-   <Position x1="353" y1="1217" x2="1116" y2="1511">
-    <Name>Scarlett Solo (3rd Gen.) Analog Stereo</Name>
-   </Position>
    <Position x1="423" y1="1296" x2="2048" y2="1348">
     <Name>Cam Link 4K Analog Stereo</Name>
+   </Position>
+   <Position x1="353" y1="1217" x2="1118" y2="1512">
+    <Name>Scarlett Solo (3rd Gen.) Analog Stereo</Name>
    </Position>
    <Position x1="1550" y1="1869" x2="1994" y2="1422">
     <Name>Live Camera Mono</Name>
    </Position>
-   <Position x1="888" y1="1405" pluginId="0">
-    <Name>voice comp</Name>
-   </Position>
-   <Position x1="1037" y1="1216" pluginId="1">
+   <Position x1="989" y1="1100" pluginId="1">
     <Name>input comp</Name>
    </Position>
-   <Position x1="725" y1="1216" pluginId="2">
-    <Name>Noise Suppressor for Voice (Mono)</Name>
-   </Position>
-   <Position x1="704" y1="1510" pluginId="3">
+   <Position x1="702" y1="1510" pluginId="3">
     <Name>bass enhancer</Name>
    </Position>
-   <Position x1="898" y1="1510" pluginId="4">
+   <Position x1="1006" y1="1204" pluginId="5">
+    <Name>mic limiter</Name>
+   </Position>
+   <Position x1="898" y1="1509" pluginId="4">
     <Name>output limiter</Name>
    </Position>
-   <Position x1="1550" y1="1274" x2="247" y2="1512">
+   <Position x1="661" y1="1217" pluginId="2">
+    <Name>Noise Suppressor for Voice (Mono)</Name>
+   </Position>
+   <Position x1="889" y1="1406" pluginId="0">
+    <Name>voice comp</Name>
+   </Position>
+   <Position x1="1550" y1="1274" x2="232" y2="1504">
     <Name>sink Audio/Sink sink</Name>
    </Position>
-   <Position x1="1550" y1="1570" x2="1552" y2="1571">
+   <Position x1="1550" y1="1570" x2="1553" y2="1513">
     <Name>Navi 10 HDMI Audio Digital Stereo (HDMI 3)</Name>
    </Position>
-   <Position x1="935" y1="2376" x2="1551" y2="1718">
-    <Name>HDA ATI HDMI Digital Stereo (HDMI)</Name>
+   <Position x1="1550" y1="1940" x2="576" y2="1609">
+    <Name>direct_sink Audio/Sink sink</Name>
    </Position>
-   <Position x1="1550" y1="2014" x2="1269" y2="1215">
+   <Position x1="1550" y1="2014" x2="1261" y2="1207">
     <Name>source Audio/Source/Virtual sink</Name>
    </Position>
-   <Position x1="1550" y1="2022" x2="1551" y2="1808">
+   <Position x1="1554" y1="2091" x2="1549" y2="1949">
     <Name>Midi-Bridge</Name>
    </Position>
   </Positions>
