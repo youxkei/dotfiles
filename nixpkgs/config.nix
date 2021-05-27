@@ -130,6 +130,7 @@
           pueue
           dust
           xgetres
+          msgpack-tools
 
           #rustup
           rust-analyzer
