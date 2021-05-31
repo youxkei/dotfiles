@@ -21,6 +21,7 @@
       pueue = callPackage ./pueue.nix {};
       dust = callPackage ./dust.nix {};
       xgetres = callPackage ./xgetres.nix {};
+      tts = callPackage ./tts.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -130,6 +131,7 @@
           dust
           xgetres
           msgpack-tools
+          tts
 
           #rustup
           rust-analyzer
