@@ -22,6 +22,7 @@
       dust = callPackage ./dust.nix {};
       xgetres = callPackage ./xgetres.nix {};
       tts = callPackage ./tts.nix {};
+      nicolive-comments = callPackage ./nicolive-comments.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -132,6 +133,7 @@
           xgetres
           msgpack-tools
           tts
+          nicolive-comments
 
           #rustup
           rust-analyzer
