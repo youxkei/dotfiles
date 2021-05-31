@@ -70,7 +70,6 @@
 
           rlwrap
           trash-cli
-          neovim
           tokei
           xsel
           ripgrep
