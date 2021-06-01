@@ -196,5 +196,4 @@ exec --no-startup-id google-chrome
 exec --no-startup-id discord
 exec --no-startup-id gnome-terminal
 
-exec --no-startup-id pcloud
-exec --no-startup-id sleep 3s; start_jack
+exec --no-startup-id sleep 5s; start_jack
