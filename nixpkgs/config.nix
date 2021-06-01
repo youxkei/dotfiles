@@ -56,7 +56,7 @@
           i3-gaps
           i3status
           i3status-rust
-          rofi
+          rofi-unwrapped
           feh
 
           glibcLocales
