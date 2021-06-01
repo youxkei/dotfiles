@@ -9,6 +9,6 @@ pactl load-module module-null-sink sink_name=source      object.linger=1 media.c
 pactl set-default-sink sink
 pactl set-default-source source
 
-if [ -f ~/pCloudDrive/carla/patch_linux.carxp ]; then
-    pw-jack /usr/local/bin/carla ~/pCloudDrive/carla/patch_linux.carxp
+if [ -f ~/pCloudDrive/carla/patch_linux_"$USER".carxp ]; then
+    pw-jack /usr/local/bin/carla ~/pCloudDrive/carla/patch_linux_"$USER".carxp
 fi
