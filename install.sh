@@ -30,6 +30,7 @@ declare -A PATHS=(
     [bin/focus_on_mouse]=~/bin/focus_on_mouse
     [bin/git-fixup]=~/bin/git-fixup
     [bin/fullhd.sh]=~/bin/fullhd
+    [bin/touhou.sh]=~/bin/touhou
     [bin/4k.sh]=~/bin/4k
     [bin/screenshot.sh]=~/bin/screenshot
     [bin/backup.sh]=~/bin/backup
