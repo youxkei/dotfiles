@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tts";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "youxkei";
     repo = pname;
     rev = "v${version}";
-    sha256 = "033kvygim2y26r9id8b7sv86d1nxaih43r7zpq7916p89c7ll0jr";
+    sha256 = "0zkq7873z2rvkvf18khaqmk9rqms66m3mx2m5xi497svjmxqmq98";
   };
 
-  vendorSha256 = "1cilmskip173x9zg8389a0200r6hq4kfg1kvfyy1wdqpxknjwp1r";
+  vendorSha256 = "1w553dw3glzybcxg0pjfbv4zfxygj853c5g5wf8mliajw8ndrjfd";
 }
