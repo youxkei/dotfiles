@@ -134,6 +134,7 @@
           msgpack-tools
           tts
           nicolive-comments
+          neovim-unwrapped
 
           #rustup
           rust-analyzer
