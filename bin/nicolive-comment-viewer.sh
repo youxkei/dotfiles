@@ -28,6 +28,6 @@ nicolive-comments -j -f "$@" \
                 end
             ' \
             | rg -o --line-buffered '^.{0,30}' \
-            | tts -l ja-JP --voice ja-JP-Wavenet-B -s 1.2 --pitch 2.5 -g 10.0 \
+            | tts --player "mpv --audio-device=pulse/tts_sink" -l ja-JP --voice ja-JP-Wavenet-B -s 1.2 --pitch 2.5 -g 10.0 \
         ) \
     | jq -r '"\(.chat.date): \(.chat.user_id): \(.chat.content)"'
