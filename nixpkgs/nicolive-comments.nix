@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nicolive-comments";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "youxkei";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qbr4fs62i978wh9wjshx9zi29jyinzdfl882vi9h74bn8472lf8";
+    sha256 = "1rm9cz7002d21wj076xvjlbcrpzs0alqw1jdbvwvsfvn2bhw2ddb";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  cargoSha256 = "0yc4wp01kdnc7bvnws0pzzfg8v23mi6flw294a6vlhydhs8rg2rq";
+  cargoSha256 = "1qdi8n88bpqybgngb1gs9i8zz1a2wlgyjrg7pwfajfv0vsmqn159";
 }
