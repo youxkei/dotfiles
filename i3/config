@@ -28,7 +28,7 @@ bindsym $mod+Shift+l move right
 
 bindsym $mod+n layout toggle split
 bindsym $mod+w layout tabbed
-bindsym $mod+f fullscreen
+bindsym $mod+Shift+f fullscreen
 
 bindsym $mod+Shift+Return floating toggle
 
