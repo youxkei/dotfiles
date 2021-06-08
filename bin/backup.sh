@@ -15,7 +15,7 @@ btrfs subvolume snapshot @ snapshots/@/"$(date -Is)"
 cd snapshots/@
 for snapshot in *; do
     if [[ "$(date -d "$snapshot" +%s)" -lt "$MONTH_AGO" ]]; then
-        echo btrfs subvolume delete "$snapshot"
+        btrfs subvolume delete "$snapshot"
         echo deleted old snapshot: "$snapshot"
     fi
 done
