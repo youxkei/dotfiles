@@ -419,6 +419,15 @@ nnoremap <silent> <Leader>f :<C-U>NERDTreeToggle<CR>
 Plug 'prabirshrestha/async.vim'
 
 Plug 'prabirshrestha/vim-lsp'
+nnoremap <silent> gd :<C-U>LspDefinition<CR>
+
+augroup general
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'rescript-vscode',
+  \ 'cmd': {server_info->['node', expand('~/repo/rescript-vscode/extension/server/out/server.js'), '--stdio']},
+  \ 'allowlist': ['rescript'],
+  \ })
+augroup END
 
 Plug 'mattn/vim-lsp-settings'
 
