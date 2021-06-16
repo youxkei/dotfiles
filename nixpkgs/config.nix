@@ -135,6 +135,7 @@
           tts
           nicolive-comments
           neovim-unwrapped
+          yadm
 
           #rustup
           rust-analyzer
