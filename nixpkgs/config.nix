@@ -136,6 +136,7 @@
           nicolive-comments
           neovim-unwrapped
           yadm
+          rpg-cli
 
           #rustup
           rust-analyzer
