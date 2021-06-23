@@ -46,11 +46,6 @@ Composition	F6	ConvertToHiragana
 Conversion	F6	ConvertToHiragana
 Composition	Ctrl g	Delete
 Composition	Delete	Delete
-Precomposition	Ctrl t	ToggleAlphanumericMode
-Composition	Ctrl t	ToggleAlphanumericMode
-Composition	Eisu	ToggleAlphanumericMode
-Conversion	Eisu	ToggleAlphanumericMode
-Precomposition	Eisu	ToggleAlphanumericMode
 Composition	Ctrl Enter	Commit
 Conversion	Ctrl Enter	Commit
 Composition	Ctrl m	Commit
@@ -99,6 +94,8 @@ Composition	Ctrl o	ConvertToHalfWidth
 Conversion	Ctrl o	ConvertToHalfWidth
 Composition	F8	ConvertToHalfWidth
 Conversion	F8	ConvertToHalfWidth
+Composition	Ctrl t	ConvertToHalfAlphanumeric
+Conversion	Ctrl t	ConvertToHalfAlphanumeric
 Composition	F10	ConvertToHalfAlphanumeric
 Conversion	F10	ConvertToHalfAlphanumeric
 Composition	Ctrl Space	InsertHalfSpace
