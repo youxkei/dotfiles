@@ -127,6 +127,7 @@
           neovim-unwrapped
           yadm
           rpg-cli
+          protontricks
 
           #rustup
           rust-analyzer
