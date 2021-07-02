@@ -128,6 +128,7 @@
           yadm
           rpg-cli
           protontricks
+          duf
 
           #rustup
           rust-analyzer
