@@ -47,8 +47,6 @@ zinit light zpm-zsh/undollar
 # zi is introduced by zinit
 unalias zi
 
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
 
 stty intr '^\'
 stty quit undef
@@ -63,6 +61,10 @@ setopt sharehistory
 HISTSIZE=100000
 SAVEHIST=100000
 HISTFILE=$XDG_DATA_HOME/zsh/history
+
+eval "$(mcfly init zsh)"
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
 
 [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
 
