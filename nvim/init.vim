@@ -164,7 +164,7 @@ call plug#begin('~/.cache/nvim/vim-plug')
 " plugins {{{
 Plug 'thinca/vim-ambicmd'
 
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 let g:deoplete#enable_at_startup = 1
 
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
@@ -416,7 +416,7 @@ nnoremap <silent> gd :<C-U>LspDefinition<CR>
 augroup general
   au User lsp_setup call lsp#register_server({
   \ 'name': 'rescript-vscode',
-  \ 'cmd': {server_info->['node', expand('~/repo/rescript-vscode/extension/server/out/server.js'), '--stdio']},
+  \ 'cmd': {server_info->['node', expand('~/.cache/nvim/vim-plug/vim-rescript/server/out/server.js'), '--stdio']},
   \ 'allowlist': ['rescript'],
   \ })
 augroup END
@@ -488,6 +488,7 @@ nmap <Leader>n <Plug>MarkAllClear
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'romgrk/nvim-treesitter-context'
+
 " plugins }}}
 
 " colorschemes {{{
@@ -618,7 +619,6 @@ if s:is_installed('denite.nvim')
 
   call denite#custom#alias('source', 'buffer/cd', 'buffer')
   call denite#custom#source('buffer/cd', 'matchers', ['matcher/clap', 'matcher/project_files'])
-
 endif
 
 if s:is_installed('nord-vim')
