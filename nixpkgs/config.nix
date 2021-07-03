@@ -130,6 +130,7 @@
           protontricks
           duf
           mcfly
+          choose
 
           #rustup
           rust-analyzer
