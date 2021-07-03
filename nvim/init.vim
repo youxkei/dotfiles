@@ -167,7 +167,7 @@ Plug 'thinca/vim-ambicmd'
 Plug 'Shougo/deoplete.nvim'
 let g:deoplete#enable_at_startup = 1
 
-"Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
 Plug 'ujihisa/neco-look'
 
@@ -587,7 +587,25 @@ if s:is_installed('vim-ambicmd')
 endif
 
 if s:is_installed('deoplete.nvim')
-  "call deoplete#custom#source('tabnine', 'rank', 1001)
+  call deoplete#custom#source('tabnine', 'rank', 1001)
+  call deoplete#custom#source('tabnine', 'filetypes', [
+  \ 'rust',
+  \ 'go',
+  \ 'vim',
+  \ 'rescript',
+  \ 'nix',
+  \ 'sh',
+  \ 'zsh',
+  \ 'prolog',
+  \ 'json',
+  \ 'toml',
+  \ 'xml',
+  \ 'yaml',
+  \ 'arduino',
+  \ 'html',
+  \ 'javascript'
+  \])
+
   call deoplete#custom#source('lsp', 'rank', 1002)
 endif
 
