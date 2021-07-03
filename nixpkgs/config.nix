@@ -132,6 +132,7 @@
           mcfly
           choose
           glances
+          gping
 
           #rustup
           rust-analyzer
