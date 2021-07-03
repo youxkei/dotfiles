@@ -201,9 +201,6 @@ augroup general
   endfunction
 augroup END
 
-Plug 'raghur/fruzzy', {'do': { -> fruzzy#install() }}
-let g:fruzzy#usenative = 1
-
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
 Plug 'notomo/denite-keymap'
