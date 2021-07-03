@@ -131,6 +131,7 @@
           duf
           mcfly
           choose
+          glances
 
           #rustup
           rust-analyzer
