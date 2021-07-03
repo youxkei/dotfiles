@@ -493,6 +493,9 @@ nmap <Leader>m <Plug>MarkSet
 vmap <Leader>m <Plug>MarkSet
 nmap <Leader>n <Plug>MarkAllClear
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'p00f/nvim-ts-rainbow'
+Plug 'romgrk/nvim-treesitter-context'
 " plugins }}}
 
 " colorschemes {{{
@@ -615,6 +618,38 @@ endif
 
 if s:is_installed('vim-sandwich')
     let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+endif
+
+if s:is_installed('nvim-treesitter')
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "rust", "go" },
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = 1000,
+  }
+}
+EOF
+
+  augroup general
+    autocmd BufEnter *.rs set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+    autocmd BufEnter *.go set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+  augroup END
+endif
+
+if s:is_installed("nvim-treesitter-context")
+lua <<EOF
+require'treesitter-context.config'.setup{
+    enable = true,
+}
+EOF
 endif
 
 " vim-plug }}}
