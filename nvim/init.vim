@@ -378,7 +378,6 @@ omap a, <Plug>(swap-textobject-a)
 xmap a, <Plug>(swap-textobject-a)
 
 Plug 'lambdalisue/suda.vim'
-let g:suda_smart_edit = 1
 
 Plug 'sgur/vim-editorconfig'
 
