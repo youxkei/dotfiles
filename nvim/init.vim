@@ -170,8 +170,6 @@ let g:deoplete#enable_at_startup = 1
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
 Plug 'ujihisa/neco-look'
-
-Plug 'Shougo/neco-syntax'
 let g:deoplete#look#words = '/usr/share/dict/american-english-huge'
 
 Plug 'fszymanski/deoplete-emoji'
