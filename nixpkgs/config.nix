@@ -133,6 +133,7 @@
           choose
           glances
           gping
+          dogdns
 
           #rustup
           rust-analyzer
