@@ -633,7 +633,21 @@ endif
 if s:is_installed('nvim-treesitter')
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "rust", "go" },
+  ensure_installed = {
+    "bash",
+    "dockerfile",
+    "go",
+    "gomod",
+    "html",
+    "javascript",
+    "json",
+    "nix",
+    "rust",
+    "toml",
+    "tsx",
+    "typescript",
+    "yaml",
+  },
   highlight = {
     enable = true,
   },
@@ -649,8 +663,7 @@ require'nvim-treesitter.configs'.setup {
 EOF
 
   augroup general
-    autocmd BufEnter *.rs set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
-    autocmd BufEnter *.go set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+    autocmd BufEnter *.sh,Dockerfile*,*.go,*.html,*.js,*.json,*.nix,*.rs,*.toml,*.tsx,*.ts,*.yml,*.yaml set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
   augroup END
 endif
 
