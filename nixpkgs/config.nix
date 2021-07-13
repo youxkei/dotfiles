@@ -8,16 +8,6 @@
     nodePackages = callPackage ./node/default.nix {};
 
     packages = rec {
-      gore = callPackage ./gore.nix {};
-      mockgen = callPackage ./mockgen.nix {};
-      wire = callPackage ./wire.nix {};
-      errcheck = callPackage ./errcheck.nix {};
-      syntaxerl = callPackage ./syntaxerl.nix {};
-      evans = callPackage ./evans.nix {};
-      teip = callPackage ./teip.nix {};
-      xcp = callPackage ./xcp.nix {};
-      pueue = callPackage ./pueue.nix {};
-      dust = callPackage ./dust.nix {};
       xgetres = callPackage ./xgetres.nix {};
       tts = callPackage ./tts.nix {};
       nicolive-comments = callPackage ./nicolive-comments.nix {};
@@ -116,7 +106,7 @@
           wasmtime
           valgrind
           pueue
-          dust
+          du-dust
           xgetres
           msgpack-tools
           tts
