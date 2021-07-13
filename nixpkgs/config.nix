@@ -16,7 +16,6 @@
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
       xcp = callPackage ./xcp.nix {};
-      protoc-gen-grpc-gateway = callPackage ./protoc-gen-grpc-gateway.nix {};
       pueue = callPackage ./pueue.nix {};
       dust = callPackage ./dust.nix {};
       xgetres = callPackage ./xgetres.nix {};
@@ -160,7 +159,6 @@
           mockgen
           wire
           statik
-          protoc-gen-grpc-gateway
         ];
       };
     };
