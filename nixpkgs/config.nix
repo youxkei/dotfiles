@@ -13,7 +13,6 @@
       wire = callPackage ./wire.nix {};
       errcheck = callPackage ./errcheck.nix {};
       syntaxerl = callPackage ./syntaxerl.nix {};
-      countdown = callPackage ./countdown.nix {};
       evans = callPackage ./evans.nix {};
       teip = callPackage ./teip.nix {};
       xcp = callPackage ./xcp.nix {};
@@ -94,7 +93,6 @@
           speedtest-cli
           light
           mysql57
-          countdown
           hugo
           evans
           inotify-tools
