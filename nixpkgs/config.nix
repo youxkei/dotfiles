@@ -121,6 +121,7 @@
           glances
           gping
           dogdns
+          kitty
 
           #rustup
           rust-analyzer

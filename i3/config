@@ -194,6 +194,6 @@ exec_always --no-startup-id sleep 1s; feh --no-fehbg --bg-scale /usr/share/backg
 exec --no-startup-id alacritty -e nvim
 exec --no-startup-id google-chrome
 exec --no-startup-id discord
-exec --no-startup-id gnome-terminal
+exec --no-startup-id nixGLIntel kitty
 
 exec --no-startup-id sleep 5s; start_jack

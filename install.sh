@@ -19,6 +19,7 @@ declare -A PATHS=(
     [procs]=$XDG_CONFIG_HOME/procs
     [alacritty]=$XDG_CONFIG_HOME/alacritty
     [dunst]=$XDG_CONFIG_HOME/dunst
+    [kitty]=$XDG_CONFIG_HOME/kitty
     [compton.conf]=$XDG_CONFIG_HOME/compton.conf
     [starship.toml]=$XDG_CONFIG_HOME/starship.toml
 
