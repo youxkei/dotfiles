@@ -16,6 +16,8 @@ export skip_global_compinit=1
 
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
+export GLFW_IM_MODULE=ibus
+
 if [ -x "$(which nix-build)" ]; then export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive; fi
 if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
