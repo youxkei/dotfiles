@@ -489,7 +489,7 @@ nmap <Leader>n <Plug>MarkAllClear
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'p00f/nvim-ts-rainbow'
-"Plug 'romgrk/nvim-treesitter-context'
+Plug 'romgrk/nvim-treesitter-context'
 
 " plugins }}}
 
@@ -670,13 +670,13 @@ EOF
   augroup END
 endif
 
-"if s:is_installed("nvim-treesitter-context")
-"lua <<EOF
-"require'treesitter-context.config'.setup{
-"    enable = true,
-"}
-"EOF
-"endif
+if s:is_installed("nvim-treesitter-context")
+lua <<EOF
+require'treesitter-context.config'.setup{
+    enable = true,
+}
+EOF
+endif
 
 " vim-plug }}}
 
