@@ -298,10 +298,10 @@ Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '┊'
 let g:indentLine_conceallevel = 1
 
-Plug 'terryma/vim-multiple-cursors'
+"Plug 'terryma/vim-multiple-cursors'
 
-Plug 'AndrewRadev/inline_edit.vim'
-let g:inline_edit_autowrite = 1
+"Plug 'AndrewRadev/inline_edit.vim'
+"let g:inline_edit_autowrite = 1
 
 Plug 'Shougo/vinarise.vim'
 
@@ -326,20 +326,20 @@ augroup general
   autocmd BufEnter *.ml let b:fswitchlocs  = '.'
 augroup END
 
-Plug 'Shougo/context_filetype.vim'
-
-Plug 'osyo-manga/vim-precious'
+"Plug 'Shougo/context_filetype.vim'
+"
+"Plug 'osyo-manga/vim-precious'
 
 Plug 'kana/vim-tabpagecd'
 
-Plug 't9md/vim-choosewin'
-let g:choosewin_overlay_enable = 1
-let g:choosewin_overlay_clear_multibyte = 1
-let g:choosewin_blink_on_land = 0
-let g:choosewin_statusline_replace = 0
-let g:choosewin_tabline_replace = 0
-
-nmap  <Leader>-  <Plug>(choosewin)
+"Plug 't9md/vim-choosewin'
+"let g:choosewin_overlay_enable = 1
+"let g:choosewin_overlay_clear_multibyte = 1
+"let g:choosewin_blink_on_land = 0
+"let g:choosewin_statusline_replace = 0
+"let g:choosewin_tabline_replace = 0
+"
+"nmap  <Leader>-  <Plug>(choosewin)
 
 Plug 'w0rp/ale'
 let g:ale_lint_on_save = 1
@@ -477,7 +477,7 @@ Plug 'AndrewRadev/linediff.vim'
 
 Plug 'thinca/vim-qfreplace'
 
-Plug 'youxkei/vim-erlang-tags'
+"Plug 'youxkei/vim-erlang-tags'
 
 Plug 'inkarkat/vim-ingo-library'
 Plug 'inkarkat/vim-mark'
