@@ -164,15 +164,15 @@ call plug#begin('~/.cache/nvim/vim-plug')
 " plugins {{{
 Plug 'thinca/vim-ambicmd'
 
-Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-let g:deoplete#enable_at_startup = 1
+"Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+"let g:deoplete#enable_at_startup = 1
 
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+"Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
-Plug 'ujihisa/neco-look'
-let g:deoplete#look#words = '/usr/share/dict/american-english-huge'
+"Plug 'ujihisa/neco-look'
+"let g:deoplete#look#words = '/usr/share/dict/american-english-huge'
 
-Plug 'fszymanski/deoplete-emoji'
+"Plug 'fszymanski/deoplete-emoji'
 
 Plug 'Shougo/denite.nvim'
 nnoremap <silent> <Leader>eu <CMD>Denite file_mru -start-filter<CR>
@@ -423,7 +423,7 @@ augroup END
 
 Plug 'mattn/vim-lsp-settings'
 
-Plug 'lighttiger2505/deoplete-vim-lsp'
+"Plug 'lighttiger2505/deoplete-vim-lsp'
 
 Plug 'junegunn/fzf'
 
@@ -578,28 +578,28 @@ if s:is_installed('vim-ambicmd')
   cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 endif
 
-if s:is_installed('deoplete.nvim')
-  call deoplete#custom#source('tabnine', 'rank', 1001)
-  call deoplete#custom#source('tabnine', 'filetypes', [
-  \ 'rust',
-  \ 'go',
-  \ 'vim',
-  \ 'rescript',
-  \ 'nix',
-  \ 'sh',
-  \ 'zsh',
-  \ 'prolog',
-  \ 'json',
-  \ 'toml',
-  \ 'xml',
-  \ 'yaml',
-  \ 'arduino',
-  \ 'html',
-  \ 'javascript'
-  \])
-
-  call deoplete#custom#source('lsp', 'rank', 1002)
-endif
+"if s:is_installed('deoplete.nvim')
+"  call deoplete#custom#source('tabnine', 'rank', 1001)
+"  call deoplete#custom#source('tabnine', 'filetypes', [
+"  \ 'rust',
+"  \ 'go',
+"  \ 'vim',
+"  \ 'rescript',
+"  \ 'nix',
+"  \ 'sh',
+"  \ 'zsh',
+"  \ 'prolog',
+"  \ 'json',
+"  \ 'toml',
+"  \ 'xml',
+"  \ 'yaml',
+"  \ 'arduino',
+"  \ 'html',
+"  \ 'javascript'
+"  \])
+"
+"  call deoplete#custom#source('lsp', 'rank', 1002)
+"endif
 
 if s:is_installed('denite.nvim')
   call denite#custom#option('default', {'split': 'floating'})
