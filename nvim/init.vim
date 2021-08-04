@@ -128,8 +128,8 @@ noremap  <silent> <C-B>7 <ESC>7gt
 noremap! <silent> <C-B>7 <ESC>7gt
 noremap  <silent> <C-B>8 <ESC>8gt
 noremap! <silent> <C-B>8 <ESC>8gt
-noremap  <silent> <C-B>9 <ESC>:<C-U>tablast<CR>
-noremap! <silent> <C-B>9 <ESC>:<C-U>tablast<CR>
+noremap  <silent> <C-B>9 <ESC><CMD>tablast<CR>
+noremap! <silent> <C-B>9 <ESC><CMD>tablast<CR>
 
 " map }}}
 
@@ -175,14 +175,14 @@ let g:deoplete#look#words = '/usr/share/dict/american-english-huge'
 Plug 'fszymanski/deoplete-emoji'
 
 Plug 'Shougo/denite.nvim'
-nnoremap <silent> <Leader>eu :<C-u>Denite file_mru -start-filter<CR>
-nnoremap <silent> <Leader>ed :<C-u>Denite directory_mru -start-filter<CR>
-nnoremap <silent> <Leader>eg :<C-u>Denite grep -start-filter<CR>
-nnoremap <silent> <Leader>ef :<C-u>Denite file/rec -start-filter<CR>
-nnoremap <silent> <Leader>eb :<C-u>Denite buffer -start-filter<CR>
-nnoremap <silent> <Leader>ec :<C-u>Denite buffer/cd file/rec -start-filter<CR>
-nnoremap <silent> <Leader>el :<C-u>Denite line -start-filter<CR>
-nnoremap <silent> <Leader>er :<C-u>Denite -resume -refresh<CR>
+nnoremap <silent> <Leader>eu <CMD>Denite file_mru -start-filter<CR>
+nnoremap <silent> <Leader>ed <CMD>Denite directory_mru -start-filter<CR>
+nnoremap <silent> <Leader>eg <CMD>Denite grep -start-filter<CR>
+nnoremap <silent> <Leader>ef <CMD>Denite file/rec -start-filter<CR>
+nnoremap <silent> <Leader>eb <CMD>Denite buffer -start-filter<CR>
+nnoremap <silent> <Leader>ec <CMD>Denite buffer/cd file/rec -start-filter<CR>
+nnoremap <silent> <Leader>el <CMD>Denite line -start-filter<CR>
+nnoremap <silent> <Leader>er <CMD>Denite -resume -refresh<CR>
 
 augroup general
   autocmd FileType denite call s:set_mappings_for_denite()
@@ -406,7 +406,7 @@ map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
 map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 Plug 'scrooloose/nerdtree'
-nnoremap <silent> <Leader>f :<C-U>NERDTreeToggle<CR>
+nnoremap <silent> <Leader>f <CMD>NERDTreeToggle<CR>
 
 Plug 'prabirshrestha/async.vim'
 
@@ -436,7 +436,7 @@ omap <silent> <C-B><Tab> <plug>(fzf-maps-o)
 Plug 'tpope/vim-fugitive'
 
 Plug 'liuchengxu/vista.vim'
-nnoremap <silent> <Leader>v :<C-U>Vista finder<CR>
+nnoremap <silent> <Leader>v <CMD>Vista finder<CR>
 
 Plug 'Shougo/deol.nvim'
 
