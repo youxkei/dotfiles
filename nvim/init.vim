@@ -491,6 +491,12 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'romgrk/nvim-treesitter-context'
 
+Plug 'neovim/nvim-lspconfig'
+nnoremap <silent> gld <CMD>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> glr <CMD>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gli <CMD>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gln <CMD>lua vim.lsp.buf.rename()<CR>
+
 " plugins }}}
 
 " colorschemes {{{
@@ -668,6 +674,17 @@ EOF
   augroup general
     autocmd BufEnter *.sh,Dockerfile*,*.go,*.html,*.js,*.json,*.nix,*.rs,*.toml,*.tsx,*.ts,*.yml,*.yaml set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
   augroup END
+endif
+
+if s:is_installed("nvim-lspconfig")
+lua <<EOF
+require'lspconfig'.gopls.setup{
+}
+EOF
+
+augroup general
+  au BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)
+augroup END
 endif
 
 if s:is_installed("nvim-treesitter-context")
