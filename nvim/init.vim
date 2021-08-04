@@ -499,6 +499,13 @@ nnoremap <silent> gln <CMD>lua vim.lsp.buf.rename()<CR>
 
 Plug 'hrsh7th/nvim-compe'
 
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+nnoremap <leader>tf <CMD>Telescope find_files<CR>
+nnoremap <leader>tg <CMD>Telescope live_grep<CR>
+nnoremap <leader>ts <CMD>Telescope lsp_document_symbols<CR>
+
 " plugins }}}
 
 " colorschemes {{{
