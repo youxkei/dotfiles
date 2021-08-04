@@ -408,20 +408,22 @@ map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 Plug 'scrooloose/nerdtree'
 nnoremap <silent> <Leader>f <CMD>NERDTreeToggle<CR>
 
-Plug 'prabirshrestha/async.vim'
-
-Plug 'prabirshrestha/vim-lsp'
-nnoremap <silent> gd :<C-U>LspDefinition<CR>
-
-augroup general
-  au User lsp_setup call lsp#register_server({
-  \ 'name': 'rescript-vscode',
-  \ 'cmd': {server_info->['node', expand('~/.cache/nvim/vim-plug/vim-rescript/server/out/server.js'), '--stdio']},
-  \ 'allowlist': ['rescript'],
-  \ })
-augroup END
-
-Plug 'mattn/vim-lsp-settings'
+"Plug 'prabirshrestha/async.vim'
+"
+"Plug 'prabirshrestha/vim-lsp'
+"nnoremap <silent> gd <CMD>LspDefinition<CR>
+"
+"augroup general
+"  au User lsp_setup call lsp#register_server({
+"  \ 'name': 'rescript-vscode',
+"  \ 'cmd': {server_info->['node', expand('~/.cache/nvim/vim-plug/vim-rescript/server/out/server.js'), '--stdio']},
+"  \ 'allowlist': ['rescript'],
+"  \ })
+"
+"  au BufWritePre *.go call execute('LspDocumentFormatSync')
+"augroup END
+"
+"Plug 'mattn/vim-lsp-settings'
 
 "Plug 'lighttiger2505/deoplete-vim-lsp'
 
