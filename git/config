@@ -25,6 +25,8 @@
 	indentHeuristic = true
 [user]
 	useConfigOnly = true
+	name = youxkei
+	email = youxkei@gmail.com
 [grep]
 	lineNumber = true
 [mergetool "neovim"]
