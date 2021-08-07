@@ -563,10 +563,10 @@ map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
 
 Plug 'mopp/vim-operator-convert-case'
-nmap <Leader>lc <Plug>(operator-convert-case-lower-camel)
-nmap <Leader>uc <Plug>(operator-convert-case-upper-camel)
-nmap <Leader>ls <Plug>(operator-convert-case-lower-snake)
-nmap <Leader>us <Plug>(operator-convert-case-upper-snake)
+"nmap <Leader>lc <Plug>(operator-convert-case-lower-camel)
+"nmap <Leader>uc <Plug>(operator-convert-case-upper-camel)
+"nmap <Leader>ls <Plug>(operator-convert-case-lower-snake)
+"nmap <Leader>us <Plug>(operator-convert-case-upper-snake)
 
 Plug 'machakann/vim-sandwich'
 let g:sandwich_no_default_key_mappings = 1
