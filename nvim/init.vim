@@ -492,19 +492,20 @@ Plug 'p00f/nvim-ts-rainbow'
 Plug 'romgrk/nvim-treesitter-context'
 
 Plug 'neovim/nvim-lspconfig'
-nnoremap <silent> gld <CMD>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> glr <CMD>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> gli <CMD>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> gln <CMD>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <leader>ln <CMD>lua vim.lsp.buf.rename()<CR>
 
 Plug 'hrsh7th/nvim-compe'
 
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-nnoremap <leader>tf <CMD>Telescope find_files<CR>
-nnoremap <leader>tg <CMD>Telescope live_grep<CR>
-nnoremap <leader>ts <CMD>Telescope lsp_document_symbols<CR>
+nnoremap <silent> <leader>tf <cmd>Telescope find_files<cr>
+nnoremap <silent> <leader>tg <cmd>Telescope live_grep<cr>
+nnoremap <silent> <leader>tb <cmd>Telescope buffers<cr>
+nnoremap <silent> <leader>ld <cmd>Telescope lsp_definitions<cr>
+nnoremap <silent> <leader>lr <cmd>Telescope lsp_references<cr>
+nnoremap <silent> <leader>li <cmd>Telescope lsp_implementations<cr>
+nnoremap <silent> <leader>ls <cmd>Telescope lsp_document_symbols<cr>
 
 Plug 'phaazon/hop.nvim'
 
