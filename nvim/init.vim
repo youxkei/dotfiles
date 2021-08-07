@@ -506,6 +506,8 @@ nnoremap <leader>tf <CMD>Telescope find_files<CR>
 nnoremap <leader>tg <CMD>Telescope live_grep<CR>
 nnoremap <leader>ts <CMD>Telescope lsp_document_symbols<CR>
 
+Plug 'phaazon/hop.nvim'
+
 " plugins }}}
 
 " colorschemes {{{
@@ -741,6 +743,14 @@ lua <<EOF
 require'treesitter-context.config'.setup{
     enable = true,
 }
+EOF
+endif
+
+if s:is_installed("hop.nvim")
+lua <<EOF
+require'hop'.setup{}
+
+vim.api.nvim_set_keymap('n', 's', "<cmd>lua require'hop'.hint_char1()<cr>", {noremap=true, silent=true})
 EOF
 endif
 
