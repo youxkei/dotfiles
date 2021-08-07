@@ -146,7 +146,7 @@ augroup general
 
   autocmd BufEnter *.res set sw=2 ts=2 sts=2
 
-  autocmd InsertLeave * call system('fcitx-remote -c')
+  autocmd InsertLeave * call system('fcitx5-remote -c')
 augroup END
 
 " autocmd }}}
