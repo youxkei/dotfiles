@@ -498,6 +498,8 @@ require("packer").startup{
   end
 }
 
-vim.cmd("source " .. compile_path)
+if fn.glob(compile_path) ~= "" then
+  vim.cmd("source " .. compile_path)
+end
 
 -- vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2:
