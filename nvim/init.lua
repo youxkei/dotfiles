@@ -436,10 +436,6 @@ require("packer").startup{
       keymap.noremap{"g#", "g#<cmd>lua require('hlslens').start()<cr>"}
     end}
 
-    use{"sunjon/shade.nvim", config = function()
-      require("shade").setup({})
-    end}
-
     use{"elzr/vim-json", config = function()
       vim.g.vim_json_syntax_conceal = 0
     end}
