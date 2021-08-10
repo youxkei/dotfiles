@@ -351,6 +351,9 @@ require("packer").startup{
       local lspconfig = require("lspconfig")
 
       lspconfig.gopls.setup{}
+      lspconfig.rescriptls.setup{
+        cmd = {"node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio"}
+      }
 
       keymap.nnoremap{"<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true}
 
