@@ -90,7 +90,7 @@ local compile_path = vim.fn.stdpath("cache") .. "/packer_compiled.lua"
 
 if fn.empty(fn.glob(packer_dir)) > 0 then
   fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", packer_dir})
-  cmd("packadd packer.nvim")
+  cmd[[packadd packer.nvim]]
 end
 
 require("packer").startup{
@@ -147,11 +147,11 @@ require("packer").startup{
       vim.cmd[[
         autocmd youxkei FileType denite call Set_mappings_for_denite()
         function! Set_mappings_for_denite() abort
-          nnoremap <silent><buffer><expr> <CR>  denite#do_map('do_action')
+          nnoremap <silent><buffer><expr> <cr>  denite#do_map('do_action')
           nnoremap <silent><buffer><expr> d     denite#do_map('do_action', 'delete')
           nnoremap <silent><buffer><expr> p     denite#do_map('do_action', 'preview')
           nnoremap <silent><buffer><expr> q     denite#do_map('quit')
-          nnoremap <silent><buffer><expr> <ESC> denite#do_map('quit')
+          nnoremap <silent><buffer><expr> <esc> denite#do_map('quit')
           nnoremap <silent><buffer><expr> i     denite#do_map('open_filter_buffer')
         endfunction
 
