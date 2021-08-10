@@ -86,7 +86,7 @@ cmd[[
 ]]
 
 local packer_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local compile_path = vim.fn.stdpath("cache") .. "/packer_compiled.lua"
+local compile_path = vim.fn.stdpath("data") .. "/site/pack/packer/packer_compiled.lua"
 
 if fn.empty(fn.glob(packer_dir)) > 0 then
   fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", packer_dir})
