@@ -2,6 +2,7 @@ local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
+local opt_global = vim.opt_global
 
 local cache_dir = fn.stdpath("cache")
 if fn.isdirectory(cache_dir) then
@@ -23,11 +24,11 @@ opt.swapfile = true
 opt.cindent = true
 opt.cinoptions = {"L0", "(2", "U1", "m1"}
 
-opt.expandtab = true
-opt.smarttab = true
-opt.shiftwidth = 4
-opt.tabstop = 4
-opt.softtabstop = 4
+opt_global.expandtab = true
+opt_global.smarttab = true
+opt_global.shiftwidth = 4
+opt_global.tabstop = 4
+opt_global.softtabstop = 4
 
 opt.fileencodings = {"ucs-bom", "utf-8", "sjis", "cp932", "euc-jp"}
 opt.fileformats = {"unix", "dos", "mac"}
