@@ -122,6 +122,7 @@
           gping
           dogdns
           kitty
+          neovim-remote
 
           #rustup
           rust-analyzer
