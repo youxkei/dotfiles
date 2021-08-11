@@ -384,15 +384,20 @@ require("packer").startup{
       requires = {
         "nvim-lua/popup.nvim",
         "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-project.nvim",
       },
       config = function()
+        require("telescope").load_extension("project")
+
         local keymap = require("astronauta.keymap")
         local builtin = require("telescope.builtin")
         local lsp = require("telescope.builtin.lsp")
+        local project = function() require("telescope").extensions.project.project{} end
 
         keymap.nnoremap{"<leader>tf", builtin.find_files}
         keymap.nnoremap{"<leader>tg", builtin.live_grep}
         keymap.nnoremap{"<leader>tb", builtin.buffers}
+        keymap.nnoremap{"<leader>tp", project}
         keymap.nnoremap{"<leader>lr", lsp.references}
         keymap.nnoremap{"<leader>li", lsp.implementations}
         keymap.nnoremap{"<leader>ls", lsp.document_symbols}
