@@ -82,7 +82,8 @@ cmd[[
     autocmd BufWritePost init.lua ++nested source <afile> | PackerCompile
     autocmd InsertLeave * call system('fcitx5-remote -c')
 
-    autocmd FileType rescript set sw=2 ts=2 sts=2
+    autocmd FileType rescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
+    autocmd FileType lua setlocal shiftwidth=2 tabstop=2 softtabstop=2
   augroup END
 ]]
 
@@ -498,5 +499,3 @@ require("packer").startup{
 if fn.glob(compile_path) ~= "" then
   vim.cmd("source " .. compile_path)
 end
-
--- vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2:
