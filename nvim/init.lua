@@ -417,17 +417,6 @@ require("packer").startup{
       require("gitsigns").setup()
     end}
 
-    use{"glepnir/indent-guides.nvim", requires = "arcticicestudio/nord-vim", config = function()
-      local nord1 = "#3B4252"
-      local nord2 = "#434C5E"
-
-      require("indent_guides").setup{
-        indent_guide_size = 4,
-        even_colors = {fg = nord2, bg = nord1};
-        odd_colors = {fg = nord1, bg = nord2};
-      }
-    end}
-
     use{'kevinhwang91/nvim-hlslens', config = function()
       local keymap = require("astronauta.keymap")
 
@@ -441,6 +430,13 @@ require("packer").startup{
       keymap.noremap{"#", "#<cmd>lua require('hlslens').start()<cr>"}
       keymap.noremap{"g*", "g*<cmd>lua require('hlslens').start()<cr>"}
       keymap.noremap{"g#", "g#<cmd>lua require('hlslens').start()<cr>"}
+    end}
+
+    use{"lukas-reineke/indent-blankline.nvim", config = function()
+      require("indent_blankline").setup{
+        char = "|",
+        buftype_exclude = {"terminal"}
+      }
     end}
 
     use{"elzr/vim-json", config = function()
