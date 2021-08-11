@@ -111,7 +111,7 @@
           msgpack-tools
           tts
           nicolive-comments
-          neovim-unwrapped
+          #neovim-unwrapped
           yadm
           rpg-cli
           protontricks
