@@ -103,7 +103,7 @@ require("packer").startup{
   function(use)
     use("wbthomason/packer.nvim")
 
-    use{"arcticicestudio/nord-vim", config = function()
+    use{"christianchiarulli/nvcode-color-schemes.vim", config = function()
       vim.cmd[[colorscheme nord]]
     end}
 
