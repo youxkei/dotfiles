@@ -140,30 +140,6 @@ require("packer").startup{
       keymap.cnoremap{"<space>", "ambicmd#expand('<space>')", expr = true}
     end}
 
-    use{"Shougo/denite.nvim", requires = "Shougo/neomru.vim", config = function()
-      local keymap = require("astronauta.keymap")
-
-      keymap.nnoremap{"<leader>ed", "<cmd>Denite directory_mru -start-filter<cr>", silent = true}
-      vim.fn["denite#custom#option"]("default", {split = "floating"})
-
-      vim.cmd[[
-        autocmd youxkei FileType denite call Set_mappings_for_denite()
-        function! Set_mappings_for_denite() abort
-          nnoremap <silent><buffer><expr> <cr>  denite#do_map('do_action')
-          nnoremap <silent><buffer><expr> d     denite#do_map('do_action', 'delete')
-          nnoremap <silent><buffer><expr> p     denite#do_map('do_action', 'preview')
-          nnoremap <silent><buffer><expr> q     denite#do_map('quit')
-          nnoremap <silent><buffer><expr> <esc> denite#do_map('quit')
-          nnoremap <silent><buffer><expr> i     denite#do_map('open_filter_buffer')
-        endfunction
-
-        autocmd youxkei FileType denite-filter call Set_mappings_for_denite_filter()
-        function! Set_mappings_for_denite_filter() abort
-          imap <silent><buffer> <ESC> <Plug>(denite_filter_quit)
-        endfunction
-      ]]
-    end}
-
     use{"itchyny/lightline.vim", requires = "maximbaz/lightline-ale", config = function()
       vim.g.lightline = {
         colorscheme = "nord",
