@@ -425,12 +425,6 @@ require("packer").startup{
       }
     end}
 
-    use{"elzr/vim-json", config = function()
-      vim.g.vim_json_syntax_conceal = 0
-    end}
-
-    use{"LnL7/vim-nix"}
-
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
