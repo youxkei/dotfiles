@@ -82,8 +82,7 @@ cmd[[
     autocmd BufWritePost init.lua ++nested source <afile> | PackerCompile
     autocmd InsertLeave * call system('fcitx5-remote -c')
 
-    autocmd FileType rescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-    autocmd FileType lua setlocal shiftwidth=2 tabstop=2 softtabstop=2
+    autocmd FileType rescript,lua,nix setlocal shiftwidth=2 tabstop=2 softtabstop=2
   augroup END
 ]]
 
