@@ -115,6 +115,9 @@ require("packer").startup{
       keymap.nnoremap{"gj", "j"}
       keymap.nnoremap{"gk", "k"}
 
+      keymap.nnoremap{"J", "gJ"}
+      keymap.nnoremap{"gJ", "J"}
+
       for i = 1, 9 do
         local lhs = "<c-b>" .. i
         local rhs = "<esc>" .. i .. "gt"
