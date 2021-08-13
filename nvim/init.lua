@@ -218,6 +218,18 @@ require("packer").startup{
       }
     end}
 
+    use{"machakann/vim-swap", config = function()
+      local keymap = require("astronauta.keymap")
+
+      vim.g.swap_no_default_key_mappings = true
+
+      keymap.nmap{"gs", "<plug>(swap-interactive)"}
+      keymap.omap{"i,", "<plug>(swap-textobject-i)"}
+      keymap.xmap{"i,", "<plug>(swap-textobject-i)"}
+      keymap.omap{"a,", "<plug>(swap-textobject-a)"}
+      keymap.xmap{"a,", "<plug>(swap-textobject-a)"}
+    end}
+
     use{"lambdalisue/suda.vim"}
 
     use{"sgur/vim-editorconfig"}
