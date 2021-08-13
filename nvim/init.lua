@@ -431,7 +431,6 @@ require("packer").startup{
 
     use {"akinsho/nvim-toggleterm.lua", config = function()
       require("toggleterm").setup{
-        size = 40,
         open_mapping = "<c-t>",
         direction = "float",
       }
