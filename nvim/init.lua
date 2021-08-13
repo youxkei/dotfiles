@@ -72,6 +72,7 @@ opt.updatetime = 100
 opt.iskeyword = {"@", "48-57", "_", "192-255", "$", "@-@", "-"}
 opt.clipboard = "unnamedplus"
 opt.joinspaces = false
+opt.timeout = false
 
 g.mapleader = ","
 
