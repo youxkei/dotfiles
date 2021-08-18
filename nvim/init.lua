@@ -87,6 +87,19 @@ cmd[[
   augroup END
 ]]
 
+function youxkei_toggleterm()
+  local id = vim.t.youxkei_toggleterm_id
+
+  if not vim.t.youxkei_toggleterm_id then
+    id = youxkei_next_toggleterm_unique_id or 1
+    youxkei_next_toggleterm_unique_id = id + 1
+
+    vim.t.youxkei_toggleterm_id = id
+  end
+
+  require("toggleterm").toggle(id)
+end
+
 local packer_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 local compile_path = vim.fn.stdpath("data") .. "/site/pack/packer/packer_compiled.lua"
 
@@ -159,7 +172,6 @@ require("packer").startup{
         component = {
           readonly = "%{&readonly?'⌬':''}",
         },
-
         tab_component_function = {
           cwd = "LightlineCWD",
         },
@@ -434,10 +446,14 @@ require("packer").startup{
     use{"tversteeg/registers.nvim", disable = true} -- dosn't work with telescope.nvim
 
     use {"akinsho/nvim-toggleterm.lua", config = function()
+      local keymap = require("astronauta.keymap")
+
       require("toggleterm").setup{
         open_mapping = "<c-t>",
         direction = "float",
       }
+
+      keymap.nnoremap{"<c-t>", youxkei_toggleterm, silent = true}
     end}
 
     use{"amiralies/vim-rescript"}
