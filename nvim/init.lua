@@ -152,12 +152,27 @@ require("packer").startup{
             {"readonly", "relativepath", "modified"},
           },
         },
+        tab = {
+          active = {"tabnum", "cwd"},
+          inactive = {"tabnum", "cwd"},
+        },
         component = {
           readonly = "%{&readonly?'⌬':''}",
+        },
+
+        tab_component_function = {
+          cwd = "LightlineCWD",
         },
         separator = {left = "", right = ""},
         subseparator = {left = "", right = ""},
       }
+
+      vim.cmd[[
+        function! LightlineCWD(n) abort
+          let cwd = gettabvar(a:n, 'cwd')
+          return fnamemodify(empty(cwd) ? getcwd() : cwd, ':t')
+        endfunction
+      ]]
     end}
 
     use{"previm/previm"}
