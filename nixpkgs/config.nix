@@ -114,6 +114,7 @@
           kitty
           neovim-remote
           sumneko-lua-language-server
+          ocamlPackages.ocaml-lsp
 
           #rustup
           rust-analyzer
