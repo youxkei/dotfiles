@@ -445,7 +445,7 @@ require("packer").startup{
 
     use{"tversteeg/registers.nvim", disable = true} -- dosn't work with telescope.nvim
 
-    use {"akinsho/nvim-toggleterm.lua", config = function()
+    use{"akinsho/nvim-toggleterm.lua", config = function()
       local keymap = require("astronauta.keymap")
 
       require("toggleterm").setup{
