@@ -156,7 +156,7 @@ require("packer").startup{
       keymap.cnoremap{"<space>", "ambicmd#expand('<space>')", expr = true}
     end}
 
-    use{"itchyny/lightline.vim", requires = "maximbaz/lightline-ale", config = function()
+    use{"itchyny/lightline.vim", config = function()
       vim.g.lightline = {
         colorscheme = "nord",
         active = {
