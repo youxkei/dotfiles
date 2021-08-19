@@ -113,6 +113,7 @@
           dogdns
           kitty
           neovim-remote
+          sumneko-lua-language-server
 
           #rustup
           rust-analyzer

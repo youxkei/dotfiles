@@ -360,11 +360,14 @@ require("packer").startup{
         cmd = {"node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio"}
       }
       lspconfig.tsserver.setup{}
+      lspconfig.sumneko_lua.setup{
+        cmd = {"lua-language-server"}
+      }
 
       keymap.nnoremap{"<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true}
       keymap.nnoremap{"<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", silent = true}
 
-      vim.cmd[[autocmd youxkei BufWritePre *.go,*.res,*js lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+      vim.cmd[[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)]]
     end}
 
     use{"hrsh7th/nvim-compe", config = function()
