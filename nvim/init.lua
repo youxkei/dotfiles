@@ -440,18 +440,17 @@ require("packer").startup{
     use{"lukas-reineke/indent-blankline.nvim", config = function()
       require("indent_blankline").setup{
         char = "│",
-        char_highlight_list = {"Indent1", "Indent2", "Indent3", "Indent4", "Indent5", "Indent6"},
+        char_highlight_list = {"Indent1", "Indent2", "Indent3", "Indent4", "Indent5"},
         buftype_exclude = {"terminal"}
       }
 
       vim.cmd[[
         function! BlanklineHighlights() abort
           highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
-          highlight Indent2 guifg=#8FBCBB guibg=none gui=nocombine
-          highlight Indent3 guifg=#D08770 guibg=none gui=nocombine
-          highlight Indent4 guifg=#EBCB8B guibg=none gui=nocombine
-          highlight Indent5 guifg=#A3BE8C guibg=none gui=nocombine
-          highlight Indent6 guifg=#B48EAD guibg=none gui=nocombine
+          highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
+          highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
+          highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
+          highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
           highlight IndentBlanklineSpaceChar guifg=white guibg=none gui=nocombine
           highlight IndentBlanklineSpaceCharBlankline guifg=white guibg=none gui=nocombine
         endfunction
