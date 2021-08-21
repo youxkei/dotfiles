@@ -472,6 +472,12 @@ require("packer").startup{
       keymap.nnoremap{"<c-t>", youxkei_toggleterm, silent = true}
     end}
 
+    use{"karb94/neoscroll.nvim", config = function()
+      require("neoscroll").setup({
+        mappings = {"<c-u>", "<c-d>"},
+      })
+    end}
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
