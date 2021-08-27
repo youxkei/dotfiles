@@ -102,7 +102,6 @@ alias ls='exa -h --color=auto'
 alias ll='ls -al'
 alias open="xdg-open"
 alias tmux="tmux -2"
-alias tig="tig --all"
 alias fzf20="fzf --height=20%"
 alias cp="xcp"
 
