@@ -115,6 +115,7 @@
           neovim-remote
           sumneko-lua-language-server
           ocamlPackages.ocaml-lsp
+          ocamlformat
 
           #rustup
           rust-analyzer
