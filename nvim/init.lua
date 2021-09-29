@@ -143,6 +143,8 @@ require("packer").startup{
       keymap.nnoremap{"Q", "<nop>"}
       keymap.nnoremap{"i", "empty(getline('.')) ? 'cc' : 'i'", expr = true}
       keymap.nnoremap{"a", "empty(getline('.')) ? 'cc' : 'a'", expr = true}
+
+      keymap.tnoremap{"<c-v>", [[<c-\><c-n>pi]], silent = true}
     end}
 
     use{"thinca/vim-ambicmd", config = function()
