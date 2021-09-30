@@ -11,8 +11,6 @@ if fn.isdirectory(cache_dir) then
   fn.mkdir(cache_dir .. "/swap", "p")
 end
 
-opt.termguicolors = true
-
 opt.backupdir = cache_dir .. "/backup"
 opt.undodir = cache_dir .. "/undo"
 opt.directory = cache_dir .. "/swap"
@@ -48,6 +46,7 @@ opt.sidescroll = 1
 opt.list = true
 opt.listchars = {tab = "| ", trail = "-", nbsp = "%"}
 
+opt.termguicolors = true
 opt.ambiwidth = "single"
 opt.cmdheight = 2
 opt.hidden = true
