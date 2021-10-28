@@ -100,18 +100,12 @@ function youxkei_toggleterm()
 end
 
 local packer_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local compile_path = vim.fn.stdpath("data") .. "/site/pack/packer/packer_compiled.lua"
 
 if fn.empty(fn.glob(packer_dir)) > 0 then
-  fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", packer_dir})
-  cmd[[packadd packer.nvim]]
+  packer_bootstrap = fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", packer_dir})
 end
 
 require("packer").startup{
-  config = {
-    compile_path = compile_path,
-  },
-
   function(use)
     use("wbthomason/packer.nvim")
 
@@ -528,9 +522,9 @@ require("packer").startup{
       keymap.nmap{"<leader>cd", "<plug>kommentary_motion_decrease"}
       keymap.xmap{"<leader>cd", "<plug>kommentary_visual_decrease"}
     end}
+
+    if packer_bootstrap then
+      require('packer').sync()
+    end
   end
 }
-
-if fn.glob(compile_path) ~= "" then
-  vim.cmd("source " .. compile_path)
-end
