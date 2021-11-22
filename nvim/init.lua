@@ -137,6 +137,8 @@ require("packer").startup{
       keymap.nnoremap{"Q", "<nop>"}
       keymap.nnoremap{"i", "empty(getline('.')) ? 'cc' : 'i'", expr = true}
       keymap.nnoremap{"a", "empty(getline('.')) ? 'cc' : 'a'", expr = true}
+      keymap.nnoremap{"<c-j>", "<cmd>:cnext<cr>", silent = true}
+      keymap.nnoremap{"<c-k>", "<cmd>:cabove<cr>", silent = true}
 
       keymap.tnoremap{"<c-v>", [[<c-\><c-n>pi]], silent = true}
     end}
