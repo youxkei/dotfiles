@@ -479,6 +479,8 @@ require("packer").startup{
       })
     end}
 
+    use{"github/copilot.vim"}
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
