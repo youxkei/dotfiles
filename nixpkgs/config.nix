@@ -11,6 +11,7 @@
       xgetres = callPackage ./xgetres.nix {};
       tts = callPackage ./tts.nix {};
       nicolive-comments = callPackage ./nicolive-comments.nix {};
+      google-youtube3-cli = callPackage ./google-youtube3-cli.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -116,6 +117,7 @@
           sumneko-lua-language-server
           ocamlPackages.ocaml-lsp
           ocamlformat
+          google-youtube3-cli
 
           #rustup
           rust-analyzer
