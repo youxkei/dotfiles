@@ -481,6 +481,12 @@ require("packer").startup{
 
     use{"github/copilot.vim"}
 
+    use{"VonHeikemen/fine-cmdline.nvim", requires = "MunifTanjim/nui.nvim", config = function()
+      local keymap = require("astronauta.keymap")
+
+      keymap.nnoremap{":", require("fine-cmdline").open}
+    end}
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
