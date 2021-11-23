@@ -14,5 +14,5 @@ pactl set-default-sink sink
 pactl set-default-source source
 
 if [ -f ~/pCloudDrive/carla/patch_linux_"$USER".carxp ]; then
-    pw-jack /usr/local/bin/carla ~/pCloudDrive/carla/patch_linux_"$USER".carxp
+    pw-jack carla ~/pCloudDrive/carla/patch_linux_"$USER".carxp
 fi
