@@ -345,41 +345,47 @@ require("packer").startup{
       }
     end}
 
-    use{"neovim/nvim-lspconfig", config = function()
-      local keymap = require("astronauta.keymap")
-      local lspconfig = require("lspconfig")
+    use{
+      "neovim/nvim-lspconfig",
+      requires = {
+        "hrsh7th/cmp-nvim-lsp",
+        "amiralies/vim-rescript",
+      },
+      config = function()
+        local keymap = require("astronauta.keymap")
+        local lspconfig = require("lspconfig")
 
-      lspconfig.gopls.setup{}
-      lspconfig.rescriptls.setup{
-        cmd = {"node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio"}
-      }
-      lspconfig.tsserver.setup{}
-      lspconfig.sumneko_lua.setup{
-        cmd = {"lua-language-server"}
-      }
-      require("lspconfig").ocamllsp.setup{}
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
-      keymap.nnoremap{"<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true}
-      keymap.nnoremap{"<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", silent = true}
+        lspconfig.gopls.setup{
+          capabilities = capabilities,
+        }
 
-      vim.cmd[[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua,*.ml lua vim.lsp.buf.formatting_sync(nil, 1000)]]
-    end}
+        lspconfig.rescriptls.setup{
+          capabilities = capabilities,
+          cmd = {"node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio"}
+        }
 
-    use{"hrsh7th/nvim-compe", config = function()
-      require("compe").setup{
-        preselect = 'disable',
-        source = {
-          path = true,
-          buffer = true,
-          calc = true,
-          nvim_lsp = true,
-          nvim_lua = false,
-          vsnip = false,
-          ultisnips = false;
-          luasnip = false,
-        },
-      }
-    end}
+        lspconfig.tsserver.setup{
+          capabilities = capabilities,
+        }
+
+        lspconfig.sumneko_lua.setup{
+          capabilities = capabilities,
+          cmd = {"lua-language-server"},
+        }
+
+        require("lspconfig").ocamllsp.setup{
+          capabilities = capabilities,
+        }
+
+        keymap.nnoremap{"<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true}
+        keymap.nnoremap{"<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", silent = true}
+
+        vim.cmd[[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua,*.ml lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+      end,
+    }
 
     use{
       "nvim-telescope/telescope.nvim",
@@ -485,6 +491,42 @@ require("packer").startup{
       local keymap = require("astronauta.keymap")
 
       keymap.nnoremap{":", require("fine-cmdline").open}
+    end}
+
+    use{
+      "hrsh7th/nvim-cmp",
+      requires = {
+        "L3MON4D3/LuaSnip",
+        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-buffer",
+        "octaltree/cmp-look",
+        "hrsh7th/cmp-cmdline",
+      },
+      config = function()
+        local cmp = require("cmp")
+        cmp.setup{
+          snippet = {
+            expand = function(args)
+              require("luasnip").lsp_expand(args.body)
+            end
+          },
+          mapping = {},
+          sources = cmp.config.sources({
+            { name = "nvim_lsp" },
+            { name = "luasnip" },
+            { name = "path" },
+            { name = "buffer" },
+            { name = "look" },
+          }),
+        }
+
+        cmp.setup.cmdline(":", {
+          sources = {
+            { name = "cmdline" },
+          },
+        })
     end}
 
     use{"amiralies/vim-rescript"}
