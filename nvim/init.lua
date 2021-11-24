@@ -109,7 +109,7 @@ require("packer").startup{
   function(use)
     use("wbthomason/packer.nvim")
 
-    use{"christianchiarulli/nvcode-color-schemes.vim", config = function()
+    use{"christianchiarulli/nvcode-color-schemes.vim", after = "indent-blankline.nvim", config = function()
       vim.cmd[[colorscheme nord]]
     end}
 
