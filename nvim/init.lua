@@ -420,7 +420,10 @@ require("packer").startup{
       local keymap = require("astronauta.keymap")
       local hop = require("hop")
 
-      hop.setup{}
+      hop.setup{
+        keys = "hidetonaspgyfcrlkmxbjwqvu",
+        jump_on_sole_occurrence = false,
+      }
 
       keymap.nnoremap{"s", hop.hint_char1}
     end}
