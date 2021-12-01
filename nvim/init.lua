@@ -403,16 +403,16 @@ require("packer").startup{
 
         local keymap = require("astronauta.keymap")
         local builtin = require("telescope.builtin")
-        local lsp = require("telescope.builtin.lsp")
         local project = function() telescope.extensions.project.project{} end
 
         keymap.nnoremap{"<leader>tf", builtin.find_files}
         keymap.nnoremap{"<leader>tg", builtin.live_grep}
         keymap.nnoremap{"<leader>tb", builtin.buffers}
         keymap.nnoremap{"<leader>tp", project}
-        keymap.nnoremap{"<leader>lr", lsp.references}
-        keymap.nnoremap{"<leader>li", lsp.implementations}
-        keymap.nnoremap{"<leader>ls", lsp.document_symbols}
+        keymap.nnoremap{"<leader>lr", builtin.lsp_references}
+        keymap.nnoremap{"<leader>li", builtin.lsp_implementations}
+        keymap.nnoremap{"<leader>ls", builtin.lsp_document_symbols}
+        keymap.nnoremap{"<leader>le", builtin.lsp_workspace_diagnostics}
       end
     }
 
