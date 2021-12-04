@@ -336,7 +336,7 @@ require("packer").startup{
           }
         }
 
-        vim.cmd[[autocmd youxkei FileType sh,dockerfile,go,html,javascript,json,lua,nix,rust,toml,typescriptreact,typescript,yaml set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()]]
+        vim.cmd[[autocmd youxkei FileType sh,dockerfile,go,html,javascript,json,lua,nix,rust,toml,typescriptreact,typescript,yaml setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()]]
       end,
     }
 
