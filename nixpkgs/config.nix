@@ -12,6 +12,7 @@
       tts = callPackage ./tts.nix {};
       nicolive-comments = callPackage ./nicolive-comments.nix {};
       google-youtube3-cli = callPackage ./google-youtube3-cli.nix {};
+      libtree = callPackage ./libtree.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -118,6 +119,7 @@
           ocamlPackages.ocaml-lsp
           ocamlformat
           google-youtube3-cli
+          libtree
 
           #rustup
           rust-analyzer
