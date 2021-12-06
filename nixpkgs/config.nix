@@ -120,6 +120,7 @@
           ocamlformat
           google-youtube3-cli
           libtree
+          imagemagick
 
           #rustup
           rust-analyzer
