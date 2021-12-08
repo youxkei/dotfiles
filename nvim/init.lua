@@ -44,7 +44,7 @@ opt.scrolloff = 16
 opt.sidescroll = 1
 
 opt.list = true
-opt.listchars = {tab = "| ", trail = "-", nbsp = "%"}
+opt.listchars = {tab = " ･", trail = "-", nbsp = "%"}
 
 opt.termguicolors = true
 opt.ambiwidth = "single"
