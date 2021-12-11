@@ -398,13 +398,23 @@ require("packer").startup{
       config = function()
         local telescope = require("telescope")
 
-        telescope.setup{}
-
         telescope.load_extension("project")
+
+        telescope.setup{}
 
         local keymap = require("astronauta.keymap")
         local builtin = require("telescope.builtin")
-        local project = function() telescope.extensions.project.project{} end
+        local project = function()
+          telescope.extensions.project.project{
+            attach_mappings = function(prompt_bufnr)
+              require("telescope.actions").select_default:replace(function()
+                require("telescope._extensions.project.actions").change_working_directory(prompt_bufnr)
+              end)
+
+              return true
+            end
+          }
+        end
 
         keymap.nnoremap{"<leader>tf", builtin.find_files}
         keymap.nnoremap{"<leader>tg", builtin.live_grep}
