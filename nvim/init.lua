@@ -567,15 +567,15 @@ require("packer").startup{
       vim.g.operator_sandwich_no_default_key_mappings = true
       vim.g["sandwich#recipes"] = vim.g["sandwich#default_recipes"]
 
-      keymap.nmap{"<Leader>sd", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
-      keymap.nmap{"<Leader>sr", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
-      keymap.nmap{"<Leader>sdb", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
-      keymap.nmap{"<Leader>srb", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
-      keymap.nmap{"<Leader>sa", "<plug>(operator-sandwich-add)"}
-      keymap.xmap{"<Leader>sa", "<plug>(operator-sandwich-add)"}
-      keymap.omap{"<Leader>sa", "<plug>(operator-sandwich-g@)"}
-      keymap.xmap{"<Leader>sd", "<plug>(operator-sandwich-delete)"}
-      keymap.xmap{"<Leader>sr", "<plug>(operator-sandwich-replace)"}
+      keymap.nmap{"<leader>sd", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
+      keymap.nmap{"<leader>sr", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
+      keymap.nmap{"<leader>sdb", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
+      keymap.nmap{"<leader>srb", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
+      keymap.nmap{"<leader>sa", "<plug>(operator-sandwich-add)"}
+      keymap.xmap{"<leader>sa", "<plug>(operator-sandwich-add)"}
+      keymap.omap{"<leader>sa", "<plug>(operator-sandwich-g@)"}
+      keymap.xmap{"<leader>sd", "<plug>(operator-sandwich-delete)"}
+      keymap.xmap{"<leader>sr", "<plug>(operator-sandwich-replace)"}
     end}
 
     use{"b3nj5m1n/kommentary", config = function()
