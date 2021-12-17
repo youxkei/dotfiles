@@ -140,7 +140,7 @@
 
           # bs-platform
 
-          go
+          go_1_17
           gopls
           goimports
           gore
