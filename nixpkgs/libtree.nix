@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtree";
-  version = "2.0.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://github.com/haampie/libtree/releases/download/v${version}/libtree_x86_64";
-    sha256 = "1268x1gkkqrn5r5f26kf0r9gddmdwh822mxxnnnhjq3pgxk4afs4";
+    sha256 = "0a5vyi3p7c9ln2bbm646121hl43q9ihm1ykv8v189mddrysp7db4";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
