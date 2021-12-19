@@ -13,6 +13,7 @@
       nicolive-comments = callPackage ./nicolive-comments.nix {};
       google-youtube3-cli = callPackage ./google-youtube3-cli.nix {};
       libtree = callPackage ./libtree.nix {};
+      nvim = callPackage ./nvim.nix {};
 
       typescript = nodePackages.typescript;
       typescript-language-server = nodePackages.typescript-language-server;
@@ -121,6 +122,7 @@
           google-youtube3-cli
           libtree
           imagemagick
+          nvim
 
           #rustup
           rust-analyzer
