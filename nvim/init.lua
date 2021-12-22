@@ -480,7 +480,7 @@ require("packer").startup{
       ]]
     end}
 
-    use{"akinsho/nvim-toggleterm.lua", config = function()
+    use{"akinsho/toggleterm.nvim", config = function()
       local keymap = require("astronauta.keymap")
 
       require("toggleterm").setup{
