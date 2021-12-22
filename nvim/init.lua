@@ -486,6 +486,9 @@ require("packer").startup{
       require("toggleterm").setup{
         open_mapping = "<c-t>",
         direction = "float",
+        float_opts = {
+          border = "double",
+        },
       }
 
       keymap.nnoremap{"<c-t>", youxkei_toggleterm, silent = true}
