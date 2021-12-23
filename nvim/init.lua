@@ -86,12 +86,12 @@ cmd[[
   augroup END
 ]]
 
-function youxkei_toggleterm()
+function Youxkei_toggleterm()
   local id = vim.t.youxkei_toggleterm_id
 
   if not vim.t.youxkei_toggleterm_id then
-    id = youxkei_next_toggleterm_unique_id or 1
-    youxkei_next_toggleterm_unique_id = id + 1
+    id = Youxkei_next_toggleterm_unique_id or 1
+    Youxkei_next_toggleterm_unique_id = id + 1
 
     vim.t.youxkei_toggleterm_id = id
   end
@@ -491,7 +491,7 @@ require("packer").startup{
         },
       }
 
-      keymap.nnoremap{"<c-t>", youxkei_toggleterm, silent = true}
+      keymap.nnoremap{"<c-t>", Youxkei_toggleterm, silent = true}
     end}
 
     use{"karb94/neoscroll.nvim", config = function()
