@@ -544,6 +544,15 @@ require("packer").startup{
         })
     end}
 
+    use{"folke/trouble.nvim", config = function()
+      local trouble = require("trouble")
+      local keymap = require("astronauta.keymap")
+
+      trouble.setup{}
+
+      keymap.nnoremap{"<leader>r", trouble.open}
+    end}
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
