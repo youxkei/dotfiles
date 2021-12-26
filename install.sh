@@ -23,7 +23,7 @@ declare -A PATHS=(
     [compton.conf]=$XDG_CONFIG_HOME/compton.conf
     [starship.toml]=$XDG_CONFIG_HOME/starship.toml
 
-    [jack/start_jack.sh]=~/bin/start_jack
+    [pipewire/start_carla.sh]=~/bin/start_carla
     [i3/i3_move.sh]=~/bin/i3_move
     [bin/talk]=~/bin/talk
     [bin/mozc_config]=~/bin/mozc_config

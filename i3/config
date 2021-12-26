@@ -196,4 +196,4 @@ exec --no-startup-id google-chrome
 exec --no-startup-id env PULSE_SINK=discord_sink PULSE_SOURCE=discord_source discord
 exec --no-startup-id nixGLIntel kitty
 
-exec --no-startup-id sleep 5s; start_jack
+exec --no-startup-id sleep 5s; start_carla
