@@ -36,7 +36,6 @@ declare -A PATHS=(
     [bin/screenshot.sh]=~/bin/screenshot
     [bin/backup.sh]=~/bin/backup
     [bin/nicolive-comment-viewer.sh]=~/bin/nicolive-comment-viewer
-    [bin/nvim]=~/bin/nvim
     [bin/devhub]=~/bin/devhub
 )
 
