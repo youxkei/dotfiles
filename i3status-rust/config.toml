@@ -16,13 +16,13 @@ command = 'echo  $(xclip -o -sel clip | xargs | rg -o "^.{0,32}")'
 
 [[block]]
 block = "net"
-format = "{speed_down;K*b}{speed_up;K*b}"
+format = "{speed_down;K*b}ps{speed_up;K*b}ps"
 interval = 1
 
 [[block]]
 block = "speedtest"
 interval = 600
-format = "\uf0ac{speed_down;K*b}{speed_up;K*b}"
+format = "\uf0ac{speed_down;K*b}ps{speed_up;K*b}ps"
 
 [[block]]
 block = "disk_space"
