@@ -114,7 +114,6 @@
           glances
           gping
           dogdns
-          kitty
           neovim-remote
           sumneko-lua-language-server
           ocamlPackages.ocaml-lsp
