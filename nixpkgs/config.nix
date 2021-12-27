@@ -107,7 +107,7 @@
           #neovim-unwrapped
           yadm
           rpg-cli
-          protontricks
+          #protontricks
           duf
           mcfly
           choose
