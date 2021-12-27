@@ -122,6 +122,7 @@
           libtree
           imagemagick
           nvim
+          nix-tree
 
           #rustup
           rust-analyzer
