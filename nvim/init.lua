@@ -417,6 +417,7 @@ require("packer").startup{
         end
 
         keymap.nnoremap{"<leader>tf", builtin.find_files}
+        keymap.nnoremap{"<leader>tF", function() builtin.find_files{hidden = true} end}
         keymap.nnoremap{"<leader>tg", builtin.live_grep}
         keymap.nnoremap{"<leader>tb", builtin.buffers}
         keymap.nnoremap{"<leader>tp", project}
