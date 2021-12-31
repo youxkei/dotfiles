@@ -394,11 +394,13 @@ require("packer").startup{
         "nvim-lua/popup.nvim",
         "nvim-lua/plenary.nvim",
         "nvim-telescope/telescope-project.nvim",
+        "nvim-telescope/telescope-file-browser.nvim",
       },
       config = function()
         local telescope = require("telescope")
 
         telescope.load_extension("project")
+        telescope.load_extension("file_browser")
 
         telescope.setup{}
 
@@ -421,6 +423,7 @@ require("packer").startup{
         keymap.nnoremap{"<leader>tg", builtin.live_grep}
         keymap.nnoremap{"<leader>tb", builtin.buffers}
         keymap.nnoremap{"<leader>tp", project}
+        keymap.nnoremap{"<leader>te", telescope.extensions.file_browser.file_browser}
         keymap.nnoremap{"<leader>lr", builtin.lsp_references}
         keymap.nnoremap{"<leader>li", builtin.lsp_implementations}
         keymap.nnoremap{"<leader>ls", builtin.lsp_document_symbols}
