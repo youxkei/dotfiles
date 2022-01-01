@@ -35,7 +35,6 @@ declare -A PATHS=(
     [bin/screenshot.sh]=~/bin/screenshot
     [bin/backup.sh]=~/bin/backup
     [bin/nicolive-comment-viewer.sh]=~/bin/nicolive-comment-viewer
-    [bin/devhub]=~/bin/devhub
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
