@@ -1,5 +1,4 @@
 *.swp
 *.swo
 *.o
-.dub/*
 .bundle/cache
