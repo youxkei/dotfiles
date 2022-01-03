@@ -16,5 +16,5 @@ pactl set-default-sink sink
 pactl set-default-source source
 
 if [ -f ~/pCloudDrive/carla/patch_linux_"$USER".carxp ]; then
-    pw-jack carla ~/pCloudDrive/carla/patch_linux_"$USER".carxp
+    PIPEWIRE_LATENCY=32/48000 pw-jack carla ~/pCloudDrive/carla/patch_linux_"$USER".carxp
 fi
