@@ -123,6 +123,7 @@
           imagemagick
           nvim
           nix-tree
+          glow
 
           #rustup
           rust-analyzer
