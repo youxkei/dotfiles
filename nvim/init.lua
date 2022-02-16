@@ -428,7 +428,7 @@ require("packer").startup{
         keymap.nnoremap{"<leader>lr", builtin.lsp_references}
         keymap.nnoremap{"<leader>li", builtin.lsp_implementations}
         keymap.nnoremap{"<leader>ls", builtin.lsp_document_symbols}
-        keymap.nnoremap{"<leader>le", builtin.lsp_workspace_diagnostics}
+        keymap.nnoremap{"<leader>le", builtin.diagnostics}
       end
     }
 
