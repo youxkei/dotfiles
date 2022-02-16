@@ -424,6 +424,7 @@ require("packer").startup{
         keymap.nnoremap{"<leader>tb", builtin.buffers}
         keymap.nnoremap{"<leader>tp", project}
         keymap.nnoremap{"<leader>te", telescope.extensions.file_browser.file_browser}
+        keymap.nnoremap{"<leader>tr", builtin.resume}
         keymap.nnoremap{"<leader>lr", builtin.lsp_references}
         keymap.nnoremap{"<leader>li", builtin.lsp_implementations}
         keymap.nnoremap{"<leader>ls", builtin.lsp_document_symbols}
