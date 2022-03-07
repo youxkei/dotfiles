@@ -558,6 +558,8 @@ require("packer").startup{
       keymap.nnoremap{"<leader>r", trouble.open}
     end}
 
+    use{"ellisonleao/glow.nvim"}
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
