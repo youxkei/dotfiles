@@ -560,6 +560,17 @@ require("packer").startup{
 
     use{"ellisonleao/glow.nvim"}
 
+    use{"hoschi/yode-nvim", requires = "nvim-lua/plenary.nvim", config = function()
+      local keymap = require("astronauta.keymap")
+
+      require('yode-nvim').setup({})
+
+      keymap.vnoremap{"<leader>yc", ":YodeCreateSeditorFloating<cr>"}
+    end}
+
+
+    -- languages, text objects, operators
+
     use{"amiralies/vim-rescript"}
 
     use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
