@@ -169,8 +169,8 @@ require("packer").startup{
         tab_component_function = {
           cwd = "LightlineCWD",
         },
-        separator = {left = "\u{e0bc}", right = "\u{e0be}"},
-        subseparator = {left = "\u{e0bd}", right = "\u{e0bf}"},
+        separator = {left = "\u{e0b4}", right = "\u{e0b6}"},
+        subseparator = {left = "\u{e0b5}", right = "\u{e0b7}"},
       }
 
       vim.cmd[[
