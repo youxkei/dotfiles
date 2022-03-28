@@ -6,7 +6,7 @@
       <string>monospace</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>HackGenNerd Console</string>
+      <string>UDEV Gothic NF</string>
     </edit>
   </match>
   <match target="pattern">
@@ -14,7 +14,7 @@
       <string>Courier New</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>HackGenNerd Console</string>
+      <string>UDEV Gothic NF</string>
     </edit>
   </match>
   <match target="pattern">
@@ -22,7 +22,7 @@
       <string>Liberation Mono</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>HackGenNerd Console</string>
+      <string>UDEV Gothic NF</string>
     </edit>
   </match>
   <match target="pattern">
@@ -30,7 +30,7 @@
       <string>Consolas</string>
     </test>
     <edit name="family" mode="assign" binding="same">
-      <string>HackGenNerd Console</string>
+      <string>UDEV Gothic NF</string>
     </edit>
   </match>
 </fontconfig>
