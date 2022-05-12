@@ -20,7 +20,7 @@ opt.backup = true
 opt.swapfile = true
 
 opt.cindent = true
-opt.cinoptions = {"L0", "(2", "U1", "m1"}
+opt.cinoptions = { "L0", "(2", "U1", "m1" }
 
 opt_global.expandtab = true
 opt_global.smarttab = true
@@ -28,8 +28,8 @@ opt_global.shiftwidth = 4
 opt_global.tabstop = 4
 opt_global.softtabstop = 4
 
-opt.fileencodings = {"ucs-bom", "utf-8", "sjis", "cp932", "euc-jp"}
-opt.fileformats = {"unix", "dos", "mac"}
+opt.fileencodings = { "ucs-bom", "utf-8", "sjis", "cp932", "euc-jp" }
+opt.fileformats = { "unix", "dos", "mac" }
 
 opt.foldenable = false
 opt.foldmethod = "indent"
@@ -44,7 +44,7 @@ opt.scrolloff = 16
 opt.sidescroll = 1
 
 opt.list = true
-opt.listchars = {tab = "･･", trail = "-", nbsp = "%"}
+opt.listchars = { tab = "･･", trail = "-", nbsp = "%" }
 
 opt.termguicolors = true
 opt.ambiwidth = "single"
@@ -57,25 +57,25 @@ opt.hlsearch = true
 opt.digraph = false
 opt.showcmd = true
 opt.showtabline = 2
-opt.backspace = {"indent", "eol", "start"}
+opt.backspace = { "indent", "eol", "start" }
 opt.laststatus = 2
 opt.wildmenu = true
 opt.signcolumn = "yes"
-opt.completeopt = {"menuone", "noselect"}
+opt.completeopt = { "menuone", "noselect" }
 opt.modeline = true
 opt.inccommand = "nosplit"
 opt.autoread = true
 opt.scrollback = 2000
 opt.synmaxcol = 512
 opt.updatetime = 100
-opt.iskeyword = {"@", "48-57", "_", "192-255", "$", "@-@", "-"}
+opt.iskeyword = { "@", "48-57", "_", "192-255", "$", "@-@", "-" }
 opt.clipboard = "unnamedplus"
 opt.joinspaces = false
 opt.timeout = false
 
 g.mapleader = ","
 
-cmd[[
+cmd [[
   augroup youxkei
     autocmd!
 
@@ -85,6 +85,31 @@ cmd[[
     autocmd FileType rescript,lua,nix,javascript,ocaml,text setlocal shiftwidth=2 tabstop=2 softtabstop=2
   augroup END
 ]]
+
+vim.keymap.set("n", "j", "gj")
+vim.keymap.set("n", "k", "gk")
+vim.keymap.set("n", "gj", "j")
+vim.keymap.set("n", "gk", "k")
+
+for i = 1, 9 do
+  local lhs = "<c-b>" .. i
+  local rhs = "<esc>" .. i .. "gt"
+
+  if i == 9 then
+    rhs = "<esc><cmd>tablast<cr>"
+  end
+
+  vim.keymap.set("n", lhs, rhs, { silent = true })
+  vim.keymap.set("i", lhs, rhs, { silent = true })
+end
+
+vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { silent = true })
+vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "i", "empty(getline('.')) ? 'cc' : 'i'", { expr = true })
+vim.keymap.set("n", "a", "empty(getline('.')) ? 'cc' : 'a'", { expr = true })
+vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>", { silent = true })
+vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>", { silent = true })
+vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]], { silent = true })
 
 function Youxkei_toggleterm()
   local id = vim.t.youxkei_toggleterm_id
@@ -99,69 +124,36 @@ function Youxkei_toggleterm()
   require("toggleterm").toggle(id)
 end
 
-local packer_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-
-if fn.empty(fn.glob(packer_dir)) > 0 then
-  packer_bootstrap = fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", packer_dir})
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
 end
 
-require("packer").startup{
+require("packer").startup {
   function(use)
     use("wbthomason/packer.nvim")
 
-    use{"christianchiarulli/nvcode-color-schemes.vim", after = "indent-blankline.nvim", config = function()
-      vim.cmd[[colorscheme nord]]
-    end}
+    use { "christianchiarulli/nvcode-color-schemes.vim", after = "indent-blankline.nvim", config = function()
+      vim.cmd [[colorscheme nord]]
+    end }
 
-    use{"tjdevries/astronauta.nvim", config = function()
-      local keymap = require("astronauta.keymap")
+    use { "thinca/vim-ambicmd", config = function()
+      vim.keymap.set("c", "<cr>", "ambicmd#expand('<cr>')", { expr = true })
+      vim.keymap.set("c", "<space>", "ambicmd#expand('<space>')", { expr = true })
+    end }
 
-      keymap.nnoremap{"j", "gj"}
-      keymap.nnoremap{"k", "gk"}
-      keymap.nnoremap{"gj", "j"}
-      keymap.nnoremap{"gk", "k"}
-
-      for i = 1, 9 do
-        local lhs = "<c-b>" .. i
-        local rhs = "<esc>" .. i .. "gt"
-
-        if i == 9 then
-          rhs = "<esc><cmd>tablast<cr>"
-        end
-
-        keymap.noremap{lhs, rhs, silent = true}
-        keymap.inoremap{lhs, rhs, silent = true}
-      end
-
-      keymap.nnoremap{"<leader>w", "<cmd>w<cr>", silent = true}
-      keymap.nnoremap{"Q", "<nop>"}
-      keymap.nnoremap{"i", "empty(getline('.')) ? 'cc' : 'i'", expr = true}
-      keymap.nnoremap{"a", "empty(getline('.')) ? 'cc' : 'a'", expr = true}
-      keymap.nnoremap{"<c-j>", "<cmd>cnext<cr>", silent = true}
-      keymap.nnoremap{"<c-k>", "<cmd>cabove<cr>", silent = true}
-
-      keymap.tnoremap{"<c-v>", [[<c-\><c-n>pi]], silent = true}
-    end}
-
-    use{"thinca/vim-ambicmd", config = function()
-      local keymap = require("astronauta.keymap")
-
-      keymap.cnoremap{"<cr>", "ambicmd#expand('<cr>')", expr = true}
-      keymap.cnoremap{"<space>", "ambicmd#expand('<space>')", expr = true}
-    end}
-
-    use{"itchyny/lightline.vim", config = function()
+    use { "itchyny/lightline.vim", config = function()
       vim.g.lightline = {
         colorscheme = "nord",
         active = {
           left = {
-            {"cwd", "mode", "paste"},
-            {"readonly", "relativepath", "modified"},
+            { "cwd", "mode", "paste" },
+            { "readonly", "relativepath", "modified" },
           },
         },
         tab = {
-          active = {"tabnum", "cwd"},
-          inactive = {"tabnum", "cwd"},
+          active = { "tabnum", "cwd" },
+          inactive = { "tabnum", "cwd" },
         },
         component = {
           readonly = "%{&readonly?'⌬':''}",
@@ -169,96 +161,83 @@ require("packer").startup{
         tab_component_function = {
           cwd = "LightlineCWD",
         },
-        separator = {left = "\u{e0b4}", right = "\u{e0b6}"},
-        subseparator = {left = "\u{e0b5}", right = "\u{e0b7}"},
+        separator = { left = "\u{e0b4}", right = "\u{e0b6}" },
+        subseparator = { left = "\u{e0b5}", right = "\u{e0b7}" },
       }
 
-      vim.cmd[[
+      vim.cmd [[
         function! LightlineCWD(n) abort
           let cwd = gettabvar(a:n, 'cwd')
           return fnamemodify(empty(cwd) ? getcwd() : cwd, ':t')
         endfunction
       ]]
-    end}
+    end }
 
-    use{"previm/previm"}
+    use { "previm/previm" }
 
-    use{"LeafCage/yankround.vim", config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { "LeafCage/yankround.vim", config = function()
       vim.g.yankround_dir = vim.fn.stdpath("cache") .. "/yankround"
       vim.g.yankround_max_history = 100
 
-      keymap.nmap{"p", "<plug>(yankround-p)"}
-      keymap.xmap{"p", "<plug>(yankround-p)"}
-      keymap.nmap{"P", "<plug>(yankround-P)"}
-      keymap.nmap{"gp", "<plug>(yankround-gp)"}
-      keymap.xmap{"gp", "<plug>(yankround-gp)"}
-      keymap.nmap{"gP", "<plug>(yankround-gP)"}
-      keymap.nmap{"<C-p>", "<plug>(yankround-prev)"}
-      keymap.nmap{"<C-n>", "<plug>(yankround-next)"}
-    end}
+      vim.keymap.set({ "n", "x" }, "p", "<plug>(yankround-p)", { remap = true })
+      vim.keymap.set("n", "P", "<plug>(yankround-P)", { remap = true })
+      vim.keymap.set({ "n", "x" }, "gp", "<plug>(yankround-gp)", { remap = true })
+      vim.keymap.set("n", "gP", "<plug>(yankround-gP)", { remap = true })
+      vim.keymap.set("n", "<C-p>", "<plug>(yankround-prev)", { remap = true })
+      vim.keymap.set("n", "<C-n>", "<plug>(yankround-next)", { remap = true })
+    end }
 
-    use{"kana/vim-niceblock"}
+    use { "kana/vim-niceblock" }
 
-    use{"tpope/vim-repeat"}
+    use { "tpope/vim-repeat" }
 
-    use{"junegunn/vim-easy-align", config = function()
-      local keymap = require("astronauta.keymap")
+    use { "junegunn/vim-easy-align", config = function()
+      vim.keymap.set("v", "<enter>", "<plug>(EasyAlign)", { remap = true })
+    end }
 
-      keymap.vmap{"<enter>", "<plug>(EasyAlign)"}
-    end}
-
-    use{"mbbill/undotree", config = function()
+    use { "mbbill/undotree", config = function()
       vim.g.undotree_WindowLayout = 3
-    end}
+    end }
 
-    use{"rhysd/committia.vim"}
+    use { "rhysd/committia.vim" }
 
-    use{"kana/vim-tabpagecd"}
+    use { "kana/vim-tabpagecd" }
 
-    use{"w0rp/ale", config = function()
-      vim.g.ale_lint_on_save = 1
+    use { "w0rp/ale", disable = true, config = function()
+      vim.g.ale_lint_on_save = 0
+      vim.g.ale_lint_on_text_changed = 0
       vim.g.ale_fix_on_save = 1
-      vim.g.ale_lint_on_text_changed = 1
 
       vim.g.ale_fixers = {
-        ["*"] = {"remove_trailing_lines", "trim_whitespace"},
+        -- ["*"] = {"remove_trailing_lines", "trim_whitespace"},
+        ["*"] = { "remove_trailing_lines" },
       }
-    end}
+    end }
 
-    use{"machakann/vim-swap", config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { "machakann/vim-swap", config = function()
       vim.g.swap_no_default_key_mappings = true
 
-      keymap.nmap{"gs", "<plug>(swap-interactive)"}
-      keymap.omap{"i,", "<plug>(swap-textobject-i)"}
-      keymap.xmap{"i,", "<plug>(swap-textobject-i)"}
-      keymap.omap{"a,", "<plug>(swap-textobject-a)"}
-      keymap.xmap{"a,", "<plug>(swap-textobject-a)"}
-    end}
+      vim.keymap.set("n", "gs", "<plug>(swap-interactive)", { remap = true })
+      vim.keymap.set({ "o", "x" }, "i,", "<plug>(swap-textobject-i)", { remap = true })
+      vim.keymap.set({ "o", "x" }, "a,", "<plug>(swap-textobject-a)", { remap = true })
+    end }
 
-    use{"lambdalisue/suda.vim"}
+    use { "lambdalisue/suda.vim" }
 
-    use{"sgur/vim-editorconfig"}
+    use { "sgur/vim-editorconfig" }
 
-    use{"prakashdanish/vim-githubinator"}
+    use { "prakashdanish/vim-githubinator" }
 
-    use{"lambdalisue/vim-manpager", opt = true, cmd = "MANPAGER"}
+    use { "lambdalisue/vim-manpager", opt = true, cmd = "MANPAGER" }
 
-    use{"haya14busa/vim-asterisk", config = function()
-      local keymap = require("astronauta.keymap")
+    use { "haya14busa/vim-asterisk", config = function()
+      vim.keymap.set({ "n", "v" }, "*", "<plug>(asterisk-z*)<cmd>lua require('hlslens').start()<cr>", { remap = true })
+      vim.keymap.set({ "n", "v" }, "#", "<plug>(asterisk-z#)<cmd>lua require('hlslens').start()<cr>", { remap = true })
+      vim.keymap.set({ "n", "v" }, "g*", "<plug>(asterisk-gz*)<cmd>lua require('hlslens').start()<cr>", { remap = true })
+      vim.keymap.set({ "n", "v" }, "g#", "<plug>(asterisk-gz#)<cmd>lua require('hlslens').start()<cr>", { remap = true })
+    end }
 
-      keymap.map{"*", "<plug>(asterisk-z*)<cmd>lua require('hlslens').start()<cr>"}
-      keymap.map{"#", "<plug>(asterisk-z#)<cmd>lua require('hlslens').start()<cr>"}
-      keymap.map{"g*", "<plug>(asterisk-gz*)<cmd>lua require('hlslens').start()<cr>"}
-      keymap.map{"g#", "<plug>(asterisk-gz#)<cmd>lua require('hlslens').start()<cr>"}
-    end}
-
-    use{"chaoren/vim-wordmotion", config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { "chaoren/vim-wordmotion", config = function()
       vim.g.wordmotion_spaces = "_-."
       vim.g.wordmotion_mappings = {
         W = "",
@@ -269,43 +248,36 @@ require("packer").startup{
         iW = "",
       }
 
-      keymap.nnoremap{"W", "w"}
-      keymap.nnoremap{"B", "b"}
-      keymap.nnoremap{"E", "e"}
-      keymap.nnoremap{"gE", "ge"}
-      keymap.onoremap{"W", "w"}
-      keymap.xnoremap{"W", "w"}
-      keymap.onoremap{"B", "b"}
-      keymap.xnoremap{"B", "b"}
-      keymap.onoremap{"E", "e"}
-      keymap.xnoremap{"E", "e"}
-      keymap.onoremap{"GE", "ge"}
-      keymap.xnoremap{"GE", "ge"}
-      keymap.xnoremap{"iW", "iw"}
-      keymap.onoremap{"iW", "iw"}
-      keymap.xnoremap{"aW", "aw"}
-      keymap.onoremap{"aW", "aw"}
-    end}
+      vim.keymap.set("n", "W", "w")
+      vim.keymap.set("n", "B", "b")
+      vim.keymap.set("n", "E", "e")
+      vim.keymap.set("n", "gE", "ge")
 
-    use{"inkarkat/vim-mark", requires = "inkarkat/vim-ingo-library", config = function()
-      local keymap = require("astronauta.keymap")
+      vim.keymap.set({ "o", "x" }, "W", "w")
+      vim.keymap.set({ "o", "x" }, "B", "b")
+      vim.keymap.set({ "o", "x" }, "E", "e")
+      vim.keymap.set({ "o", "x" }, "GE", "ge")
+      vim.keymap.set({ "o", "x" }, "iW", "iw")
+      vim.keymap.set({ "o", "x" }, "aW", "aw")
+    end }
 
+    use { "inkarkat/vim-mark", requires = "inkarkat/vim-ingo-library", config = function()
       vim.g.mw_no_mappings = 1
       vim.g.mwDefaultHighlightingPalette = 'maximum'
 
-      keymap.nmap{"<leader>m", "<plug>MarkSet"}
-      keymap.vmap{"<leader>m", "<plug>MarkSet"}
-      keymap.nmap{"<leader>n", "<plug>MarkAllClear"}
-    end}
+      vim.keymap.set({ "n", "v" }, "<leader>m", "<plug>MarkSet", { remap = true })
+      vim.keymap.set("n", "<leader>n", "<plug>MarkAllClear", { remap = true })
+    end }
 
-    use{
+    use {
       "nvim-treesitter/nvim-treesitter",
       run = ":TSUpdate",
       requires = {
         "p00f/nvim-ts-rainbow",
+        "nvim-treesitter/nvim-treesitter-textobjects",
       },
       config = function()
-        require("nvim-treesitter.configs").setup{
+        require("nvim-treesitter.configs").setup {
           ensure_installed = {
             "bash",
             "comment",
@@ -333,62 +305,85 @@ require("packer").startup{
             enable = true,
             extended_mode = true,
             max_file_lines = 1000,
-          }
-        }
+          },
+          textobjects = {
+            move = {
+              enable = true,
+              set_jumps = true,
+              goto_next_start = {
+                ["]m"] = "@function.outer",
+              },
+              goto_next_end = {
+                ["]M"] = "@function.outer",
+              },
+              goto_previous_start = {
+                ["[m"] = "@function.outer",
+              },
+              goto_previous_end = {
+                ["[M"] = "@function.outer",
+              },
+            },
+          }, }
 
-        vim.cmd[[autocmd youxkei FileType sh,dockerfile,go,html,javascript,json,lua,nix,rust,toml,typescriptreact,typescript,yaml setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()]]
+        vim.cmd [[autocmd youxkei FileType sh,dockerfile,go,html,javascript,json,lua,nix,rust,toml,typescriptreact,typescript,yaml setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()]]
       end,
     }
 
-    use{"romgrk/nvim-treesitter-context", config = function()
-      require("treesitter-context.config").setup{
+    use { "romgrk/nvim-treesitter-context", config = function()
+      require("treesitter-context").setup {
         enable = true,
       }
-    end}
+    end }
 
-    use{
+    use {
       "neovim/nvim-lspconfig",
       requires = {
         "hrsh7th/cmp-nvim-lsp",
         "amiralies/vim-rescript",
       },
       config = function()
-        local keymap = require("astronauta.keymap")
         local lspconfig = require("lspconfig")
 
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
-        lspconfig.gopls.setup{
+        lspconfig.gopls.setup {
           capabilities = capabilities,
         }
 
-        lspconfig.rescriptls.setup{
+        lspconfig.rescriptls.setup {
           capabilities = capabilities,
-          cmd = {"node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio"}
+          cmd = { "node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio" }
         }
 
-        lspconfig.tsserver.setup{
-          capabilities = capabilities,
-        }
-
-        lspconfig.sumneko_lua.setup{
-          capabilities = capabilities,
-          cmd = {"lua-language-server"},
-        }
-
-        require("lspconfig").ocamllsp.setup{
+        lspconfig.tsserver.setup {
           capabilities = capabilities,
         }
 
-        keymap.nnoremap{"<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", silent = true}
-        keymap.nnoremap{"<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", silent = true}
+        lspconfig.sumneko_lua.setup {
+          capabilities = capabilities,
+          cmd = { "lua-language-server" },
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { 'vim' }
+              }
+            }
+          }
+        }
 
-        vim.cmd[[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua,*.ml lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+        lspconfig.ocamllsp.setup {
+          capabilities = capabilities,
+        }
+
+        vim.keymap.set("n", "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", { silent = true })
+        vim.keymap.set("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
+
+        vim.cmd [[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua,*.ml lua vim.lsp.buf.formatting_sync(nil, 1000)]]
       end,
     }
 
-    use{
+    use {
       "nvim-telescope/telescope.nvim",
       requires = {
         "nvim-lua/popup.nvim",
@@ -402,12 +397,11 @@ require("packer").startup{
         telescope.load_extension("project")
         telescope.load_extension("file_browser")
 
-        telescope.setup{}
+        telescope.setup {}
 
-        local keymap = require("astronauta.keymap")
         local builtin = require("telescope.builtin")
         local project = function()
-          telescope.extensions.project.project{
+          telescope.extensions.project.project {
             attach_mappings = function(prompt_bufnr)
               require("telescope.actions").select_default:replace(function()
                 require("telescope._extensions.project.actions").change_working_directory(prompt_bufnr)
@@ -418,59 +412,56 @@ require("packer").startup{
           }
         end
 
-        keymap.nnoremap{"<leader>tf", builtin.find_files}
-        keymap.nnoremap{"<leader>tF", function() builtin.find_files{hidden = true} end}
-        keymap.nnoremap{"<leader>tg", builtin.live_grep}
-        keymap.nnoremap{"<leader>tb", builtin.buffers}
-        keymap.nnoremap{"<leader>tp", project}
-        keymap.nnoremap{"<leader>te", telescope.extensions.file_browser.file_browser}
-        keymap.nnoremap{"<leader>tr", builtin.resume}
-        keymap.nnoremap{"<leader>lr", builtin.lsp_references}
-        keymap.nnoremap{"<leader>li", builtin.lsp_implementations}
-        keymap.nnoremap{"<leader>ls", builtin.lsp_document_symbols}
-        keymap.nnoremap{"<leader>le", builtin.diagnostics}
+        vim.keymap.set("n", "<leader>tf", builtin.find_files)
+        vim.keymap.set("n", "<leader>tF", function() builtin.find_files { hidden = true } end)
+        vim.keymap.set("n", "<leader>tg", builtin.live_grep)
+        vim.keymap.set("n", "<leader>tb", builtin.buffers)
+        vim.keymap.set("n", "<leader>tp", project)
+        vim.keymap.set("n", "<leader>te", telescope.extensions.file_browser.file_browser)
+        vim.keymap.set("n", "<leader>tr", builtin.resume)
+        vim.keymap.set("n", "<leader>lr", builtin.lsp_references)
+        vim.keymap.set("n", "<leader>li", builtin.lsp_implementations)
+        vim.keymap.set("n", "<leader>ls", builtin.lsp_document_symbols)
+        vim.keymap.set("n", "<leader>le", builtin.diagnostics)
       end
     }
 
-    use{"phaazon/hop.nvim", config = function()
-      local keymap = require("astronauta.keymap")
+    use { "phaazon/hop.nvim", config = function()
       local hop = require("hop")
 
-      hop.setup{
+      hop.setup {
         keys = "etonaspgyfcrlkmxbjwqvuhid",
         jump_on_sole_occurrence = false,
       }
 
-      keymap.nnoremap{"s", hop.hint_char1}
-    end}
+      vim.keymap.set("n", "s", hop.hint_char1)
+    end }
 
-    use{"lewis6991/gitsigns.nvim", requires = "nvim-lua/plenary.nvim", config = function()
+    use { "lewis6991/gitsigns.nvim", requires = "nvim-lua/plenary.nvim", config = function()
       require("gitsigns").setup()
-    end}
+    end }
 
-    use{'kevinhwang91/nvim-hlslens', config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { 'kevinhwang91/nvim-hlslens', config = function()
       require("hlslens").setup({
         calm_down = true,
       })
 
-      keymap.noremap{"n", "<cmd>execute('normal! ' . v:count1 . 'n')<cr><cmd>lua require('hlslens').start()<cr>", silent = true}
-      keymap.noremap{"N", "<cmd>execute('normal! ' . v:count1 . 'N')<cr><cmd>lua require('hlslens').start()<cr>", silent = true}
-      keymap.noremap{"*", "*<cmd>lua require('hlslens').start()<cr>"}
-      keymap.noremap{"#", "#<cmd>lua require('hlslens').start()<cr>"}
-      keymap.noremap{"g*", "g*<cmd>lua require('hlslens').start()<cr>"}
-      keymap.noremap{"g#", "g#<cmd>lua require('hlslens').start()<cr>"}
-    end}
+      vim.keymap.set("n", "n", "<cmd>execute('normal! ' . v:count1 . 'n')<cr><cmd>lua require('hlslens').start()<cr>", { silent = true })
+      vim.keymap.set("n", "N", "<cmd>execute('normal! ' . v:count1 . 'N')<cr><cmd>lua require('hlslens').start()<cr>", { silent = true })
+      vim.keymap.set("n", "*", "*<cmd>lua require('hlslens').start()<cr>")
+      vim.keymap.set("n", "#", "#<cmd>lua require('hlslens').start()<cr>")
+      vim.keymap.set("n", "g*", "g*<cmd>lua require('hlslens').start()<cr>")
+      vim.keymap.set("n", "g#", "g#<cmd>lua require('hlslens').start()<cr>")
+    end }
 
-    use{"lukas-reineke/indent-blankline.nvim", config = function()
-      require("indent_blankline").setup{
+    use { "lukas-reineke/indent-blankline.nvim", config = function()
+      require("indent_blankline").setup {
         char = "│",
-        char_highlight_list = {"Indent1", "Indent2", "Indent3", "Indent4", "Indent5"},
-        buftype_exclude = {"terminal"}
+        char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
+        buftype_exclude = { "terminal" }
       }
 
-      vim.cmd[[
+      vim.cmd [[
         function! BlanklineHighlights() abort
           highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
           highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
@@ -483,12 +474,10 @@ require("packer").startup{
 
         autocmd youxkei ColorScheme * call BlanklineHighlights()
       ]]
-    end}
+    end }
 
-    use{"akinsho/toggleterm.nvim", config = function()
-      local keymap = require("astronauta.keymap")
-
-      require("toggleterm").setup{
+    use { "akinsho/toggleterm.nvim", config = function()
+      require("toggleterm").setup {
         open_mapping = "<c-t>",
         direction = "float",
         float_opts = {
@@ -496,24 +485,22 @@ require("packer").startup{
         },
       }
 
-      keymap.nnoremap{"<c-t>", Youxkei_toggleterm, silent = true}
-    end}
+      vim.keymap.set("n", "<c-t>", Youxkei_toggleterm, { silent = true })
+    end }
 
-    use{"karb94/neoscroll.nvim", config = function()
+    use { "karb94/neoscroll.nvim", config = function()
       require("neoscroll").setup({
-        mappings = {"<C-u>", "<C-d>"},
+        mappings = { "<C-u>", "<C-d>" },
       })
-    end}
+    end }
 
-    use{"github/copilot.vim"}
+    use { "github/copilot.vim" }
 
-    use{"VonHeikemen/fine-cmdline.nvim", disable = true, requires = "MunifTanjim/nui.nvim", config = function() -- disabled because it doesn't work with cmp-cmdline
-      local keymap = require("astronauta.keymap")
+    use { "VonHeikemen/fine-cmdline.nvim", disable = true, requires = "MunifTanjim/nui.nvim", config = function() -- disabled because it doesn't work with cmp-cmdline
+      vim.keymap.set("n", ":", require("fine-cmdline").open)
+    end }
 
-      keymap.nnoremap{":", require("fine-cmdline").open}
-    end}
-
-    use{
+    use {
       "hrsh7th/nvim-cmp",
       requires = {
         "L3MON4D3/LuaSnip",
@@ -526,7 +513,7 @@ require("packer").startup{
       },
       config = function()
         local cmp = require("cmp")
-        cmp.setup{
+        cmp.setup {
           snippet = {
             expand = function(args)
               require("luasnip").lsp_expand(args.body)
@@ -547,79 +534,68 @@ require("packer").startup{
             { name = "cmdline" },
           },
         })
-    end}
+      end }
 
-    use{"folke/trouble.nvim", config = function()
+    use { "folke/trouble.nvim", config = function()
       local trouble = require("trouble")
-      local keymap = require("astronauta.keymap")
+      trouble.setup {}
 
-      trouble.setup{}
+      vim.keymap.set("n", "<leader>r", trouble.open)
+    end }
 
-      keymap.nnoremap{"<leader>r", trouble.open}
-    end}
+    use { "ellisonleao/glow.nvim" }
 
-    use{"ellisonleao/glow.nvim"}
-
-    use{"hoschi/yode-nvim", requires = "nvim-lua/plenary.nvim", config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { "hoschi/yode-nvim", requires = "nvim-lua/plenary.nvim", config = function()
       require('yode-nvim').setup({})
 
-      keymap.vnoremap{"<leader>yc", ":YodeCreateSeditorFloating<cr>"}
-    end}
+      vim.keymap.set("v", "<leader>yc", ":YodeCreateSeditorFloating<cr>")
+    end }
 
 
     -- languages, text objects, operators
 
-    use{"amiralies/vim-rescript"}
+    use { "amiralies/vim-rescript" }
 
-    use{"sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user"}
+    use { "sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user" }
 
-    use{"kana/vim-textobj-entire", requires = "kana/vim-textobj-user"}
+    use { "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" }
 
-    use{"kana/vim-operator-replace", requires = "kana/vim-operator-user", config = function()
-      local keymap = require("astronauta.keymap")
+    use { "kana/vim-operator-replace", requires = "kana/vim-operator-user", config = function()
+      vim.keymap.set({ "n", "v" }, "_", "<plug>(operator-replace)")
+    end }
 
-      keymap.map{"_", "<plug>(operator-replace)"}
-    end}
+    use { "haya14busa/vim-operator-flashy", config = function()
+      vim.keymap.set({ "n", "v" }, "y", "<plug>(operator-flashy)", { remap = true })
+      vim.keymap.set("n", "Y", "<plug>(operator-flashy)$", { remap = true })
+    end }
 
-    use{"haya14busa/vim-operator-flashy", config = function()
-      local keymap = require("astronauta.keymap")
-
-      keymap.map{"y", "<plug>(operator-flashy)"}
-      keymap.nmap{"Y", "<plug>(operator-flashy)$"}
-    end}
-
-    use{"machakann/vim-sandwich", config = function()
-      local keymap = require("astronauta.keymap")
-
+    use { "machakann/vim-sandwich", config = function()
       vim.g.sandwich_no_default_key_mappings = true
       vim.g.operator_sandwich_no_default_key_mappings = true
       vim.g["sandwich#recipes"] = vim.g["sandwich#default_recipes"]
 
-      keymap.nmap{"<leader>sd", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
-      keymap.nmap{"<leader>sr", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)"}
-      keymap.nmap{"<leader>sdb", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
-      keymap.nmap{"<leader>srb", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)"}
-      keymap.nmap{"<leader>sa", "<plug>(operator-sandwich-add)"}
-      keymap.xmap{"<leader>sa", "<plug>(operator-sandwich-add)"}
-      keymap.omap{"<leader>sa", "<plug>(operator-sandwich-g@)"}
-      keymap.xmap{"<leader>sd", "<plug>(operator-sandwich-delete)"}
-      keymap.xmap{"<leader>sr", "<plug>(operator-sandwich-replace)"}
-    end}
+      vim.keymap.set("n", "<leader>sd", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)", { remap = true })
+      vim.keymap.set("n", "<leader>sr", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)", { remap = true })
+      vim.keymap.set("n", "<leader>sdb", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)", { remap = true })
+      vim.keymap.set("n", "<leader>srb", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)", { remap = true })
+      vim.keymap.set("n", "<leader>sa", "<plug>(operator-sandwich-add)")
 
-    use{"b3nj5m1n/kommentary", config = function()
-      local keymap = require("astronauta.keymap")
+      vim.keymap.set("x", "<leader>sa", "<plug>(operator-sandwich-add)", { remap = true })
+      vim.keymap.set("o", "<leader>sa", "<plug>(operator-sandwich-g@)", { remap = true })
+      vim.keymap.set("x", "<leader>sd", "<plug>(operator-sandwich-delete)", { remap = true })
+      vim.keymap.set("x", "<leader>sr", "<plug>(operator-sandwich-replace)", { remap = true })
+    end }
 
+    use { "b3nj5m1n/kommentary", config = function()
       vim.g.kommentary_create_default_mappings = false
 
-      keymap.nmap{"<leader>cic", "<plug>kommentary_line_increase"}
-      keymap.nmap{"<leader>ci", "<plug>kommentary_motion_increase"}
-      keymap.xmap{"<leader>ci", "<plug>kommentary_visual_increase"}
-      keymap.nmap{"<leader>cdc", "<plug>kommentary_line_decrease"}
-      keymap.nmap{"<leader>cd", "<plug>kommentary_motion_decrease"}
-      keymap.xmap{"<leader>cd", "<plug>kommentary_visual_decrease"}
-    end}
+      vim.keymap.set("n", "<leader>cic", "<plug>kommentary_line_increase", { remap = true })
+      vim.keymap.set("n", "<leader>ci", "<plug>kommentary_motion_increase", { remap = true })
+      vim.keymap.set("x", "<leader>ci", "<plug>kommentary_visual_increase", { remap = true })
+      vim.keymap.set("n", "<leader>cdc", "<plug>kommentary_line_decrease", { remap = true })
+      vim.keymap.set("n", "<leader>cd", "<plug>kommentary_motion_decrease", { remap = true })
+      vim.keymap.set("x", "<leader>cd", "<plug>kommentary_visual_decrease", { remap = true })
+    end }
 
     if packer_bootstrap then
       require('packer').sync()
