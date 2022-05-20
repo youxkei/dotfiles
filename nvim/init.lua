@@ -547,7 +547,7 @@ require("packer").startup {
 
     use { "lukas-reineke/indent-blankline.nvim", config = function()
       require("indent_blankline").setup {
-        char = "│",
+        char = "¦",
         char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
         buftype_exclude = { "terminal" }
       }
