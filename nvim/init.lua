@@ -368,6 +368,7 @@ require("packer").startup {
           },
           highlight = {
             enable = true,
+            additional_vim_regex_highlighting = false,
           },
           indent = {
             enable = true
@@ -378,23 +379,31 @@ require("packer").startup {
             max_file_lines = 1000,
           },
           textobjects = {
+            select = {
+              enable = true,
+              lookahead = true,
+              keymaps = {
+                ["af"] = "@function.declaration",
+              },
+            },
             move = {
               enable = true,
               set_jumps = true,
               goto_next_start = {
-                ["]m"] = "@function.outer",
+                ["]m"] = "@function.declaration",
               },
               goto_next_end = {
-                ["]M"] = "@function.outer",
+                ["]M"] = "@function.declaration",
               },
               goto_previous_start = {
-                ["[m"] = "@function.outer",
+                ["[m"] = "@function.declaration",
               },
               goto_previous_end = {
-                ["[M"] = "@function.outer",
+                ["[M"] = "@function.declaration",
               },
             },
-          }, }
+          },
+        }
 
         vim.api.nvim_create_autocmd("FileType", { group = "youxkei",
           pattern = { "sh", "dockerfile", "go", "html", "javascript", "json", "lua", "nix", "rust", "toml", "typescriptreact", "typescript", "yaml" },
