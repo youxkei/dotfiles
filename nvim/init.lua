@@ -131,6 +131,66 @@ function Youxkei_toggleterm()
   require("toggleterm").toggle(id)
 end
 
+vim.keymap.set("v", "<leader>g", function()
+  local Job = require("plenary.job")
+
+  local full_path = vim.fn.expand("%:p")
+  local mode = vim.api.nvim_get_mode().mode
+  local startline = nil
+  local endline = nil
+
+  if mode == "v" or mode == "V" or mode == "" then
+    startline = vim.fn.line("v")
+    endline = vim.fn.line(".")
+
+    if startline > endline then
+      startline, endline = endline, startline
+    end
+  end
+
+  Job:new {
+    command = "git",
+    args = { "rev-parse", "HEAD" },
+    enabled_recording = true,
+    on_exit = function(job)
+      local ref = job:result()[1]
+
+      Job:new {
+        command = "git",
+        args = { "ls-remote", "--get-url", "origin" },
+        enabled_recording = true,
+        on_exit = function(job)
+          local url_head = "https://github.com/" .. job:result()[1]:match("^git@github.com:(.*).git$")
+
+          Job:new {
+            command = "git",
+            args = { "rev-parse", "--show-toplevel" },
+            enabled_recording = true,
+            on_exit = function(job)
+              local git_root = job:result()[1]
+              local path = full_path:sub(#git_root + 2)
+              local url = url_head .. "/blob/" .. ref .. "/" .. path
+
+              if startline then
+                if startline == endline then
+                  url = url .. "#L" .. startline
+                else
+                  url = url .. "#L" .. startline .. "-L" .. endline
+                end
+              end
+
+              vim.schedule(function()
+                vim.fn.setreg("+", url)
+                print("GitHub URL: " .. url)
+              end)
+            end,
+          }:start()
+        end,
+      }:start()
+    end,
+  }:start()
+end)
+
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
@@ -139,6 +199,8 @@ end
 require("packer").startup {
   function(use)
     use("wbthomason/packer.nvim")
+
+    use("nvim-lua/plenary.nvim")
 
     use { "christianchiarulli/nvcode-color-schemes.vim", after = "indent-blankline.nvim", config = function()
       vim.cmd [[colorscheme nord]]
