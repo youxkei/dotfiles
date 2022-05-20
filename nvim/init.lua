@@ -647,6 +647,19 @@ require("packer").startup {
       vim.keymap.set("v", "<leader>yc", ":YodeCreateSeditorFloating<cr>")
     end }
 
+    use { "https://gitlab.com/yorickpeterse/nvim-window", config = function()
+      require('nvim-window').setup({
+        chars = {
+          "e", "t", "o", "n", "a", "s", "p", "g", "y", "f", "c", "r", "l", "k", "m", "x", "b", "j", "w", "q", "v", "u", "h", "i", "d"
+        },
+        normal_hl = 'Normal',
+        hint_hl = 'Bold',
+        border = 'single'
+      })
+
+      vim.keymap.set("n", "<leader>h", require('nvim-window').pick)
+    end }
+
 
     -- languages, text objects, operators
 
