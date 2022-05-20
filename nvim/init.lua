@@ -3,6 +3,7 @@ local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
 local opt_global = vim.opt_global
+local opt_local = vim.opt_local
 
 local cache_dir = fn.stdpath("cache")
 if fn.isdirectory(cache_dir) then
@@ -75,16 +76,22 @@ opt.timeout = false
 
 g.mapleader = ","
 
-cmd [[
-  augroup youxkei
-    autocmd!
-
-    autocmd BufWritePost init.lua ++nested source <afile> | PackerCompile
-    autocmd InsertLeave * call system('fcitx5-remote -c')
-
-    autocmd FileType rescript,lua,nix,javascript,ocaml,text setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  augroup END
-]]
+local augroup = vim.api.nvim_create_augroup("youxkei", {})
+vim.api.nvim_create_autocmd("BufWritePost", { group = augroup,
+  pattern = "init.lua",
+  callback = function()
+    cmd("luafile " .. fn.stdpath("config") .. "/init.lua")
+    require("packer").compile()
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", { group = augroup,
+  pattern = { "rescript", "lua", "nix", "javascript", "ocaml", "text" },
+  callback = function()
+    opt_local.shiftwidth = 2
+    opt_local.tabstop = 2
+    opt_local.softtabstop = 2
+  end,
+})
 
 vim.keymap.set("n", "j", "gj")
 vim.keymap.set("n", "k", "gk")
@@ -325,7 +332,13 @@ require("packer").startup {
             },
           }, }
 
-        vim.cmd [[autocmd youxkei FileType sh,dockerfile,go,html,javascript,json,lua,nix,rust,toml,typescriptreact,typescript,yaml setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()]]
+        vim.api.nvim_create_autocmd("FileType", { group = "youxkei",
+          pattern = { "sh", "dockerfile", "go", "html", "javascript", "json", "lua", "nix", "rust", "toml", "typescriptreact", "typescript", "yaml" },
+          callback = function()
+            vim.opt_local.foldmethod = "expr"
+            vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+          end,
+        })
       end,
     }
 
@@ -379,7 +392,12 @@ require("packer").startup {
         vim.keymap.set("n", "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", { silent = true })
         vim.keymap.set("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
 
-        vim.cmd [[autocmd youxkei BufWritePre *.go,*.res,*.js,*.lua,*.ml lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+        vim.api.nvim_create_autocmd("BufWritePre", { group = "youxkei",
+          pattern = { "*.go", "*.res", "*.js", "*.lua", "*.ml" },
+          callback = function()
+            vim.lsp.buf.formatting_sync(nil, 1000)
+          end,
+        })
       end,
     }
 
@@ -461,19 +479,20 @@ require("packer").startup {
         buftype_exclude = { "terminal" }
       }
 
-      vim.cmd [[
-        function! BlanklineHighlights() abort
-          highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
-          highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
-          highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
-          highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
-          highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
-          highlight IndentBlanklineSpaceChar guifg=white guibg=none gui=nocombine
-          highlight IndentBlanklineSpaceCharBlankline guifg=white guibg=none gui=nocombine
-        endfunction
-
-        autocmd youxkei ColorScheme * call BlanklineHighlights()
-      ]]
+      vim.api.nvim_create_autocmd("ColorScheme", { group = "youxkei",
+        pattern = "*",
+        callback = function()
+          vim.cmd [[
+            highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
+            highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
+            highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
+            highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
+            highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
+            highlight IndentBlanklineSpaceChar guifg=white guibg=none gui=nocombine
+            highlight IndentBlanklineSpaceCharBlankline guifg=white guibg=none gui=nocombine
+          ]]
+        end,
+      })
     end }
 
     use { "akinsho/toggleterm.nvim", config = function()
