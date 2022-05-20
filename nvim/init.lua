@@ -628,12 +628,16 @@ require("packer").startup {
         })
       end }
 
-    use { "folke/trouble.nvim", config = function()
-      local trouble = require("trouble")
-      trouble.setup {}
+    use {
+      "folke/trouble.nvim",
+      requires = { "kyazdani42/nvim-web-devicons" },
+      config = function()
+        local trouble = require("trouble")
+        trouble.setup {}
 
-      vim.keymap.set("n", "<leader>r", trouble.open)
-    end }
+        vim.keymap.set("n", "<leader>r", trouble.open)
+      end,
+    }
 
     use { "ellisonleao/glow.nvim" }
 
