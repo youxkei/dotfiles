@@ -59,7 +59,7 @@ opt.digraph = false
 opt.showcmd = true
 opt.showtabline = 2
 opt.backspace = { "indent", "eol", "start" }
-opt.laststatus = 2
+opt.laststatus = 3
 opt.wildmenu = true
 opt.signcolumn = "yes"
 opt.completeopt = { "menuone", "noselect" }
@@ -658,6 +658,10 @@ require("packer").startup {
       })
 
       vim.keymap.set("n", "<leader>h", require('nvim-window').pick)
+    end }
+
+    use { "b0o/incline.nvim", config = function()
+      require("incline").setup {}
     end }
 
 
