@@ -678,7 +678,7 @@ require("packer").startup {
     end }
 
     use { "haya14busa/vim-operator-flashy", config = function()
-      vim.keymap.set({ "n", "v" }, "y", "<plug>(operator-flashy)", { remap = true })
+      vim.keymap.set({ "n", "v", "o" }, "y", "<plug>(operator-flashy)", { remap = true })
       vim.keymap.set("n", "Y", "<plug>(operator-flashy)$", { remap = true })
     end }
 
