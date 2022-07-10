@@ -104,7 +104,6 @@
           msgpack-tools
           tts
           nicolive-comments
-          #neovim-unwrapped
           yadm
           rpg-cli
           #protontricks
