@@ -145,7 +145,7 @@
 
           go_1_17
           gopls
-          goimports
+          gotools
           gore
           errcheck
           go-protobuf
