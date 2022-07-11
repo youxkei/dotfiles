@@ -84,7 +84,7 @@ service = { name = "openweathermap", units = "metric" }
 [[block]]
 block = "custom"
 interval = 60
-command = 'curl -sS "https://map.yahooapis.jp/weather/V1/place?coordinates=139.7699064,35.6714754&output=json&appid=$YAHOO_APPID" | jq ".Feature[0].Property.WeatherList.Weather[1:6][].Rainfall" | xargs echo '
+command = 'curl -sS "https://map.yahooapis.jp/weather/V1/place?coordinates=$YAHOO_LONGITUDE,$YAHOO_LATITUDE&output=json&appid=$YAHOO_APPID" | jq ".Feature[0].Property.WeatherList.Weather[1:6][].Rainfall" | xargs echo '
 
 [[block]]
 block = "sound"
