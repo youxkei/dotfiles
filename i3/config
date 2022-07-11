@@ -117,15 +117,6 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
-bindsym $mod+t mode "transparency"
-mode "transparency" {
-    bindsym h exec --no-startup-id compton-trans -c -- -2
-    bindsym l exec --no-startup-id compton-trans -c +4
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
 set $screenshot "Screenshot: (W)indow, (A)rea"
 bindsym $mod+s mode $screenshot
 mode $screenshot {
