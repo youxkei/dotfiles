@@ -523,16 +523,18 @@ key_bindings:
 
   - { key: T, mods:  Control|Shift, command: { program: "alacritty" }, mode: ~Alt }
 
-  - { key: Tab,  mods: Control, chars: "\x02\x09", mode: Alt }
-  - { key: Key1, mods: Control, chars: "\x021",    mode: Alt }
-  - { key: Key2, mods: Control, chars: "\x022",    mode: Alt }
-  - { key: Key3, mods: Control, chars: "\x023",    mode: Alt }
-  - { key: Key4, mods: Control, chars: "\x024",    mode: Alt }
-  - { key: Key5, mods: Control, chars: "\x025",    mode: Alt }
-  - { key: Key6, mods: Control, chars: "\x026",    mode: Alt }
-  - { key: Key7, mods: Control, chars: "\x027",    mode: Alt }
-  - { key: Key8, mods: Control, chars: "\x028",    mode: Alt }
-  - { key: Key9, mods: Control, chars: "\x029",    mode: Alt }
+  - { key: Tab,  mods: Control,       chars: "\x11\x09", mode: Alt }
+  - { key: Tab,  mods: Control|Shift, chars: "\x11s\x09", mode: Alt }
+
+  - { key: Key1, mods: Control, chars: "\x111",    mode: Alt }
+  - { key: Key2, mods: Control, chars: "\x112",    mode: Alt }
+  - { key: Key3, mods: Control, chars: "\x113",    mode: Alt }
+  - { key: Key4, mods: Control, chars: "\x114",    mode: Alt }
+  - { key: Key5, mods: Control, chars: "\x115",    mode: Alt }
+  - { key: Key6, mods: Control, chars: "\x116",    mode: Alt }
+  - { key: Key7, mods: Control, chars: "\x117",    mode: Alt }
+  - { key: Key8, mods: Control, chars: "\x118",    mode: Alt }
+  - { key: Key9, mods: Control, chars: "\x119",    mode: Alt }
 
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
