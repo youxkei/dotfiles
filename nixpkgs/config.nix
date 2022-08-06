@@ -38,6 +38,7 @@
           gitAndTools.diff-so-fancy
           gitAndTools.gh
           gitAndTools.delta
+          git-branchless
 
           nix-prefetch-git
 
