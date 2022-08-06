@@ -303,7 +303,7 @@ require("packer").startup {
 
     use { "prakashdanish/vim-githubinator" }
 
-    use { "lambdalisue/vim-manpager", opt = true, cmd = "MANPAGER" }
+    use { "lambdalisue/vim-manpager", opt = true, cmd = "ASMANPAGER" }
 
     use { "haya14busa/vim-asterisk", config = function()
       vim.keymap.set({ "n", "v" }, "*", "<plug>(asterisk-z*)<cmd>lua require('hlslens').start()<cr>", { remap = true })

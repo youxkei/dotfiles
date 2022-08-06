@@ -1,6 +1,6 @@
 export EDITOR=nvim
 export VISUAL=nvim
-export MANPAGER='nvim -c MANPAGER -'
+export MANPAGER='nvim -c ASMANPAGER -'
 
 PATH=~/bin:$PATH
 export PATH
