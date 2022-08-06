@@ -148,10 +148,6 @@
           gotools
           gore
           errcheck
-          go-protobuf
-          mockgen
-          wire
-          statik
         ];
       };
     };
