@@ -876,7 +876,7 @@ require("packer").startup {
       vim.keymap.set("x", "<leader>cd", "<plug>kommentary_visual_decrease", { remap = true })
     end }
 
-    use { "mfussenegger/nvim-ts-hint-textobject", config = function()
+    use { "mfussenegger/nvim-treehopper", config = function()
       local tsht = require("tsht")
 
       tsht.config.hint_keys = {
@@ -884,8 +884,8 @@ require("packer").startup {
         "k", "m", "x", "b", "j", "w", "q", "v",
       }
 
-      vim.keymap.set("o", "m", tsht.nodes)
-      vim.keymap.set("v", "m", [[:lua require("tsht").nodes()<CR>]])
+      vim.keymap.set("o", "n", tsht.nodes)
+      vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]])
     end }
 
     use { "David-Kunz/treesitter-unit", config = function()
