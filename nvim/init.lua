@@ -353,6 +353,7 @@ require("packer").startup {
       requires = {
         "p00f/nvim-ts-rainbow",
         "nvim-treesitter/nvim-treesitter-textobjects",
+        "andymass/vim-matchup",
       },
       config = function()
         require("nvim-treesitter.configs").setup {
@@ -410,6 +411,9 @@ require("packer").startup {
               },
             },
           },
+          matchup = {
+            enable = true,
+          },
         }
 
         vim.api.nvim_create_autocmd("FileType", {
@@ -434,6 +438,8 @@ require("packer").startup {
             vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
           end,
         })
+
+        vim.g.matchup_matchparen_offscreen = { method = "" }
       end,
     }
 
