@@ -871,6 +871,18 @@ require("packer").startup {
       vim.keymap.set("x", "<leader>cd", "<plug>kommentary_visual_decrease", { remap = true })
     end }
 
+    use { "mfussenegger/nvim-ts-hint-textobject", config = function()
+      local tsht = require("tsht")
+
+      tsht.config.hint_keys = {
+        "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
+        "k", "m", "x", "b", "j", "w", "q", "v",
+      }
+
+      vim.keymap.set("o", "m", tsht.nodes)
+      vim.keymap.set("v", "m", [[:lua require("tsht").nodes()<CR>]])
+    end }
+
     if packer_bootstrap then
       require("packer").sync()
     end
