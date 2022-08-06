@@ -104,7 +104,6 @@ alias open="xdg-open"
 alias tmux="tmux -2"
 alias fzf20="fzf --height=20%"
 alias cp="xcp"
-alias tig='tig $(git for-each-ref --format="%(refname)" refs/heads)'
 
 function chpwd() { ls }
 
