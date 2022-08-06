@@ -160,11 +160,6 @@ workspace  8 output $right_monitor
 workspace  9 output $right_monitor
 workspace 10 output $right_monitor
 
-for_window [class="Google-chrome" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] floating enable
-for_window [class="Google-chrome" instance="crx_gjjpophepkbhejnglcmkdnncmaanojkf"] floating enable
-for_window [class="mousecross"] floating enable
-for_window [class="mousecross"] border none
-
 new_window pixel 16
 
 exec --no-startup-id sudo ~/bin/backup
