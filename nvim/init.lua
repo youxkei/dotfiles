@@ -292,14 +292,6 @@ require("packer").startup {
       }
     end }
 
-    use { "machakann/vim-swap", config = function()
-      vim.g.swap_no_default_key_mappings = true
-
-      vim.keymap.set("n", "gs", "<plug>(swap-interactive)", { remap = true })
-      vim.keymap.set({ "o", "x" }, "i,", "<plug>(swap-textobject-i)", { remap = true })
-      vim.keymap.set({ "o", "x" }, "a,", "<plug>(swap-textobject-a)", { remap = true })
-    end }
-
     use { "lambdalisue/suda.vim" }
 
     use { "sgur/vim-editorconfig" }
@@ -809,6 +801,17 @@ require("packer").startup {
     use { "moll/vim-bbye", config = function()
       vim.keymap.set("n", "<leader>bd", "<cmd>Bdelete<cr>")
     end }
+
+    use { "mizlan/iswap.nvim", config = function()
+      local iswap = require("iswap")
+      iswap.setup {
+        keys = "etuhonasidpgyfcrlkmxbjwqv"
+      }
+
+      vim.keymap.set("n", "gs", iswap.iswap_with)
+      vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]])
+    end }
+
 
     -- languages, text objects, operators
 
