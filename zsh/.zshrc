@@ -131,5 +131,9 @@ function timer() {
   countdown $1 && mplayer -really-quiet $TIMER_ALERM_FILE
 }
 
+function git() {
+  git-branchless wrap -- $@
+}
+
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
