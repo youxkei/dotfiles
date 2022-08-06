@@ -649,6 +649,7 @@ require("packer").startup {
         "hrsh7th/cmp-buffer",
         "octaltree/cmp-look",
         "hrsh7th/cmp-cmdline",
+        "hrsh7th/cmp-nvim-lsp-signature-help",
       },
       config = function()
         local cmp = require("cmp")
@@ -664,6 +665,7 @@ require("packer").startup {
             { name = "path" },
             { name = "buffer" },
             { name = "look" },
+            { name = "nvim_lsp_signature_help" },
           }),
           preselect = cmp.PreselectMode.None,
         }
