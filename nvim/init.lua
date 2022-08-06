@@ -806,6 +806,10 @@ require("packer").startup {
       end,
     }
 
+    use { "moll/vim-bbye", config = function()
+      vim.keymap.set("n", "<leader>bd", "<cmd>Bdelete<cr>")
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
