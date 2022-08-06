@@ -621,9 +621,14 @@ require("packer").startup {
 
     use { "github/copilot.vim" }
 
-    use { "VonHeikemen/fine-cmdline.nvim", disable = true, requires = "MunifTanjim/nui.nvim", config = function() -- disabled because it doesn't work with cmp-cmdline
-      vim.keymap.set("n", ":", require("fine-cmdline").open)
-    end }
+    use {
+      "VonHeikemen/fine-cmdline.nvim",
+      disable = true, -- disabled because it doesn't work with cmp-cmdline
+      requires = "MunifTanjim/nui.nvim",
+      config = function()
+        vim.keymap.set("n", ":", require("fine-cmdline").open)
+      end
+    }
 
     use {
       "hrsh7th/nvim-cmp",
