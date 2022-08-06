@@ -77,14 +77,16 @@ opt.timeout = false
 g.mapleader = ","
 
 local augroup = vim.api.nvim_create_augroup("youxkei", {})
-vim.api.nvim_create_autocmd("BufWritePost", { group = augroup,
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = augroup,
   pattern = "init.lua",
   callback = function()
     cmd("luafile " .. fn.stdpath("config") .. "/init.lua")
     require("packer").compile()
   end,
 })
-vim.api.nvim_create_autocmd("FileType", { group = augroup,
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
   pattern = { "rescript", "lua", "nix", "javascript", "ocaml", "text" },
   callback = function()
     opt_local.shiftwidth = 2
@@ -152,22 +154,22 @@ vim.keymap.set("v", "<leader>g", function()
     command = "git",
     args = { "rev-parse", "HEAD" },
     enabled_recording = true,
-    on_exit = function(job)
-      local ref = job:result()[1]
+    on_exit = function(rev_parse_head_job)
+      local ref = rev_parse_head_job:result()[1]
 
       Job:new {
         command = "git",
         args = { "ls-remote", "--get-url", "origin" },
         enabled_recording = true,
-        on_exit = function(job)
-          local url_head = "https://github.com/" .. job:result()[1]:match("^git@github.com:(.*).git$")
+        on_exit = function(ls_remote_job)
+          local url_head = "https://github.com/" .. ls_remote_job:result()[1]:match("^git@github.com:(.*).git$")
 
           Job:new {
             command = "git",
             args = { "rev-parse", "--show-toplevel" },
             enabled_recording = true,
-            on_exit = function(job)
-              local git_root = job:result()[1]
+            on_exit = function(rev_parse_toplevel_job)
+              local git_root = rev_parse_toplevel_job:result()[1]
               local path = full_path:sub(#git_root + 2)
               local url = url_head .. "/blob/" .. ref .. "/" .. path
 
@@ -191,11 +193,13 @@ vim.keymap.set("v", "<leader>g", function()
   }:start()
 end)
 
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 local packer_bootstrap = false
 if fn.empty(fn.glob(install_path)) > 0 then
-  vim.o.runtimepath = fn.stdpath('data') .. '/site/pack/*/start/*,' .. vim.o.runtimepath
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+  vim.o.runtimepath = fn.stdpath("data") .. "/site/pack/*/start/*," .. vim.o.runtimepath
+  packer_bootstrap = fn.system({
+    "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path,
+  })
 end
 
 require("packer").startup {
@@ -334,7 +338,7 @@ require("packer").startup {
 
     use { "inkarkat/vim-mark", requires = "inkarkat/vim-ingo-library", config = function()
       vim.g.mw_no_mappings = 1
-      vim.g.mwDefaultHighlightingPalette = 'maximum'
+      vim.g.mwDefaultHighlightingPalette = "maximum"
 
       vim.keymap.set({ "n", "v" }, "<leader>m", "<plug>MarkSet", { remap = true })
       vim.keymap.set("n", "<leader>n", "<plug>MarkAllClear", { remap = true })
@@ -405,8 +409,23 @@ require("packer").startup {
           },
         }
 
-        vim.api.nvim_create_autocmd("FileType", { group = "youxkei",
-          pattern = { "sh", "dockerfile", "go", "html", "javascript", "json", "lua", "nix", "rust", "toml", "typescriptreact", "typescript", "yaml" },
+        vim.api.nvim_create_autocmd("FileType", {
+          group = "youxkei",
+          pattern = {
+            "sh",
+            "dockerfile",
+            "go",
+            "html",
+            "javascript",
+            "json",
+            "lua",
+            "nix",
+            "rust",
+            "toml",
+            "typescriptreact",
+            "typescript",
+            "yaml",
+          },
           callback = function()
             vim.opt_local.foldmethod = "expr"
             vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
@@ -439,7 +458,11 @@ require("packer").startup {
 
         lspconfig.rescriptls.setup {
           capabilities = capabilities,
-          cmd = { "node", vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js", "--stdio" }
+          cmd = {
+            "node",
+            vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js",
+            "--stdio",
+          }
         }
 
         lspconfig.tsserver.setup {
@@ -452,7 +475,7 @@ require("packer").startup {
           settings = {
             Lua = {
               diagnostics = {
-                globals = { 'vim' }
+                globals = { "vim" }
               }
             }
           }
@@ -465,7 +488,8 @@ require("packer").startup {
         vim.keymap.set("n", "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", { silent = true })
         vim.keymap.set("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
 
-        vim.api.nvim_create_autocmd("BufWritePre", { group = "youxkei",
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = "youxkei",
           pattern = { "*.go", "*.res", "*.js", "*.lua", "*.ml" },
           callback = function()
             vim.lsp.buf.formatting_sync(nil, 1000)
@@ -532,13 +556,21 @@ require("packer").startup {
       require("gitsigns").setup()
     end }
 
-    use { 'kevinhwang91/nvim-hlslens', config = function()
+    use { "kevinhwang91/nvim-hlslens", config = function()
       require("hlslens").setup({
         calm_down = true,
       })
 
-      vim.keymap.set("n", "n", "<cmd>execute('normal! ' . v:count1 . 'n')<cr><cmd>lua require('hlslens').start()<cr>", { silent = true })
-      vim.keymap.set("n", "N", "<cmd>execute('normal! ' . v:count1 . 'N')<cr><cmd>lua require('hlslens').start()<cr>", { silent = true })
+      vim.keymap.set(
+        "n", "n",
+        "<cmd>execute('normal! ' . v:count1 . 'n')<cr><cmd>lua require('hlslens').start()<cr>",
+        { silent = true }
+      )
+      vim.keymap.set(
+        "n", "N",
+        "<cmd>execute('normal! ' . v:count1 . 'N')<cr><cmd>lua require('hlslens').start()<cr>",
+        { silent = true }
+      )
       vim.keymap.set("n", "*", "*<cmd>lua require('hlslens').start()<cr>")
       vim.keymap.set("n", "#", "#<cmd>lua require('hlslens').start()<cr>")
       vim.keymap.set("n", "g*", "g*<cmd>lua require('hlslens').start()<cr>")
@@ -552,7 +584,8 @@ require("packer").startup {
         buftype_exclude = { "terminal" }
       }
 
-      vim.api.nvim_create_autocmd("ColorScheme", { group = "youxkei",
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = "youxkei",
         pattern = "*",
         callback = function()
           vim.cmd [[
@@ -642,22 +675,23 @@ require("packer").startup {
     use { "ellisonleao/glow.nvim" }
 
     use { "hoschi/yode-nvim", requires = "nvim-lua/plenary.nvim", config = function()
-      require('yode-nvim').setup({})
+      require("yode-nvim").setup({})
 
       vim.keymap.set("v", "<leader>yc", ":YodeCreateSeditorFloating<cr>")
     end }
 
     use { "https://gitlab.com/yorickpeterse/nvim-window", config = function()
-      require('nvim-window').setup({
+      require("nvim-window").setup({
         chars = {
-          "e", "t", "o", "n", "a", "s", "p", "g", "y", "f", "c", "r", "l", "k", "m", "x", "b", "j", "w", "q", "v", "u", "h", "i", "d"
+          "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
+          "k", "m", "x", "b", "j", "w", "q", "v",
         },
-        normal_hl = 'Normal',
-        hint_hl = 'Bold',
-        border = 'single'
+        normal_hl = "Normal",
+        hint_hl = "Bold",
+        border = "single"
       })
 
-      vim.keymap.set("n", "<leader>h", require('nvim-window').pick)
+      vim.keymap.set("n", "<leader>h", require("nvim-window").pick)
     end }
 
     use { "b0o/incline.nvim", config = function()
@@ -687,10 +721,26 @@ require("packer").startup {
       vim.g.operator_sandwich_no_default_key_mappings = true
       vim.g["sandwich#recipes"] = vim.g["sandwich#default_recipes"]
 
-      vim.keymap.set("n", "<leader>sd", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)", { remap = true })
-      vim.keymap.set("n", "<leader>sr", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)", { remap = true })
-      vim.keymap.set("n", "<leader>sdb", "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)", { remap = true })
-      vim.keymap.set("n", "<leader>srb", "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)", { remap = true })
+      vim.keymap.set(
+        "n", "<leader>sd",
+        "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)",
+        { remap = true }
+      )
+      vim.keymap.set(
+        "n", "<leader>sr",
+        "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-query-a)",
+        { remap = true }
+      )
+      vim.keymap.set(
+        "n", "<leader>sdb",
+        "<plug>(operator-sandwich-delete)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)",
+        { remap = true }
+      )
+      vim.keymap.set(
+        "n", "<leader>srb",
+        "<plug>(operator-sandwich-replace)<plug>(operator-sandwich-release-count)<plug>(textobj-sandwich-auto-a)",
+        { remap = true }
+      )
       vim.keymap.set("n", "<leader>sa", "<plug>(operator-sandwich-add)")
 
       vim.keymap.set("x", "<leader>sa", "<plug>(operator-sandwich-add)", { remap = true })
@@ -711,7 +761,7 @@ require("packer").startup {
     end }
 
     if packer_bootstrap then
-      require('packer').sync()
+      require("packer").sync()
     end
   end
 }
