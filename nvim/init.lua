@@ -101,7 +101,7 @@ vim.keymap.set("n", "gj", "j")
 vim.keymap.set("n", "gk", "k")
 
 for i = 1, 9 do
-  local lhs = "<c-b>" .. i
+  local lhs = "<c-q>" .. i
   local rhs = "<esc>" .. i .. "gt"
 
   if i == 9 then
