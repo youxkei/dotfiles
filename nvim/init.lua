@@ -304,7 +304,7 @@ require("packer").startup {
 
     use { "sgur/vim-editorconfig" }
 
-    use { "prakashdanish/vim-githubinator" }
+    use { "prakashdanish/vim-githubinator", disable = true }
 
     use { "lambdalisue/vim-manpager", opt = true, cmd = "ASMANPAGER" }
 
@@ -622,13 +622,13 @@ require("packer").startup {
       vim.keymap.set("n", "<c-t>", Youxkei_toggleterm, { silent = true })
     end }
 
-    use { "karb94/neoscroll.nvim", config = function()
+    use { "karb94/neoscroll.nvim", disable = true, config = function()
       require("neoscroll").setup({
         mappings = { "<C-u>", "<C-d>" },
       })
     end }
 
-    use { "github/copilot.vim" }
+    use { "github/copilot.vim", disable = true }
 
     use {
       "VonHeikemen/fine-cmdline.nvim",
