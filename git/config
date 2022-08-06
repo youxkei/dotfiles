@@ -2,7 +2,6 @@
 	ui = auto
 [core]
 	editor = nvim
-	excludesfile = $HOME/.config/git/ignore
 [alias]
 	tree = log --all --graph --oneline --decorate
 	rg = !git ls-files | xargs rg
