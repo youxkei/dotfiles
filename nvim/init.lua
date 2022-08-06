@@ -883,6 +883,15 @@ require("packer").startup {
       vim.keymap.set("v", "m", [[:lua require("tsht").nodes()<CR>]])
     end }
 
+    use { "David-Kunz/treesitter-unit", config = function()
+      local unit = require("treesitter-unit")
+
+      vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]])
+      vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]])
+      vim.keymap.set("o", "iu", function() unit.select() end)
+      vim.keymap.set("o", "au", function() unit.select(true) end)
+    end }
+
     if packer_bootstrap then
       require("packer").sync()
     end
