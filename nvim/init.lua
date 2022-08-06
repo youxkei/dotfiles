@@ -546,7 +546,7 @@ require("packer").startup {
       local hop = require("hop")
 
       hop.setup {
-        keys = "etonaspgyfcrlkmxbjwqvuhid",
+        keys = "etuhonasidpgyfcrlkmxbjwqv",
         jump_on_sole_occurrence = false,
       }
 
