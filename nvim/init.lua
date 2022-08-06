@@ -73,6 +73,9 @@ opt.iskeyword = { "@", "48-57", "_", "192-255", "$", "@-@", "-" }
 opt.clipboard = "unnamedplus"
 opt.joinspaces = false
 opt.timeout = false
+opt.sessionoptions = {
+  "blank", "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
+}
 
 g.mapleader = ","
 
@@ -503,36 +506,36 @@ require("packer").startup {
       requires = {
         "nvim-lua/popup.nvim",
         "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope-project.nvim",
         "nvim-telescope/telescope-file-browser.nvim",
+        "rmagatti/session-lens",
       },
       config = function()
         local telescope = require("telescope")
+        local session_lens = require("session-lens")
 
-        telescope.load_extension("project")
         telescope.load_extension("file_browser")
+        telescope.load_extension("session-lens")
 
-        telescope.setup {}
+        telescope.setup {
+          pickers = {
+            buffers = {
+              mappings = {
+                n = {
+                  d = "delete_buffer",
+                },
+              },
+            },
+          },
+        }
 
         local builtin = require("telescope.builtin")
-        local project = function()
-          telescope.extensions.project.project {
-            attach_mappings = function(prompt_bufnr)
-              require("telescope.actions").select_default:replace(function()
-                require("telescope._extensions.project.actions").change_working_directory(prompt_bufnr)
-              end)
-
-              return true
-            end
-          }
-        end
 
         vim.keymap.set("n", "<leader>tf", builtin.find_files)
         vim.keymap.set("n", "<leader>tF", function() builtin.find_files { hidden = true } end)
         vim.keymap.set("n", "<leader>tg", builtin.live_grep)
         vim.keymap.set("n", "<leader>tb", builtin.buffers)
-        vim.keymap.set("n", "<leader>tp", project)
         vim.keymap.set("n", "<leader>te", telescope.extensions.file_browser.file_browser)
+        vim.keymap.set("n", "<leader>ts", session_lens.search_session)
         vim.keymap.set("n", "<leader>tr", builtin.resume)
         vim.keymap.set("n", "<leader>lr", builtin.lsp_references)
         vim.keymap.set("n", "<leader>li", builtin.lsp_implementations)
@@ -703,6 +706,40 @@ require("packer").startup {
       require("incline").setup {}
     end }
 
+    use {
+      "rmagatti/auto-session",
+      config = function()
+        require("auto-session").setup {
+          auto_session_suppress_dirs = { "~/repo" },
+          pre_save_cmds = {
+            function()
+              for _, win in ipairs(vim.api.nvim_list_wins()) do
+                local config = vim.api.nvim_win_get_config(win)
+                if config.relative ~= "" then
+                  vim.api.nvim_win_close(win, true)
+                end
+              end
+            end,
+          },
+        }
+      end
+    }
+
+    use {
+      "rmagatti/session-lens",
+      requires = { "rmagatti/auto-session" },
+      config = function()
+        require("session-lens").setup {
+          theme_conf = {
+            layout_config = {
+              width = function(_, max_columns, _)
+                return math.min(max_columns, 140)
+              end,
+            },
+          },
+        }
+      end
+    }
 
     -- languages, text objects, operators
 
