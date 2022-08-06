@@ -220,7 +220,7 @@ require("packer").startup {
       vim.keymap.set("c", "<space>", "ambicmd#expand('<space>')", { expr = true })
     end }
 
-    use { "itchyny/lightline.vim", config = function()
+    use { "itchyny/lightline.vim", disable = true, config = function()
       vim.g.lightline = {
         colorscheme = "nord",
         active = {
@@ -739,6 +739,52 @@ require("packer").startup {
           },
         }
       end
+    }
+
+    use {
+      "nvim-lualine/lualine.nvim",
+      requires = {
+        "kyazdani42/nvim-web-devicons",
+        "rmagatti/auto-session",
+      },
+      config = function()
+        require("lualine").setup {
+          options = {
+            component_separators = { left = "\u{e0b5}", right = "\u{e0b7}" },
+            section_separators = { left = "\u{e0b4}", right = "\u{e0b6}" },
+          },
+          sections = {
+            lualine_b = {
+              require("auto-session-library").current_session_name,
+              "branch",
+              "diff",
+              "diagnostics",
+            },
+            lualine_c = {
+              { "filename", path = 1 --[[ relative path --]] }
+            }
+          },
+        }
+      end
+    }
+
+    use {
+      "kdheepak/tabline.nvim",
+      requires = {
+        "kyazdani42/nvim-web-devicons",
+      },
+      after = { "lualine.nvim" }, -- to inherit separators settings from lualine.nvim
+      config = function()
+        local tabline = require("tabline")
+
+        tabline.setup {
+          options = {
+            show_tabs_always = true,
+          },
+        }
+        vim.keymap.set("n", "<c-q>s<tab>", tabline.buffer_previous)
+        vim.keymap.set("n", "<c-q><tab>", tabline.buffer_next)
+      end,
     }
 
     -- languages, text objects, operators
