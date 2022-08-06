@@ -660,6 +660,11 @@ require("packer").startup {
               require("luasnip").lsp_expand(args.body)
             end
           },
+          window = {
+            completion = cmp.config.window.bordered(),
+            -- documentation = cmp.config.window.bordered(),
+          },
+          mapping = cmp.mapping.preset.insert({}),
           sources = cmp.config.sources({
             { name = "nvim_lsp" },
             { name = "luasnip" },
