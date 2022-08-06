@@ -832,7 +832,6 @@ require("packer").startup {
 
     use { "machakann/vim-sandwich", config = function()
       vim.g.sandwich_no_default_key_mappings = true
-      vim.g.operator_sandwich_no_default_key_mappings = true
       vim.g["sandwich#recipes"] = vim.g["sandwich#default_recipes"]
 
       vim.keymap.set(
@@ -861,6 +860,9 @@ require("packer").startup {
       vim.keymap.set("o", "<leader>sa", "<plug>(operator-sandwich-g@)", { remap = true })
       vim.keymap.set("x", "<leader>sd", "<plug>(operator-sandwich-delete)", { remap = true })
       vim.keymap.set("x", "<leader>sr", "<plug>(operator-sandwich-replace)", { remap = true })
+
+      vim.keymap.set({ "x", "o" }, "ib", "<plug>(textobj-sandwich-auto-i)", { remap = true })
+      vim.keymap.set({ "x", "o" }, "ab", "<plug>(textobj-sandwich-auto-a)", { remap = true })
     end }
 
     use { "b3nj5m1n/kommentary", config = function()
