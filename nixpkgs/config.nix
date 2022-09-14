@@ -5,8 +5,6 @@
     allPackages = nixpkgs // packages;
     callPackage = nixpkgs.lib.callPackageWith allPackages;
 
-    nodePackages = callPackage ./node/default.nix {};
-
     packages = rec {
       xgetres = callPackage ./xgetres.nix {};
       tts = callPackage ./tts.nix {};
@@ -15,11 +13,7 @@
       libtree = callPackage ./libtree.nix {};
       nvim = callPackage ./nvim.nix {};
 
-      typescript = nodePackages.typescript;
-      typescript-language-server = nodePackages.typescript-language-server;
-
-      nodejs = nixpkgs.nodejs-14_x;
-      prettier = (nixpkgs.nodePackages.override { nodejs = nodejs; }).prettier;
+      inherit (nixpkgs.nodePackages) prettier typescript typescript-language-server;
 
       all = nixpkgs.buildEnv {
         name = "all";
