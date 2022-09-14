@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eu
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: git wa <name>"
+    exit 1
+fi
+
+REPO_PATH=$(git worktree list --porcelain | perl -lane 'print $F[1] if $.==1')
+ROOT_PATH=$(dirname "$REPO_PATH")
+NAME=$(basename "$REPO_PATH")
+WORKTREE_NAME="$NAME-$1"
+WORKTREE_PATH="$ROOT_PATH/$WORKTREE_NAME"
+
+git worktree add "$ROOT_PATH/$WORKTREE_NAME" -b "$1" HEAD
+
+if [[ -e "$REPO_PATH/.env" ]]; then
+    ln -s "$REPO_PATH/.env" "$WORKTREE_PATH/.env"
+fi
