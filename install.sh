@@ -28,13 +28,14 @@ declare -A PATHS=(
     [bin/mozc_config]=~/bin/mozc_config
     [bin/clip]=~/bin/clip
     [bin/focus_on_mouse]=~/bin/focus_on_mouse
-    [bin/git-fixup]=~/bin/git-fixup
     [bin/fullhd.sh]=~/bin/fullhd
     [bin/touhou.sh]=~/bin/touhou
     [bin/4k.sh]=~/bin/4k
     [bin/screenshot.sh]=~/bin/screenshot
     [bin/backup.sh]=~/bin/backup
     [bin/nicolive-comment-viewer.sh]=~/bin/nicolive-comment-viewer
+    [bin/git-fixup]=~/bin/git-fixup
+    [bin/git-wa]=~/bin/git-wa
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
