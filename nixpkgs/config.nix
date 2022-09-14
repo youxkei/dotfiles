@@ -118,6 +118,7 @@
           nvim
           nix-tree
           glow
+          ouch
 
           #rustup
           rust-analyzer
