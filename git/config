@@ -33,6 +33,7 @@
 	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
 [merge]
 	tool = neovim
+	conflictStyle = diff3
 [init]
 	defaultBranch = main
 [commit]
