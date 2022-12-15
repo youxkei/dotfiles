@@ -18,6 +18,9 @@ show_always = true
 [directory]
 truncate_to_repo = false
 
+[git_branch]
+symbol = ""
+
 [git_commit]
 only_detached = false
 
