@@ -97,7 +97,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: monospace
+    family: UDEV Gothic NF
 
     # The `style` can be specified to pick a specific face.
     #style: Regular
@@ -314,10 +314,9 @@ font:
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-#shell:
-#  program: /bin/bash
-#  args:
-#    - --login
+shell:
+  program: /Windows/System32/wsl.exe
+  args: ["-u", "youxkei", "-e", "zsh", "-l", "-c", "nvim"]
 
 # Startup directory
 #
@@ -503,15 +502,16 @@ font:
 key_bindings:
   # (Windows, Linux, and BSD only)
   - { key: Tab,    mods:  Control,       action: ReceiveChar      }
-  - { key: C,      mods:  Control,       action: Copy,            mode: ~Alt }
-  - { key: V,      mods:  Control,       action: Paste,           mode: ~Alt }
+  - { key: C,      mods:  Control,       action: ReceiveChar      }
+  - { key: V,      mods:  Control,       action: ReceiveChar      }
   - { key: C,      mods:  Control|Shift, action: ReceiveChar      }
   - { key: V,      mods:  Control|Shift, action: ReceiveChar      }
+
   - { key: Key0,   mods:  Control,       action: ResetFontSize    }
-  - { key: Equals, mods:  Control,       action: IncreaseFontSize }
-  - { key: Plus,   mods:  Control|Shift, action: IncreaseFontSize }
-  - { key: Plus,   mods:  Control,       action: IncreaseFontSize }
+  - { key: Equals, mods:  Control|Shift, action: IncreaseFontSize } # Ctrl-+
+  - { key: Equals, mods:  Control,       action: IncreaseFontSize } # Ctrl-;
   - { key: Minus,  mods:  Control,       action: DecreaseFontSize }
+
   - { key: Left,   chars: "\x1b[D",      mode:   ~AppCursor       }
   - { key: Left,   chars: "\x1bOD",      mode:   AppCursor        }
   - { key: Right,  chars: "\x1b[C",      mode:   ~AppCursor       }
@@ -521,20 +521,20 @@ key_bindings:
   - { key: Down,   chars: "\x1b[B",      mode:   ~AppCursor       }
   - { key: Down,   chars: "\x1bOB",      mode:   AppCursor        }
 
-  - { key: T, mods:  Control|Shift, command: { program: "alacritty" }, mode: ~Alt }
+  - { key: T, mods:  Control|Shift, command: { program: "alacritty" } }
 
-  - { key: Tab,  mods: Control,       chars: "\x11\x09", mode: Alt }
-  - { key: Tab,  mods: Control|Shift, chars: "\x11s\x09", mode: Alt }
+  - { key: Tab,  mods: Control,       chars: "\x11\x09" }
+  - { key: Tab,  mods: Control|Shift, chars: "\x11s\x09" }
 
-  - { key: Key1, mods: Control, chars: "\x111",    mode: Alt }
-  - { key: Key2, mods: Control, chars: "\x112",    mode: Alt }
-  - { key: Key3, mods: Control, chars: "\x113",    mode: Alt }
-  - { key: Key4, mods: Control, chars: "\x114",    mode: Alt }
-  - { key: Key5, mods: Control, chars: "\x115",    mode: Alt }
-  - { key: Key6, mods: Control, chars: "\x116",    mode: Alt }
-  - { key: Key7, mods: Control, chars: "\x117",    mode: Alt }
-  - { key: Key8, mods: Control, chars: "\x118",    mode: Alt }
-  - { key: Key9, mods: Control, chars: "\x119",    mode: Alt }
+  - { key: Key1, mods: Control, chars: "\x111" }
+  - { key: Key2, mods: Control, chars: "\x112" }
+  - { key: Key3, mods: Control, chars: "\x113" }
+  - { key: Key4, mods: Control, chars: "\x114" }
+  - { key: Key5, mods: Control, chars: "\x115" }
+  - { key: Key6, mods: Control, chars: "\x116" }
+  - { key: Key7, mods: Control, chars: "\x117" }
+  - { key: Key8, mods: Control, chars: "\x118" }
+  - { key: Key9, mods: Control, chars: "\x119" }
 
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
