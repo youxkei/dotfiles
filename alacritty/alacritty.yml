@@ -316,7 +316,7 @@ font:
 #   - (Windows) powershell
 shell:
   program: /Windows/System32/wsl.exe
-  args: ["-u", "youxkei", "-e", "zsh", "-l", "-c", "nvim"]
+  args: ["-u", "youxkei", "--cd", "~", "-e", "zsh", "-l", "-c", "nvim"]
 
 # Startup directory
 #
