@@ -22,3 +22,6 @@ if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
 if [ -x "$(which nix-build)" ]; then export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
+
+keychain -q --nogui ~/.ssh/id_ed25519
+. ~/.keychain/$HOST-sh
