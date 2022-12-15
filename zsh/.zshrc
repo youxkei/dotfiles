@@ -8,7 +8,7 @@ declare -A ZINIT=(
 
 if [[ ! -d $ZINIT[BIN_DIR] ]]; then
   if whence git > /dev/null; then
-    git clone --depth 1 https://github.com/zdharma/zinit.git $ZINIT[BIN_DIR]
+    git clone --depth 1 https://github.com/zdharma-continuum/zinit.git $ZINIT[BIN_DIR]
   fi
 fi
 
