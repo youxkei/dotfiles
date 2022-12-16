@@ -829,6 +829,14 @@ require("packer").startup {
       require("indent-o-matic").setup {}
     end }
 
+    use({
+      "iamcco/markdown-preview.nvim", run = function()
+        vim.fn["mkdp#util#install"]()
+      end,
+      config = function()
+      end,
+    })
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
