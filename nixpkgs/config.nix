@@ -12,6 +12,7 @@
       google-youtube3-cli = callPackage ./google-youtube3-cli.nix {};
       libtree = callPackage ./libtree.nix {};
       nvim = callPackage ./nvim.nix {};
+      loophole = callPackage ./loophole.nix {};
 
       inherit (nixpkgs.nodePackages) prettier typescript typescript-language-server;
 
@@ -119,6 +120,7 @@
           nix-tree
           glow
           ouch
+          loophole
 
           #rustup
           rust-analyzer
