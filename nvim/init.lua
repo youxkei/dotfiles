@@ -389,7 +389,7 @@ require("packer").startup {
       end,
     }
 
-    use { "romgrk/nvim-treesitter-context", config = function()
+    use { "romgrk/nvim-treesitter-context", disable = true, config = function()
       require("treesitter-context").setup {
         enable = true,
       }
