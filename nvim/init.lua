@@ -32,9 +32,6 @@ opt_global.softtabstop = 4
 opt.fileencodings = { "ucs-bom", "utf-8", "sjis", "cp932", "euc-jp" }
 opt.fileformats = { "unix", "dos", "mac" }
 
-opt.foldenable = false
-opt.foldmethod = "indent"
-
 opt.showmatch = true
 opt.matchtime = 1
 
@@ -380,29 +377,6 @@ require("packer").startup {
             enable = true,
           },
         }
-
-        vim.api.nvim_create_autocmd("FileType", {
-          group = "youxkei",
-          pattern = {
-            "sh",
-            "dockerfile",
-            "go",
-            "html",
-            "javascript",
-            "json",
-            "lua",
-            "nix",
-            "rust",
-            "toml",
-            "typescriptreact",
-            "typescript",
-            "yaml",
-          },
-          callback = function()
-            vim.opt_local.foldmethod = "expr"
-            vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-          end,
-        })
 
         vim.g.matchup_matchparen_offscreen = { method = "" }
       end,
@@ -839,6 +813,15 @@ require("packer").startup {
 
     use { "nacro90/numb.nvim", config = function()
       require('numb').setup {}
+    end }
+
+    use { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async", config = function()
+      local ufo = require("ufo")
+
+      vim.opt_global.foldcolumn = "1"
+      vim.opt_global.foldlevel = 99
+      vim.opt_global.foldlevelstart = 99
+      vim.opt_global.foldenable = true
     end }
 
     -- languages, text objects, operators
