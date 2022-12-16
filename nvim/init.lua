@@ -306,7 +306,6 @@ require("packer").startup {
         require("nvim-treesitter.configs").setup {
           ensure_installed = {
             "bash",
-            "comment",
             "dockerfile",
             "go",
             "gomod",
