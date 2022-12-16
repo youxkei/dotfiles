@@ -792,32 +792,13 @@ require("packer").startup {
               { "filename", path = 1 --[[ relative path --]] }
             }
           },
-        }
-      end
-    }
-
-    use {
-      "kdheepak/tabline.nvim",
-      requires = {
-        "kyazdani42/nvim-web-devicons",
-      },
-      after = { "lualine.nvim" }, -- to inherit separators settings from lualine.nvim
-      config = function()
-        local tabline = require("tabline")
-
-        tabline.setup {
-          options = {
-            show_tabs_always = true,
+          tabline = {
+            lualine_c = { { 'tabs', mode = 2 } },
           },
         }
-        vim.keymap.set("n", "<c-q>s<tab>", tabline.buffer_previous)
-        vim.keymap.set("n", "<c-q><tab>", tabline.buffer_next)
-      end,
-    }
 
-    use { "moll/vim-bbye", config = function()
-      vim.keymap.set("n", "<leader>bd", "<cmd>Bdelete<cr>")
-    end }
+      end
+    }
 
     use { "mizlan/iswap.nvim", config = function()
       local iswap = require("iswap")
