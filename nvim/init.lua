@@ -648,8 +648,8 @@ require("packer").startup {
         "hrsh7th/cmp-buffer",
         "octaltree/cmp-look",
         "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
-        "tzachar/cmp-tabnine",
+        --"hrsh7th/cmp-nvim-lsp-signature-help",
+        --"tzachar/cmp-tabnine",
       },
       config = function()
         local cmp = require("cmp")
@@ -670,8 +670,8 @@ require("packer").startup {
             { name = "path" },
             { name = "buffer" },
             { name = "look" },
-            { name = "nvim_lsp_signature_help" },
-            { name = "cmp_tabnine" },
+            --{ name = "nvim_lsp_signature_help" },
+            --{ name = "cmp_tabnine" },
           }),
           preselect = cmp.PreselectMode.None,
         }
@@ -681,9 +681,10 @@ require("packer").startup {
             { name = "cmdline" },
           },
         })
-      end }
+      end
+    }
 
-    use { "tzachar/cmp-tabnine", run = "./install.sh", config = function()
+    use { "tzachar/cmp-tabnine", run = "./install.sh", disable = true, config = function()
       require("cmp_tabnine.config"):setup {}
     end }
 
