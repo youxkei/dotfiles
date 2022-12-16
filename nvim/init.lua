@@ -557,7 +557,7 @@ require("packer").startup {
         jump_on_sole_occurrence = false,
       }
 
-      vim.keymap.set("n", "s", hop.hint_char1)
+      vim.keymap.set("n", "s", hop.hint_char2)
     end }
 
     use { "lewis6991/gitsigns.nvim", requires = "nvim-lua/plenary.nvim", config = function()
