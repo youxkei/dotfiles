@@ -249,17 +249,6 @@ require("packer").startup {
 
     use { "kana/vim-tabpagecd" }
 
-    use { "w0rp/ale", disable = true, config = function()
-      vim.g.ale_lint_on_save = 0
-      vim.g.ale_lint_on_text_changed = 0
-      vim.g.ale_fix_on_save = 1
-
-      vim.g.ale_fixers = {
-        -- ["*"] = {"remove_trailing_lines", "trim_whitespace"},
-        ["*"] = { "remove_trailing_lines" },
-      }
-    end }
-
     use { "lambdalisue/suda.vim" }
 
     use { "sgur/vim-editorconfig" }
