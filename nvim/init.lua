@@ -816,6 +816,15 @@ require("packer").startup {
       require("lsp_signature").setup {}
     end }
 
+    use { "monaqa/dial.nvim", config = function()
+      local dial = require("dial.map")
+
+      vim.keymap.set("n", "<c-a>", dial.inc_normal())
+      vim.keymap.set("n", "<c-x>", dial.dec_normal())
+      vim.keymap.set("v", "<c-a>", dial.inc_visual())
+      vim.keymap.set("v", "<c-x>", dial.dec_visual())
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
