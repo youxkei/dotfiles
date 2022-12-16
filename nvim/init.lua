@@ -210,9 +210,23 @@ require("packer").startup {
 
     use("nvim-lua/plenary.nvim")
 
-    use { "christianchiarulli/nvcode-color-schemes.vim", after = "indent-blankline.nvim", config = function()
-      vim.cmd [[colorscheme nord]]
-    end }
+    use { "christianchiarulli/nvcode-color-schemes.vim",
+      config = function()
+        vim.cmd [[
+          colorscheme nord
+
+          highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
+          highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
+          highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
+          highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
+          highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
+          highlight IndentBlanklineSpaceChar guifg=#434C5E guibg=none gui=nocombine
+          highlight IndentBlanklineSpaceCharBlankline guifg=#434C5E guibg=none gui=nocombine
+
+          highlight Comment gui=NONE cterm=NONE
+        ]]
+      end
+    }
 
     use { "thinca/vim-ambicmd", config = function()
       vim.keymap.set("c", "<cr>", "ambicmd#expand('<cr>')", { expr = true })
@@ -591,22 +605,6 @@ require("packer").startup {
         char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
         buftype_exclude = { "terminal" }
       }
-
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        group = "youxkei",
-        pattern = "*",
-        callback = function()
-          vim.cmd [[
-            highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
-            highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
-            highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
-            highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
-            highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
-            highlight IndentBlanklineSpaceChar guifg=white guibg=none gui=nocombine
-            highlight IndentBlanklineSpaceCharBlankline guifg=white guibg=none gui=nocombine
-          ]]
-        end,
-      })
     end }
 
     use { "akinsho/toggleterm.nvim", config = function()
