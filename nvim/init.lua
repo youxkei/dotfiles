@@ -719,7 +719,7 @@ require("packer").startup {
       vim.keymap.set("n", "<leader>h", require("nvim-window").pick)
     end }
 
-    use { "b0o/incline.nvim", config = function()
+    use { "b0o/incline.nvim", disable = true, config = function()
       require("incline").setup {}
     end }
 
