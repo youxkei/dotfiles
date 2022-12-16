@@ -400,19 +400,50 @@ require("packer").startup {
       requires = {
         "hrsh7th/cmp-nvim-lsp",
         "amiralies/vim-rescript",
+        "jose-elias-alvarez/null-ls.nvim",
       },
       config = function()
         local lspconfig = require("lspconfig")
 
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+        local augroup_lsp_format = vim.api.nvim_create_augroup("LspFormatting", {})
+        local on_attach = function(client, bufnr)
+          if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_clear_autocmds({ group = augroup_lsp_format, buffer = bufnr })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = augroup_lsp_format,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format({
+                  bufnr = bufnr,
+                  timeout_ms = 10000,
+                })
+              end,
+            })
+          end
+
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, { silent = true, buffer = bufnr })
+          vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { silent = true, buffer = bufnr })
+        end
+
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        capabilities.textDocument.foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true
+        }
 
         lspconfig.gopls.setup {
           capabilities = capabilities,
+          on_attach = on_attach,
+          settings = {
+            gopls = {
+              gofumpt = true,
+            },
+          },
         }
 
         lspconfig.rescriptls.setup {
           capabilities = capabilities,
+          on_attach = on_attach,
           cmd = {
             "node",
             vim.fn.stdpath("data") .. "/site/pack/packer/start/vim-rescript/server/out/server.js",
@@ -422,11 +453,17 @@ require("packer").startup {
 
         lspconfig.tsserver.setup {
           capabilities = capabilities,
+          on_attach = function(client)
+            client.resolved_capabilities.document_formatting = false
+            on_attach(client)
+          end,
+          -- TODO: refine tsserver-path
+          cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/home/youxkei/.nix-profile/bin/tsserver" },
         }
 
         lspconfig.sumneko_lua.setup {
           capabilities = capabilities,
-          cmd = { "lua-language-server" },
+          on_attach = on_attach,
           settings = {
             Lua = {
               diagnostics = {
@@ -438,17 +475,31 @@ require("packer").startup {
 
         lspconfig.ocamllsp.setup {
           capabilities = capabilities,
+          on_attach = on_attach,
         }
 
-        vim.keymap.set("n", "<leader>ln", "<cmd>lua vim.lsp.buf.rename()<cr>", { silent = true })
-        vim.keymap.set("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
+        lspconfig.rust_analyzer.setup {
+          capabilities = capabilities,
+          on_attach = on_attach,
+        }
 
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = "youxkei",
-          pattern = { "*.go", "*.res", "*.js", "*.lua", "*.ml" },
-          callback = function()
-            vim.lsp.buf.formatting_sync(nil, 1000)
-          end,
+
+        local null_ls = require("null-ls")
+        null_ls.setup({
+          on_attach = on_attach,
+          sources = {
+            null_ls.builtins.formatting.prettier.with {
+              filetypes = {
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+                "html",
+                "json",
+              },
+            },
+            null_ls.builtins.formatting.goimports,
+          },
         })
       end,
     }
