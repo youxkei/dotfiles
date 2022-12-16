@@ -825,6 +825,10 @@ require("packer").startup {
       vim.keymap.set("v", "<c-x>", dial.dec_visual())
     end }
 
+    use { "Darazaki/indent-o-matic", config = function()
+      require("indent-o-matic").setup {}
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
