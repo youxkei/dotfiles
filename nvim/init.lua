@@ -542,8 +542,10 @@ require("packer").startup {
         vim.keymap.set("n", "<leader>tr", builtin.resume)
         vim.keymap.set("n", "<leader>lr", builtin.lsp_references)
         vim.keymap.set("n", "<leader>li", builtin.lsp_implementations)
-        vim.keymap.set("n", "<leader>ls", builtin.lsp_document_symbols)
+        vim.keymap.set("n", "<leader>ls", function() builtin.lsp_document_symbols { symbol_width = 80 } end)
+        vim.keymap.set("n", "<leader>lS", function() builtin.lsp_dynamic_workspace_symbols { symbol_width = 80 } end)
         vim.keymap.set("n", "<leader>le", builtin.diagnostics)
+        vim.keymap.set("n", "<leader>ld", builtin.lsp_definitions)
       end
     }
 
