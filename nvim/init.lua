@@ -135,19 +135,6 @@ vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>", { silent = true })
 vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>", { silent = true })
 vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]], { silent = true })
 
-function Youxkei_toggleterm()
-  local id = vim.t.youxkei_toggleterm_id
-
-  if not vim.t.youxkei_toggleterm_id then
-    id = Youxkei_next_toggleterm_unique_id or 1
-    Youxkei_next_toggleterm_unique_id = id + 1
-
-    vim.t.youxkei_toggleterm_id = id
-  end
-
-  require("toggleterm").toggle(id)
-end
-
 vim.keymap.set("v", "<leader>g", function()
   local Job = require("plenary.job")
 
@@ -623,7 +610,7 @@ require("packer").startup {
         },
       }
 
-      vim.keymap.set("n", "<c-t>", Youxkei_toggleterm, { silent = true })
+      vim.keymap.set("n", "<c-t>", function() require("toggleterm").toggle(0) end, { silent = true })
     end }
 
     use { "karb94/neoscroll.nvim", disable = true, config = function()
