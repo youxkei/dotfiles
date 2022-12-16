@@ -102,7 +102,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup,
-  pattern = { "rescript", "lua", "nix", "javascript", "ocaml", "text" },
+  pattern = { "rescript", "lua", "nix", "javascript", "ocaml", "text", "typescript", "typescriptreact" },
   callback = function()
     opt_local.shiftwidth = 2
     opt_local.tabstop = 2
