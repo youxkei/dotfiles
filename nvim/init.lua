@@ -812,6 +812,10 @@ require("packer").startup {
 
     use { "f-person/git-blame.nvim" }
 
+    use { "ray-x/lsp_signature.nvim", config = function()
+      require("lsp_signature").setup {}
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
