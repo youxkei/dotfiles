@@ -115,18 +115,6 @@ vim.keymap.set("n", "k", "gk")
 vim.keymap.set("n", "gj", "j")
 vim.keymap.set("n", "gk", "k")
 
-for i = 1, 9 do
-  local lhs = "<c-q>" .. i
-  local rhs = "<esc>" .. i .. "gt"
-
-  if i == 9 then
-    rhs = "<esc><cmd>tablast<cr>"
-  end
-
-  vim.keymap.set("n", lhs, rhs, { silent = true })
-  vim.keymap.set("i", lhs, rhs, { silent = true })
-end
-
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { silent = true })
 vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "i", "empty(getline('.')) ? 'cc' : 'i'", { expr = true })
@@ -134,6 +122,23 @@ vim.keymap.set("n", "a", "empty(getline('.')) ? 'cc' : 'a'", { expr = true })
 vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>", { silent = true })
 vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>", { silent = true })
 vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]], { silent = true })
+
+vim.keymap.set("n", "<c-q>s<tab>", "gT")
+vim.keymap.set("n", "<c-q><tab>", "gt")
+vim.keymap.set("n", "<c-s-tab>", "gT")
+vim.keymap.set("n", "<c-tab>", "gt")
+
+for i = 1, 9 do
+  local lhs = "<c-q>" .. i
+  local rhs = i .. "gt"
+
+  if i == 9 then
+    rhs = "<cmd>tablast<cr>"
+  end
+
+  vim.keymap.set("n", lhs, rhs)
+  vim.keymap.set("i", lhs, rhs)
+end
 
 vim.keymap.set("v", "<leader>g", function()
   local Job = require("plenary.job")
