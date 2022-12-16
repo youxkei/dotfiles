@@ -837,6 +837,10 @@ require("packer").startup {
       end,
     })
 
+    use { "nacro90/numb.nvim", config = function()
+      require('numb').setup {}
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
