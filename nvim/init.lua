@@ -219,37 +219,6 @@ require("packer").startup {
       vim.keymap.set("c", "<space>", "ambicmd#expand('<space>')", { expr = true })
     end }
 
-    use { "itchyny/lightline.vim", disable = true, config = function()
-      vim.g.lightline = {
-        colorscheme = "nord",
-        active = {
-          left = {
-            { "cwd", "mode", "paste" },
-            { "readonly", "relativepath", "modified" },
-          },
-        },
-        tab = {
-          active = { "tabnum", "cwd" },
-          inactive = { "tabnum", "cwd" },
-        },
-        component = {
-          readonly = "%{&readonly?'⌬':''}",
-        },
-        tab_component_function = {
-          cwd = "LightlineCWD",
-        },
-        separator = { left = "\u{e0b4}", right = "\u{e0b6}" },
-        subseparator = { left = "\u{e0b5}", right = "\u{e0b7}" },
-      }
-
-      vim.cmd [[
-        function! LightlineCWD(n) abort
-          let cwd = gettabvar(a:n, 'cwd')
-          return fnamemodify(empty(cwd) ? getcwd() : cwd, ':t')
-        endfunction
-      ]]
-    end }
-
     use { "previm/previm" }
 
     use { "LeafCage/yankround.vim", config = function()
