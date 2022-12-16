@@ -810,6 +810,7 @@ require("packer").startup {
       vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]])
     end }
 
+    use { "f-person/git-blame.nvim" }
 
     -- languages, text objects, operators
 
