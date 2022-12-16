@@ -253,8 +253,6 @@ require("packer").startup {
 
     use { "sgur/vim-editorconfig" }
 
-    use { "prakashdanish/vim-githubinator", disable = true }
-
     use { "lambdalisue/vim-manpager", opt = true, cmd = "ASMANPAGER" }
 
     use { "haya14busa/vim-asterisk", config = function()
