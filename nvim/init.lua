@@ -779,7 +779,7 @@ require("packer").startup {
           sections = {
             lualine_b = {
               require("auto-session-library").current_session_name,
-              "branch",
+              { "branch", icon = "" },
               "diff",
               "diagnostics",
             },
