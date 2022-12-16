@@ -824,6 +824,12 @@ require("packer").startup {
       vim.opt_global.foldenable = true
     end }
 
+    use { "fgheng/winbar.nvim", config = function()
+      require("winbar").setup {
+        enabled = true,
+      }
+    end }
+
     -- languages, text objects, operators
 
     use { "amiralies/vim-rescript" }
