@@ -114,8 +114,8 @@ vim.keymap.set("n", "gk", "k")
 
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { silent = true })
 vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "i", "empty(getline('.')) ? 'cc' : 'i'", { expr = true })
-vim.keymap.set("n", "a", "empty(getline('.')) ? 'cc' : 'a'", { expr = true })
+vim.keymap.set("n", "i", [[empty(getline(".")) ? "cc" : "i"]], { expr = true })
+vim.keymap.set("n", "a", [[empty(getline(".")) ? "cc" : "a"]], { expr = true })
 vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>", { silent = true })
 vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>", { silent = true })
 vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]], { silent = true })
@@ -214,8 +214,8 @@ require("packer").startup {
     }
 
     use { "thinca/vim-ambicmd", config = function()
-      vim.keymap.set("c", "<cr>", "ambicmd#expand('<cr>')", { expr = true })
-      vim.keymap.set("c", "<space>", "ambicmd#expand('<space>')", { expr = true })
+      vim.keymap.set("c", "<cr>", [[ambicmd#expand("<cr>")]], { expr = true })
+      vim.keymap.set("c", "<space>", [[ambicmd#expand("<space>")]], { expr = true })
     end }
 
     use { "previm/previm" }
@@ -255,10 +255,12 @@ require("packer").startup {
     use { "lambdalisue/vim-manpager", opt = true, cmd = "ASMANPAGER" }
 
     use { "haya14busa/vim-asterisk", config = function()
-      vim.keymap.set({ "n", "v" }, "*", "<plug>(asterisk-z*)<cmd>lua require('hlslens').start()<cr>", { remap = true })
-      vim.keymap.set({ "n", "v" }, "#", "<plug>(asterisk-z#)<cmd>lua require('hlslens').start()<cr>", { remap = true })
-      vim.keymap.set({ "n", "v" }, "g*", "<plug>(asterisk-gz*)<cmd>lua require('hlslens').start()<cr>", { remap = true })
-      vim.keymap.set({ "n", "v" }, "g#", "<plug>(asterisk-gz#)<cmd>lua require('hlslens').start()<cr>", { remap = true })
+      vim.keymap.set({ "n", "v" }, "*", [[<plug>(asterisk-z*)<cmd>lua require("hlslens").start()<cr>]], { remap = true })
+      vim.keymap.set({ "n", "v" }, "#", [[<plug>(asterisk-z#)<cmd>lua require("hlslens").start()<cr>]], { remap = true })
+      vim.keymap.set({ "n", "v" }, "g*", [[<plug>(asterisk-gz*)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true })
+      vim.keymap.set({ "n", "v" }, "g#", [[<plug>(asterisk-gz#)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true })
     end }
 
     use { "chaoren/vim-wordmotion", config = function()
@@ -547,18 +549,18 @@ require("packer").startup {
 
       vim.keymap.set(
         "n", "n",
-        "<cmd>execute('normal! ' . v:count1 . 'n')<cr><cmd>lua require('hlslens').start()<cr>",
+        [[<cmd>execute("normal! " . v:count1 . "n")<cr><cmd>lua require("hlslens").start()<cr>]],
         { silent = true }
       )
       vim.keymap.set(
         "n", "N",
-        "<cmd>execute('normal! ' . v:count1 . 'N')<cr><cmd>lua require('hlslens').start()<cr>",
+        [[<cmd>execute("normal! " . v:count1 . "N")<cr><cmd>lua require("hlslens").start()<cr>]],
         { silent = true }
       )
-      vim.keymap.set("n", "*", "*<cmd>lua require('hlslens').start()<cr>")
-      vim.keymap.set("n", "#", "#<cmd>lua require('hlslens').start()<cr>")
-      vim.keymap.set("n", "g*", "g*<cmd>lua require('hlslens').start()<cr>")
-      vim.keymap.set("n", "g#", "g#<cmd>lua require('hlslens').start()<cr>")
+      vim.keymap.set("n", "*", [[*<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "#", [[#<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "g*", [[g*<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "g#", [[g#<cmd>lua require("hlslens").start()<cr>]])
     end }
 
     use { "lukas-reineke/indent-blankline.nvim", config = function()
@@ -750,7 +752,7 @@ require("packer").startup {
             }
           },
           tabline = {
-            -- lualine_c = { { 'tabs', mode = 2 } },
+            -- lualine_c = { { "tabs", mode = 2 } },
           },
         }
 
@@ -795,7 +797,7 @@ require("packer").startup {
     })
 
     use { "nacro90/numb.nvim", config = function()
-      require('numb').setup {}
+      require("numb").setup {}
     end }
 
     use { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async", config = function()
