@@ -295,8 +295,7 @@ require("packer").startup {
       vim.keymap.set("n", "<leader>n", "<plug>MarkAllClear", { remap = true })
     end }
 
-    use {
-      "nvim-treesitter/nvim-treesitter",
+    use { "nvim-treesitter/nvim-treesitter",
       run = ":TSUpdate",
       requires = {
         "p00f/nvim-ts-rainbow",
@@ -373,8 +372,7 @@ require("packer").startup {
       }
     end }
 
-    use {
-      "neovim/nvim-lspconfig",
+    use { "neovim/nvim-lspconfig",
       requires = {
         "hrsh7th/cmp-nvim-lsp",
         "amiralies/vim-rescript",
@@ -482,8 +480,7 @@ require("packer").startup {
       end,
     }
 
-    use {
-      "nvim-telescope/telescope.nvim",
+    use { "nvim-telescope/telescope.nvim",
       requires = {
         "nvim-lua/popup.nvim",
         "nvim-lua/plenary.nvim",
@@ -591,8 +588,7 @@ require("packer").startup {
 
     use { "github/copilot.vim", disable = true }
 
-    use {
-      "VonHeikemen/fine-cmdline.nvim",
+    use { "VonHeikemen/fine-cmdline.nvim",
       disable = true, -- disabled because it doesn't work with cmp-cmdline
       requires = "MunifTanjim/nui.nvim",
       config = function()
@@ -600,8 +596,7 @@ require("packer").startup {
       end
     }
 
-    use {
-      "hrsh7th/nvim-cmp",
+    use { "hrsh7th/nvim-cmp",
       requires = {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
@@ -650,8 +645,7 @@ require("packer").startup {
       require("cmp_tabnine.config"):setup {}
     end }
 
-    use {
-      "folke/trouble.nvim",
+    use { "folke/trouble.nvim",
       requires = { "kyazdani42/nvim-web-devicons" },
       config = function()
         local trouble = require("trouble")
@@ -687,8 +681,7 @@ require("packer").startup {
       require("incline").setup {}
     end }
 
-    use {
-      "rmagatti/auto-session",
+    use { "rmagatti/auto-session",
       config = function()
         require("auto-session").setup {
           auto_session_suppress_dirs = { "~/repo" },
@@ -712,8 +705,7 @@ require("packer").startup {
       end
     }
 
-    use {
-      "rmagatti/session-lens",
+    use { "rmagatti/session-lens",
       requires = { "rmagatti/auto-session" },
       config = function()
         require("session-lens").setup {
@@ -728,8 +720,7 @@ require("packer").startup {
       end
     }
 
-    use {
-      "nvim-lualine/lualine.nvim",
+    use { "nvim-lualine/lualine.nvim",
       requires = {
         "kyazdani42/nvim-web-devicons",
         "rmagatti/auto-session",
@@ -788,8 +779,8 @@ require("packer").startup {
       require("indent-o-matic").setup {}
     end }
 
-    use({
-      "iamcco/markdown-preview.nvim", run = function()
+    use({ "iamcco/markdown-preview.nvim",
+      run = function()
         vim.fn["mkdp#util#install"]()
       end,
       config = function()
@@ -820,8 +811,7 @@ require("packer").startup {
       }
     end }
 
-    use {
-      "akinsho/bufferline.nvim",
+    use { "akinsho/bufferline.nvim",
       requires = "nvim-tree/nvim-web-devicons",
       config = function()
         local bufferline = require("bufferline")
