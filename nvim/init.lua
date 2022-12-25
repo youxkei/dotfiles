@@ -120,23 +120,6 @@ vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>", { silent = true })
 vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>", { silent = true })
 vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]], { silent = true })
 
-vim.keymap.set("n", "<c-q>s<tab>", "gT")
-vim.keymap.set("n", "<c-q><tab>", "gt")
-vim.keymap.set("n", "<c-s-tab>", "gT")
-vim.keymap.set("n", "<c-tab>", "gt")
-
-for i = 1, 9 do
-  local lhs = "<c-q>" .. i
-  local rhs = i .. "gt"
-
-  if i == 9 then
-    rhs = "<cmd>tablast<cr>"
-  end
-
-  vim.keymap.set("n", lhs, rhs)
-  vim.keymap.set("i", lhs, rhs)
-end
-
 vim.keymap.set("v", "<leader>g", function()
   local Job = require("plenary.job")
 
@@ -763,11 +746,11 @@ require("packer").startup {
               "diagnostics",
             },
             lualine_c = {
-              { "filename", path = 1 --[[ relative path --]] }
+              -- { "filename", path = 1 --[[ relative path --]] }
             }
           },
           tabline = {
-            lualine_c = { { 'tabs', mode = 2 } },
+            -- lualine_c = { { 'tabs', mode = 2 } },
           },
         }
 
@@ -829,6 +812,44 @@ require("packer").startup {
         enabled = true,
       }
     end }
+
+    use {
+      "akinsho/bufferline.nvim",
+      requires = "nvim-tree/nvim-web-devicons",
+      config = function()
+        local bufferline = require("bufferline")
+
+        bufferline.setup {}
+
+        vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle(-1) end)
+        vim.keymap.set("n", "<c-q><tab>", function() bufferline.cycle(1) end)
+        vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle(-1) end)
+        vim.keymap.set("n", "<c-tab>", function() bufferline.cycle(1) end)
+
+        for i = 1, 9 do
+          local lhs = "<c-q>" .. i
+          local rhs = function() bufferline.go_to(i, true) end
+
+          if i == 9 then
+            rhs = function() bufferline.go_to(-1, true) end
+
+          end
+
+          vim.keymap.set("n", lhs, rhs)
+          vim.keymap.set("i", lhs, rhs)
+        end
+
+        vim.keymap.set("n", "ZQ", function()
+          local wins = vim.api.nvim_tabpage_list_wins(0)
+
+          if #wins == 1 then
+            vim.api.nvim_buf_delete(0, {})
+          else
+            vim.api.nvim_win_close(0, {})
+          end
+        end)
+      end
+    }
 
     -- languages, text objects, operators
 
