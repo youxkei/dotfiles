@@ -801,10 +801,15 @@ require("packer").startup {
     use { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async", config = function()
       local ufo = require("ufo")
 
+      ufo.setup {}
+
       vim.opt_global.foldcolumn = "1"
       vim.opt_global.foldlevel = 99
       vim.opt_global.foldlevelstart = 99
       vim.opt_global.foldenable = true
+
+      vim.keymap.set("n", "zR", ufo.openAllFolds)
+      vim.keymap.set("n", "zM", ufo.closeAllFolds)
     end }
 
     use { "fgheng/winbar.nvim", config = function()
