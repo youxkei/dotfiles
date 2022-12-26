@@ -1,5 +1,7 @@
 #SingleInstance Force
 
+#Include %A_ScriptDir%\komorebi.generated.ahk
+
 Komorebic(args) {
     Run komorebic.exe %args%, , Hide
 }
