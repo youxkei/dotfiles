@@ -19,6 +19,10 @@ Komorebic("ensure-workspaces " . LeftMonitor   . " 3")
 Komorebic("ensure-workspaces " . CenterMonitor . " 9")
 Komorebic("ensure-workspaces " . RightMonitor  . " 15")
 
+Komorebic("identify-tray-application exe Carla.exe")
+Komorebic("identify-tray-application exe qjackctl.exe")
+Komorebic("identify-tray-application exe jackd.exe")
+
 Komorebic("mouse-follows-focus enable")
 Komorebic("window-hiding-behaviour minimize")
 Komorebic("focus-follows-mouse enable -i windows")
