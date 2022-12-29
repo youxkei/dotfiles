@@ -218,8 +218,6 @@ require("packer").startup {
       vim.keymap.set("c", "<space>", [[ambicmd#expand("<space>")]], { expr = true })
     end }
 
-    use { "previm/previm" }
-
     use { "LeafCage/yankround.vim", config = function()
       vim.g.yankround_dir = vim.fn.stdpath("cache") .. "/yankround"
       vim.g.yankround_max_history = 100
@@ -246,11 +244,7 @@ require("packer").startup {
 
     use { "rhysd/committia.vim" }
 
-    use { "kana/vim-tabpagecd" }
-
     use { "lambdalisue/suda.vim" }
-
-    use { "sgur/vim-editorconfig" }
 
     use { "lambdalisue/vim-manpager", opt = true, cmd = "ASMANPAGER" }
 
@@ -366,7 +360,7 @@ require("packer").startup {
       end,
     }
 
-    use { "romgrk/nvim-treesitter-context", disable = true, config = function()
+    use { "romgrk/nvim-treesitter-context", config = function()
       require("treesitter-context").setup {
         enable = true,
       }
@@ -580,22 +574,6 @@ require("packer").startup {
       vim.keymap.set("n", "<c-t>", function() require("toggleterm").toggle(0) end, { silent = true })
     end }
 
-    use { "karb94/neoscroll.nvim", disable = true, config = function()
-      require("neoscroll").setup({
-        mappings = { "<C-u>", "<C-d>" },
-      })
-    end }
-
-    use { "github/copilot.vim", disable = true }
-
-    use { "VonHeikemen/fine-cmdline.nvim",
-      disable = true, -- disabled because it doesn't work with cmp-cmdline
-      requires = "MunifTanjim/nui.nvim",
-      config = function()
-        vim.keymap.set("n", ":", require("fine-cmdline").open)
-      end
-    }
-
     use { "hrsh7th/nvim-cmp",
       requires = {
         "L3MON4D3/LuaSnip",
@@ -606,7 +584,6 @@ require("packer").startup {
         "octaltree/cmp-look",
         "hrsh7th/cmp-cmdline",
         --"hrsh7th/cmp-nvim-lsp-signature-help",
-        --"tzachar/cmp-tabnine",
       },
       config = function()
         local cmp = require("cmp")
@@ -641,10 +618,6 @@ require("packer").startup {
       end
     }
 
-    use { "tzachar/cmp-tabnine", run = "./install.sh", disable = true, config = function()
-      require("cmp_tabnine.config"):setup {}
-    end }
-
     use { "folke/trouble.nvim",
       requires = { "kyazdani42/nvim-web-devicons" },
       config = function()
@@ -654,32 +627,6 @@ require("packer").startup {
         vim.keymap.set("n", "<leader>r", trouble.open)
       end,
     }
-
-    use { "ellisonleao/glow.nvim" }
-
-    use { "hoschi/yode-nvim", requires = "nvim-lua/plenary.nvim", config = function()
-      require("yode-nvim").setup({})
-
-      vim.keymap.set("v", "<leader>yc", ":YodeCreateSeditorFloating<cr>")
-    end }
-
-    use { "https://gitlab.com/yorickpeterse/nvim-window", config = function()
-      require("nvim-window").setup({
-        chars = {
-          "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
-          "k", "m", "x", "b", "j", "w", "q", "v",
-        },
-        normal_hl = "Normal",
-        hint_hl = "Bold",
-        border = "single"
-      })
-
-      vim.keymap.set("n", "<leader>h", require("nvim-window").pick)
-    end }
-
-    use { "b0o/incline.nvim", disable = true, config = function()
-      require("incline").setup {}
-    end }
 
     use { "rmagatti/auto-session",
       config = function()
@@ -738,12 +685,6 @@ require("packer").startup {
               "diff",
               "diagnostics",
             },
-            lualine_c = {
-              -- { "filename", path = 1 --[[ relative path --]] }
-            }
-          },
-          tabline = {
-            -- lualine_c = { { "tabs", mode = 2 } },
           },
         }
 
@@ -779,13 +720,13 @@ require("packer").startup {
       require("indent-o-matic").setup {}
     end }
 
-    use({ "iamcco/markdown-preview.nvim",
+    use { "iamcco/markdown-preview.nvim",
       run = function()
         vim.fn["mkdp#util#install"]()
       end,
       config = function()
       end,
-    })
+    }
 
     use { "nacro90/numb.nvim", config = function()
       require("numb").setup {}
@@ -849,8 +790,6 @@ require("packer").startup {
     }
 
     -- languages, text objects, operators
-
-    use { "amiralies/vim-rescript" }
 
     use { "sgur/vim-textobj-parameter", requires = "kana/vim-textobj-user" }
 
