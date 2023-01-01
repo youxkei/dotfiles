@@ -7,8 +7,9 @@ Komorebic(args) {
 }
 
 KomorebicTwice(args) {
-    Run komorebic.exe %args%, , Hide
-    Run komorebic.exe %args%, , Hide
+    Loop 5 {
+        Run komorebic.exe %args%, , Hide
+    }
 }
 
 LeftMonitor := "1"
