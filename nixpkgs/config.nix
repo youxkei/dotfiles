@@ -121,6 +121,7 @@
           glow
           ouch
           loophole
+          stderred
 
           #rustup
           rust-analyzer

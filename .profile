@@ -17,8 +17,12 @@ export GLFW_IM_MODULE=ibus
 
 if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
-if [ -x "$(which nix-build)" ]; then export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
+
+if [ -x "$(which nix-build)" ]; then
+    export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive;
+    export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+fi
 
 PATH=~/bin:$PATH
 export PATH
