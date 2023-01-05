@@ -457,6 +457,7 @@ return {
       vim.keymap.set("n", "<leader>tf", builtin.find_files)
       vim.keymap.set("n", "<leader>tF", function() builtin.find_files { hidden = true } end)
       vim.keymap.set("n", "<leader>tg", builtin.live_grep)
+      vim.keymap.set("n", "<leader>tG", function() builtin.live_grep { additional_args = { "-uuu" } } end)
       vim.keymap.set("n", "<leader>tb", builtin.buffers)
       vim.keymap.set("n", "<leader>tr", builtin.resume)
       vim.keymap.set("n", "<leader>lr", builtin.lsp_references)
