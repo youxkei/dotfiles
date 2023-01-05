@@ -501,25 +501,24 @@ shell:
 # at once.
 key_bindings:
   # (Windows, Linux, and BSD only)
-  - { key: Tab,    mods:  Control,       action: ReceiveChar      }
-  - { key: C,      mods:  Control,       action: ReceiveChar      }
-  - { key: V,      mods:  Control,       action: ReceiveChar      }
-  - { key: C,      mods:  Control|Shift, action: ReceiveChar      }
-  - { key: V,      mods:  Control|Shift, action: ReceiveChar      }
+  - { key: C, mods: Control,       action: ReceiveChar }
+  - { key: V, mods: Control,       action: ReceiveChar }
+  - { key: C, mods: Control|Shift, action: ReceiveChar }
+  - { key: V, mods: Control|Shift, action: ReceiveChar }
 
   - { key: Key0,   mods:  Control,       action: ResetFontSize    }
   - { key: Equals, mods:  Control|Shift, action: IncreaseFontSize } # Ctrl-+
   - { key: Equals, mods:  Control,       action: IncreaseFontSize } # Ctrl-;
   - { key: Minus,  mods:  Control,       action: DecreaseFontSize }
 
-  - { key: Left,   chars: "\x1b[D",      mode:   ~AppCursor       }
-  - { key: Left,   chars: "\x1bOD",      mode:   AppCursor        }
-  - { key: Right,  chars: "\x1b[C",      mode:   ~AppCursor       }
-  - { key: Right,  chars: "\x1bOC",      mode:   AppCursor        }
-  - { key: Up,     chars: "\x1b[A",      mode:   ~AppCursor       }
-  - { key: Up,     chars: "\x1bOA",      mode:   AppCursor        }
-  - { key: Down,   chars: "\x1b[B",      mode:   ~AppCursor       }
-  - { key: Down,   chars: "\x1bOB",      mode:   AppCursor        }
+  - { key: Left,  chars: "\x1b[D", mode: ~AppCursor }
+  - { key: Left,  chars: "\x1bOD", mode: AppCursor  }
+  - { key: Right, chars: "\x1b[C", mode: ~AppCursor }
+  - { key: Right, chars: "\x1bOC", mode: AppCursor  }
+  - { key: Up,    chars: "\x1b[A", mode: ~AppCursor }
+  - { key: Up,    chars: "\x1bOA", mode: AppCursor  }
+  - { key: Down,  chars: "\x1b[B", mode: ~AppCursor }
+  - { key: Down,  chars: "\x1bOB", mode: AppCursor  }
 
   - { key: T, mods:  Control|Shift, command: { program: "alacritty" } }
 
