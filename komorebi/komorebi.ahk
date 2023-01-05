@@ -80,6 +80,7 @@ $!+5::Komorebic("send-to-monitor-workspace " . RightMonitor . " 14")
 
 $!+Enter::Komorebic("toggle-float")
 $!s::Komorebic("toggle-pause")
+$!m::Komorebic("manage")
 
 $!r::Komorebic("retile")
 $!+r::Komorebic("reload-configuration")
