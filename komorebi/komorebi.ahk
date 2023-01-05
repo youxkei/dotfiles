@@ -25,8 +25,9 @@ Komorebic("identify-tray-application exe qjackctl.exe")
 Komorebic("identify-tray-application exe jackd.exe")
 
 Komorebic("mouse-follows-focus enable")
-Komorebic("window-hiding-behaviour minimize")
 Komorebic("focus-follows-mouse enable -i windows")
+Komorebic("window-hiding-behaviour minimize")
+Komorebic("cross-monitor-move-behaviour insert")
 
 Komorebic("watch-configuration enable")
 Komorebic("complete-configuration")
