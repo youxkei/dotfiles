@@ -62,9 +62,11 @@ HISTSIZE=100000
 SAVEHIST=100000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
-eval "$(mcfly init zsh)"
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
+[[ -x "$(which mcfly)"     ]] && eval "$(mcfly init zsh)"
+[[ -x "$(which starship)"  ]] && eval "$(starship init zsh)"
+[[ -x "$(which zoxide)"    ]] && eval "$(zoxide init zsh)"
+[[ -x "$(which direnv)"    ]] && eval "$(direnv hook zsh)"
+[[ -x "$(which nix-build)" ]] && export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 
 [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
 
@@ -89,8 +91,6 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 autoload -Uz zmv
 alias zmv='noglob zmv -W'
-
-eval "$(direnv hook zsh)"
 
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"
