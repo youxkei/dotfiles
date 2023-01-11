@@ -100,9 +100,7 @@ export LESS='-SR'
 
 alias ls='exa -h --color=auto'
 alias ll='ls -al'
-alias open="xdg-open"
 alias tmux="tmux -2"
-alias fzf20="fzf --height=20%"
 alias cp="xcp"
 
 function chpwd() { ls }
@@ -117,19 +115,6 @@ re-prompt() {
 }
 
 # zle -N accept-line re-prompt
-
-function rcd() {
-  cd ~/repo/$(ls ~/repo | fzf20)
-}
-
-function timer() {
-  if [[ $# -ne 1 ]]; then
-    echo "Usage: $0 3m"
-    return 1
-  fi
-
-  countdown $1 && mplayer -really-quiet $TIMER_ALERM_FILE
-}
 
 function git() {
   git-branchless wrap -- $@
