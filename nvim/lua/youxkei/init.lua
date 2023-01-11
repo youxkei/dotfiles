@@ -46,7 +46,7 @@ opt.listchars = { tab = "･･", trail = "-", nbsp = "%" }
 
 opt.termguicolors = true
 opt.ambiwidth = "single"
-opt.cmdheight = 2
+opt.cmdheight = 0
 opt.hidden = true
 opt.number = true
 opt.wrap = false
