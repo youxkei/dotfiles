@@ -62,20 +62,20 @@ return {
   end },
 
   { "christianchiarulli/nvcode-color-schemes.vim",
-    config = function()
+    init = function()
       vim.cmd [[
-          colorscheme nord
+        colorscheme nord
 
-          highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
-          highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
-          highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
-          highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
-          highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
-          highlight IndentBlanklineSpaceChar guifg=#434C5E guibg=none gui=nocombine
-          highlight IndentBlanklineSpaceCharBlankline guifg=#434C5E guibg=none gui=nocombine
+        highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
+        highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
+        highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
+        highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
+        highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
+        highlight IndentBlanklineSpaceChar guifg=#434C5E guibg=none gui=nocombine
+        highlight IndentBlanklineSpaceCharBlankline guifg=#434C5E guibg=none gui=nocombine
 
-          highlight Comment gui=NONE cterm=NONE
-        ]]
+        highlight Comment gui=NONE cterm=NONE
+      ]]
     end
   },
 
