@@ -62,6 +62,7 @@
   "vim-textobj-parameter": { "branch": "master", "commit": "201144f19a1a7081033b3cf2b088916dd0bcb98c" },
   "vim-textobj-user": { "branch": "master", "commit": "41a675ddbeefd6a93664a4dc52f302fe3086a933" },
   "vim-wordmotion": { "branch": "master", "commit": "5dd613ed68a0ecf0fc6c11cd4098c03583786bf0" },
+  "which-key.nvim": { "branch": "main", "commit": "e4fa445065a2bb0bbc3cca85346b67817f28e83e" },
   "winbar.nvim": { "branch": "main", "commit": "13739fdb31be51a1000486189662596f07a59a31" },
   "yankround.vim": { "branch": "master", "commit": "9dca96ed35b09de9fe5474de40da323d75fa3204" }
 }

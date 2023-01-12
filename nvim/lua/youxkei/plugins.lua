@@ -58,7 +58,7 @@ return {
           }:start()
         end,
       }:start()
-    end)
+    end, { desc = "Copy GitHub URL" })
   end },
 
   { "christianchiarulli/nvcode-color-schemes.vim",
@@ -233,17 +233,17 @@ return {
       "k", "m", "x", "b", "j", "w", "q", "v",
     }
 
-    vim.keymap.set("o", "n", tsht.nodes)
-    vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]])
+    vim.keymap.set("o", "n", tsht.nodes, { desc = "Select treesitter node" })
+    vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]], { desc = "Select treesitter node" })
   end },
 
   { "David-Kunz/treesitter-unit", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
     local unit = require("treesitter-unit")
 
-    vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]])
-    vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]])
-    vim.keymap.set("o", "iu", function() unit.select() end)
-    vim.keymap.set("o", "au", function() unit.select(true) end)
+    vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]], { desc = "Select treesitter unit" })
+    vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]], { desc = "Select treesitter unit" })
+    vim.keymap.set("o", "iu", function() unit.select() end, { desc = "Select treesitter unit" })
+    vim.keymap.set("o", "au", function() unit.select(true) end, { desc = "Select treesitter unit" })
   end },
 
   { "kevinhwang91/nvim-ufo",
@@ -258,8 +258,8 @@ return {
       vim.opt_global.foldlevelstart = 99
       vim.opt_global.foldenable = true
 
-      vim.keymap.set("n", "zR", ufo.openAllFolds)
-      vim.keymap.set("n", "zM", ufo.closeAllFolds)
+      vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
+      vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
     end
   },
 
@@ -281,12 +281,26 @@ return {
   end },
 
   { "haya14busa/vim-asterisk", dependencies = { "kevinhwang91/nvim-hlslens" }, config = function()
-    vim.keymap.set({ "n", "v" }, "*", [[<plug>(asterisk-z*)<cmd>lua require("hlslens").start()<cr>]], { remap = true })
-    vim.keymap.set({ "n", "v" }, "#", [[<plug>(asterisk-z#)<cmd>lua require("hlslens").start()<cr>]], { remap = true })
-    vim.keymap.set({ "n", "v" }, "g*", [[<plug>(asterisk-gz*)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true })
-    vim.keymap.set({ "n", "v" }, "g#", [[<plug>(asterisk-gz#)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true })
+    vim.keymap.set(
+      { "n", "v" }, "*",
+      [[<plug>(asterisk-z*)<cmd>lua require("hlslens").start()<cr>]],
+      { remap = true }
+    )
+    vim.keymap.set(
+      { "n", "v" }, "#",
+      [[<plug>(asterisk-z#)<cmd>lua require("hlslens").start()<cr>]],
+      { remap = true }
+    )
+    vim.keymap.set(
+      { "n", "v" }, "g*",
+      [[<plug>(asterisk-gz*)<cmd>lua require("hlslens").start()<cr>]],
+      { remap = true }
+    )
+    vim.keymap.set(
+      { "n", "v" }, "g#",
+      [[<plug>(asterisk-gz#)<cmd>lua require("hlslens").start()<cr>]],
+      { remap = true }
+    )
   end },
 
   { "neovim/nvim-lspconfig",
@@ -313,8 +327,8 @@ return {
           })
         end
 
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr })
-        vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr })
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
+        vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename with lsp" })
       end
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -439,7 +453,6 @@ return {
     config = function()
       local telescope = require("telescope")
 
-
       telescope.setup {
         pickers = {
           buffers = {
@@ -454,18 +467,66 @@ return {
 
       local builtin = require("telescope.builtin")
 
-      vim.keymap.set("n", "<leader>tf", builtin.find_files)
-      vim.keymap.set("n", "<leader>tF", function() builtin.find_files { hidden = true } end)
-      vim.keymap.set("n", "<leader>tg", builtin.live_grep)
-      vim.keymap.set("n", "<leader>tG", function() builtin.live_grep { additional_args = { "-uuu" } } end)
-      vim.keymap.set("n", "<leader>tb", builtin.buffers)
-      vim.keymap.set("n", "<leader>tr", builtin.resume)
-      vim.keymap.set("n", "<leader>lr", builtin.lsp_references)
-      vim.keymap.set("n", "<leader>li", builtin.lsp_implementations)
-      vim.keymap.set("n", "<leader>ls", function() builtin.lsp_document_symbols { symbol_width = 80 } end)
-      vim.keymap.set("n", "<leader>lS", function() builtin.lsp_dynamic_workspace_symbols { symbol_width = 80 } end)
-      vim.keymap.set("n", "<leader>le", builtin.diagnostics)
-      vim.keymap.set("n", "<leader>ld", builtin.lsp_definitions)
+      vim.keymap.set(
+        "n", "<leader>tf",
+        builtin.find_files,
+        { desc = "Select from files with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>tF",
+        function() builtin.find_files { hidden = true } end,
+        { desc = "Select from all files with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>tg",
+        builtin.live_grep,
+        { desc = "Grep from files with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>tG",
+        function() builtin.live_grep { additional_args = { "-uuu" } } end,
+        { desc = "Grep from all files with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>tb",
+        builtin.buffers,
+        { desc = "Select from buffers with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>tr",
+        builtin.resume,
+        { desc = "Select from previous selections with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>lr",
+        builtin.lsp_references,
+        { desc = "Select from references with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>li",
+        builtin.lsp_implementations,
+        { desc = "Select from implementations with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>ls",
+        function() builtin.lsp_document_symbols { symbol_width = 80 } end,
+        { desc = "Select from symbols in buffer with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>lS",
+        function() builtin.lsp_dynamic_workspace_symbols { symbol_width = 80 } end,
+        { desc = "Select from symbols in project with teselcope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>le",
+        builtin.diagnostics,
+        { desc = "Select from diagnostics with telescope" }
+      )
+      vim.keymap.set(
+        "n", "<leader>ld",
+        builtin.lsp_definitions,
+        { desc = "Select from definitions with telescope" }
+      )
     end,
   },
 
@@ -476,32 +537,34 @@ return {
 
       telescope.load_extension("file_browser")
 
-      vim.keymap.set("n", "<leader>te", telescope.extensions.file_browser.file_browser)
+      vim.keymap.set(
+        "n", "<leader>te",
+        telescope.extensions.file_browser.file_browser,
+        { desc = "Select with file browser" }
+      )
     end,
   },
 
-  { "rmagatti/auto-session",
-    config = function()
-      require("auto-session").setup {
-        auto_session_suppress_dirs = { "~/repo" },
-        pre_save_cmds = {
-          function()
-            for _, win in ipairs(vim.api.nvim_list_wins()) do
-              local config = vim.api.nvim_win_get_config(win)
-              if config.relative ~= "" then
-                vim.api.nvim_win_close(win, true)
-              end
+  { "rmagatti/auto-session", config = function()
+    require("auto-session").setup {
+      auto_session_suppress_dirs = { "~/repo" },
+      pre_save_cmds = {
+        function()
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local config = vim.api.nvim_win_get_config(win)
+            if config.relative ~= "" then
+              vim.api.nvim_win_close(win, true)
             end
-          end,
-        },
-        post_restore_cmds = {
-          function()
-            vim.cmd("luafile " .. vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-          end,
-        },
-      }
-    end
-  },
+          end
+        end,
+      },
+      post_restore_cmds = {
+        function()
+          vim.cmd("luafile " .. vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+        end,
+      },
+    }
+  end },
 
   { "rmagatti/session-lens",
     dependencies = {
@@ -523,7 +586,7 @@ return {
 
       require("telescope").load_extension("session-lens")
 
-      vim.keymap.set("n", "<leader>ts", session_lens.search_session)
+      vim.keymap.set("n", "<leader>ts", session_lens.search_session, { desc = "Select from sessions with telescope" })
     end,
   },
 
@@ -555,10 +618,10 @@ return {
   { "monaqa/dial.nvim", config = function()
     local dial = require("dial.map")
 
-    vim.keymap.set("n", "<c-a>", dial.inc_normal())
-    vim.keymap.set("n", "<c-x>", dial.dec_normal())
-    vim.keymap.set("v", "<c-a>", dial.inc_visual())
-    vim.keymap.set("v", "<c-x>", dial.dec_visual())
+    vim.keymap.set("n", "<c-a>", dial.inc_normal(), { desc = "Increment" })
+    vim.keymap.set("n", "<c-x>", dial.dec_normal(), { desc = "Decrement" })
+    vim.keymap.set("v", "<c-a>", dial.inc_visual(), { desc = "Increment" })
+    vim.keymap.set("v", "<c-x>", dial.dec_visual(), { desc = "Decrement" })
   end },
 
   { "Darazaki/indent-o-matic", config = function()
@@ -591,10 +654,10 @@ return {
 
       bufferline.setup {}
 
-      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle(-1) end)
-      vim.keymap.set("n", "<c-q><tab>", function() bufferline.cycle(1) end)
-      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle(-1) end)
-      vim.keymap.set("n", "<c-tab>", function() bufferline.cycle(1) end)
+      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-q><tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
+      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
 
       for i = 1, 9 do
         local lhs = "<c-q>" .. i
@@ -603,21 +666,27 @@ return {
         if i == 9 then
           rhs = function() bufferline.go_to(-1, true) end
 
+          vim.keymap.set("n", lhs, rhs, { desc = "Go to the last buffer" })
+          vim.keymap.set("i", lhs, rhs, { desc = "Go to the last buffer" })
+        else
+          vim.keymap.set("n", lhs, rhs, { desc = "Go to #" .. i .. " buffer" })
+          vim.keymap.set("i", lhs, rhs, { desc = "Go to #" .. i .. " buffer" })
         end
-
-        vim.keymap.set("n", lhs, rhs)
-        vim.keymap.set("i", lhs, rhs)
       end
 
-      vim.keymap.set("n", "ZQ", function()
-        local wins = vim.api.nvim_tabpage_list_wins(0)
+      vim.keymap.set(
+        "n", "ZQ",
+        function()
+          local wins = vim.api.nvim_tabpage_list_wins(0)
 
-        if #wins == 1 then
-          vim.api.nvim_buf_delete(0, {})
-        else
-          vim.api.nvim_win_close(0, {})
-        end
-      end)
+          if #wins == 1 then
+            vim.api.nvim_buf_delete(0, {})
+          else
+            vim.api.nvim_win_close(0, {})
+          end
+        end,
+        { desc = "Close window or Delete buffer" }
+      )
     end
   },
 
@@ -629,7 +698,7 @@ return {
       jump_on_sole_occurrence = false,
     }
 
-    vim.keymap.set("n", "s", hop.hint_char2)
+    vim.keymap.set("n", "s", hop.hint_char2, { desc = "Jump with 2 chars" })
   end },
 
   { "akinsho/toggleterm.nvim", config = function()
@@ -643,7 +712,7 @@ return {
       },
     }
 
-    vim.keymap.set("n", "<c-t>", function() toggleterm.toggle(0) end)
+    vim.keymap.set("n", "<c-t>", function() toggleterm.toggle(0) end, { desc = "Open terminal" })
   end },
 
   { "f-person/git-blame.nvim" },
@@ -655,7 +724,7 @@ return {
 
       trouble.setup {}
 
-      vim.keymap.set("n", "<leader>r", trouble.open)
+      vim.keymap.set("n", "<leader>r", trouble.open, { desc = "Open diagnostics buffer" })
     end,
   },
 
@@ -679,6 +748,12 @@ return {
     vim.g.undotree_WindowLayout = 3
   end },
 
+  { "folke/which-key.nvim", config = function()
+    vim.o.timeout = true
+    vim.o.timeoutlen = 300
+    require("which-key").setup {}
+  end },
+
   { "tpope/vim-repeat" },
 
   { "mizlan/iswap.nvim", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
@@ -687,8 +762,8 @@ return {
       keys = "etuhonasidpgyfcrlkmxbjwqv"
     }
 
-    vim.keymap.set("n", "gs", iswap.iswap_with)
-    vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]])
+    vim.keymap.set("n", "gs", iswap.iswap_with, { desc = "Swap treesitter nodes" })
+    vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
   end },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
