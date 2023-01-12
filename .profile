@@ -20,7 +20,7 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
 
 if [ -x "$(which nix-build)" ]; then
-    export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales)/lib/locale/locale-archive;
+    export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales --no-out-link)/lib/locale/locale-archive;
 fi
 
 PATH=~/bin:$PATH
