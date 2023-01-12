@@ -108,6 +108,13 @@ vim.api.nvim_create_autocmd("FileType", {
     opt_local.softtabstop = 2
   end,
 })
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = augroup,
+  pattern = "*",
+  callback = function()
+    vim.opt_local.scrollback = -1
+  end,
+})
 
 vim.keymap.set("n", "j", "gj")
 vim.keymap.set("n", "k", "gk")
