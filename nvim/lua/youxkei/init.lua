@@ -69,7 +69,6 @@ opt.updatetime = 100
 opt.iskeyword = { "@", "48-57", "_", "192-255", "$", "@-@", "-" }
 opt.clipboard = "unnamedplus"
 opt.joinspaces = false
-opt.timeout = false
 opt.sessionoptions = {
   "blank", "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
 }
