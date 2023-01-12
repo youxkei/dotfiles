@@ -263,8 +263,15 @@ return {
     end
   },
 
-  { "rcarriga/nvim-notify", config = function()
-    vim.notify = require("notify")
+  { "rcarriga/nvim-notify", dependencies = { "nvim-telescope/telescope.nvim" }, config = function()
+    local notify = require("notify")
+    vim.notify = notify
+
+    vim.keymap.set(
+      "n", "<leader>tn",
+      require('telescope').extensions.notify.notify,
+      { desc = "Select from notifications with telescope" }
+    )
   end },
 
   { "kevinhwang91/nvim-hlslens", config = function()
