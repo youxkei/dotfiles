@@ -66,7 +66,7 @@ export HISTFILE=$XDG_DATA_HOME/zsh/history
 [[ -x "$(which starship)"  ]] && eval "$(starship init zsh)"
 [[ -x "$(which zoxide)"    ]] && eval "$(zoxide init zsh)"
 [[ -x "$(which direnv)"    ]] && eval "$(direnv hook zsh)"
-[[ -x "$(which nix-build)" ]] && export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+[[ -x "$(which nix-build)" ]] && export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 
 [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
 
