@@ -754,6 +754,15 @@ return {
     require("which-key").setup {}
   end },
 
+  { "ckolkey/ts-node-action",
+    dependencies = { "nvim-treesitter" },
+    config = function()
+      require("ts-node-action").setup {}
+
+      vim.keymap.set({ "n" }, "<leader>ta", require("ts-node-action").node_action, { desc = "Trigger Node Action" })
+    end
+  },
+
   { "tpope/vim-repeat" },
 
   { "mizlan/iswap.nvim", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
