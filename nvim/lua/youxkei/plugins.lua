@@ -151,7 +151,7 @@ return {
   { "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-      "p00f/nvim-ts-rainbow",
+      "mrjones2014/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "andymass/vim-matchup",
     },
