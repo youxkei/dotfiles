@@ -314,6 +314,7 @@ return {
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp", dependencies = { "hrsh7th/nvim-cmp" } },
       "jose-elias-alvarez/null-ls.nvim",
+      "SmiteshP/nvim-navic",
     },
     config = function()
       local lspconfig = require("lspconfig")
@@ -332,6 +333,10 @@ return {
               })
             end,
           })
+        end
+
+        if client.supports_method("textDocument/documentSymbol") then
+          require("nvim-navic").attach(client, bufnr)
         end
 
         vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
@@ -646,14 +651,6 @@ return {
     require("numb").setup {}
   end },
 
-  { "fgheng/winbar.nvim", config = function()
-    require("winbar").setup {
-      enabled = true,
-      show_symbols = true,
-    }
-  end },
-
-
   { "akinsho/bufferline.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
@@ -781,6 +778,21 @@ return {
     vim.keymap.set("n", "gs", iswap.iswap_with, { desc = "Swap treesitter nodes" })
     vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
   end },
+
+  {
+    "utilyre/barbecue.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("barbecue").setup {
+        attach_navic = false,
+        show_modified = true,
+      }
+    end,
+  },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
 
