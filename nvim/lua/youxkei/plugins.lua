@@ -336,7 +336,7 @@ return {
         end
 
         if client.supports_method("textDocument/documentSymbol") then
-          require("nvim-navic").attach(client, bufnr)
+          --require("nvim-navic").attach(client, bufnr)
         end
 
         vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
@@ -788,6 +788,7 @@ return {
     },
     config = function()
       require("barbecue").setup {
+        show_navic = false,
         attach_navic = false,
         show_modified = true,
       }
