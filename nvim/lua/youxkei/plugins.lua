@@ -63,19 +63,15 @@ return {
 
   { "christianchiarulli/nvcode-color-schemes.vim",
     init = function()
-      vim.cmd [[
-        colorscheme nord
-
-        highlight Indent1 guifg=#BF616A guibg=none gui=nocombine
-        highlight Indent2 guifg=#D08770 guibg=none gui=nocombine
-        highlight Indent3 guifg=#EBCB8B guibg=none gui=nocombine
-        highlight Indent4 guifg=#A3BE8C guibg=none gui=nocombine
-        highlight Indent5 guifg=#B48EAD guibg=none gui=nocombine
-        highlight IndentBlanklineSpaceChar guifg=#434C5E guibg=none gui=nocombine
-        highlight IndentBlanklineSpaceCharBlankline guifg=#434C5E guibg=none gui=nocombine
-
-        highlight Comment gui=NONE cterm=NONE
-      ]]
+      vim.cmd.colorscheme("nord")
+      vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
+      vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
+      vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
+      vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
+      vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
+      vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
     end
   },
 
@@ -572,7 +568,7 @@ return {
       },
       post_restore_cmds = {
         function()
-          vim.cmd("luafile " .. vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+          vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
         end,
       },
     }
