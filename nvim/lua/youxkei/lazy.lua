@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "LazyReload",
   callback = function()
     for _, plugin in pairs(require("lazy").plugins()) do
-      if type(plugin.config) == "function" and not plugin.lazy then
+      if type(plugin.config) == "function" and not plugin.lazy and plugin._.loaded then
         plugin.config()
       end
     end
