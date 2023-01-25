@@ -1,4 +1,3 @@
-local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
@@ -95,7 +94,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   group = augroup,
   pattern = "init.lua",
   callback = function()
-    cmd("luafile " .. fn.stdpath("config") .. "/lua/youxkei/init.lua")
+    vim.cmd.luafile(fn.stdpath("config") .. "/lua/youxkei/init.lua")
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {
