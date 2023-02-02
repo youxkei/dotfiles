@@ -791,6 +791,34 @@ return {
     end,
   },
 
+  {
+    "LeonHeidelbach/trailblazer.nvim",
+    config = function()
+      require("trailblazer").setup {
+        mappings = {
+          nv = {
+            motions = {
+              new_trail_mark = '<leader>bn',
+              track_back = '<leader>bb',
+              peek_move_next_down = '<leader>bj',
+              peek_move_previous_up = '<leader>bk',
+              toggle_trail_mark_list = '<nop>',
+            },
+            actions = {
+              delete_all_trail_marks = '<leader>bd',
+              paste_at_last_trail_mark = '<nop>',
+              paste_at_all_trail_marks = '<nop>',
+              set_trail_mark_select_mode = '<nop>',
+              switch_to_next_trail_mark_stack = '<nop>',
+              switch_to_previous_trail_mark_stack = '<nop>',
+              set_trail_mark_stack_sort_mode = '<nop>',
+            },
+          },
+        },
+      }
+    end,
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
 
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
