@@ -365,7 +365,7 @@ return {
         cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/home/youxkei/.nix-profile/bin/tsserver" },
       }
 
-      lspconfig.sumneko_lua.setup {
+      lspconfig.lua_ls.setup {
         capabilities = capabilities,
         on_attach = on_attach,
         settings = {
