@@ -569,6 +569,7 @@ return {
       post_restore_cmds = {
         function()
           vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+          vim.cmd.LspRestart()
         end,
       },
     }
