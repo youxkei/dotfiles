@@ -61,19 +61,17 @@ return {
     end, { desc = "Copy GitHub URL" })
   end },
 
-  { "christianchiarulli/nvcode-color-schemes.vim",
-    init = function()
-      vim.cmd.colorscheme("nord")
-      vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
-      vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
-      vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
-      vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
-      vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
-      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
-      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
-      vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
-    end
-  },
+  { "christianchiarulli/nvcode-color-schemes.vim", init = function()
+    vim.cmd.colorscheme("nord")
+    vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
+    vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
+    vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
+    vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
+    vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
+    vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
+    vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
+    vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
+  end },
 
   { "thinca/vim-ambicmd", config = function()
     vim.keymap.set("c", "<cr>", [[ambicmd#expand("<cr>")]], { expr = true })
@@ -174,7 +172,7 @@ return {
           additional_vim_regex_highlighting = false,
         },
         indent = {
-          enable = true
+          enable = true,
         },
         rainbow = {
           enable = true,
@@ -256,7 +254,7 @@ return {
 
       vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
       vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
-    end
+    end,
   },
 
   { "rcarriga/nvim-notify", dependencies = { "nvim-telescope/telescope.nvim" }, config = function()
@@ -265,15 +263,15 @@ return {
 
     vim.keymap.set(
       "n", "<leader>tn",
-      require('telescope').extensions.notify.notify,
+      require("telescope").extensions.notify.notify,
       { desc = "Select from notifications with telescope" }
     )
   end },
 
   { "kevinhwang91/nvim-hlslens", config = function()
-    require("hlslens").setup({
+    require("hlslens").setup {
       calm_down = true,
-    })
+    }
 
     vim.keymap.set("n", "n", [[<cmd>execute("normal! " . v:count1 . "n")<cr><cmd>lua require("hlslens").start()<cr>]])
     vim.keymap.set("n", "N", [[<cmd>execute("normal! " . v:count1 . "N")<cr><cmd>lua require("hlslens").start()<cr>]])
@@ -318,23 +316,22 @@ return {
       local augroup_lsp_format = vim.api.nvim_create_augroup("LspFormatting", {})
       local on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
-          vim.api.nvim_clear_autocmds({ group = augroup_lsp_format, buffer = bufnr })
+          vim.api.nvim_clear_autocmds { group = augroup_lsp_format, buffer = bufnr }
           vim.api.nvim_create_autocmd("BufWritePre", {
             group = augroup_lsp_format,
             buffer = bufnr,
             callback = function()
-              vim.lsp.buf.format({
+              vim.lsp.buf.format {
                 bufnr = bufnr,
                 timeout_ms = 10000,
-              })
+              }
             end,
           })
         end
 
-        if client.supports_method("textDocument/documentSymbol") then
-          --require("nvim-navic").attach(client, bufnr)
-        end
-
+        --[[ if client.supports_method("textDocument/documentSymbol") then
+          require("nvim-navic").attach(client, bufnr)
+        end ]]
         vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
         vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename with lsp" })
       end
@@ -342,7 +339,7 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       capabilities.textDocument.foldingRange = {
         dynamicRegistration = false,
-        lineFoldingOnly = true
+        lineFoldingOnly = true,
       }
 
       lspconfig.gopls.setup {
@@ -370,11 +367,27 @@ return {
         on_attach = on_attach,
         settings = {
           Lua = {
+            format = {
+              enable = true,
+              defaultConfig = {
+                indent_style = "space",
+                indent_size = "2",
+                quote_style = "double",
+                call_arg_parentheses = "remove_table_only",
+                trailing_table_separator = "keep",
+                space_before_function_call_single_arg = "true",
+                space_inside_function_call_parentheses = "false",
+                align_array_table = "false",
+              },
+            },
             diagnostics = {
-              globals = { "vim" }
-            }
-          }
-        }
+              globals = { "vim" },
+              neededFileStatus = {
+                ["codestyle-check"] = "Any"
+              },
+            },
+          },
+        },
       }
 
       lspconfig.ocamllsp.setup {
@@ -389,7 +402,7 @@ return {
 
 
       local null_ls = require("null-ls")
-      null_ls.setup({
+      null_ls.setup {
         on_attach = on_attach,
         sources = {
           null_ls.builtins.formatting.prettier.with {
@@ -404,7 +417,7 @@ return {
           },
           null_ls.builtins.formatting.goimports,
         },
-      })
+      }
     end,
   },
 
@@ -428,20 +441,20 @@ return {
         snippet = {
           expand = function(args)
             require("snippy").expand_snippet(args.body)
-          end
+          end,
         },
         window = {
           completion = cmp.config.window.bordered(),
           -- documentation = cmp.config.window.bordered(),
         },
-        mapping = cmp.mapping.preset.insert({}),
-        sources = cmp.config.sources({
+        mapping = cmp.mapping.preset.insert {},
+        sources = cmp.config.sources {
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "path" },
           { name = "buffer" },
           { name = "look" },
-        }),
+        },
         preselect = cmp.PreselectMode.None,
       }
 
@@ -450,7 +463,7 @@ return {
           { name = "cmdline" },
         },
       })
-    end
+    end,
   },
 
   { "nvim-telescope/telescope.nvim",
@@ -619,7 +632,7 @@ return {
           },
         },
       }
-    end
+    end,
   },
 
   "f-person/git-blame.nvim",
@@ -638,11 +651,9 @@ return {
   end },
 
 
-  { "iamcco/markdown-preview.nvim",
-    build = function()
-      vim.fn["mkdp#util#install"]()
-    end,
-  },
+  { "iamcco/markdown-preview.nvim", build = function()
+    vim.fn["mkdp#util#install"]()
+  end },
 
   { "nacro90/numb.nvim", config = function()
     require("numb").setup {}
@@ -655,9 +666,9 @@ return {
 
       bufferline.setup {}
 
-      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle( -1) end, { desc = "Go to the previous buffer" })
       vim.keymap.set("n", "<c-q><tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
-      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle( -1) end, { desc = "Go to the previous buffer" })
       vim.keymap.set("n", "<c-tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
 
       for i = 1, 9 do
@@ -665,7 +676,7 @@ return {
         local rhs = function() bufferline.go_to(i, true) end
 
         if i == 9 then
-          rhs = function() bufferline.go_to(-1, true) end
+          rhs = function() bufferline.go_to( -1, true) end
 
           vim.keymap.set("n", lhs, rhs, { desc = "Go to the last buffer" })
           vim.keymap.set("i", lhs, rhs, { desc = "Go to the last buffer" })
@@ -688,7 +699,7 @@ return {
         end,
         { desc = "Close window or Delete buffer" }
       )
-    end
+    end,
   },
 
   { "phaazon/hop.nvim", config = function()
@@ -737,7 +748,7 @@ return {
     require("indent_blankline").setup {
       char = "¦",
       char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
-      buftype_exclude = { "terminal" }
+      buftype_exclude = { "terminal" },
     }
 
     for _, keymap in pairs { "zo", "zO", "zc", "zC", "za", "zA", "zv", "zx", "zX", "zm", "zM", "zr", "zR" } do
@@ -761,11 +772,10 @@ return {
       require("ts-node-action").setup {}
 
       vim.keymap.set({ "n" }, "<leader>ta", require("ts-node-action").node_action, { desc = "Trigger Node Action" })
-    end
+    end,
   },
 
   { "tpope/vim-repeat" },
-
   { "mizlan/iswap.nvim", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
     local iswap = require("iswap")
     iswap.setup {
@@ -776,12 +786,11 @@ return {
     vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
   end },
 
-  {
-    "utilyre/barbecue.nvim",
+  { "utilyre/barbecue.nvim",
     dependencies = {
       "neovim/nvim-lspconfig",
       "SmiteshP/nvim-navic",
-      "nvim-tree/nvim-web-devicons",
+      "nvim-tree/nvim-web-devicons"
     },
     config = function()
       require("barbecue").setup {
@@ -792,27 +801,26 @@ return {
     end,
   },
 
-  {
-    "LeonHeidelbach/trailblazer.nvim",
+  { "LeonHeidelbach/trailblazer.nvim",
     config = function()
       require("trailblazer").setup {
         mappings = {
           nv = {
             motions = {
-              new_trail_mark = '<leader>bn',
-              track_back = '<leader>bb',
-              peek_move_next_down = '<leader>bj',
-              peek_move_previous_up = '<leader>bk',
-              toggle_trail_mark_list = '<nop>',
+              new_trail_mark = "<leader>bn",
+              track_back = "<leader>bb",
+              peek_move_next_down = "<leader>bj",
+              peek_move_previous_up = "<leader>bk",
+              toggle_trail_mark_list = "<nop>",
             },
             actions = {
-              delete_all_trail_marks = '<leader>bd',
-              paste_at_last_trail_mark = '<nop>',
-              paste_at_all_trail_marks = '<nop>',
-              set_trail_mark_select_mode = '<nop>',
-              switch_to_next_trail_mark_stack = '<nop>',
-              switch_to_previous_trail_mark_stack = '<nop>',
-              set_trail_mark_stack_sort_mode = '<nop>',
+              delete_all_trail_marks = "<leader>bd",
+              paste_at_last_trail_mark = "<nop>",
+              paste_at_all_trail_marks = "<nop>",
+              set_trail_mark_select_mode = "<nop>",
+              switch_to_next_trail_mark_stack = "<nop>",
+              switch_to_previous_trail_mark_stack = "<nop>",
+              set_trail_mark_stack_sort_mode = "<nop>",
             },
           },
         },
@@ -821,11 +829,9 @@ return {
   },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
-
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
   { "kana/vim-niceblock" },
-
   { "kana/vim-operator-replace", dependencies = { "kana/vim-operator-user" }, config = function()
     vim.keymap.set({ "n", "v" }, "_", "<plug>(operator-replace)")
   end },
@@ -871,7 +877,7 @@ return {
 
       vim.keymap.set({ "x", "o" }, "ib", "<plug>(textobj-sandwich-auto-i)", { remap = true })
       vim.keymap.set({ "x", "o" }, "ab", "<plug>(textobj-sandwich-auto-a)", { remap = true })
-    end
+    end,
   },
 
   { "b3nj5m1n/kommentary",
