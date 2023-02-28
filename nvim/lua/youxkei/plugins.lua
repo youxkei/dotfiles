@@ -50,7 +50,7 @@ return {
 
                   vim.schedule(function()
                     vim.fn.setreg("+", url)
-                    print("GitHub URL: " .. url)
+                    vim.notify("GitHub URL: " .. url)
                   end)
                 end,
               }:start()
