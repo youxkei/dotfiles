@@ -40,3 +40,5 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+[include]
+	path = config_host
