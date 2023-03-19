@@ -1,89 +1,102 @@
 return {
-  { "nvim-lua/plenary.nvim", config = function()
-    local Job = require("plenary.job")
+  {
+    "nvim-lua/plenary.nvim",
+    config = function()
+      local Job = require("plenary.job")
 
-    vim.keymap.set("v", "<leader>g", function()
-      local full_path = vim.fn.expand("%:p")
-      local mode = vim.api.nvim_get_mode().mode
-      local startline = nil
-      local endline = nil
+      vim.keymap.set("v", "<leader>g", function()
+        local full_path = vim.fn.expand("%:p")
+        local mode = vim.api.nvim_get_mode().mode
+        local startline = nil
+        local endline = nil
 
-      if mode == "v" or mode == "V" or mode == "" then
-        startline = vim.fn.line("v")
-        endline = vim.fn.line(".")
+        if mode == "v" or mode == "V" or mode == "" then
+          startline = vim.fn.line("v")
+          endline = vim.fn.line(".")
 
-        if startline > endline then
-          startline, endline = endline, startline
+          if startline > endline then
+            startline, endline = endline, startline
+          end
         end
-      end
 
-      Job:new {
-        command = "git",
-        args = { "rev-parse", "HEAD" },
-        enabled_recording = true,
-        on_exit = function(rev_parse_head_job)
-          local ref = rev_parse_head_job:result()[1]
+        Job:new {
+          command = "git",
+          args = { "rev-parse", "HEAD" },
+          enabled_recording = true,
+          on_exit = function(rev_parse_head_job)
+            local ref = rev_parse_head_job:result()[1]
 
-          Job:new {
-            command = "git",
-            args = { "ls-remote", "--get-url", "origin" },
-            enabled_recording = true,
-            on_exit = function(ls_remote_job)
-              local url_head = "https://github.com/" .. ls_remote_job:result()[1]:match("^git@github.com:(.*).git$")
+            Job:new {
+              command = "git",
+              args = { "ls-remote", "--get-url", "origin" },
+              enabled_recording = true,
+              on_exit = function(ls_remote_job)
+                local url_head = "https://github.com/" .. ls_remote_job:result()[1]:match("^git@github.com:(.*).git$")
 
-              Job:new {
-                command = "git",
-                args = { "rev-parse", "--show-toplevel" },
-                enabled_recording = true,
-                on_exit = function(rev_parse_toplevel_job)
-                  local git_root = rev_parse_toplevel_job:result()[1]
-                  local path = full_path:sub(#git_root + 2)
-                  local url = url_head .. "/blob/" .. ref .. "/" .. path
+                Job:new {
+                  command = "git",
+                  args = { "rev-parse", "--show-toplevel" },
+                  enabled_recording = true,
+                  on_exit = function(rev_parse_toplevel_job)
+                    local git_root = rev_parse_toplevel_job:result()[1]
+                    local path = full_path:sub(#git_root + 2)
+                    local url = url_head .. "/blob/" .. ref .. "/" .. path
 
-                  if startline then
-                    if startline == endline then
-                      url = url .. "#L" .. startline
-                    else
-                      url = url .. "#L" .. startline .. "-L" .. endline
+                    if startline then
+                      if startline == endline then
+                        url = url .. "#L" .. startline
+                      else
+                        url = url .. "#L" .. startline .. "-L" .. endline
+                      end
                     end
-                  end
 
-                  vim.schedule(function()
-                    vim.fn.setreg("+", url)
-                    vim.notify("GitHub URL: " .. url)
-                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
-                  end)
-                end,
-              }:start()
-            end,
-          }:start()
-        end,
-      }:start()
-    end, { desc = "Copy GitHub URL" })
-  end },
+                    vim.schedule(function()
+                      vim.fn.setreg("+", url)
+                      vim.notify("GitHub URL: " .. url)
+                      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
+                    end)
+                  end,
+                }:start()
+              end,
+            }:start()
+          end,
+        }:start()
+      end, { desc = "Copy GitHub URL" })
+    end
+  },
 
-  { "christianchiarulli/nvcode-color-schemes.vim", init = function()
-    vim.cmd.colorscheme("nord")
-    vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
-    vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
-    vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
-    vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
-    vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
-    vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
-    vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
-    vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
-  end },
+  {
+    "christianchiarulli/nvcode-color-schemes.vim",
+    init = function()
+      vim.cmd.colorscheme("nord")
+      vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
+      vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
+      vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
+      vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
+      vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
+      vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
+    end
+  },
 
-  { "thinca/vim-ambicmd", config = function()
-    vim.keymap.set("c", "<cr>", [[ambicmd#expand("<cr>")]], { expr = true })
-    vim.keymap.set("c", "<space>", [[ambicmd#expand("<space>")]], { expr = true })
-  end },
+  {
+    "thinca/vim-ambicmd",
+    config = function()
+      vim.keymap.set("c", "<cr>", [[ambicmd#expand("<cr>")]], { expr = true })
+      vim.keymap.set("c", "<space>", [[ambicmd#expand("<space>")]], { expr = true })
+    end
+  },
 
-  { "junegunn/vim-easy-align", config = function()
-    vim.keymap.set("v", "<enter>", "<plug>(EasyAlign)", { remap = true })
-  end },
+  {
+    "junegunn/vim-easy-align",
+    config = function()
+      vim.keymap.set("v", "<enter>", "<plug>(EasyAlign)", { remap = true })
+    end
+  },
 
-  { "LeafCage/yankround.vim",
+  {
+    "LeafCage/yankround.vim",
     init = function()
       vim.g.yankround_dir = vim.fn.stdpath("cache") .. "/yankround"
       vim.g.yankround_max_history = 100
@@ -104,7 +117,8 @@ return {
 
   { "lambdalisue/vim-manpager" },
 
-  { "chaoren/vim-wordmotion",
+  {
+    "chaoren/vim-wordmotion",
     init = function()
       vim.g.wordmotion_spaces = "_-."
       vim.g.wordmotion_mappings = {
@@ -131,7 +145,8 @@ return {
     end,
   },
 
-  { "inkarkat/vim-mark",
+  {
+    "inkarkat/vim-mark",
     dependencies = { "inkarkat/vim-ingo-library" },
     init = function()
       vim.g.mw_no_mappings = 1
@@ -143,7 +158,8 @@ return {
     end,
   },
 
-  { "nvim-treesitter/nvim-treesitter",
+  {
+    "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
       "mrjones2014/nvim-ts-rainbow",
@@ -214,34 +230,47 @@ return {
     end,
   },
 
-  { "romgrk/nvim-treesitter-context", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
-    require("treesitter-context").setup {
-      enable = true,
-    }
-  end },
+  {
+    "romgrk/nvim-treesitter-context",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("treesitter-context").setup {
+        enable = true,
+      }
+    end
+  },
 
-  { "mfussenegger/nvim-treehopper", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
-    local tsht = require("tsht")
+  {
+    "mfussenegger/nvim-treehopper",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local tsht = require("tsht")
 
-    tsht.config.hint_keys = {
-      "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
-      "k", "m", "x", "b", "j", "w", "q", "v",
-    }
+      tsht.config.hint_keys = {
+        "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
+        "k", "m", "x", "b", "j", "w", "q", "v",
+      }
 
-    vim.keymap.set("o", "n", tsht.nodes, { desc = "Select treesitter node" })
-    vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]], { desc = "Select treesitter node" })
-  end },
+      vim.keymap.set("o", "n", tsht.nodes, { desc = "Select treesitter node" })
+      vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]], { desc = "Select treesitter node" })
+    end
+  },
 
-  { "David-Kunz/treesitter-unit", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
-    local unit = require("treesitter-unit")
+  {
+    "David-Kunz/treesitter-unit",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local unit = require("treesitter-unit")
 
-    vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]], { desc = "Select treesitter unit" })
-    vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]], { desc = "Select treesitter unit" })
-    vim.keymap.set("o", "iu", function() unit.select() end, { desc = "Select treesitter unit" })
-    vim.keymap.set("o", "au", function() unit.select(true) end, { desc = "Select treesitter unit" })
-  end },
+      vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]], { desc = "Select treesitter unit" })
+      vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]], { desc = "Select treesitter unit" })
+      vim.keymap.set("o", "iu", function() unit.select() end, { desc = "Select treesitter unit" })
+      vim.keymap.set("o", "au", function() unit.select(true) end, { desc = "Select treesitter unit" })
+    end
+  },
 
-  { "kevinhwang91/nvim-ufo",
+  {
+    "kevinhwang91/nvim-ufo",
     dependencies = { "kevinhwang91/promise-async", "nvim-treesitter/nvim-treesitter" },
     config = function()
       local ufo = require("ufo")
@@ -258,54 +287,66 @@ return {
     end,
   },
 
-  { "rcarriga/nvim-notify", dependencies = { "nvim-telescope/telescope.nvim" }, config = function()
-    local notify = require("notify")
-    vim.notify = notify
+  {
+    "rcarriga/nvim-notify",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    config = function()
+      local notify = require("notify")
+      vim.notify = notify
 
-    vim.keymap.set(
-      "n", "<leader>tn",
-      require("telescope").extensions.notify.notify,
-      { desc = "Select from notifications with telescope" }
-    )
-  end },
+      vim.keymap.set(
+        "n", "<leader>tn",
+        require("telescope").extensions.notify.notify,
+        { desc = "Select from notifications with telescope" }
+      )
+    end
+  },
 
-  { "kevinhwang91/nvim-hlslens", config = function()
-    require("hlslens").setup {
-      calm_down = true,
-    }
+  {
+    "kevinhwang91/nvim-hlslens",
+    config = function()
+      require("hlslens").setup {
+        calm_down = true,
+      }
 
-    vim.keymap.set("n", "n", [[<cmd>execute("normal! " . v:count1 . "n")<cr><cmd>lua require("hlslens").start()<cr>]])
-    vim.keymap.set("n", "N", [[<cmd>execute("normal! " . v:count1 . "N")<cr><cmd>lua require("hlslens").start()<cr>]])
-    vim.keymap.set("n", "*", [[*<cmd>lua require("hlslens").start()<cr>]])
-    vim.keymap.set("n", "#", [[#<cmd>lua require("hlslens").start()<cr>]])
-    vim.keymap.set("n", "g*", [[g*<cmd>lua require("hlslens").start()<cr>]])
-    vim.keymap.set("n", "g#", [[g#<cmd>lua require("hlslens").start()<cr>]])
-  end },
+      vim.keymap.set("n", "n", [[<cmd>execute("normal! " . v:count1 . "n")<cr><cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "N", [[<cmd>execute("normal! " . v:count1 . "N")<cr><cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "*", [[*<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "#", [[#<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "g*", [[g*<cmd>lua require("hlslens").start()<cr>]])
+      vim.keymap.set("n", "g#", [[g#<cmd>lua require("hlslens").start()<cr>]])
+    end
+  },
 
-  { "haya14busa/vim-asterisk", dependencies = { "kevinhwang91/nvim-hlslens" }, config = function()
-    vim.keymap.set(
-      { "n", "v" }, "*",
-      [[<plug>(asterisk-z*)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true }
-    )
-    vim.keymap.set(
-      { "n", "v" }, "#",
-      [[<plug>(asterisk-z#)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true }
-    )
-    vim.keymap.set(
-      { "n", "v" }, "g*",
-      [[<plug>(asterisk-gz*)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true }
-    )
-    vim.keymap.set(
-      { "n", "v" }, "g#",
-      [[<plug>(asterisk-gz#)<cmd>lua require("hlslens").start()<cr>]],
-      { remap = true }
-    )
-  end },
+  {
+    "haya14busa/vim-asterisk",
+    dependencies = { "kevinhwang91/nvim-hlslens" },
+    config = function()
+      vim.keymap.set(
+        { "n", "v" }, "*",
+        [[<plug>(asterisk-z*)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true }
+      )
+      vim.keymap.set(
+        { "n", "v" }, "#",
+        [[<plug>(asterisk-z#)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true }
+      )
+      vim.keymap.set(
+        { "n", "v" }, "g*",
+        [[<plug>(asterisk-gz*)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true }
+      )
+      vim.keymap.set(
+        { "n", "v" }, "g#",
+        [[<plug>(asterisk-gz#)<cmd>lua require("hlslens").start()<cr>]],
+        { remap = true }
+      )
+    end
+  },
 
-  { "neovim/nvim-lspconfig",
+  {
+    "neovim/nvim-lspconfig",
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp", dependencies = { "hrsh7th/nvim-cmp" } },
       "jose-elias-alvarez/null-ls.nvim",
@@ -422,11 +463,16 @@ return {
     end,
   },
 
-  { "ray-x/lsp_signature.nvim", dependencies = { "neovim/nvim-lspconfig" }, config = function()
-    require("lsp_signature").setup {}
-  end },
+  {
+    "ray-x/lsp_signature.nvim",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = function()
+      require("lsp_signature").setup {}
+    end
+  },
 
-  { "hrsh7th/nvim-cmp",
+  {
+    "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-path",
@@ -467,7 +513,8 @@ return {
     end,
   },
 
-  { "nvim-telescope/telescope.nvim",
+  {
+    "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "rmagatti/session-lens",
@@ -552,7 +599,8 @@ return {
     end,
   },
 
-  { "nvim-telescope/telescope-file-browser.nvim",
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
       local telescope = require("telescope")
@@ -567,29 +615,33 @@ return {
     end,
   },
 
-  { "rmagatti/auto-session", config = function()
-    require("auto-session").setup {
-      auto_session_suppress_dirs = { "~/repo" },
-      pre_save_cmds = {
-        function()
-          for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local config = vim.api.nvim_win_get_config(win)
-            if config.relative ~= "" then
-              vim.api.nvim_win_close(win, true)
+  {
+    "rmagatti/auto-session",
+    config = function()
+      require("auto-session").setup {
+        auto_session_suppress_dirs = { "~/repo" },
+        pre_save_cmds = {
+          function()
+            for _, win in ipairs(vim.api.nvim_list_wins()) do
+              local config = vim.api.nvim_win_get_config(win)
+              if config.relative ~= "" then
+                vim.api.nvim_win_close(win, true)
+              end
             end
-          end
-        end,
-      },
-      post_restore_cmds = {
-        function()
-          vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-          vim.cmd.LspRestart()
-        end,
-      },
-    }
-  end },
+          end,
+        },
+        post_restore_cmds = {
+          function()
+            vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+            vim.cmd.LspRestart()
+          end,
+        },
+      }
+    end
+  },
 
-  { "rmagatti/session-lens",
+  {
+    "rmagatti/session-lens",
     dependencies = {
       "rmagatti/auto-session",
       "nvim-telescope/telescope.nvim",
@@ -613,7 +665,8 @@ return {
     end,
   },
 
-  { "nvim-lualine/lualine.nvim",
+  {
+    "nvim-lualine/lualine.nvim",
     dependencies = {
       "rmagatti/auto-session",
       "nvim-tree/nvim-web-devicons",
@@ -638,38 +691,51 @@ return {
 
   "f-person/git-blame.nvim",
 
-  { "monaqa/dial.nvim", config = function()
-    local dial = require("dial.map")
+  {
+    "monaqa/dial.nvim",
+    config = function()
+      local dial = require("dial.map")
 
-    vim.keymap.set("n", "<c-a>", dial.inc_normal(), { desc = "Increment" })
-    vim.keymap.set("n", "<c-x>", dial.dec_normal(), { desc = "Decrement" })
-    vim.keymap.set("v", "<c-a>", dial.inc_visual(), { desc = "Increment" })
-    vim.keymap.set("v", "<c-x>", dial.dec_visual(), { desc = "Decrement" })
-  end },
+      vim.keymap.set("n", "<c-a>", dial.inc_normal(), { desc = "Increment" })
+      vim.keymap.set("n", "<c-x>", dial.dec_normal(), { desc = "Decrement" })
+      vim.keymap.set("v", "<c-a>", dial.inc_visual(), { desc = "Increment" })
+      vim.keymap.set("v", "<c-x>", dial.dec_visual(), { desc = "Decrement" })
+    end
+  },
 
-  { "Darazaki/indent-o-matic", config = function()
-    require("indent-o-matic").setup {}
-  end },
+  {
+    "Darazaki/indent-o-matic",
+    config = function()
+      require("indent-o-matic").setup {}
+    end
+  },
 
 
-  { "iamcco/markdown-preview.nvim", build = function()
-    vim.fn["mkdp#util#install"]()
-  end },
+  {
+    "iamcco/markdown-preview.nvim",
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end
+  },
 
-  { "nacro90/numb.nvim", config = function()
-    require("numb").setup {}
-  end },
+  {
+    "nacro90/numb.nvim",
+    config = function()
+      require("numb").setup {}
+    end
+  },
 
-  { "akinsho/bufferline.nvim",
+  {
+    "akinsho/bufferline.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local bufferline = require("bufferline")
 
       bufferline.setup {}
 
-      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle( -1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-q>s<tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
       vim.keymap.set("n", "<c-q><tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
-      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle( -1) end, { desc = "Go to the previous buffer" })
+      vim.keymap.set("n", "<c-s-tab>", function() bufferline.cycle(-1) end, { desc = "Go to the previous buffer" })
       vim.keymap.set("n", "<c-tab>", function() bufferline.cycle(1) end, { desc = "Go to the next buffer" })
 
       for i = 1, 9 do
@@ -677,7 +743,7 @@ return {
         local rhs = function() bufferline.go_to(i, true) end
 
         if i == 9 then
-          rhs = function() bufferline.go_to( -1, true) end
+          rhs = function() bufferline.go_to(-1, true) end
 
           vim.keymap.set("n", lhs, rhs, { desc = "Go to the last buffer" })
           vim.keymap.set("i", lhs, rhs, { desc = "Go to the last buffer" })
@@ -703,34 +769,41 @@ return {
     end,
   },
 
-  { "phaazon/hop.nvim", config = function()
-    local hop = require("hop")
+  {
+    "phaazon/hop.nvim",
+    config = function()
+      local hop = require("hop")
 
-    hop.setup {
-      keys = "etuhonasidpgyfcrlkmxbjwqv",
-      jump_on_sole_occurrence = false,
-    }
+      hop.setup {
+        keys = "etuhonasidpgyfcrlkmxbjwqv",
+        jump_on_sole_occurrence = false,
+      }
 
-    vim.keymap.set("n", "s", hop.hint_char2, { desc = "Jump with 2 chars" })
-  end },
+      vim.keymap.set("n", "s", hop.hint_char2, { desc = "Jump with 2 chars" })
+    end
+  },
 
-  { "akinsho/toggleterm.nvim", config = function()
-    local toggleterm = require("toggleterm")
+  {
+    "akinsho/toggleterm.nvim",
+    config = function()
+      local toggleterm = require("toggleterm")
 
-    toggleterm.setup {
-      open_mapping = "<c-t>",
-      direction = "float",
-      float_opts = {
-        border = "double",
-      },
-    }
+      toggleterm.setup {
+        open_mapping = "<c-t>",
+        direction = "float",
+        float_opts = {
+          border = "double",
+        },
+      }
 
-    vim.keymap.set("n", "<c-t>", function() toggleterm.toggle(0) end, { desc = "Open terminal" })
-  end },
+      vim.keymap.set("n", "<c-t>", function() toggleterm.toggle(0) end, { desc = "Open terminal" })
+    end
+  },
 
   { "f-person/git-blame.nvim" },
 
-  { "folke/trouble.nvim",
+  {
+    "folke/trouble.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local trouble = require("trouble")
@@ -741,33 +814,48 @@ return {
     end,
   },
 
-  { "lewis6991/gitsigns.nvim", requires = "nvim-lua/plenary.nvim", config = function()
-    require("gitsigns").setup()
-  end },
-
-  { "lukas-reineke/indent-blankline.nvim", dependencies = { "kevinhwang91/nvim-ufo" }, config = function()
-    require("indent_blankline").setup {
-      char = "¦",
-      char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
-      buftype_exclude = { "terminal" },
-    }
-
-    for _, keymap in pairs { "zo", "zO", "zc", "zC", "za", "zA", "zv", "zx", "zX", "zm", "zM", "zr", "zR" } do
-      vim.keymap.set("n", keymap, keymap .. "<cmd>IndentBlanklineRefresh<cr>", { remap = true })
+  {
+    "lewis6991/gitsigns.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("gitsigns").setup()
     end
-  end },
+  },
 
-  { "mbbill/undotree", init = function()
-    vim.g.undotree_WindowLayout = 3
-  end },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    dependencies = { "kevinhwang91/nvim-ufo" },
+    config = function()
+      require("indent_blankline").setup {
+        char = "¦",
+        char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
+        buftype_exclude = { "terminal" },
+      }
 
-  { "folke/which-key.nvim", config = function()
-    vim.o.timeout = true
-    vim.o.timeoutlen = 1000
-    require("which-key").setup {}
-  end },
+      for _, keymap in pairs { "zo", "zO", "zc", "zC", "za", "zA", "zv", "zx", "zX", "zm", "zM", "zr", "zR" } do
+        vim.keymap.set("n", keymap, keymap .. "<cmd>IndentBlanklineRefresh<cr>", { remap = true })
+      end
+    end
+  },
 
-  { "ckolkey/ts-node-action",
+  {
+    "mbbill/undotree",
+    init = function()
+      vim.g.undotree_WindowLayout = 3
+    end
+  },
+
+  {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 1000
+      require("which-key").setup {}
+    end
+  },
+
+  {
+    "ckolkey/ts-node-action",
     dependencies = { "nvim-treesitter" },
     config = function()
       require("ts-node-action").setup {}
@@ -777,17 +865,22 @@ return {
   },
 
   { "tpope/vim-repeat" },
-  { "mizlan/iswap.nvim", dependencies = { "nvim-treesitter/nvim-treesitter" }, config = function()
-    local iswap = require("iswap")
-    iswap.setup {
-      keys = "etuhonasidpgyfcrlkmxbjwqv"
-    }
+  {
+    "mizlan/iswap.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local iswap = require("iswap")
+      iswap.setup {
+        keys = "etuhonasidpgyfcrlkmxbjwqv"
+      }
 
-    vim.keymap.set("n", "gs", iswap.iswap_with, { desc = "Swap treesitter nodes" })
-    vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
-  end },
+      vim.keymap.set("n", "gs", iswap.iswap_with, { desc = "Swap treesitter nodes" })
+      vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
+    end
+  },
 
-  { "utilyre/barbecue.nvim",
+  {
+    "utilyre/barbecue.nvim",
     dependencies = {
       "neovim/nvim-lspconfig",
       "SmiteshP/nvim-navic",
@@ -802,7 +895,8 @@ return {
     end,
   },
 
-  { "LeonHeidelbach/trailblazer.nvim",
+  {
+    "LeonHeidelbach/trailblazer.nvim",
     config = function()
       require("trailblazer").setup {
         mappings = {
@@ -833,16 +927,25 @@ return {
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
   { "kana/vim-niceblock" },
-  { "kana/vim-operator-replace", dependencies = { "kana/vim-operator-user" }, config = function()
-    vim.keymap.set({ "n", "v" }, "_", "<plug>(operator-replace)")
-  end },
+  {
+    "kana/vim-operator-replace",
+    dependencies = { "kana/vim-operator-user" },
+    config = function()
+      vim.keymap.set({ "n", "v" }, "_", "<plug>(operator-replace)")
+    end
+  },
 
-  { "haya14busa/vim-operator-flashy", dependencies = { "kana/vim-operator-user" }, config = function()
-    vim.keymap.set({ "n", "v", "o" }, "y", "<plug>(operator-flashy)", { remap = true })
-    vim.keymap.set("n", "Y", "<plug>(operator-flashy)$", { remap = true })
-  end },
+  {
+    "haya14busa/vim-operator-flashy",
+    dependencies = { "kana/vim-operator-user" },
+    config = function()
+      vim.keymap.set({ "n", "v", "o" }, "y", "<plug>(operator-flashy)", { remap = true })
+      vim.keymap.set("n", "Y", "<plug>(operator-flashy)$", { remap = true })
+    end
+  },
 
-  { "machakann/vim-sandwich",
+  {
+    "machakann/vim-sandwich",
     init = function()
       vim.g.sandwich_no_default_key_mappings = true
     end,
@@ -881,7 +984,8 @@ return {
     end,
   },
 
-  { "b3nj5m1n/kommentary",
+  {
+    "b3nj5m1n/kommentary",
     build = function()
       vim.g.kommentary_create_default_mappings = false
     end,
