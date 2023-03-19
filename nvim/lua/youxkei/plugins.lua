@@ -481,9 +481,81 @@ return {
       "hrsh7th/cmp-cmdline",
       "dcampos/nvim-snippy",
       "dcampos/cmp-snippy",
+      "nvim-lua/plenary.nvim",
     },
     config = function()
+      local source = {}
+      source.new = function()
+        local self = setmetatable({ cache = {} }, { __index = source })
+        return self
+      end
+      source.get_trigger_characters = function()
+        return { "\t", "\n", ".", ":", "(", "'", [["]], "[", ",", "#", "*", "@", "|", "=", "-", "{", "/", "\\", " ", "+",
+          "?", "`" }
+      end
+      source.complete = function(_, params, callback)
+        local curl = require("plenary.curl")
+
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        print(row, col)
+        local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
+        local before_cursor_lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+        local after_cursor_lines = vim.api.nvim_buf_get_lines(0, row, -1, false)
+
+        local before_cursor = table.concat(before_cursor_lines, "\n") .. "\n" .. string.sub(current_line, 1, col)
+        local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
+
+        local json_payload = vim.fn.json_encode {
+          model = "code-davinci-002",
+          prompt = string.sub(before_cursor, -8000 * 4),
+          suffix = string.sub(after_cursor, 0, 256 * 4),
+          max_tokens = 32,
+          temperature = 0,
+        }
+
+        curl.post("https://api.openai.com/v1/completions", {
+          headers = {
+            content_type = "application/json",
+            authorization = "Bearer " .. vim.env.OPENAI_API_KEY,
+          },
+          raw_body = json_payload,
+          callback = function(result)
+            if result.status == 200 then
+              vim.schedule(function()
+                local body = vim.fn.json_decode(result.body)
+                local text = body.choices[1].text
+
+                if text == "" then
+                  callback()
+                else
+                  callback {
+                    isIncomplete = true,
+                    items = {
+                      {
+                        label = body.choices[1].text,
+                        documentation = {
+                          kind = "markdown",
+                          value = table.concat({
+                            "```" .. params.context.filetype,
+                            text,
+                            "```"
+                          }, "\n"),
+                        }
+                      },
+                    },
+                  }
+                end
+              end)
+            else
+              callback()
+            end
+          end,
+        })
+      end
+
       local cmp = require("cmp")
+      cmp.register_source("openai_codex", source.new())
+
       cmp.setup {
         snippet = {
           expand = function(args)
@@ -501,6 +573,7 @@ return {
           { name = "path" },
           { name = "buffer" },
           { name = "look" },
+          { name = "openai_codex" },
         },
         preselect = cmp.PreselectMode.None,
       }
