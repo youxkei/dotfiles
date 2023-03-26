@@ -46,9 +46,10 @@ alt + shift + y : komorebic send-to-named-workspace r3
 alt + shift + 4 : komorebic send-to-named-workspace r4
 alt + shift + 5 : komorebic send-to-named-workspace r5
 
-alt + s     : komorebic toggle-pause
-alt + m     : komorebic manage
-alt + r     : komorebic retile
+alt + s : komorebic toggle-pause
+alt + f : komorebic toggle-maximize
+alt + m : komorebic manage
+alt + r : komorebic retile
 
 alt + shift + return : komorebic toggle-float
 alt + shift + r      : komorebic reload-configuration
