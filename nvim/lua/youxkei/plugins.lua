@@ -497,7 +497,6 @@ return {
         local curl = require("plenary.curl")
 
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        print(row, col)
         local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
         local before_cursor_lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
         local after_cursor_lines = vim.api.nvim_buf_get_lines(0, row, -1, false)
