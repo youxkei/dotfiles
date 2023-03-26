@@ -829,9 +829,15 @@ return {
       vim.keymap.set(
         "n", "ZQ",
         function()
-          local wins = vim.api.nvim_tabpage_list_wins(0)
+          local windows = vim.api.nvim_tabpage_list_wins(0)
+          local window_count = 0
+          for _, window in ipairs(windows) do
+            if vim.api.nvim_win_get_config(window).relative == "" then
+              window_count = window_count + 1
+            end
+          end
 
-          if #wins == 1 then
+          if window_count == 1 then
             vim.api.nvim_buf_delete(0, {})
           else
             vim.api.nvim_win_close(0, {})
