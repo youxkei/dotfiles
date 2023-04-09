@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nvim";
-  version = "v0.8.3";
+  version = "v0.9.0";
 
   src = fetchurl {
     url = "https://github.com/neovim/neovim/releases/download/${version}/nvim.appimage";
-    hash = "sha256-Bfeiyxd/RQaIK3zYZ9giB8eQZuepVQ5O945urFN91Kg=";
+    hash = "sha256-Dh5tU8bIBV3iO9sz9gu2SvC68ROQZpwbQOy78sejRUc=";
   };
 
   unpackPhase = ":";
