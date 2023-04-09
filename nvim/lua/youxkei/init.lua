@@ -43,16 +43,18 @@ opt.sidescroll = 1
 opt.list = true
 opt.listchars = { tab = "･･", trail = "-", nbsp = "%" }
 
+opt.cmdheight = 0
+opt.showcmd = true
+opt.showcmdloc = "statusline"
+
 opt.termguicolors = true
 opt.ambiwidth = "single"
-opt.cmdheight = 0
 opt.hidden = true
 opt.number = true
 opt.wrap = false
 opt.endofline = true
 opt.hlsearch = true
 opt.digraph = false
-opt.showcmd = true
 opt.showtabline = 2
 opt.backspace = { "indent", "eol", "start" }
 opt.laststatus = 3
