@@ -52,7 +52,7 @@ return {
 
                     vim.schedule(function()
                       vim.fn.setreg("+", url)
-                      vim.notify("GitHub URL: " .. url)
+                      vim.notify("GitHub URL: " .. url, vim.log.levels.INFO)
                       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
                     end)
                   end,
