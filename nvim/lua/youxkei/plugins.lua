@@ -164,7 +164,6 @@ return {
     dependencies = {
       "mrjones2014/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "andymass/vim-matchup",
     },
     config = function()
       require("nvim-treesitter.configs").setup {
@@ -220,9 +219,6 @@ return {
               ["[M"] = "@function.declaration",
             },
           },
-        },
-        matchup = {
-          enable = false,
         },
       }
 
