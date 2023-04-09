@@ -1022,6 +1022,19 @@ return {
     end,
   },
 
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local treesj = require("treesj")
+      treesj.setup {
+        use_default_keymaps = false,
+      }
+
+      vim.keymap.set("n", "<leader>j", treesj.toggle, { desc = "Togggle between split and join" })
+    end,
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
