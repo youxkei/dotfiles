@@ -18,6 +18,7 @@ komorebic ensure-named-workspaces $right_monitor  r0 r1 r2 r3 r4 r5
 komorebic identify-tray-application exe Carla.exe
 komorebic identify-tray-application exe qjackctl.exe
 komorebic identify-tray-application exe jackd.exe
+komorebic identify-tray-application exe iTunes.exe
 
 komorebic mouse-follows-focus enable
 komorebic focus-follows-mouse enable -i windows
