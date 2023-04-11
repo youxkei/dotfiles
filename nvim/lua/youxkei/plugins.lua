@@ -501,9 +501,9 @@ return {
         local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
 
         local json_payload = vim.fn.json_encode {
-          model = "code-davinci-002",
-          prompt = string.sub(before_cursor, -8000 * 4),
-          suffix = string.sub(after_cursor, 0, 256 * 4),
+          model = "text-davinci-003",
+          prompt = string.sub(before_cursor, -4093 * 2),
+          suffix = string.sub(after_cursor, 0, 256 * 2),
           max_tokens = 32,
           temperature = 0,
         }
