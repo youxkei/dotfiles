@@ -21,7 +21,7 @@ if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
 
 if [ -x "$(which nix-build)" ]; then
     export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' -A glibcLocales --no-out-link)/lib/locale/locale-archive;
-    export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+    #export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
 PATH=~/bin:$PATH
