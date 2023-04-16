@@ -514,29 +514,35 @@ return {
           callback = function(result)
             if result.status == 200 then
               vim.schedule(function()
+                if result.body == "" then
+                  callback()
+                  return
+                end
+
                 local body = vim.fn.json_decode(result.body)
                 local text = body.choices[1].text
 
                 if text == "" then
                   callback()
-                else
-                  callback {
-                    isIncomplete = true,
-                    items = {
-                      {
-                        label = body.choices[1].text,
-                        documentation = {
-                          kind = "markdown",
-                          value = table.concat({
-                            "```" .. params.context.filetype,
-                            text,
-                            "```"
-                          }, "\n"),
-                        }
-                      },
-                    },
-                  }
+                  return
                 end
+
+                callback {
+                  isIncomplete = true,
+                  items = {
+                    {
+                      label = body.choices[1].text,
+                      documentation = {
+                        kind = "markdown",
+                        value = table.concat({
+                          "```" .. params.context.filetype,
+                          text,
+                          "```"
+                        }, "\n"),
+                      }
+                    },
+                  },
+                }
               end)
             else
               callback()
