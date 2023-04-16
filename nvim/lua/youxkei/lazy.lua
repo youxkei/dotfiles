@@ -1,13 +1,13 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+  vim.fn.system {
     "git",
     "clone",
     "--filter=blob:none",
     "--single-branch",
     "https://github.com/folke/lazy.nvim.git",
     lazypath,
-  })
+  }
 end
 vim.opt.runtimepath:prepend(lazypath)
 
@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "LazySync",
   callback = function()
     local lazy = require("lazy")
-    lazy.load({ plugins = lazy.plugins() })
+    lazy.load { plugins = lazy.plugins() }
   end,
 })
 
@@ -30,11 +30,21 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "plugins.lua",
+  callback = function(event)
+    vim.loader.reset(event.file)
+  end
+});
+
 require("lazy").setup("youxkei.plugins", {
   defaults = {
     lazy = false,
   },
   checker = {
+    enabled = true,
+  },
+  change_detection = {
     enabled = true,
   },
   rtp = {

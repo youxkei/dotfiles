@@ -287,9 +287,6 @@ return {
     "rcarriga/nvim-notify",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
-      local notify = require("notify")
-      vim.notify = notify
-
       vim.keymap.set(
         "n", "<leader>tn",
         require("telescope").extensions.notify.notify,
