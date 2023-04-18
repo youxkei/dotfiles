@@ -1039,6 +1039,16 @@ return {
     end,
   },
 
+  {
+    "axkirillov/hbac.nvim",
+    config = function()
+      require("hbac").setup {
+        autoclose = true,
+        threshold = 6,
+      }
+    end
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
