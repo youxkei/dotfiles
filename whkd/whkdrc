@@ -20,6 +20,8 @@ alt + VK_OEM_COMMA  : komorebic focus-named-workspace c2
 alt + VK_OEM_PERIOD : komorebic focus-named-workspace c3
 alt + 2             : komorebic focus-named-workspace c4
 alt + 3             : komorebic focus-named-workspace c5
+alt + t             : komorebic focus-named-workspace c6
+alt + n             : komorebic focus-named-workspace c7
 
 alt + u : komorebic focus-named-workspace r0
 alt + i : komorebic focus-named-workspace r1
@@ -38,6 +40,8 @@ alt + shift + VK_OEM_COMMA  : komorebic send-to-named-workspace c2
 alt + shift + VK_OEM_PERIOD : komorebic send-to-named-workspace c3
 alt + shift + 2             : komorebic send-to-named-workspace c4
 alt + shift + 3             : komorebic send-to-named-workspace c5
+alt + shift + t             : komorebic send-to-named-workspace c6
+alt + shift + n             : komorebic send-to-named-workspace c7
 
 alt + shift + u : komorebic send-to-named-workspace r0
 alt + shift + i : komorebic send-to-named-workspace r1
