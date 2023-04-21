@@ -764,6 +764,7 @@ return {
             "diff",
             "diagnostics",
           },
+          lualine_x = { "%S", "encoding", "fileformat", "filetype" },
         },
       }
     end,
