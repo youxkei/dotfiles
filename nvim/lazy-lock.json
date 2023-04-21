@@ -1,7 +1,7 @@
 {
   "auto-session": { "branch": "main", "commit": "f391aba10ee61927a1cceb9ea3a9dde501e87e9e" },
   "barbecue.nvim": { "branch": "main", "commit": "ac2272e72e4d1960d9cab62f9914e264ba1e6082" },
-  "bufferline.nvim": { "branch": "main", "commit": "243893ba9d5d1049dd451a25cab32ec7f8f67bcf" },
+  "bufferline.nvim": { "branch": "main", "commit": "6861ceee88bdcede04b1803a51f2993bddc6435a" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-cmdline": { "branch": "main", "commit": "af88e700417c6449719fc77f6f3745f88e42d5da" },
   "cmp-look": { "branch": "master", "commit": "b39c50bcdf6199dddda56adc466c2bd9c951a960" },
