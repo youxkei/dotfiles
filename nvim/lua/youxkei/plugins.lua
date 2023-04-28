@@ -597,7 +597,6 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "rmagatti/session-lens",
     },
     config = function()
       local telescope = require("telescope")
@@ -697,6 +696,9 @@ return {
 
   {
     "rmagatti/auto-session",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
     config = function()
       require("auto-session").setup {
         auto_session_suppress_dirs = { "~/repo" },
@@ -717,32 +719,12 @@ return {
           end,
         },
       }
+
+      vim.keymap.set(
+        "n", "<leader>ts", require("auto-session.session-lens").search_session,
+        { desc = "Select from sessions with telescope" }
+      )
     end
-  },
-
-  {
-    "rmagatti/session-lens",
-    dependencies = {
-      "rmagatti/auto-session",
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      local session_lens = require("session-lens")
-
-      session_lens.setup {
-        theme_conf = {
-          layout_config = {
-            width = function(_, max_columns, _)
-              return math.min(max_columns, 140)
-            end,
-          },
-        },
-      }
-
-      require("telescope").load_extension("session-lens")
-
-      vim.keymap.set("n", "<leader>ts", session_lens.search_session, { desc = "Select from sessions with telescope" })
-    end,
   },
 
   {
@@ -759,7 +741,7 @@ return {
         },
         sections = {
           lualine_b = {
-            require("auto-session-library").current_session_name,
+            require("auto-session.lib").current_session_name,
             { "branch", icon = "" },
             "diff",
             "diagnostics",
