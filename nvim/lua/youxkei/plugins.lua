@@ -476,8 +476,43 @@ return {
       "dcampos/nvim-snippy",
       "dcampos/cmp-snippy",
       "nvim-lua/plenary.nvim",
+      "uga-rosa/utf8.nvim",
     },
     config = function()
+      local utf8 = require("utf8")
+
+      local utf8_sub = function(str, n)
+        local utf8_chars = {}
+        local count = 0
+
+        for _, char in utf8.codes(str) do
+          if count < n then
+            table.insert(utf8_chars, char)
+          else
+            break
+          end
+          count = count + 1
+        end
+
+        return table.concat(utf8_chars)
+      end
+
+      local utf8_sub_last = function(str, n)
+        local utf8_str = {}
+        local utc8_chars = {}
+        local len = utf8.len(str)
+
+        for _, char in utf8.codes(str) do
+          table.insert(utf8_str, char)
+        end
+
+        for i = #utf8_str - n, #utf8_str + 1 do
+          table.insert(utc8_chars, utf8_str[i])
+        end
+
+        return table.concat(utc8_chars)
+      end
+
       local source = {}
       source.new = function()
         local self = setmetatable({ cache = {} }, { __index = source })
@@ -500,8 +535,8 @@ return {
 
         local json_payload = vim.fn.json_encode {
           model = "text-davinci-003",
-          prompt = string.sub(before_cursor, -4093 * 2),
-          suffix = string.sub(after_cursor, 0, 256 * 2),
+          prompt = utf8_sub_last(before_cursor, 4093 * 2),
+          suffix = utf8_sub(after_cursor, 256 * 2),
           max_tokens = 32,
           temperature = 0,
         }
