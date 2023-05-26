@@ -606,7 +606,7 @@ return {
           { name = "luasnip" },
           { name = "path" },
           { name = "buffer" },
-          { name = "look" },
+          -- { name = "look" },
           { name = "openai_codex" },
         },
         preselect = cmp.PreselectMode.None,
