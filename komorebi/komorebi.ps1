@@ -20,6 +20,9 @@ komorebic identify-tray-application exe qjackctl.exe
 komorebic identify-tray-application exe jackd.exe
 komorebic identify-tray-application exe iTunes.exe
 
+komorebic active-window-border enable
+komorebic active-window-border-colour 232 145 45
+
 komorebic mouse-follows-focus enable
 komorebic focus-follows-mouse enable -i windows
 komorebic window-hiding-behaviour cloak
