@@ -164,6 +164,7 @@ return {
     dependencies = {
       "mrjones2014/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
+      "JoosepAlviste/nvim-ts-context-commentstring",
     },
     config = function()
       require("nvim-treesitter.configs").setup {
@@ -219,6 +220,9 @@ return {
               ["[M"] = "@function.declaration",
             },
           },
+        },
+        context_commentstring = {
+          enable = true,
         },
       }
 
@@ -1129,17 +1133,15 @@ return {
   },
 
   {
-    "b3nj5m1n/kommentary",
-    build = function()
-      vim.g.kommentary_create_default_mappings = false
-    end,
+    "numToStr/Comment.nvim",
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     config = function()
-      vim.keymap.set("n", "<leader>cic", "<plug>kommentary_line_increase", { remap = true })
-      vim.keymap.set("n", "<leader>ci", "<plug>kommentary_motion_increase", { remap = true })
-      vim.keymap.set("x", "<leader>ci", "<plug>kommentary_visual_increase", { remap = true })
-      vim.keymap.set("n", "<leader>cdc", "<plug>kommentary_line_decrease", { remap = true })
-      vim.keymap.set("n", "<leader>cd", "<plug>kommentary_motion_decrease", { remap = true })
-      vim.keymap.set("x", "<leader>cd", "<plug>kommentary_visual_decrease", { remap = true })
-    end,
+      require("Comment").setup {
+        mappings = {
+          extra = false,
+        },
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      }
+    end
   },
 }
