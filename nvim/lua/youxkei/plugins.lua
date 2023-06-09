@@ -743,6 +743,7 @@ return {
         auto_session_suppress_dirs = { "~/repo" },
         pre_save_cmds = {
           function()
+            vim.cmd.LspStop()
             for _, win in ipairs(vim.api.nvim_list_wins()) do
               local config = vim.api.nvim_win_get_config(win)
               if config.relative ~= "" then
@@ -754,7 +755,7 @@ return {
         post_restore_cmds = {
           function()
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-            vim.cmd.LspRestart()
+            vim.cmd.LspStart()
           end,
         },
       }
