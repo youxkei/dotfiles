@@ -51,7 +51,6 @@ alt + shift + 4 : komorebic manage; komorebic send-to-named-workspace r4
 alt + shift + 5 : komorebic manage; komorebic send-to-named-workspace r5
 
 alt + s : komorebic toggle-pause
-alt + f : komorebic toggle-maximize
 alt + m : komorebic manage
 alt + r : komorebic retile
 alt + w : komorebic change-layout rows
