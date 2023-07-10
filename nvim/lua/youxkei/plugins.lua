@@ -154,7 +154,6 @@ return {
     end,
     config = function()
       vim.keymap.set({ "n", "v" }, "<leader>m", "<plug>MarkSet", { remap = true })
-      vim.keymap.set("n", "<leader>n", "<plug>MarkAllClear", { remap = true })
     end,
   },
 
@@ -242,6 +241,7 @@ return {
 
   {
     "mfussenegger/nvim-treehopper",
+    enabled = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
       local tsht = require("tsht")
@@ -880,6 +880,7 @@ return {
 
   {
     "phaazon/hop.nvim",
+    enabled = false,
     config = function()
       local hop = require("hop")
 
@@ -1069,6 +1070,27 @@ return {
         autoclose = true,
         threshold = 6,
       }
+    end
+  },
+
+  {
+    "folke/flash.nvim",
+    config = function()
+      local flash = require("flash")
+
+      flash.setup {
+        label = {
+          uppercase = false,
+        },
+      }
+
+      vim.keymap.set({ "n", "x", "o" }, "s", flash.jump, { desc = "Jump with flash" })
+      vim.keymap.set({ "n", "x", "o" }, "S", function() flash.jump { continue = true } end, {
+        desc = "Continue last jump with flash"
+      })
+      vim.keymap.set({ "n" }, "<leader>n", flash.treesitter, { desc = "Select treesitter node with flash" })
+      vim.keymap.set({ "x", "o", }, "n", flash.treesitter, { desc = "Select treesitter node with flash" })
+      vim.keymap.set("o", "r", flash.remote, { desc = "Do command in remote position with flash" })
     end
   },
 
