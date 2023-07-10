@@ -47,6 +47,9 @@ opt.cmdheight = 0
 opt.showcmd = true
 opt.showcmdloc = "statusline"
 
+opt.ignorecase = true
+opt.smartcase = true
+
 opt.termguicolors = true
 opt.ambiwidth = "single"
 opt.hidden = true
