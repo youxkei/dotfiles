@@ -54,6 +54,7 @@ alt + s : komorebic toggle-pause
 alt + m : komorebic manage
 alt + r : komorebic retile
 alt + w : komorebic change-layout rows
+alt + v : komorebic change-layout columns
 alt + b : komorebic change-layout bsp
 
 alt + shift + return : komorebic toggle-float
