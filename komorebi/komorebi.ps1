@@ -19,7 +19,8 @@ komorebic identify-tray-application exe Carla.exe
 komorebic identify-tray-application exe qjackctl.exe
 komorebic identify-tray-application exe jackd.exe
 komorebic identify-tray-application exe iTunes.exe
-komorebic identify-tray-application exe ShellExperienceHost.exe
+
+komorebic float-rule exe ShellExperienceHost.exe
 
 komorebic active-window-border enable
 komorebic active-window-border-colour 232 145 45
