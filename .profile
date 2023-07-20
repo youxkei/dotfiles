@@ -24,7 +24,7 @@ if [ -x "$(which nix-build)" ]; then
     #export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
-PATH=~/bin:$PATH
+PATH=~/bin:~/go/bin:$PATH
 export PATH
 
 keychain -q --nogui ~/.ssh/id_ed25519
