@@ -74,7 +74,7 @@ opt.iskeyword = { "@", "48-57", "_", "192-255", "$", "@-@", "-" }
 opt.clipboard = "unnamedplus"
 opt.joinspaces = false
 opt.sessionoptions = {
-  "blank", "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
+  "blank", "buffers", "curdir", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
 }
 
 g.mapleader = ","
