@@ -141,7 +141,7 @@
 
           # bs-platform
 
-          go_1_19
+          go_1_20
           gopls
           gotools
           gore
