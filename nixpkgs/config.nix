@@ -14,8 +14,6 @@
       nvim = callPackage ./nvim.nix {};
       loophole = callPackage ./loophole.nix {};
 
-      inherit (nixpkgs.nodePackages) prettier typescript typescript-language-server;
-
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
@@ -134,10 +132,10 @@
           opam
 
           nodejs
-          prettier
-
-          typescript
-          typescript-language-server
+          nodePackages.prettier
+          nodePackages.typescript
+          nodePackages.typescript-language-server
+          nodePackages.pnpm
 
           # bs-platform
 
