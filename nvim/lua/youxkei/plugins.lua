@@ -161,9 +161,22 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-      "mrjones2014/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "JoosepAlviste/nvim-ts-context-commentstring",
+      {
+        "hiphish/rainbow-delimiters.nvim",
+        config = function()
+          local rainbow_delimiters = require("rainbow-delimiters")
+          vim.g.rainbow_delimiters = {
+            strategy = {
+              [""] = rainbow_delimiters.strategy["global"],
+            },
+            query = {
+              tsx = "rainbow-parens",
+            },
+          }
+        end
+      },
     },
     config = function()
       require("nvim-treesitter.configs").setup {
@@ -189,11 +202,6 @@ return {
         },
         indent = {
           enable = true,
-        },
-        rainbow = {
-          enable = true,
-          extended_mode = true,
-          max_file_lines = 1000,
         },
         textobjects = {
           select = {
