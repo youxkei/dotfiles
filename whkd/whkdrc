@@ -1,54 +1,54 @@
 .shell pwsh
 
-alt + h : komorebic manage; komorebic focus left
-alt + j : komorebic manage; komorebic focus down
-alt + k : komorebic manage; komorebic focus up
-alt + l : komorebic manage; komorebic focus right
+alt + h : komorebic focus left
+alt + j : komorebic focus down
+alt + k : komorebic focus up
+alt + l : komorebic focus right
 
-alt + shift + h : komorebic manage; komorebic move left
-alt + shift + j : komorebic manage; komorebic move down
-alt + shift + k : komorebic manage; komorebic move up
-alt + shift + l : komorebic manage; komorebic move right
+alt + shift + h : komorebic move left
+alt + shift + j : komorebic move down
+alt + shift + k : komorebic move up
+alt + shift + l : komorebic move right
 
-alt + a        : komorebic manage; komorebic focus-named-workspace l0
-alt + VK_OEM_1 : komorebic manage; komorebic focus-named-workspace l1
-alt + 1        : komorebic manage; komorebic focus-named-workspace l2
+alt + a        : komorebic focus-named-workspace l0
+alt + VK_OEM_1 : komorebic focus-named-workspace l1
+alt + 1        : komorebic focus-named-workspace l2
 
-alt + o             : komorebic manage; komorebic focus-named-workspace c0
-alt + e             : komorebic manage; komorebic focus-named-workspace c1
-alt + VK_OEM_COMMA  : komorebic manage; komorebic focus-named-workspace c2
-alt + VK_OEM_PERIOD : komorebic manage; komorebic focus-named-workspace c3
-alt + 2             : komorebic manage; komorebic focus-named-workspace c4
-alt + 3             : komorebic manage; komorebic focus-named-workspace c5
-alt + t             : komorebic manage; komorebic focus-named-workspace c6
-alt + n             : komorebic manage; komorebic focus-named-workspace c7
+alt + o             : komorebic focus-named-workspace c0
+alt + e             : komorebic focus-named-workspace c1
+alt + VK_OEM_COMMA  : komorebic focus-named-workspace c2
+alt + VK_OEM_PERIOD : komorebic focus-named-workspace c3
+alt + 2             : komorebic focus-named-workspace c4
+alt + 3             : komorebic focus-named-workspace c5
+alt + t             : komorebic focus-named-workspace c6
+alt + n             : komorebic focus-named-workspace c7
 
-alt + u : komorebic manage; komorebic focus-named-workspace r0
-alt + i : komorebic manage; komorebic focus-named-workspace r1
-alt + p : komorebic manage; komorebic focus-named-workspace r2
-alt + y : komorebic manage; komorebic focus-named-workspace r3
-alt + 4 : komorebic manage; komorebic focus-named-workspace r4
-alt + 5 : komorebic manage; komorebic focus-named-workspace r5
+alt + u : komorebic focus-named-workspace r0
+alt + i : komorebic focus-named-workspace r1
+alt + p : komorebic focus-named-workspace r2
+alt + y : komorebic focus-named-workspace r3
+alt + 4 : komorebic focus-named-workspace r4
+alt + 5 : komorebic focus-named-workspace r5
 
-alt + shift + a        : komorebic manage; komorebic send-to-named-workspace l0
-alt + shift + VK_OEM_1 : komorebic manage; komorebic send-to-named-workspace l1
-alt + shift + 1        : komorebic manage; komorebic send-to-named-workspace l2
+alt + shift + a        : komorebic send-to-named-workspace l0
+alt + shift + VK_OEM_1 : komorebic send-to-named-workspace l1
+alt + shift + 1        : komorebic send-to-named-workspace l2
 
-alt + shift + o             : komorebic manage; komorebic send-to-named-workspace c0
-alt + shift + e             : komorebic manage; komorebic send-to-named-workspace c1
-alt + shift + VK_OEM_COMMA  : komorebic manage; komorebic send-to-named-workspace c2
-alt + shift + VK_OEM_PERIOD : komorebic manage; komorebic send-to-named-workspace c3
-alt + shift + 2             : komorebic manage; komorebic send-to-named-workspace c4
-alt + shift + 3             : komorebic manage; komorebic send-to-named-workspace c5
-alt + shift + t             : komorebic manage; komorebic send-to-named-workspace c6
-alt + shift + n             : komorebic manage; komorebic send-to-named-workspace c7
+alt + shift + o             : komorebic send-to-named-workspace c0
+alt + shift + e             : komorebic send-to-named-workspace c1
+alt + shift + VK_OEM_COMMA  : komorebic send-to-named-workspace c2
+alt + shift + VK_OEM_PERIOD : komorebic send-to-named-workspace c3
+alt + shift + 2             : komorebic send-to-named-workspace c4
+alt + shift + 3             : komorebic send-to-named-workspace c5
+alt + shift + t             : komorebic send-to-named-workspace c6
+alt + shift + n             : komorebic send-to-named-workspace c7
 
-alt + shift + u : komorebic manage; komorebic send-to-named-workspace r0
-alt + shift + i : komorebic manage; komorebic send-to-named-workspace r1
-alt + shift + p : komorebic manage; komorebic send-to-named-workspace r2
-alt + shift + y : komorebic manage; komorebic send-to-named-workspace r3
-alt + shift + 4 : komorebic manage; komorebic send-to-named-workspace r4
-alt + shift + 5 : komorebic manage; komorebic send-to-named-workspace r5
+alt + shift + u : komorebic send-to-named-workspace r0
+alt + shift + i : komorebic send-to-named-workspace r1
+alt + shift + p : komorebic send-to-named-workspace r2
+alt + shift + y : komorebic send-to-named-workspace r3
+alt + shift + 4 : komorebic send-to-named-workspace r4
+alt + shift + 5 : komorebic send-to-named-workspace r5
 
 alt + s : komorebic toggle-pause
 alt + m : komorebic manage
