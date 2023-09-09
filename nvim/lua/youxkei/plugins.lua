@@ -993,6 +993,7 @@ return {
 
   {
     "axkirillov/hbac.nvim",
+    enabled = false,
     config = function()
       require("hbac").setup {
         autoclose = true,
