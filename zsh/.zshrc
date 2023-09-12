@@ -97,7 +97,7 @@ export FZF_DEFAULT_OPTS="--reverse --ansi"
 
 export LESS='-SR'
 
-alias ls='exa -h --color=auto'
+alias ls='eza -h --color=auto'
 alias ll='ls -al'
 alias tmux="tmux -2"
 alias cp="xcp"

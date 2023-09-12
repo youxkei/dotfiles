@@ -41,7 +41,7 @@
           xsel
           ripgrep
           fd
-          exa
+          eza
           gron
           translate-shell
           powertop
