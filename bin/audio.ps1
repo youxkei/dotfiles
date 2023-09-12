@@ -5,7 +5,8 @@ do
 }
 while($result -eq $null)
 
-Start-Process "C:\Program Files\JACK2\jackd.exe" -WindowStyle Hidden -ArgumentList '-S -X winmme -dportaudio -d "ASIO::ASIO Link Pro" -r48000 -p384' &
+$process = Start-Process -PassThru "C:\Program Files\JACK2\jackd.exe" -WindowStyle Hidden -ArgumentList '-S -X winmme -dportaudio -d "ASIO::ASIO Link Pro" -r48000 -p384'
+$process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
 
 do
 {
@@ -14,4 +15,5 @@ do
 }
 while($result -eq $null)
 
-Start-Process -FilePath "P:\software\Carla\Carla.exe" -ArgumentList "P:\carla\patch_windows.carxp" &
+$process = Start-Process -PassThru -FilePath "P:\software\Carla\Carla.exe" -ArgumentList "P:\carla\patch_windows.carxp" -RedirectStandardOutput ".\out\NUL" -RedirectStandardError ".\err\NUL"
+$process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
