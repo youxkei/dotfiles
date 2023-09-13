@@ -5,7 +5,7 @@ Start-Job -ScriptBlock {
     } while($result -eq $null)
 
     $process = Start-Process -PassThru "C:\Program Files\JACK2\jackd.exe" -WindowStyle Hidden -ArgumentList '-S -X winmme -dportaudio -d "ASIO::ASIO Link Pro" -r48000 -p384'
-    $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
+    $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::AboveNormal
 
     do {
         Start-Sleep 1
@@ -13,5 +13,5 @@ Start-Job -ScriptBlock {
     } while($result -eq $null)
 
     $process = Start-Process -PassThru -FilePath "P:\software\Carla\Carla.exe" -ArgumentList "P:\carla\patch_windows.carxp"
-    $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
+    $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::AboveNormal
 }
