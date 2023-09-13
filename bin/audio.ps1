@@ -8,7 +8,7 @@ Start-Job -ScriptBlock {
     $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::AboveNormal
 
     do {
-        Start-Sleep 1
+        Start-Sleep 5
         $result = Get-Process | Where-Object {$_.MainWindowTitle -match "^ASIO Link Pro"}
     } while($result -eq $null)
 
