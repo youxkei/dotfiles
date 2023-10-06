@@ -1,4 +1,5 @@
 $env:KOMOREBI_CONFIG_HOME = "$env:USERPROFILE\.config\komorebi"
+$env:WHKD_CONFIG_HOME = "$env:USERPROFILE\.config\whkd"
 
 Set-PSReadLineKeyHandler -Key "Ctrl+w" -Function BackwardKillWord
 Set-PSReadLineKeyHandler -Key "Ctrl+u" -Function BackwardDeleteLine
