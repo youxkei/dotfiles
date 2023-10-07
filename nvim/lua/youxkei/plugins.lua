@@ -862,11 +862,20 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     dependencies = { "kevinhwang91/nvim-ufo" },
+    main = "ibl",
     config = function()
-      require("indent_blankline").setup {
-        char = "¦",
-        char_highlight_list = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
-        buftype_exclude = { "terminal" },
+      require("ibl").setup {
+        indent = {
+          char = "┋",
+          tab_char = "┋",
+          highlight = { "Indent1", "Indent2", "Indent3", "Indent4", "Indent5" },
+        },
+        exclude = {
+          buftypes = { "terminal" },
+        },
+        scope = {
+          enabled = false,
+        },
       }
 
       for _, keymap in pairs { "zo", "zO", "zc", "zC", "za", "zA", "zv", "zx", "zX", "zm", "zM", "zr", "zR" } do
