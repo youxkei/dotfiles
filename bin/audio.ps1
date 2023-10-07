@@ -1,4 +1,7 @@
 Start-Job -ScriptBlock {
+    kill -Name carla
+    kill -Name jackd
+
     do {
         Start-Sleep 5
         $result = Get-PNPDevice | Where-Object {($_.Status -eq "ok") -and ($_.InstanceId -eq "USB\VID_1235&PID_8217\V275QW42602F0D")}
@@ -8,7 +11,7 @@ Start-Job -ScriptBlock {
     $process.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::AboveNormal
 
     do {
-        Start-Sleep 5
+        Start-Sleep 10
         $result = Get-Process | Where-Object {$_.MainWindowTitle -match "^ASIO Link Pro"}
     } while($result -eq $null)
 
