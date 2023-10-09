@@ -67,14 +67,14 @@ automations: [
 
         actions: [
             {
-                type: "device.command.ColorAbsolute"
-                devices: #config.target
-                color: temperature: "\(#config.temperature.max)K"
-            },
-            {
                 type: "device.command.BrightnessAbsolute"
                 devices: #config.target
                 brightness: 100
+            },
+            {
+                type: "device.command.ColorAbsolute"
+                devices: #config.target
+                color: temperature: "\(#config.temperature.max)K"
             },
         ]
     },
