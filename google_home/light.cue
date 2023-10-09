@@ -15,14 +15,17 @@ import "list"
         min: 2700
         max: 6500
     }
+
+    delayBetweenActions: "5sec"
 }
+
+#stepSeconds: div(((#ToSeconds & {time: #config.time.lightOffEnd}).out - (#ToSeconds & {time: #config.time.lightOffStart}).out), 100)
+#stepTemperature: div(#config.temperature.max - #config.temperature.min, 100)
 
 metadata: {
     name: "照明オンオフ"
     description: "時刻に応じて照明をオンにしたり徐々にオフにしたりする"
 }
-
-#stepSeconds: div(((#ToSeconds & {time: #config.time.lightOffEnd}).out - (#ToSeconds & {time: #config.time.lightOffStart}).out), 100)
 
 automations: [
     for i, _ in list.Repeat([_], 100) {
@@ -33,14 +36,18 @@ automations: [
 
         actions: [
             {
-                type: "device.command.ColorAbsolute"
-                devices: #config.target
-                color: temperature: "\(#config.temperature.min)K"
-            },
-            {
                 type: "device.command.BrightnessAbsolute"
                 devices: #config.target
                 brightness: 100 - i
+            },
+            {
+                type: "time.delay"
+                for: #config.delayBetweenActions
+            },
+            {
+                type: "device.command.ColorAbsolute"
+                devices: #config.target
+                color: temperature: "\(#config.temperature.max - #stepTemperature * i)K"
             },
         ]
     }
@@ -70,6 +77,10 @@ automations: [
                 type: "device.command.BrightnessAbsolute"
                 devices: #config.target
                 brightness: 100
+            },
+            {
+                type: "time.delay"
+                for: #config.delayBetweenActions
             },
             {
                 type: "device.command.ColorAbsolute"
