@@ -20,7 +20,6 @@ import "list"
 }
 
 #stepSeconds: div(((#ToSeconds & {time: #config.time.lightOffEnd}).out - (#ToSeconds & {time: #config.time.lightOffStart}).out), 100)
-#stepTemperature: div(#config.temperature.max - #config.temperature.min, 100)
 
 metadata: {
     name: "照明オンオフ"
@@ -47,7 +46,7 @@ automations: [
             {
                 type: "device.command.ColorAbsolute"
                 devices: #config.target
-                color: temperature: "\(#config.temperature.max - #stepTemperature * i)K"
+                color: temperature: "\(#config.temperature.min)K"
             },
         ]
     }
