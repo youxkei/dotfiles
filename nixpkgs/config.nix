@@ -91,7 +91,6 @@
           msgpack-tools
           tts
           nicolive-comments
-          yadm
           rpg-cli
           #protontricks
           duf
