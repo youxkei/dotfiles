@@ -17,12 +17,6 @@
       all = nixpkgs.buildEnv {
         name = "all";
         paths = with nixpkgs; [
-          i3-gaps
-          i3status
-          i3status-rust
-          rofi-unwrapped
-          feh
-
           glibcLocales
 
           gitAndTools.gitFull
@@ -38,13 +32,13 @@
           rlwrap
           trash-cli
           tokei
-          xsel
+          #xsel
           ripgrep
           fd
           eza
           gron
           translate-shell
-          powertop
+          #powertop
           figlet
           fzf
           jq
@@ -67,8 +61,8 @@
           qpdf
           stress-ng
           speedtest-cli
-          light
           mysql57
+          #light
           hugo
           evans
           inotify-tools
@@ -94,7 +88,6 @@
           valgrind
           pueue
           du-dust
-          xgetres
           msgpack-tools
           tts
           nicolive-comments
