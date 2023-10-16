@@ -122,6 +122,7 @@
           cargo-edit
           cargo-insta
           cargo-generate
+          cargo-cross
 
           opam
 
