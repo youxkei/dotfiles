@@ -113,6 +113,7 @@
           ouch
           loophole
           stderred
+          cue
 
           #rustup
           rust-analyzer
