@@ -109,6 +109,7 @@
         loophole
         stderred
         cue
+        difftastic
 
         #rustup
         rust-analyzer
