@@ -506,7 +506,7 @@ return {
         config = function()
           require("copilot_cmp").setup {}
         end
-      }
+      },
     },
     config = function()
       local has_words_before = function()
