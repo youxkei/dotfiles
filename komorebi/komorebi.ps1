@@ -23,6 +23,11 @@ komorebic identify-tray-application exe iTunes.exe
 komorebic float-rule exe ShellExperienceHost.exe
 komorebic float-rule exe komorebi.exe
 komorebic float-rule exe DeepL.exe
+komorebic float-rule exe steam.exe
+komorebic float-rule exe th15.exe
+komorebic float-rule exe steamwebhelper.exe
+
+komorebic manage-rule exe VBAudioMatrix_x64.exe
 
 komorebic active-window-border enable
 komorebic active-window-border-colour 232 145 45

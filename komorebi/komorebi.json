@@ -1,0 +1,92 @@
+{
+  "app_specific_configuration_path": "$Env:USERPROFILE\\.cache\\komorebi\\applications.yaml",
+  "resize_delta": 50,
+  "window_container_behaviour": "Create",
+  "cross_monitor_move_behaviour": "Insert",
+  "unmanaged_window_operation_behaviour": "Op",
+  "focus_follows_mouse": "Windows",
+  "mouse_follows_focus": true,
+  "active_window_border_width": 20,
+  "active_window_border": true,
+  "active_window_border_colours": {
+    "single": { "r": 232, "g": 145, "b": 45 },
+    "stack": { "r": 232, "g": 145, "b": 45 },
+    "monocle": { "r": 232, "g": 145, "b": 45 }
+  },
+  "default_workspace_padding": 10,
+  "default_container_padding": 10,
+  "monitors": [
+    {
+      "workspaces": [
+        { "name": "c0", "layout": "BSP" },
+        { "name": "c1", "layout": "BSP" },
+        { "name": "c2", "layout": "BSP" },
+        { "name": "c3", "layout": "BSP" },
+        { "name": "c4", "layout": "BSP" },
+        { "name": "c5", "layout": "BSP" },
+        { "name": "c6", "layout": "BSP" },
+        { "name": "c7", "layout": "BSP" }
+      ]
+    },
+    {
+      "workspaces": [
+        { "name": "l0", "layout": "BSP" },
+        { "name": "l1", "layout": "BSP" },
+        { "name": "l2", "layout": "BSP" }
+      ]
+    },
+    {
+      "workspaces": [
+        { "name": "r0", "layout": "BSP" },
+        { "name": "r1", "layout": "BSP" },
+        { "name": "r2", "layout": "BSP" },
+        { "name": "r3", "layout": "BSP" },
+        { "name": "r4", "layout": "BSP" },
+        { "name": "r5", "layout": "BSP" }
+      ]
+    }
+  ],
+  "alt_focus_hack": false,
+  "window_hiding_behaviour": "Cloak",
+  "monitor_index_preferences": {
+    "0": { "left": 0, "top": 0, "right": 3840, "bottom": 2160 },
+    "1": { "left": -2160, "top": -1680, "right": 2160, "bottom": 3840 },
+    "2": { "left": 3840, "top": 0, "right": 3840, "bottom": 2160 }
+  },
+  "tray_and_multi_window_applications": [
+    {
+      "kind": "Exe",
+      "id": "Carla.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "VBAudioMatrix_x64.exe",
+      "matching_strategy": "Equals"
+    }
+  ],
+  "float_rules": [
+    {
+      "kind": "Exe",
+      "id": "DeepL.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "steam.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "th15.exe",
+      "matching_strategy": "Equals"
+    }
+  ],
+  "manage_rules": [
+    {
+      "kind": "Exe",
+      "id": "VBAudioMatrix_x64.exe",
+      "matching_strategy": "Equals"
+    }
+  ]
+}
