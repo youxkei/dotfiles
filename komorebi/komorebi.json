@@ -15,37 +15,6 @@
   },
   "default_workspace_padding": 10,
   "default_container_padding": 10,
-  "monitors": [
-    {
-      "workspaces": [
-        { "name": "c0", "layout": "BSP" },
-        { "name": "c1", "layout": "BSP" },
-        { "name": "c2", "layout": "BSP" },
-        { "name": "c3", "layout": "BSP" },
-        { "name": "c4", "layout": "BSP" },
-        { "name": "c5", "layout": "BSP" },
-        { "name": "c6", "layout": "BSP" },
-        { "name": "c7", "layout": "BSP" }
-      ]
-    },
-    {
-      "workspaces": [
-        { "name": "l0", "layout": "BSP" },
-        { "name": "l1", "layout": "BSP" },
-        { "name": "l2", "layout": "BSP" }
-      ]
-    },
-    {
-      "workspaces": [
-        { "name": "r0", "layout": "BSP" },
-        { "name": "r1", "layout": "BSP" },
-        { "name": "r2", "layout": "BSP" },
-        { "name": "r3", "layout": "BSP" },
-        { "name": "r4", "layout": "BSP" },
-        { "name": "r5", "layout": "BSP" }
-      ]
-    }
-  ],
   "alt_focus_hack": false,
   "window_hiding_behaviour": "Cloak",
   "monitor_index_preferences": {
@@ -61,11 +30,19 @@
     },
     {
       "kind": "Exe",
-      "id": "VBAudioMatrix_x64.exe",
+      "id": "qjackctl.exe",
       "matching_strategy": "Equals"
-    }
-  ],
-  "float_rules": [
+    },
+    {
+      "kind": "Exe",
+      "id": "jackd.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "iTunes.exe",
+      "matching_strategy": "Equals"
+    },
     {
       "kind": "Exe",
       "id": "DeepL.exe",
@@ -73,7 +50,39 @@
     },
     {
       "kind": "Exe",
+      "id": "OktaVerify.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "VBAudioMatrix_x64.exe",
+      "matching_strategy": "Equals"
+    }
+  ],
+  "float_rules": [
+    {
+      "kind": "Exe",
+      "id": "ShellExperienceHost.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "DeepL.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "OktaVerify.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
       "id": "steam.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "steamwebhelper.exe",
       "matching_strategy": "Equals"
     },
     {
