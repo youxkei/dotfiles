@@ -1,0 +1,18 @@
+#!/bin/zsh
+set -x
+set -eu
+
+DIR=$(wslpath "$(cmd.exe /c "<nul set /p=%UserProfile%" 2>/dev/null)"/Downloads)
+TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+echo "$TEMP_DIR"
+
+LATEST_INVOICES=$(ls -t $DIR/invoices*.zip | head -1)
+LATEST_RECIPT=$(ls -t $DIR/receipt*.pdf | head -1)
+
+echo "$LATEST_INVOICES $LATEST_RECIPT"
+
+unzip "$LATEST_INVOICES" -d "$TEMP_DIR"
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dAutoRotatePages=/None -sOutputFile="$DIR/invoice.pdf" "$LATEST_RECIPT" "$TEMP_DIR"/*.pdf
