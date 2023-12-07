@@ -4,6 +4,8 @@ export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim -c ASMANPAGER -'
 
+export BROWSER=wslview
+
 export ANDROID_HOME=~/Android/Sdk
 
 export XDG_CONFIG_HOME=~/.config
