@@ -178,6 +178,10 @@ return {
         end
       },
     },
+    init = function()
+      vim.g.skip_ts_context_commentstring_module = true
+      vim.g.matchup_matchparen_offscreen = { method = "" }
+    end,
     config = function()
       require("nvim-treesitter.configs").setup {
         ensure_installed = {
@@ -228,12 +232,9 @@ return {
             },
           },
         },
-        context_commentstring = {
-          enable = true,
-        },
       }
 
-      vim.g.matchup_matchparen_offscreen = { method = "" }
+      require("ts_context_commentstring").setup {}
     end,
   },
 
