@@ -110,6 +110,7 @@
         stderred
         cue
         difftastic
+        wslu
 
         #rustup
         rust-analyzer
