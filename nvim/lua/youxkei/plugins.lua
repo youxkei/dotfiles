@@ -510,14 +510,123 @@ return {
       },
     },
     config = function()
+      local lspkind = require("lspkind")
+      local utf8 = require("utf8")
+
       local has_words_before = function()
         if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
         return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
       end
 
+      local utf8_sub = function(str, n)
+        local utf8_chars = {}
+        local count = 0
+
+        for _, char in utf8.codes(str) do
+          if count < n then
+            table.insert(utf8_chars, char)
+          else
+            break
+          end
+          count = count + 1
+        end
+
+        return table.concat(utf8_chars)
+      end
+
+      local utf8_sub_last = function(str, n)
+        local utf8_str = {}
+        local utc8_chars = {}
+        local len = utf8.len(str)
+
+        for _, char in utf8.codes(str) do
+          table.insert(utf8_str, char)
+        end
+
+        for i = #utf8_str - n, #utf8_str + 1 do
+          table.insert(utc8_chars, utf8_str[i])
+        end
+
+        return table.concat(utc8_chars)
+      end
+
+      local source = {}
+      source.new = function()
+        local self = setmetatable({ cache = {} }, { __index = source })
+        return self
+      end
+      source.get_trigger_characters = function()
+        return { "\t", "\n", ".", ":", "(", "'", [["]], "[", ",", "#", "*", "@", "|", "=", "-", "{", "/", "\\", " ", "+",
+          "?", "`" }
+      end
+      source.complete = function(_, params, callback)
+        local curl = require("plenary.curl")
+
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
+        local before_cursor_lines = vim.api.nvim_buf_get_lines(0, 0, row - 1, false)
+        local after_cursor_lines = vim.api.nvim_buf_get_lines(0, row, -1, false)
+
+        local before_cursor = table.concat(before_cursor_lines, "\n") .. "\n" .. string.sub(current_line, 1, col)
+        local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
+
+        local json_payload = vim.fn.json_encode {
+          model = "text-davinci-003",
+          prompt = utf8_sub_last(before_cursor, 4093 * 2),
+          suffix = utf8_sub(after_cursor, 256 * 2),
+          max_tokens = 32,
+          temperature = 0,
+        }
+
+        curl.post("https://api.openai.com/v1/completions", {
+          headers = {
+            content_type = "application/json",
+            authorization = "Bearer " .. vim.env.OPENAI_API_KEY,
+          },
+          raw_body = json_payload,
+          callback = function(result)
+            if result.status == 200 then
+              vim.schedule(function()
+                if result.body == "" then
+                  callback()
+                  return
+                end
+
+                local body = vim.fn.json_decode(result.body)
+                local text = body.choices[1].text
+
+                if text == "" then
+                  callback()
+                  return
+                end
+
+                callback {
+                  isIncomplete = true,
+                  items = {
+                    {
+                      label = text,
+                      documentation = {
+                        kind = "markdown",
+                        value = table.concat({
+                          "```" .. params.context.filetype,
+                          text,
+                          "```"
+                        }, "\n"),
+                      }
+                    },
+                  },
+                }
+              end)
+            else
+              callback()
+            end
+          end,
+        })
+      end
+
       local cmp = require("cmp")
-      local lspkind = require("lspkind")
+      cmp.register_source("openai_codex", source.new())
 
       cmp.setup {
         snippet = {
@@ -539,7 +648,8 @@ return {
           end),
         },
         sources = cmp.config.sources {
-          { name = "copilot", group_index = 2 },
+          --{ name = "copilot", group_index = 2 },
+          { name = "openai_codex", group_index = 2 },
           { name = "nvim_lsp", group_index = 2 },
           { name = "snippy", group_index = 2 },
           { name = "path", group_index = 2 },
