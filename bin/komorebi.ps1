@@ -1,4 +1,4 @@
-iwr https://raw.githubusercontent.com/LGUG2Z/komorebi-application-specific-configuration/master/applications.yaml -OutFile "$Env:USERPROFILE\.cache\komorebi\applications.yaml"
+iwr https://raw.githubusercontent.com/LGUG2Z/komorebi-application-specific-configuration/master/applications.yaml -OutFile "$Env:USERPROFILE\.cache\komorebi\applications.yaml" -ProgressAction "SilentlyContinue"
 
 komorebic start -c "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" --whkd
 komorebic focus-follows-mouse enable -i windows
