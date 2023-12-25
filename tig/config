@@ -11,5 +11,9 @@ set main-view = line-number:display=no id:display=no date:display=no author:disp
 set diff-options = --histogram
 
 bind status + !git commit --amend --reset-author --allow-empty
+bind status e >nvr %(file)
+
+bind stage e >nvr %(file) %(lineno)
+
 bind main   c !git switch %(branch)
 bind main   C !git switch -d %(commit)

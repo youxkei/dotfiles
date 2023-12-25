@@ -1,10 +1,11 @@
 #!/bin/bash
+set -eu
 
 if [[ -z "$NVIM" || -z "$@" ]]; then
-    return 1
+    exit 1
 fi
 
-files=()
-for file in "$@"; do files+=("$(readlink -f $file)"); done
+file="$(readlink -f "$1")"
+lineno="${2:-1}"
 
-nvim --server $NVIM --remote-send '<cmd>lua require("toggleterm").toggle()<cr>' && nvim --server $NVIM --remote "$files"
+nvim --server $NVIM --remote-send "<cmd>lua require('toggleterm').toggle()<cr><cmd>e ${file}<cr>${lineno}G"
