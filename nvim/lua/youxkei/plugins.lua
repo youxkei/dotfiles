@@ -1163,6 +1163,18 @@ return {
     end
   },
 
+  {
+    "echasnovski/mini.bufremove",
+    version = "*",
+    config = function()
+      local bufremove = require("mini.bufremove")
+
+      bufremove.setup {}
+
+      vim.keymap.set("n", "<leader>bw", bufremove.wipeout, { desc = "Wipeout buffer" })
+    end
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
