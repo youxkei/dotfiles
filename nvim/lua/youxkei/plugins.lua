@@ -796,6 +796,10 @@ return {
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
           end,
         },
+
+        session_lens = {
+          buftypes_to_ignore = { "terminal" },
+        }
       }
 
       vim.keymap.set(
@@ -944,7 +948,22 @@ return {
         },
       }
 
-      vim.keymap.set("n", "<c-t>", function() toggleterm.toggle(0) end, { desc = "Open terminal" })
+      vim.keymap.set("n", "<c-t>", function()
+        if not YOUXKEI_TOGGLETERM_ID_MAP then
+          YOUXKEI_TOGGLETERM_ID_MAP = {}
+        end
+
+        local cwd = vim.fn.getcwd()
+        local id = YOUXKEI_TOGGLETERM_ID_MAP[cwd]
+
+        if not id then
+          id = YOUXKEI_TOGGLETERM_NEXT_ID or 1
+          YOUXKEI_TOGGLETERM_ID_MAP[cwd] = id
+          YOUXKEI_TOGGLETERM_NEXT_ID = id + 1
+        end
+
+        toggleterm.toggle(id)
+      end, { desc = "Open terminal" })
     end
   },
 
