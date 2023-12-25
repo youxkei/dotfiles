@@ -791,6 +791,7 @@ return {
     config = function()
       require("auto-session").setup {
         auto_session_suppress_dirs = { "~/repo" },
+        pre_save_cmds = { "%argd" },
         post_restore_cmds = {
           function()
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
