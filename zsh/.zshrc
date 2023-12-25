@@ -62,11 +62,6 @@ HISTSIZE=100000
 SAVEHIST=100000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
-[[ -x "$(which mcfly)"     ]] && eval "$(mcfly init zsh)"
-[[ -x "$(which starship)"  ]] && eval "$(starship init zsh)"
-[[ -x "$(which zoxide)"    ]] && eval "$(zoxide init zsh)"
-[[ -x "$(which direnv)"    ]] && eval "$(direnv hook zsh)"
-
 [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
 
 autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/compdump
@@ -88,6 +83,13 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+[[ -x "$(which mcfly)"    ]] && eval "$(mcfly init zsh)"
+[[ -x "$(which starship)" ]] && eval "$(starship init zsh)"
+[[ -x "$(which zoxide)"   ]] && eval "$(zoxide init zsh)"
+[[ -x "$(which direnv)"   ]] && eval "$(direnv hook zsh)"
+[[ -x "$(which eza)"      ]] && alias ls='eza -h --color=auto'
+[[ -x "$(which xcp)"      ]] && alias cp="xcp"
+
 autoload -Uz zmv
 alias zmv='noglob zmv -W'
 
@@ -97,17 +99,15 @@ export FZF_DEFAULT_OPTS="--reverse --ansi"
 
 export LESS='-SR'
 
-alias ls='eza -h --color=auto'
 alias ll='ls -al'
 alias tmux="tmux -2"
-alias cp="xcp"
 
 function chpwd() { ls }
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
-re-prompt() {
+function re-prompt() {
   starship_precmd
   zle .reset-prompt
   zle .accept-line
