@@ -835,7 +835,26 @@ return {
     end,
   },
 
-  "f-person/git-blame.nvim",
+  {
+    "f-person/git-blame.nvim",
+    config = function()
+      local ignored_filetypes = { "octo", "toggleterm" }
+      local gitblame = require("gitblame")
+      gitblame.setup {
+        ignored_filetypes = ignored_filetypes,
+      }
+
+      local augroup = vim.api.nvim_create_augroup("YouxkeiGitBlame", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = augroup,
+        pattern = ignored_filetypes,
+        callback = function()
+          gitblame.disable()
+          gitblame.enable()
+        end,
+      })
+    end
+  },
 
   {
     "monaqa/dial.nvim",
@@ -1172,6 +1191,18 @@ return {
       bufremove.setup {}
 
       vim.keymap.set("n", "<leader>bw", bufremove.wipeout, { desc = "Wipeout buffer" })
+    end
+  },
+
+  {
+    "pwntester/octo.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require "octo".setup {}
     end
   },
 
