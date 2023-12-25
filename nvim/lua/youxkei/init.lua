@@ -94,7 +94,7 @@ if fn.executable("win32yank.exe") then
   }
 end
 
-local augroup = vim.api.nvim_create_augroup("youxkei", {})
+local augroup = vim.api.nvim_create_augroup("youxkei", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = augroup,
   pattern = "init.lua",
