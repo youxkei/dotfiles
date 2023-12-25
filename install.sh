@@ -4,8 +4,8 @@ SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 # source path (relative to $SCRIPT_DIR) -> destination path
 declare -A PATHS=(
-    [.profile]=~/.profile
-    [.zprofile]=~/.zprofile
+    [.profile]=$HOME/.profile
+    [.zprofile]=$HOME/.zprofile
 
     [zsh]=$XDG_CONFIG_HOME/zsh
     [fontconfig]=$XDG_CONFIG_HOME/fontconfig
@@ -22,26 +22,26 @@ declare -A PATHS=(
     [compton.conf]=$XDG_CONFIG_HOME/compton.conf
     [starship.toml]=$XDG_CONFIG_HOME/starship.toml
 
-    [pipewire/start_carla.sh]=~/bin/start_carla
-    [i3/i3_move.sh]=~/bin/i3_move
-    [bin/talk]=~/bin/talk
-    [bin/mozc_config]=~/bin/mozc_config
-    [bin/clip]=~/bin/clip
-    [bin/focus_on_mouse]=~/bin/focus_on_mouse
-    [bin/fullhd.sh]=~/bin/fullhd
-    [bin/touhou.sh]=~/bin/touhou
-    [bin/4k.sh]=~/bin/4k
-    [bin/screenshot.sh]=~/bin/screenshot
-    [bin/backup.sh]=~/bin/backup
-    [bin/nicolive-comment-viewer.sh]=~/bin/nicolive-comment-viewer
-    [bin/git-fixup]=~/bin/git-fixup
-    [bin/git-wa]=~/bin/git-wa
+    [pipewire/start_carla.sh]=$HOME/bin/start_carla
+    [i3/i3_move.sh]=$HOME/bin/i3_move
+    [bin/talk]=$HOME/bin/talk
+    [bin/mozc_config]=$HOME/bin/mozc_config
+    [bin/clip]=$HOME/bin/clip
+    [bin/focus_on_mouse]=$HOME/bin/focus_on_mouse
+    [bin/fullhd.sh]=$HOME/bin/fullhd
+    [bin/touhou.sh]=$HOME/bin/touhou
+    [bin/4k.sh]=$HOME/bin/4k
+    [bin/screenshot.sh]=$HOME/bin/screenshot
+    [bin/backup.sh]=$HOME/bin/backup
+    [bin/nicolive-comment-viewer.sh]=$HOME/bin/nicolive-comment-viewer
+    [bin/git-fixup]=$HOME/bin/git-fixup
+    [bin/git-wa]=$HOME/bin/git-wa
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
 declare -A TEMPLATE_PATHS=(
-    [.Xresources.template]=~/.Xresources
-    [.profile_host.template]=~/.profile_host
+    [.Xresources.template]=$HOME/.Xresources
+    [.profile_host.template]=$HOME/.profile_host
 )
 
 # Check whether the source paths exist in $SCRIPT_DIR
