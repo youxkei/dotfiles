@@ -119,13 +119,5 @@ function git() {
   git-branchless wrap -- $@
 }
 
-function nvr() {
-  if [[ -z "$NVIM" || -z "$@" ]]; then
-    return 1
-  fi
-
-  nvim --server $NVIM --remote-send '<cmd>lua require("toggleterm").toggle()<cr>' && nvim --server $NVIM --remote "$@"
-}
-
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:

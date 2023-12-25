@@ -36,6 +36,7 @@ declare -A PATHS=(
     [bin/nicolive-comment-viewer.sh]=$HOME/bin/nicolive-comment-viewer
     [bin/git-fixup]=$HOME/bin/git-fixup
     [bin/git-wa]=$HOME/bin/git-wa
+    [bin/nvr]=$HOME/bin/nvr
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path

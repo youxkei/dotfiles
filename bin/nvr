@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ -z "$NVIM" || -z "$@" ]]; then
+    return 1
+fi
+
+files=()
+for file in "$@"; do files+=("$(readlink -f $file)"); done
+
+nvim --server $NVIM --remote-send '<cmd>lua require("toggleterm").toggle()<cr>' && nvim --server $NVIM --remote "$files"
