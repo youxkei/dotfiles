@@ -20,5 +20,5 @@ if ($monitor_count -ge 3) {
         komorebic ensure-named-workspaces $monitor $named_workspaces[$monitor]
     }
 } else {
-    komorebic ensure-named-workspaces $center_monitor $named_workspaces.Values
+    komorebic ensure-named-workspaces $center_monitor $named_workspaces[$left_monitor] $named_workspaces[$center_monitor] $named_workspaces[$right_monitor]
 }
