@@ -648,7 +648,7 @@ return {
           end),
         },
         sources = cmp.config.sources {
-          --{ name = "copilot", group_index = 2 },
+          { name = "copilot", group_index = 2 },
           { name = "openai_codex", group_index = 2 },
           { name = "nvim_lsp", group_index = 2 },
           { name = "snippy", group_index = 2 },
@@ -795,6 +795,7 @@ return {
         post_restore_cmds = {
           function()
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+            vim.cmd.LspRestart("copilot")
           end,
         },
 
