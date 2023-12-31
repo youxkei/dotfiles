@@ -111,6 +111,7 @@
         cue
         difftastic
         wslu
+        sheldon
 
         #rustup
         rust-analyzer
