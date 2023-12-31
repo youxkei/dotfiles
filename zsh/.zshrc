@@ -1,53 +1,5 @@
 bindkey -e
 
-# zinit {{{
-declare -A ZINIT=(
-  BIN_DIR  $XDG_CACHE_HOME/zinit/bin
-  HOME_DIR $XDG_CACHE_HOME/zinit
-)
-
-if [[ ! -d $ZINIT[BIN_DIR] ]]; then
-  if whence git > /dev/null; then
-    git clone --depth 1 https://github.com/zdharma-continuum/zinit.git $ZINIT[BIN_DIR]
-  fi
-fi
-
-source $ZINIT[BIN_DIR]/zinit.zsh
-
-# sync {{{
-zinit light momo-lab/zsh-abbrev-alias
-abbrev-alias -g -e CI='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}")'
-abbrev-alias -g -e B='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}" | xargs -I{} bash -c "git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk \"{print \\\$1}\"")'
-abbrev-alias -g -e PS='$(procs -c always | fzf --header-lines 1 | awk "{print \$1}")'
-abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
-# sync }}}
-
-# async {{{
-zinit ice lucid wait"0"
-zinit light zsh-users/zsh-history-substring-search
-
-zinit ice lucid wait"0" atload'_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
-
-zinit ice lucid wait"0"
-zinit light zsh-users/zsh-syntax-highlighting
-
-zinit ice lucid wait"0"
-zinit light zsh-users/zsh-completions
-
-zinit ice lucid wait"0" src"git-escape-magic"
-zinit light knu/zsh-git-escape-magic
-
-zinit ice lucid wait"0"
-zinit light zpm-zsh/undollar
-# async }}}
-
-# zinit }}}
-
-# zi is introduced by zinit
-unalias zi
-
-
 stty intr '^\'
 stty quit undef
 stty lnext undef
@@ -89,6 +41,15 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 [[ -x "$(which direnv)"   ]] && eval "$(direnv hook zsh)"
 [[ -x "$(which eza)"      ]] && alias ls='eza -h --color=auto'
 [[ -x "$(which xcp)"      ]] && alias cp="xcp"
+
+if [[ -x "$(which sheldon)"  ]]; then
+  eval "$(sheldon source)"
+
+  abbrev-alias -g -e CI='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}")'
+  abbrev-alias -g -e B='$(git tree --color | fzf | grep -Po "\\w.*$" | awk "{print \$1}" | xargs -I{} bash -c "git branch -av | grep {} | fzf -0 -1 | cut -c3- | awk \"{print \\\$1}\"")'
+  abbrev-alias -g -e PS='$(procs -c always | fzf --header-lines 1 | awk "{print \$1}")'
+  abbrev-alias -g -e DP='$(docker ps | tail -n +2 | fzf | awk "{print \$1}")'
+fi
 
 autoload -Uz zmv
 alias zmv='noglob zmv -W'
