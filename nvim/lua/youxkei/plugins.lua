@@ -1171,6 +1171,11 @@ return {
         label = {
           uppercase = false,
         },
+        modes = {
+          search = {
+            enabled = false,
+          },
+        },
       }
 
       vim.keymap.set({ "n", "x", "o" }, "s", flash.jump, { desc = "Jump with flash" })
