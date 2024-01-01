@@ -103,8 +103,6 @@
         cargo-generate
         cargo-cross
 
-        opam
-
         nodejs
         nodePackages.prettier
         nodePackages.typescript
