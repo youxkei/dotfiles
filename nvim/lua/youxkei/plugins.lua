@@ -183,6 +183,14 @@ return {
       vim.g.matchup_matchparen_offscreen = { method = "" }
     end,
     config = function()
+      require("nvim-treesitter.parsers").get_parser_configs().satysfi = {
+        install_info = {
+          url = "https://github.com/monaqa/tree-sitter-satysfi",
+          files = { "src/parser.c", "src/scanner.c" }
+        },
+        filetype = "satysfi",
+      }
+
       require("nvim-treesitter.configs").setup {
         ensure_installed = {
           "bash",
@@ -195,6 +203,7 @@ return {
           "lua",
           "nix",
           "rust",
+          "satysfi",
           "toml",
           "tsx",
           "typescript",
