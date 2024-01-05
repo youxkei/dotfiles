@@ -82,11 +82,6 @@
     },
     {
       "kind": "Exe",
-      "id": "steamwebhelper.exe",
-      "matching_strategy": "Equals"
-    },
-    {
-      "kind": "Exe",
       "id": "th15.exe",
       "matching_strategy": "Equals"
     }
