@@ -416,8 +416,7 @@ return {
           client.server_capabilities.documentRangeFormattingProvider = false
           on_attach(client)
         end,
-        -- TODO: refine tsserver-path
-        cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "/home/youxkei/.nix-profile/bin/tsserver" },
+        cmd = { "typescript-language-server", "--stdio" },
       }
 
       lspconfig.lua_ls.setup {
