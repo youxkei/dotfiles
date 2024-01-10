@@ -30,7 +30,7 @@
         figlet
         fzf
         jq
-        yq
+        yq-go
         jo
         jid
         direnv
