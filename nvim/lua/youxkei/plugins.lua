@@ -565,8 +565,8 @@ return {
         return self
       end
       source.get_trigger_characters = function()
-        return { "\t", "\n", ".", ":", "(", "'", [["]], "[", ",", "#", "*", "@", "|", "=", "-", "{", "/", "\\", " ", "+",
-          "?", "`" }
+        return { "\t", "\n", ".", ":", "(", ")", "'", [["]], "[", "]", ",", "#", "*", "@", "|", "=", "-", "{", "}", "/",
+          "\\", " ", "+", "?", "`" }
       end
       source.complete = function(_, params, callback)
         local curl = require("plenary.curl")
