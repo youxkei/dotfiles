@@ -583,7 +583,7 @@ return {
           model = "gpt-3.5-turbo-instruct",
           prompt = utf8_sub_last(before_cursor, 4093 * 2),
           suffix = utf8_sub(after_cursor, 256 * 2),
-          max_tokens = 32,
+          max_tokens = 64,
           temperature = 0,
         }
 
