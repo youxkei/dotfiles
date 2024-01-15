@@ -92,6 +92,7 @@
         sheldon
         colorized-logs
         podman-compose
+        graphviz
 
         #rustup
         rust-analyzer
