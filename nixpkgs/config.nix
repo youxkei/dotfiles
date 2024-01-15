@@ -96,6 +96,9 @@
 
         swiProlog
 
+        pipenv
+        pyenv
+
         #rustup
         rust-analyzer
         wasm-pack
