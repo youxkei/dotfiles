@@ -90,6 +90,7 @@
         difftastic
         wslu
         sheldon
+        colorized-logs
 
         #rustup
         rust-analyzer
