@@ -10,11 +10,8 @@
       name = "all";
       paths = with nixpkgs; [
         gitAndTools.gitFull
-        gitAndTools.hub
         gitAndTools.tig
-        gitAndTools.diff-so-fancy
         gitAndTools.gh
-        gitAndTools.delta
         git-branchless
 
         nix-prefetch-git
