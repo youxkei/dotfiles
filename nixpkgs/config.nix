@@ -94,6 +94,8 @@
         podman-compose
         graphviz
 
+        swiProlog
+
         #rustup
         rust-analyzer
         wasm-pack
