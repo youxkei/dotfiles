@@ -91,6 +91,7 @@
         wslu
         sheldon
         colorized-logs
+        podman-compose
 
         #rustup
         rust-analyzer
