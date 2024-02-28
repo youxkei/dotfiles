@@ -2,6 +2,7 @@
 	ui = auto
 [core]
 	editor = nvim
+	sshCommand = ssh.exe
 [alias]
 	tree = log --all --graph --oneline --decorate
 	rg = !git ls-files | xargs rg
@@ -27,6 +28,7 @@
 	useConfigOnly = true
 	name = youxkei
 	email = youxkei@gmail.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB++QTgmLSv6XpWqh2iQ1ub3lzVeFJo/GJucxy5HZjb
 [grep]
 	lineNumber = true
 [mergetool "neovim"]
@@ -40,5 +42,9 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+[gpg "ssh"]
+	program = "/home/youxkei/windows/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+[url "git@github.com:"]
+	insteadOf = https://github.com/
 [include]
 	path = config_host
