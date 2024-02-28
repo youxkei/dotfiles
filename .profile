@@ -32,6 +32,10 @@ fi
 PATH=$PNPM_HOME:~/bin:~/go/bin:$PATH
 export PATH
 
+if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
+    ln -s "$(wslpath "$(wslvar USERPROFILE)")" ~/windows
+fi
+
 #keychain -q --nogui ~/.ssh/id_ed25519
 #. ~/.keychain/$HOST-sh
 
