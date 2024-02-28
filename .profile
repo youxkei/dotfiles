@@ -32,5 +32,9 @@ fi
 PATH=$PNPM_HOME:~/bin:~/go/bin:$PATH
 export PATH
 
-keychain -q --nogui ~/.ssh/id_ed25519
-. ~/.keychain/$HOST-sh
+#keychain -q --nogui ~/.ssh/id_ed25519
+#. ~/.keychain/$HOST-sh
+
+# for 1password ssh agent
+alias ssh='ssh.exe'
+alias ssh-add='ssh-add.exe'
