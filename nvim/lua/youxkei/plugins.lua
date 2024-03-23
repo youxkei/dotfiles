@@ -1221,6 +1221,19 @@ return {
     end
   },
 
+  {
+    "johmsalas/text-case.nvim",
+    config = function()
+      local textcase = require("textcase")
+      textcase.setup {
+        default_keymappings_enabled = false,
+      }
+
+      vim.keymap.set({ "n", "v" }, "gas", function() textcase.operator("to_snake_case") end,
+        { desc = "Change to snake case" })
+    end
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
