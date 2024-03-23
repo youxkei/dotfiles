@@ -12,7 +12,6 @@
         gitAndTools.gitFull
         gitAndTools.tig
         gitAndTools.gh
-        git-branchless
 
         nix-prefetch-git
 
@@ -45,7 +44,6 @@
         qpdf
         stress-ng
         speedtest-cli
-        hugo
         evans
         inotify-tools
         starship

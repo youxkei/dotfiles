@@ -80,9 +80,5 @@ function re-prompt() {
 
 # zle -N accept-line re-prompt
 
-function git() {
-  git-branchless wrap -- $@
-}
-
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
