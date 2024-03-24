@@ -715,17 +715,17 @@ return {
 
       vim.keymap.set(
         "n", "<leader>tf",
-        builtin.find_files,
+        function() builtin.find_files { find_command = { "fd", "-t", "f", "-H" } } end,
         { desc = "Select from files with telescope" }
       )
       vim.keymap.set(
         "n", "<leader>tF",
-        function() builtin.find_files { hidden = true } end,
+        function() builtin.find_files { find_command = { "fd", "-t", "f", "-u" } } end,
         { desc = "Select from all files with telescope" }
       )
       vim.keymap.set(
         "n", "<leader>tg",
-        builtin.live_grep,
+        function() builtin.live_grep { additional_args = { "-.", "-g", "!/.git" } } end,
         { desc = "Grep from files with telescope" }
       )
       vim.keymap.set(
