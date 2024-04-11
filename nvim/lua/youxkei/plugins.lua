@@ -1022,7 +1022,6 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     dependencies = { "kevinhwang91/nvim-ufo" },
-    main = "ibl",
     config = function()
       require("ibl").setup {
         indent = {
@@ -1039,7 +1038,7 @@ return {
       }
 
       for _, keymap in pairs { "zo", "zO", "zc", "zC", "za", "zA", "zv", "zx", "zX", "zm", "zM", "zr", "zR" } do
-        vim.keymap.set("n", keymap, keymap .. "<cmd>IndentBlanklineRefresh<cr>", { remap = true })
+        vim.keymap.set("n", keymap, keymap .. [[<cmd>lua require("ibl").debounced_refresh(0)<cr>]], { remap = true })
       end
     end
   },
