@@ -205,6 +205,7 @@ return {
           "nix",
           "rust",
           "satysfi",
+          "terraform",
           "toml",
           "tsx",
           "typescript",
