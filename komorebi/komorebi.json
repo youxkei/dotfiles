@@ -6,9 +6,9 @@
   "unmanaged_window_operation_behaviour": "Op",
   "focus_follows_mouse": "Windows",
   "mouse_follows_focus": true,
-  "active_window_border_width": 20,
-  "active_window_border": true,
-  "active_window_border_colours": {
+  "border_width": 20,
+  "border": true,
+  "border_colours": {
     "single": { "r": 232, "g": 145, "b": 45 },
     "stack": { "r": 232, "g": 145, "b": 45 },
     "monocle": { "r": 232, "g": 145, "b": 45 }
@@ -83,6 +83,11 @@
     {
       "kind": "Exe",
       "id": "th15.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "th07.exe",
       "matching_strategy": "Equals"
     }
   ],
