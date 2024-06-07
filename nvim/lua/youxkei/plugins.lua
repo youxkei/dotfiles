@@ -477,6 +477,49 @@ return {
           null_ls.builtins.formatting.goimports,
         },
       }
+
+      StopLsp = function(restart)
+        local detach_clients = {}
+        local clients = require("lspconfig.util").get_lsp_clients()
+
+        for _, client in ipairs(clients) do
+          if client.name ~= "copilot" then
+            if vim.tbl_count(client.attached_buffers) > 0 then
+              detach_clients[client.name] = { client, vim.lsp.get_buffers_by_client_id(client.id) }
+            end
+            client.stop(true)
+          end
+        end
+
+        if not restart then
+          return
+        end
+
+        local timer = vim.loop.new_timer()
+        timer:start(
+          500,
+          100,
+          vim.schedule_wrap(function()
+            for client_name, tuple in pairs(detach_clients) do
+              local client, attached_buffers = unpack(tuple)
+
+              if client.is_stopped() then
+                if require("lspconfig.configs")[client_name] then
+                  for _, buf in pairs(attached_buffers) do
+                    require("lspconfig.configs")[client_name].launch(buf)
+                  end
+
+                  detach_clients[client_name] = nil
+                end
+              end
+            end
+
+            if next(detach_clients) == nil and not timer:is_closing() then
+              timer:close()
+            end
+          end)
+        )
+      end
     end,
   },
 
@@ -797,15 +840,21 @@ return {
     "rmagatti/auto-session",
     dependencies = {
       "nvim-telescope/telescope.nvim",
+      "neovim/nvim-lspconfig",
     },
     config = function()
       require("auto-session").setup {
         auto_session_suppress_dirs = { "~/repo" },
         pre_save_cmds = { "%argd" },
+        pre_restore_cmds = {
+          function()
+            StopLsp(false)
+          end
+        },
         post_restore_cmds = {
           function()
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-            vim.cmd.LspRestart("copilot")
+            -- vim.cmd.LspRestart("copilot")
           end,
         },
 

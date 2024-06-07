@@ -15,5 +15,5 @@ bind status e >nvr %(file)
 
 bind stage e >nvr %(file) %(lineno)
 
-bind main   c !git switch %(branch)
-bind main   C !git switch -d %(commit)
+bind main   c !git co %(branch)
+bind main   C !git co -d %(commit)
