@@ -6,7 +6,7 @@
 [alias]
 	tree = log --all --graph --oneline --decorate
 	rg = !git ls-files | xargs rg
-	co = switch
+	co = "!f() { git switch \"$@\"; nvim --server $NVIM --remote-send '<cmd>lua StopLsp(true)<cr>'; }; f"
 	fc = "!f() { git fetch origin \"$1\"; git switch -d FETCH_HEAD; }; f"
 [github]
 	user = youxkei
