@@ -1222,6 +1222,7 @@ return {
 
   {
     "folke/flash.nvim",
+    enabled = false,
     config = function()
       local flash = require("flash")
 
@@ -1280,6 +1281,18 @@ return {
 
       vim.keymap.set({ "n", "v" }, "gas", function() textcase.operator("to_snake_case") end,
         { desc = "Change to snake case" })
+    end
+  },
+
+  {
+    "echasnovski/mini.jump2d",
+    version = "*",
+    config = function()
+      local jump2d = require("mini.jump2d")
+
+      jump2d.setup {
+        labels = "hutenosadir,c.gpvqwjmkl:z;fybx"
+      }
     end
   },
 
