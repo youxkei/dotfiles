@@ -38,7 +38,6 @@
         unar
         grpcurl
         pup
-        youtube-dl
         tmux
         protobuf
         qpdf
@@ -91,6 +90,7 @@
         colorized-logs
         podman-compose
         graphviz
+        yt-dlp
 
         swiProlog
 
