@@ -96,6 +96,7 @@
 
         pipenv
         pyenv
+        uv
 
         #rustup
         rust-analyzer
