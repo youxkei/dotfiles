@@ -38,6 +38,8 @@ declare -A PATHS=(
     [bin/git-fixup]=$HOME/bin/git-fixup
     [bin/git-wa]=$HOME/bin/git-wa
     [bin/nvr]=$HOME/bin/nvr
+    [bin/ssh]=$HOME/bin/ssh
+    [bin/ssh-add]=$HOME/bin/ssh-add
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path

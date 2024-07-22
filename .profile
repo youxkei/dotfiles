@@ -35,10 +35,3 @@ export PATH
 if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
     ln -s "$(wslpath "$(wslvar USERPROFILE)")" ~/windows
 fi
-
-#keychain -q --nogui ~/.ssh/id_ed25519
-#. ~/.keychain/$HOST-sh
-
-# for 1password ssh agent
-alias ssh='ssh.exe'
-alias ssh-add='ssh-add.exe'
