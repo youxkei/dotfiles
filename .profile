@@ -35,3 +35,8 @@ export PATH
 if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
     ln -s "$(wslpath "$(wslvar USERPROFILE)")" ~/windows
 fi
+
+export OP_ACCOUNT=my.1password.com
+if [ -x "$(which op.exe)" ]; then
+    op.exe read -n op://development/wsl/password | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
+fi
