@@ -625,14 +625,26 @@ return {
         local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
 
         local json_payload = vim.fn.json_encode {
-          model = "gpt-3.5-turbo-instruct",
-          prompt = utf8_sub_last(before_cursor, 4093 * 2),
-          suffix = utf8_sub(after_cursor, 256 * 2),
-          max_tokens = 64,
-          temperature = 0,
+          model = "gpt-4o-mini",
+          response_format = { type = "json_object" },
+          messages = {
+            {
+              role = "system",
+              content = [[You are an intelligent code completion assistant. You will be provided with the code context before and after the cursor position, and you should generate the code that should be inserted at the cursor position. Your output should only include the code snippet to be inserted, without any additional text or explanations in JSON format like {"code": "..."}.]],
+            },
+            {
+              role = "user",
+              content = vim.fn.json_encode {
+                context = {
+                  before_cursor = before_cursor,
+                  after_cursor = after_cursor,
+                },
+              },
+            },
+          },
         }
 
-        curl.post("https://api.openai.com/v1/completions", {
+        curl.post("https://api.openai.com/v1/chat/completions", {
           headers = {
             content_type = "application/json",
             authorization = "Bearer " .. vim.env.OPENAI_API_KEY,
@@ -647,9 +659,16 @@ return {
                 end
 
                 local body = vim.fn.json_decode(result.body)
-                local text = body.choices[1].text
+                local message = body.choices[1].message.content
 
-                if text == "" then
+                if message == "" then
+                  callback()
+                  return
+                end
+
+                local completed = vim.fn.json_decode(message)
+
+                if completed.code == nil or completed.code == "" then
                   callback()
                   return
                 end
@@ -658,12 +677,12 @@ return {
                   isIncomplete = true,
                   items = {
                     {
-                      label = text,
+                      label = completed.code,
                       documentation = {
                         kind = "markdown",
                         value = table.concat({
                           "```" .. params.context.filetype,
-                          text,
+                          completed.code,
                           "```"
                         }, "\n"),
                       }
@@ -679,7 +698,7 @@ return {
       end
 
       local cmp = require("cmp")
-      cmp.register_source("openai_codex", source.new())
+      cmp.register_source("openai", source.new())
 
       cmp.setup {
         snippet = {
@@ -699,10 +718,17 @@ return {
               fallback()
             end
           end),
+          ["<c-a>"] = cmp.mapping.complete {
+            config = {
+              sources = {
+                { name = "openai" },
+              },
+            },
+          },
         },
         sources = cmp.config.sources {
           { name = "copilot", group_index = 2 },
-          { name = "openai_codex", group_index = 2 },
+          { name = "openai", group_index = 2 },
           { name = "nvim_lsp", group_index = 2 },
           { name = "snippy", group_index = 2 },
           { name = "path", group_index = 2 },
@@ -712,9 +738,12 @@ return {
         preselect = cmp.PreselectMode.None,
         formatting = {
           format = lspkind.cmp_format {
-            mode = "symbol",
+            mode = "text",
             max_width = 50,
-            symbol_map = { Copilot = "" }
+            menu = {
+              copilot = "[Copilot]",
+              openai = "[OpenAI]",
+            }
           }
         },
       }
