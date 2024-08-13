@@ -625,7 +625,7 @@ return {
         local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
 
         local json_payload = vim.fn.json_encode {
-          model = "gpt-4o-mini",
+          model = "gpt-4o",
           response_format = { type = "json_object" },
           messages = {
             {
