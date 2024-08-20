@@ -15,7 +15,7 @@ $named_workspaces = @{
 
 $monitor_count = gcim -Namespace root\wmi -ClassName WmiMonitorBasicDisplayParams | measure | % count
 
-if ($monitor_count -ge 4) {
+if ($monitor_count -ge 3) {
     foreach ($monitor in $named_workspaces.Keys) {
         komorebic ensure-named-workspaces $monitor $named_workspaces[$monitor]
     }
