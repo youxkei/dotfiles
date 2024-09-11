@@ -625,8 +625,26 @@ return {
         local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
 
         local json_payload = vim.fn.json_encode {
-          model = "gpt-4o",
-          response_format = { type = "json_object" },
+          model = "gpt-4o-2024-08-06",
+          response_format = {
+            type = "json_schema",
+            json_schema = {
+              name = "code_completion",
+              description = "complete the code between the code before cursor and the code after cursor",
+              strict = true,
+              schema = {
+                type = "object",
+                properties = {
+                  code = {
+                    type = "string",
+                    description = "completed code between the code before cursor and the code after cussor",
+                  },
+                },
+                additionalProperties = false,
+                required = { "code" },
+              },
+            },
+          },
           messages = {
             {
               role = "system",
@@ -722,6 +740,7 @@ return {
             config = {
               sources = {
                 { name = "openai" },
+                { name = "copilot" },
               },
             },
           },
@@ -760,6 +779,16 @@ return {
             }
           }
         })
+      })
+
+      local augroup = vim.api.nvim_create_augroup("YouxkeiInitialCompletion", { clear = true })
+      vim.api.nvim_create_autocmd("ModeChanged", {
+        group = augroup,
+        callback = function()
+          if vim.v.event.new_mode == "i" then
+            cmp.complete()
+          end
+        end,
       })
     end,
   },
