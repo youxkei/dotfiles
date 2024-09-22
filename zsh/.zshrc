@@ -1,9 +1,5 @@
 bindkey -e
 
-stty intr '^\'
-stty quit undef
-stty lnext undef
-
 setopt auto_pushd
 setopt hist_ignore_space
 setopt histignorealldups
