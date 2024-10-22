@@ -29,11 +29,11 @@
 	useConfigOnly = true
 	name = youxkei
 	email = youxkei@gmail.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB++QTgmLSv6XpWqh2iQ1ub3lzVeFJo/GJucxy5HZjb
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB++QTgmLSv6XpWqh2iQ1ub3lzVeFJo/GJucxy5HZjb GitHub
 [grep]
 	lineNumber = true
 [mergetool "neovim"]
-	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+	cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'set diffopt+=iwhite' -c '$wincmd w' -c 'wincmd J'
 [merge]
 	tool = neovim
 	conflictStyle = merge
