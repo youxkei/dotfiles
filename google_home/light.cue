@@ -26,7 +26,7 @@ metadata: {
 }
 
 automations: [
-    for i, _ in list.Repeat([_], 100) {
+    for i, _ in list.Repeat([_], 99) {
         starters: {
             type: "time.schedule"
             at: (#FormatTime & {time: (#AddSeconds & {time: config.time.lightOffStart, seconds: stepSeconds * i}).out}).out
@@ -36,7 +36,7 @@ automations: [
             {
                 type: "device.command.BrightnessAbsolute"
                 devices: config.target
-                brightness: 100 - i
+                brightness: 99 - i
             },
             {
                 type: "time.delay"
