@@ -21,8 +21,8 @@ let config = {
 let stepSeconds = div(((#ToSeconds & {time: config.time.lightOffEnd}).out - (#ToSeconds & {time: config.time.lightOffStart}).out), 100)
 
 metadata: {
-    name: "照明を徐々に暗くする"
-    description: "時刻に応じて照明を徐々に暗くする"
+    name: "照明オフ"
+    description: "時刻に応じて照明を徐々にオフにする"
 }
 
 automations: [
@@ -50,18 +50,18 @@ automations: [
         ]
     },
 
-    // {
-    //     starters: {
-    //         type: "time.schedule"
-    //         at: (#FormatTime & {time: config.time.lightOffEnd}).out
-    //     }
-    //
-    //     actions: [
-    //         {
-    //             type: "device.command.OnOff"
-    //             devices: config.target
-    //             on: false
-    //         },
-    //     ]
-    // }
+    {
+        starters: {
+            type: "time.schedule"
+            at: (#FormatTime & {time: config.time.lightOffEnd}).out
+        }
+
+        actions: [
+            {
+                type: "device.command.OnOff"
+                devices: config.target
+                on: false
+            },
+        ]
+    }
 ]
