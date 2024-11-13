@@ -17,3 +17,5 @@ bind stage e >nvr %(file) %(lineno)
 
 bind main c !git sw %(branch)
 bind main C !git sw -d %(commit)
+bind main M !git merge %(branch)
+bind main B !git rebase %(branch)
