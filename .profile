@@ -37,6 +37,7 @@ if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
 fi
 
 export OP_ACCOUNT=my.1password.com
-if [ -x "$(which op.exe)" ]; then
+if [ -x "$(which op.exe)" ] && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
     op.exe read -n op://development/wsl/password | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
+    touch /dev/shm/gnome-keyring-daemon-launched
 fi
