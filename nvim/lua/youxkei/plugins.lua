@@ -623,7 +623,7 @@ return {
         local after_cursor = string.sub(current_line, col + 1) .. "\n" .. table.concat(after_cursor_lines, "\n")
 
         local json_payload = vim.fn.json_encode {
-          model = "gpt-4o-2024-08-06",
+          model = "gpt-4o-mini",
           response_format = {
             type = "json_schema",
             json_schema = {
@@ -660,6 +660,8 @@ return {
           },
         }
 
+        callback { isIncomplete = true, items = { { label = "REQUEST" } } }
+
         curl.post("https://api.openai.com/v1/chat/completions", {
           headers = {
             content_type = "application/json",
@@ -667,6 +669,8 @@ return {
           },
           raw_body = json_payload,
           callback = function(result)
+            callback { isIncomplete = true, items = { { label = "RESPONSE" } } }
+
             if result.status == 200 then
               vim.schedule(function()
                 if result.body == "" then
@@ -685,12 +689,13 @@ return {
                 local completed = vim.fn.json_decode(message)
 
                 if completed.code == nil or completed.code == "" then
-                  callback()
+                  callback { isIncomplete = false, items = { { label = "EMPTY" } } }
+
                   return
                 end
 
                 callback {
-                  isIncomplete = true,
+                  isIncomplete = false,
                   items = {
                     {
                       label = completed.code,
@@ -707,7 +712,18 @@ return {
                 }
               end)
             else
-              callback()
+              callback {
+                isIncomplete = false,
+                items = {
+                  {
+                    label = "ERROR",
+                    documentation = {
+                      kind = "text",
+                      value = result.body,
+                    },
+                  }
+                }
+              }
             end
           end,
         })
