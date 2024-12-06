@@ -539,8 +539,6 @@ return {
       "hrsh7th/cmp-buffer",
       "octaltree/cmp-look",
       "hrsh7th/cmp-cmdline",
-      "dcampos/nvim-snippy",
-      "dcampos/cmp-snippy",
       "nvim-lua/plenary.nvim",
       "uga-rosa/utf8.nvim",
       "onsails/lspkind.nvim",
@@ -719,11 +717,6 @@ return {
       cmp.register_source("openai", source.new())
 
       cmp.setup {
-        snippet = {
-          expand = function(args)
-            require("snippy").expand_snippet(args.body)
-          end,
-        },
         window = {
           completion = cmp.config.window.bordered(),
           -- documentation = cmp.config.window.bordered(),
