@@ -50,8 +50,7 @@ fi
 autoload -Uz zmv
 alias zmv='noglob zmv -W'
 
-autoload -U select-word-style
-select-word-style bash
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"
