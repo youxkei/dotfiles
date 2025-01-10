@@ -53,7 +53,7 @@
         zoxide
         watchexec
         bottom
-        parallel
+        #parallel
         xcp
         diskonaut
         traceroute
@@ -66,7 +66,7 @@
         valgrind
         pueue
         du-dust
-        msgpack-tools
+        #msgpack-tools
         rpg-cli
         duf
         mcfly
@@ -92,7 +92,7 @@
         graphviz
         yt-dlp
 
-        swiProlog
+        swi-prolog
 
         pipenv
         pyenv
