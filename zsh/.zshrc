@@ -65,18 +65,49 @@ export _ZO_FZF_OPTS='--no-sort --bind=ctrl-z:ignore,btab:up,tab:down --cycle --k
 alias ll='ls -al'
 alias tmux="tmux -2"
 
-function chpwd() { ls }
+autoload -Uz add-zsh-hook 
+
+function ls-with-chpwd() { ls }
+add-zsh-hook chpwd ls-with-chpwd
 
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
-function re-prompt() {
-  starship_precmd
+function update-prompt() {
   zle .reset-prompt
   zle .accept-line
 }
 
-# zle -N accept-line re-prompt
+zle -N accept-line update-prompt
+
+export COMMAND_START_TIME=0
+function save-current-line-command-start-time() {
+  export CURRENT_LINE="$2"
+  export COMMAND_START_TIME=$EPOCHSECONDS
+}
+
+function notify-long-command-exec() {
+  case "$CURRENT_LINE" in
+    "tig") return ;;
+    "btm") return ;;
+    *"nvim"*) return ;;
+    "man"*) return ;;
+  esac
+
+  if (( COMMAND_START_TIME > 0 )); then
+    export COMMAND_DURATION=$(( EPOCHSECONDS - COMMAND_START_TIME ))
+
+    if (( COMMAND_DURATION >= 5 )); then
+      local current_line=${CURRENT_LINE//\'/ˈ}
+      pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'zsh-notify-long-command-exec' -Text 'Command finished','$current_line'" &!
+    fi
+
+    command_start_time=0
+  fi
+}
+
+add-zsh-hook preexec save-current-line-command-start-time
+add-zsh-hook precmd notify-long-command-exec
 
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
