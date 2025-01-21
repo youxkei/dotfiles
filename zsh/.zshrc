@@ -64,6 +64,7 @@ export _ZO_FZF_OPTS='--no-sort --bind=ctrl-z:ignore,btab:up,tab:down --cycle --k
 
 alias ll='ls -al'
 alias tmux="tmux -2"
+alias op=op.exe
 
 autoload -Uz add-zsh-hook 
 
