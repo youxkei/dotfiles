@@ -55,7 +55,6 @@
         bottom
         #parallel
         xcp
-        diskonaut
         traceroute
         tcptraceroute
         netcat
