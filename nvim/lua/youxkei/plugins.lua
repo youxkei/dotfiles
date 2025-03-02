@@ -1402,6 +1402,13 @@ return {
     },
   },
 
+  {
+    "stevearc/quicker.nvim",
+    event = "FileType qf",
+    opts = {},
+  },
+
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
