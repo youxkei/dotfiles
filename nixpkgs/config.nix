@@ -112,7 +112,7 @@
         nodePackages.typescript-language-server
         nodePackages.pnpm
 
-        go_1_21
+        go
         gopls
         gotools
         gore
