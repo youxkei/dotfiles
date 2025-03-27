@@ -21,6 +21,8 @@ export GLFW_IM_MODULE=ibus
 
 export PNPM_HOME=$XDG_DATA_HOME/pnpm
 
+export OP_ACCOUNT=my.1password.com
+
 if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
@@ -36,8 +38,7 @@ if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
     ln -s "$(wslpath "$(wslvar USERPROFILE)")" ~/windows
 fi
 
-export OP_ACCOUNT=my.1password.com
 if [ -x "$(which op.exe)" ] && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
-    op.exe read -n op://development/wsl/password | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
+    op.exe read -n "op://development/wsl/password" | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
     touch /dev/shm/gnome-keyring-daemon-launched
 fi
