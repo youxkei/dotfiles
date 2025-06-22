@@ -924,10 +924,6 @@ return {
             -- vim.cmd.LspRestart("copilot")
           end,
         },
-
-        session_lens = {
-          buftypes_to_ignore = { "terminal" },
-        }
       }
 
       vim.keymap.set(
@@ -1084,34 +1080,43 @@ return {
 
   {
     "akinsho/toggleterm.nvim",
-    config = function()
-      local toggleterm = require("toggleterm")
+    lazy = false,
+    opts = {
+      open_mapping = "<c-t>",
+      direction = "float",
+      float_opts = {
+        border = "double",
+      },
+    },
+    keys = {
+      {
+        "gf",
+        function()
+          local cfile = vim.fn.expand("<cfile>")
 
-      toggleterm.setup {
-        open_mapping = "<c-t>",
-        direction = "float",
-        float_opts = {
-          border = "double",
-        },
-      }
-
-      vim.keymap.set("n", "<c-t>", function()
-        if not YOUXKEI_TOGGLETERM_ID_MAP then
-          YOUXKEI_TOGGLETERM_ID_MAP = {}
-        end
-
-        local cwd = vim.fn.getcwd()
-        local id = YOUXKEI_TOGGLETERM_ID_MAP[cwd]
-
-        if not id then
-          id = YOUXKEI_TOGGLETERM_NEXT_ID or 1
-          YOUXKEI_TOGGLETERM_ID_MAP[cwd] = id
-          YOUXKEI_TOGGLETERM_NEXT_ID = id + 1
-        end
-
-        toggleterm.toggle(id)
-      end, { desc = "Open terminal" })
-    end
+          if cfile ~= "" then
+            vim.notify("Open file: " .. cfile, "info")
+            require("toggleterm").toggle()
+            vim.cmd.edit(cfile)
+          end
+        end,
+        ft = "toggleterm",
+        desc = "Open file under cursor in toggleterm",
+      },
+      {
+        "<c-l>",
+        function()
+          require("toggleterm").toggle()
+          vim.cmd.ClaudeCode()
+          vim.schedule(function()
+            vim.cmd.startinsert()
+          end)
+        end,
+        mode = "t",
+        ft = "toggleterm",
+        desc = "Open Claude in toggleterm",
+      },
+    },
   },
 
   { "f-person/git-blame.nvim" },
@@ -1408,6 +1413,45 @@ return {
     opts = {},
   },
 
+  {
+    "coder/claudecode.nvim",
+    opts = {},
+    lazy = false,
+    keys = {
+      { "<leader>a", nil, desc = "AI/Claude Code" },
+      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+      { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+      { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+      { "<leader>as", "<cmd>ClaudeCodeSend<cr><cmd>ClaudeCodeFocus<cr>", mode = "v", desc = "Send to Claude" },
+      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+
+      { "<c-l>", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<c-l>", "<cmd>ClaudeCode<cr>", mode = "t", ft = "claudecode", desc = "Toggle Claude" },
+      {
+        "<c-t>",
+        function()
+          vim.cmd.ClaudeCode()
+          require("toggleterm").toggle()
+        end,
+        mode = "t",
+        ft = "claudecode",
+        desc = "Toggle toggleterm in Claude"
+      },
+    },
+    init = function()
+      local augroup = vim.api.nvim_create_augroup("my.claudecode", {})
+      vim.api.nvim_create_autocmd("TermEnter", {
+        group = augroup,
+        pattern = "term://*/claude",
+        callback = function()
+          vim.bo.filetype = "claudecode"
+          vim.bo.buflisted = false
+        end,
+      })
+    end,
+  },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
