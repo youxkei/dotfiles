@@ -1383,6 +1383,9 @@ return {
 
   {
     "coder/claudecode.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+    },
     opts = {},
     lazy = false,
     keys = {
@@ -1415,7 +1418,7 @@ return {
       },
 
       { "<c-l>", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
-      { "<c-l>", "<cmd>ClaudeCode<cr>", mode = "t", ft = "claudecode", desc = "Toggle Claude" },
+      { "<c-l>", "<cmd>ClaudeCode<cr>", mode = "t", ft = "snacks_terminal", desc = "Toggle Claude" },
       {
         "<c-t>",
         function()
@@ -1423,21 +1426,10 @@ return {
           require("toggleterm").toggle()
         end,
         mode = "t",
-        ft = "claudecode",
+        ft = "snacks_terminal",
         desc = "Toggle toggleterm in Claude"
       },
     },
-    init = function()
-      local augroup = vim.api.nvim_create_augroup("my.claudecode", {})
-      vim.api.nvim_create_autocmd("TermEnter", {
-        group = augroup,
-        pattern = "term://*/claude",
-        callback = function()
-          vim.bo.filetype = "claudecode"
-          vim.bo.buflisted = false
-        end,
-      })
-    end,
   },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
