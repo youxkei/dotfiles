@@ -11,31 +11,31 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "LazySync",
-  callback = function()
-    local lazy = require("lazy")
-    lazy.load { plugins = lazy.plugins() }
-  end,
-})
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "LazyReload",
-  callback = function()
-    for _, plugin in pairs(require("lazy").plugins()) do
-      if type(plugin.config) == "function" and not plugin.lazy and plugin._.loaded then
-        plugin.config()
-      end
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "plugins.lua",
-  callback = function(event)
-    vim.loader.reset(event.file)
-  end
-});
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "LazySync",
+--   callback = function()
+--     local lazy = require("lazy")
+--     lazy.load { plugins = lazy.plugins() }
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "LazyReload",
+--   callback = function()
+--     for _, plugin in pairs(require("lazy").plugins()) do
+--       if type(plugin.config) == "function" and not plugin.lazy and plugin._.loaded then
+--         plugin.config()
+--       end
+--     end
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "plugins.lua",
+--   callback = function(event)
+--     vim.loader.reset(event.file)
+--   end
+-- });
 
 require("lazy").setup("youxkei.plugins", {
   defaults = {
