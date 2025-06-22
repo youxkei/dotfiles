@@ -1391,9 +1391,27 @@ return {
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
       { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
-      { "<leader>as", "<cmd>ClaudeCodeSend<cr><cmd>ClaudeCodeFocus<cr>", mode = "v", desc = "Send to Claude" },
       { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+
+      {
+        "<leader>as",
+        function()
+          vim.cmd.ClaudeCodeSend()
+
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "filetype") == "claudecode" then
+              vim.schedule(function()
+                vim.cmd.ClaudeCodeFocus()
+              end)
+
+              break
+            end
+          end
+        end,
+        mode = "v",
+        desc = "Send to Claude",
+      },
 
       { "<c-l>", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
       { "<c-l>", "<cmd>ClaudeCode<cr>", mode = "t", ft = "claudecode", desc = "Toggle Claude" },
