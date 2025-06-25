@@ -366,7 +366,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp", dependencies = { "hrsh7th/nvim-cmp" } },
-      "jose-elias-alvarez/null-ls.nvim",
+      "nvimtools/none-ls.nvim",
       "SmiteshP/nvim-navic",
     },
     config = function()
