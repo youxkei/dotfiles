@@ -1,0 +1,86 @@
+#!/bin/bash
+
+AUTHOR=$(gh auth status | grep -F "Logged in to github.com" | perl -pe 's/^.*Logged in to github.com account (\w+) .*$/$1/g')
+if [[ -z "$AUTHOR" ]]; then
+  echo "Error: Unable to determine GitHub username. Please ensure you are logged in to GitHub CLI."
+  exit 1
+fi
+
+REPO_INFO=$(gh repo view --json owner,name -q '.owner.login + "/" + .name')
+REPO_OWNER=$(echo $REPO_INFO | cut -d'/' -f1)
+REPO_NAME=$(echo $REPO_INFO | cut -d'/' -f2)
+if [[ -z "$REPO_OWNER" || -z "$REPO_NAME" ]]; then
+  echo "Error: Unable to determine repository owner or name. Please ensure you are in a GitHub repository."
+  exit 1
+fi
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [[ -z "$CURRENT_BRANCH" ]]; then
+  echo "Error: Unable to determine the current branch."
+  exit 1
+fi
+
+PR_NUMBER=$(gh api graphql -f query='
+query {
+  repository(owner: "'$REPO_OWNER'", name: "'$REPO_NAME'") {
+    pullRequests(first: 1, headRefName: "'$CURRENT_BRANCH'", states: OPEN) {
+      nodes {
+        number
+      }
+    }
+  }
+}
+' -q '.data.repository.pullRequests.nodes[0].number')
+if [[ -z "$PR_NUMBER" ]]; then
+  echo "Error: Unable to find an open pull request for the current branch."
+  exit 1
+fi
+
+
+gh api graphql -f query='
+query($endCursor: String) {
+  repository(owner: "'$REPO_OWNER'", name: "'$REPO_NAME'") {
+    pullRequest(number: '$PR_NUMBER') {
+      reviewThreads(last: 80) {
+        nodes {
+          resolvedBy { login }
+          path
+          diffSide
+          startDiffSide
+          line
+          originalLine
+          startLine
+          originalStartLine
+          isResolved
+          isCollapsed
+          isOutdated
+
+          comments(last: 100, after: $endCursor) {
+            nodes {
+              createdAt
+              author {
+                login
+              }
+              body
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+' --paginate -q '
+  # Get all review threads
+  .data.repository.pullRequest.reviewThreads.nodes[]
+  # Filter out resolved and outdated threads
+  | select(.isResolved == false and .isOutdated == false)
+  # Filter out comments authored by specified author
+  | .comments.nodes = [.comments.nodes[] | select(.author.login != "'$AUTHOR'")]
+  # Only include threads that still have comments after filtering
+  | select(.comments.nodes | length > 0)
+'
