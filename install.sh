@@ -40,6 +40,7 @@ declare -A PATHS=(
     [bin/nvr]=$HOME/bin/nvr
     [bin/ssh]=$HOME/bin/ssh
     [bin/ssh-add]=$HOME/bin/ssh-add
+    [bin/get-review-comments]=$HOME/bin/get-review-comments
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
