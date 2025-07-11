@@ -90,6 +90,7 @@
         podman-compose
         graphviz
         yt-dlp
+        protols
 
         swi-prolog
 

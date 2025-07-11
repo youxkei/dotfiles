@@ -460,6 +460,11 @@ return {
       }
 
 
+      lspconfig.protols.setup {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+
       local null_ls = require("null-ls")
       null_ls.setup {
         on_attach = on_attach,
