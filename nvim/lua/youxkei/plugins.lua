@@ -705,32 +705,25 @@ return {
 
   {
     "rmagatti/auto-session",
+    lazy = false,
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "neovim/nvim-lspconfig",
     },
-    config = function()
-      require("auto-session").setup {
-        auto_session_suppress_dirs = { "~/repo" },
-        pre_save_cmds = { "%argd" },
-        pre_restore_cmds = {
-          function()
-            StopLsp(false)
-          end
-        },
-        post_restore_cmds = {
-          function()
-            vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-            -- vim.cmd.LspRestart("copilot")
-          end,
-        },
-      }
-
-      vim.keymap.set(
-        "n", "<leader>ts", require("auto-session.session-lens").search_session,
-        { desc = "Select from sessions with telescope" }
-      )
-    end
+    opts = {
+      auto_session_suppress_dirs = { "~/repo" },
+      lsp_stop_on_restore = true,
+      auto_delete_empty_sessions = false,
+      pre_save_cmds = { "%argd" },
+      post_restore_cmds = {
+        function()
+          vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+        end,
+      },
+    },
+    keys = {
+      { "<leader>ts", function() vim.cmd.AutoSession("search") end, desc = "Select from sessions with telescope" },
+    },
   },
 
   {
