@@ -370,40 +370,57 @@ return {
       "SmiteshP/nvim-navic",
     },
     config = function()
-      local lspconfig = require("lspconfig")
+      local augroup_lsp = vim.api.nvim_create_augroup("youxkei.lsp", { clear = true })
+      local augroup_lsp_format = vim.api.nvim_create_augroup("youxkei.lsp.formatting", { clear = true })
 
-      local augroup_lsp_format = vim.api.nvim_create_augroup("LspFormatting", {})
-      local on_attach = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
-          vim.api.nvim_clear_autocmds { group = augroup_lsp_format, buffer = bufnr }
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            group = augroup_lsp_format,
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.format {
-                bufnr = bufnr,
-                timeout_ms = 10000,
-              }
-            end,
-          })
-        end
+      -- Global LspAttach autocmd (replaces on_attach)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = augroup_lsp,
+        callback = function(args)
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+          local bufnr = args.buf
 
-        --[[ if client.supports_method("textDocument/documentSymbol") then
-          require("nvim-navic").attach(client, bufnr)
-        end ]]
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
-        vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename with lsp" })
-      end
+          -- Auto-format on save
+          if client:supports_method("textDocument/formatting") then
+            vim.api.nvim_clear_autocmds { group = augroup_lsp_format, buffer = bufnr }
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = augroup_lsp_format,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format {
+                  bufnr = bufnr,
+                  timeout_ms = 10000,
+                }
+              end,
+            })
+          end
 
+          -- Disable formatting for ts_ls (use prettierd via null-ls instead)
+          if client.name == "ts_ls" then
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+          end
+
+          --[[ if client:supports_method("textDocument/documentSymbol") then
+            require("nvim-navic").attach(client, bufnr)
+          end ]]
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover with lsp" })
+          vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename with lsp" })
+        end,
+      })
+
+      -- Default capabilities for all LSP servers
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       capabilities.textDocument.foldingRange = {
         dynamicRegistration = false,
         lineFoldingOnly = true,
       }
 
-      lspconfig.gopls.setup {
+      vim.lsp.config("*", {
         capabilities = capabilities,
-        on_attach = on_attach,
+      })
+
+      vim.lsp.config.gopls = {
         settings = {
           gopls = {
             gofumpt = true,
@@ -411,19 +428,7 @@ return {
         },
       }
 
-      lspconfig.tsserver.setup {
-        capabilities = capabilities,
-        on_attach = function(client)
-          client.server_capabilities.documentFormattingProvider = false
-          client.server_capabilities.documentRangeFormattingProvider = false
-          on_attach(client)
-        end,
-        cmd = { "typescript-language-server", "--stdio" },
-      }
-
-      lspconfig.lua_ls.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
+      vim.lsp.config.lua_ls = {
         settings = {
           Lua = {
             format = {
@@ -449,25 +454,8 @@ return {
         },
       }
 
-      lspconfig.ocamllsp.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
-
-      lspconfig.rust_analyzer.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
-
-
-      lspconfig.protols.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
-
       local null_ls = require("null-ls")
       null_ls.setup {
-        on_attach = on_attach,
         sources = {
           null_ls.builtins.formatting.prettierd.with {
             filetypes = {
@@ -483,48 +471,28 @@ return {
         },
       }
 
-      StopLsp = function(restart)
-        local detach_clients = {}
-        local clients = require("lspconfig.util").get_lsp_clients()
+      vim.lsp.enable { "gopls", "lua_ls", "rust_analyzer", "protols" }
 
-        for _, client in ipairs(clients) do
-          if client.name ~= "copilot" then
-            if vim.tbl_count(client.attached_buffers) > 0 then
-              detach_clients[client.name] = { client, vim.lsp.get_buffers_by_client_id(client.id) }
-            end
-            client.stop(true)
+      vim.api.nvim_create_autocmd("FileType", {
+        group = augroup_lsp,
+        callback = function(ctx)
+          if not vim.tbl_contains(
+                { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+                ctx.match
+              ) then
+            return
           end
-        end
 
-        if not restart then
-          return
-        end
+          -- node
+          if vim.fn.findfile("package.json", ".;") ~= "" then
+            vim.lsp.start(vim.lsp.config.ts_ls)
+            return
+          end
 
-        local timer = vim.loop.new_timer()
-        timer:start(
-          500,
-          100,
-          vim.schedule_wrap(function()
-            for client_name, tuple in pairs(detach_clients) do
-              local client, attached_buffers = unpack(tuple)
-
-              if client.is_stopped() then
-                if require("lspconfig.configs")[client_name] then
-                  for _, buf in pairs(attached_buffers) do
-                    require("lspconfig.configs")[client_name].launch(buf)
-                  end
-
-                  detach_clients[client_name] = nil
-                end
-              end
-            end
-
-            if next(detach_clients) == nil and not timer:is_closing() then
-              timer:close()
-            end
-          end)
-        )
-      end
+          -- deno
+          vim.lsp.start(vim.lsp.config.denols)
+        end,
+      })
     end,
   },
 
@@ -760,7 +728,7 @@ return {
         ignored_filetypes = ignored_filetypes,
       }
 
-      local augroup = vim.api.nvim_create_augroup("YouxkeiGitBlame", { clear = true })
+      local augroup = vim.api.nvim_create_augroup("youxkei.git-blame", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = ignored_filetypes,
