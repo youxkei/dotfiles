@@ -469,7 +469,7 @@ return {
       null_ls.setup {
         on_attach = on_attach,
         sources = {
-          null_ls.builtins.formatting.prettier.with {
+          null_ls.builtins.formatting.prettierd.with {
             filetypes = {
               "javascript",
               "javascriptreact",
