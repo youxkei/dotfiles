@@ -112,6 +112,7 @@
         nodePackages.typescript
         nodePackages.typescript-language-server
         nodePackages.pnpm
+        deno
 
         go
         gopls
