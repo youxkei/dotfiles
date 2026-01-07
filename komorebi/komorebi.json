@@ -17,10 +17,19 @@
   "default_container_padding": 10,
   "alt_focus_hack": false,
   "window_hiding_behaviour": "Cloak",
-  "monitor_index_preferences": {
-    "0": { "left": 0, "top": 0, "right": 3840, "bottom": 2160 },
-    "1": { "left": -2160, "top": -1680, "right": 2160, "bottom": 3840 },
-    "2": { "left": 3840, "top": 0, "right": 3840, "bottom": 2160 }
+  "display_index_preferences": {
+    "0": "IOCFFFF-9&37b11675&0&UID262402",
+    "1": "GSM76F6-5&39ed454c&0&UID4354",
+    "2": "DEL4187-5&39ed454c&0&UID4354",
+    "3": "PHL095C-5&39ed454c&0&UID4354",
+    "4": "DEL42A1-5&39ed454c&0&UID4354",
+    "5": "DEL437D-5&39ed454c&0&UID4354",
+    "6": "DELA0F4-5&39ed454c&0&UID4354",
+    "7": "MRG4100-5&39ed454c&0&UID4352",
+    "8": "DEL437D-5&39ed454c&0&UID4352",
+    "9": "GSM7799-9&37b11675&0&UID262405",
+    "10": "SDC4178-4&32ada849&0&UID8388688",
+    "11": "AUS272A-9&37b11675&0&UID262406"
   },
   "tray_and_multi_window_applications": [
     {
