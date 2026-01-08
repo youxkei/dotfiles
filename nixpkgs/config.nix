@@ -9,9 +9,9 @@
     all = nixpkgs.buildEnv {
       name = "all";
       paths = with nixpkgs; [
-        gitAndTools.gitFull
-        gitAndTools.tig
-        gitAndTools.gh
+        gitFull
+        tig
+        gh
 
         nix-prefetch-git
 
@@ -64,7 +64,7 @@
         wasmtime
         valgrind
         pueue
-        du-dust
+        dust
         #msgpack-tools
         rpg-cli
         duf
@@ -72,8 +72,8 @@
         choose
         glances
         gping
-        dogdns
-        sumneko-lua-language-server
+        doggo
+        lua-language-server
         libtree
         imagemagick
         nvim
