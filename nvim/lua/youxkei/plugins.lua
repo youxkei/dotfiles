@@ -31,7 +31,8 @@ return {
               args = { "ls-remote", "--get-url", "origin" },
               enabled_recording = true,
               on_exit = function(ls_remote_job)
-                local url_head = "https://github.com/" .. ls_remote_job:result()[1]:match("^git@github.com:(.*).git$")
+                local url_head = "https://github.com/" ..
+                    ls_remote_job:result()[1]:match("^https://github.com/(.*).git$")
 
                 Job:new {
                   command = "git",
