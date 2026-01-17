@@ -1161,7 +1161,7 @@ return {
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr><cmd>ClaudeCodeFocus<cr>", desc = "Deny diff" },
 
       {
-        "<leader>as",
+        "<c-l>",
         function()
           vim.cmd.ClaudeCodeSend()
 
