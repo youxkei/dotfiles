@@ -18,18 +18,17 @@
   "alt_focus_hack": false,
   "window_hiding_behaviour": "Cloak",
   "display_index_preferences": {
-    "0": "IOCFFFF-9&37b11675&0&UID262402",
-    "1": "GSM76F6-5&39ed454c&0&UID4354",
-    "2": "DEL4187-5&39ed454c&0&UID4354",
-    "3": "PHL095C-5&39ed454c&0&UID4354",
-    "4": "DEL42A1-5&39ed454c&0&UID4354",
-    "5": "DEL437D-5&39ed454c&0&UID4354",
-    "6": "DELA0F4-5&39ed454c&0&UID4354",
-    "7": "MRG4100-5&39ed454c&0&UID4352",
-    "8": "DEL437D-5&39ed454c&0&UID4352",
-    "9": "GSM7799-9&37b11675&0&UID262405",
-    "10": "SDC4178-4&32ada849&0&UID8388688",
-    "11": "AUS272A-9&37b11675&0&UID262406"
+    "0": "IOCFFFF",
+    "1": "GSM76F6",
+    "2": "DEL4187",
+    "3": "PHL095C",
+    "4": "DEL42A1",
+    "5": "DEL437D",
+    "6": "DELA0F4",
+    "7": "MRG4100",
+    "8": "GSM7799",
+    "9": "SDC4178",
+    "10": "AUS272A"
   },
   "tray_and_multi_window_applications": [
     {
