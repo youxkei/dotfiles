@@ -26,6 +26,7 @@ $display_monitors = @{
     "DELA0F4" = @($center_monitor)
     "MRG4100" = @($center_monitor)
 
+    "GSM779A" = @($left_monitor)
     "GSM7799" = @($left_monitor)
     "SDC4178" = @($left_monitor)
 
