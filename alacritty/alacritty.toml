@@ -1,0 +1,159 @@
+[font]
+size = 9.0
+
+[font.normal]
+family = "Moralerspace Krypton HWNF"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "C"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "V"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "C"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "V"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "Key0"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[D"
+key = "Left"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOD"
+key = "Left"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[C"
+key = "Right"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOC"
+key = "Right"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[A"
+key = "Up"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOA"
+key = "Up"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001B[B"
+key = "Down"
+mode = "~AppCursor"
+
+[[keyboard.bindings]]
+chars = "\u001BOB"
+key = "Down"
+mode = "AppCursor"
+
+[[keyboard.bindings]]
+key = "T"
+mods = "Control|Shift"
+
+[keyboard.bindings.command]
+program = "alacritty"
+
+[[keyboard.bindings]]
+chars = "\u0011\t"
+key = "Tab"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u0011s\t"
+key = "Tab"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+chars = "\u00111"
+key = "Key1"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00112"
+key = "Key2"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00113"
+key = "Key3"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00114"
+key = "Key4"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00115"
+key = "Key5"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00116"
+key = "Key6"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00117"
+key = "Key7"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00118"
+key = "Key8"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u00119"
+key = "Key9"
+mods = "Control"
+
+[terminal]
+
+[scrolling]
+history = 100000
+multiplier = 3
+
+[keyboard]
+
+[terminal.shell]
+args = ["-u", "youxkei", "--cd", "~", "-e", "zsh", "-l", "-c", "nvim"]
+program = "/Windows/System32/wsl.exe"
