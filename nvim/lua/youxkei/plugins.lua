@@ -1192,6 +1192,19 @@ return {
         desc = "Toggle toggleterm in Claude"
       },
     },
+    config = function(_, opts)
+      require("claudecode").setup(opts)
+
+      local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = augroup,
+        pattern = "snacks_terminal",
+        callback = function(args)
+          vim.bo[args.buf].buflisted = false
+        end,
+      })
+    end
+
   },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
