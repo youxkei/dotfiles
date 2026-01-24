@@ -4,7 +4,6 @@
   packageOverrides = nixpkgs: with nixpkgs; rec {
     libtree = callPackage ./libtree.nix {};
     nvim = callPackage ./nvim.nix {};
-    loophole = callPackage ./loophole.nix {};
 
     all = nixpkgs.buildEnv {
       name = "all";
@@ -80,7 +79,6 @@
         nix-tree
         glow
         ouch
-        loophole
         stderred
         cue
         difftastic
