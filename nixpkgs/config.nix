@@ -42,17 +42,14 @@
         qpdf
         stress-ng
         speedtest-cli
-        evans
         inotify-tools
         starship
         tree-sitter
         redis
         bandwhich
-        tealdeer
         zoxide
         watchexec
         bottom
-        #parallel
         xcp
         traceroute
         tcptraceroute
@@ -60,12 +57,9 @@
         shellcheck
         multitail
         pv
-        wasmtime
         valgrind
         pueue
         dust
-        #msgpack-tools
-        rpg-cli
         duf
         mcfly
         choose
@@ -87,8 +81,13 @@
         colorized-logs
         podman-compose
         graphviz
+        brotli
+        arp-scan-rs
+        firebase-tools
+
         yt-dlp
         protols
+        python3Packages.yt-dlp-ejs
 
         swi-prolog
 
@@ -96,7 +95,6 @@
         pyenv
         uv
 
-        #rustup
         rust-analyzer
         wasm-pack
         wasm-bindgen-cli
@@ -105,7 +103,7 @@
         cargo-generate
         cargo-cross
 
-        nodejs
+        nodejs_24
         nodePackages.prettier
         nodePackages.typescript
         nodePackages.typescript-language-server
