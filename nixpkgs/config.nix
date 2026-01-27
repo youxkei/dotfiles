@@ -83,7 +83,6 @@
         graphviz
         brotli
         arp-scan-rs
-        firebase-tools
 
         yt-dlp
         protols
@@ -103,7 +102,7 @@
         cargo-generate
         cargo-cross
 
-        nodejs_24
+        nodejs_25
         nodePackages.prettier
         nodePackages.typescript
         nodePackages.typescript-language-server
