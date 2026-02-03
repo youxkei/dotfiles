@@ -1,0 +1,7 @@
+#!/bin/sh
+# Usage: notify <title> <message>
+
+title="${1:-Notification}"
+message="${2:-}"
+
+pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'notify' -Text '$title','$message'"
