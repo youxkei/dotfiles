@@ -100,7 +100,7 @@ function notify-long-command-exec() {
 
     if (( COMMAND_DURATION >= 5 )); then
       local current_line=${CURRENT_LINE//\'/ˈ}
-      pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'zsh-notify-long-command-exec' -Text 'Command finished','$current_line'" &!
+      notify "Command finished" "$current_line" &!
     fi
 
     command_start_time=0

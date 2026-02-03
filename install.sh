@@ -41,6 +41,7 @@ declare -A PATHS=(
     [bin/ssh]=$HOME/bin/ssh
     [bin/ssh-add]=$HOME/bin/ssh-add
     [bin/get-review-comments]=$HOME/bin/get-review-comments
+    [bin/notify]=$HOME/bin/notify
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
