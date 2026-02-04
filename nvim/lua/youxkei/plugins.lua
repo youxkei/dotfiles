@@ -472,7 +472,7 @@ return {
         },
       }
 
-      vim.lsp.enable { "gopls", "lua_ls", "rust_analyzer", "protols" }
+      vim.lsp.enable { "gopls", "lua_ls", "rust_analyzer", "protols", "pyright" }
 
       vim.api.nvim_create_autocmd("FileType", {
         group = augroup_lsp,
