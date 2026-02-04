@@ -93,6 +93,7 @@
         pipenv
         pyenv
         uv
+        pyright
 
         rust-analyzer
         wasm-pack
