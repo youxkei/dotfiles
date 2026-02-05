@@ -11,6 +11,7 @@
         gitFull
         tig
         gh
+        git-lfs
 
         nix-prefetch-git
 
