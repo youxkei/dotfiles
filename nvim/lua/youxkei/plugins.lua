@@ -1148,7 +1148,9 @@ return {
     dependencies = {
       "folke/snacks.nvim",
     },
-    opts = {},
+    opts = {
+      track_selection = false,
+    },
     lazy = false,
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
@@ -1204,7 +1206,6 @@ return {
         end,
       })
     end
-
   },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
