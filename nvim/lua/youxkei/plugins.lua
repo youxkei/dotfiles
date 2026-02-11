@@ -1148,9 +1148,6 @@ return {
     dependencies = {
       "folke/snacks.nvim",
     },
-    opts = {
-      track_selection = false,
-    },
     lazy = false,
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
