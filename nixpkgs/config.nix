@@ -4,6 +4,7 @@
   packageOverrides = nixpkgs: with nixpkgs; rec {
     libtree = callPackage ./libtree.nix {};
     nvim = callPackage ./nvim.nix {};
+    tree = callPackage ./tree.nix {};
 
     all = nixpkgs.buildEnv {
       name = "all";
@@ -84,6 +85,7 @@
         graphviz
         brotli
         arp-scan-rs
+        tree
 
         yt-dlp
         protols
