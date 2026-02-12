@@ -31,7 +31,7 @@ if [ -x "$(which nix-build)" ]; then
     export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
-PATH=$PNPM_HOME:~/bin:~/go/bin:~/.local/bin:$PATH
+PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH
 export PATH
 
 if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
