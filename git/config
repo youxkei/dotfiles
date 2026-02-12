@@ -44,7 +44,7 @@
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = "/home/youxkei/windows/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+	program = "/home/youxkei/windows/AppData/Local/Microsoft/WindowsApps/op-ssh-sign-wsl.exe"
 [include]
 	path = config_host
 [credential "https://github.com"]
