@@ -62,6 +62,11 @@ export LESS='-SR'
 # https://github.com/ajeetdsouza/zoxide/blob/18001773f35fba7bd46571c6edc0e8dfd7fd83ac/src/util.rs#L60-L81
 export _ZO_FZF_OPTS='--no-sort --bind=ctrl-z:ignore,btab:up,tab:down --cycle --keep-right --border=sharp --height=45% --info=inline --layout=reverse --tabstop=1 --exit-0 --select-1 --preview="\\command -p ls -Cp --color=always --group-directories-first {2..}" --preview-window=down,30%,sharp'
 
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+fi
+
+
 alias ll='ls -al'
 alias tmux="tmux -2"
 alias op=op.exe
