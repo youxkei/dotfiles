@@ -1115,6 +1115,14 @@ return {
 
       vim.keymap.set({ "n", "v" }, "gas", function() textcase.operator("to_snake_case") end,
         { desc = "Change to snake case" })
+      vim.keymap.set({ "n", "v" }, "gac", function() textcase.operator("to_camel_case") end,
+        { desc = "Change to lower camel case" })
+      vim.keymap.set({ "n", "v" }, "gap", function() textcase.operator("to_pascal_case") end,
+        { desc = "Change to pascal case" })
+      vim.keymap.set({ "n", "v" }, "gak", function() textcase.operator("to_dash_case") end,
+        { desc = "Change to kebab case" })
+      vim.keymap.set({ "n", "v" }, "gam", function() textcase.operator("to_constant_case") end,
+        { desc = "Change to macro case" })
     end
   },
 
