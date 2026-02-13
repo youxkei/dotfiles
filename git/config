@@ -9,6 +9,7 @@
 	sw = "!f() { git switch \"$@\"; nvim --server $NVIM --remote-send '<cmd>lua StopLsp(true)<cr>'; }; f"
 	fs = "!f() { git fetch && git fetch origin \"$1\" && git switch -d FETCH_HEAD; }; f"
 	dcb = "!f() { local branch=$(git rev-parse --abbrev-ref HEAD); git switch -d HEAD && git branch -D \"$branch\"; }; f"
+	redate = "!f() { GIT_COMMITTER_DATE=\"$1\" git commit --amend --no-edit --date=\"$1\"; }; f"
 [github]
 	user = youxkei
 [push]
