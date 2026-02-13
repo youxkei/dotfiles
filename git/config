@@ -44,10 +44,6 @@
 	gpgsign = true
 [gpg]
 	format = ssh
-[gpg "ssh"]
-	program = "/home/youxkei/windows/AppData/Local/Microsoft/WindowsApps/op-ssh-sign-wsl.exe"
-[include]
-	path = config_host
 [credential "https://github.com"]
 	helper = 
 	helper = !/home/youxkei/.nix-profile/bin/gh auth git-credential
@@ -56,3 +52,5 @@
 	helper = !/home/youxkei/.nix-profile/bin/gh auth git-credential
 [url "https://github.com/"]
 	insteadOf = git@github.com:
+[include]
+	path = config_host
