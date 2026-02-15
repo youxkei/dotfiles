@@ -1213,13 +1213,6 @@ return {
     end
   },
 
-  {
-    "nacro90/numb.nvim",
-    config = function()
-      require("numb").setup()
-    end
-  },
-
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
