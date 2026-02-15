@@ -160,9 +160,14 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+      },
       "JoosepAlviste/nvim-ts-context-commentstring",
       {
         "hiphish/rainbow-delimiters.nvim",
@@ -184,67 +189,47 @@ return {
       vim.g.matchup_matchparen_offscreen = { method = "" }
     end,
     config = function()
-      require("nvim-treesitter.parsers").get_parser_configs().satysfi = {
-        install_info = {
-          url = "https://github.com/monaqa/tree-sitter-satysfi",
-          files = { "src/parser.c", "src/scanner.c" }
-        },
-        filetype = "satysfi",
+      require("nvim-treesitter").install {
+        "bash", "cue", "dockerfile", "go", "gomod", "html",
+        "javascript", "json", "lua", "nix", "rust",
+        "terraform", "toml", "tsx", "typescript", "yaml",
       }
 
-      require("nvim-treesitter.configs").setup {
-        ensure_installed = {
-          "bash",
-          "cue",
-          "dockerfile",
-          "go",
-          "gomod",
-          "html",
-          "javascript",
-          "json",
-          "lua",
-          "nix",
-          "rust",
-          "satysfi",
-          "terraform",
-          "toml",
-          "tsx",
-          "typescript",
-          "yaml",
-        },
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true,
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.declaration",
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              ["]m"] = "@function.declaration",
-            },
-            goto_next_end = {
-              ["]M"] = "@function.declaration",
-            },
-            goto_previous_start = {
-              ["[m"] = "@function.declaration",
-            },
-            goto_previous_end = {
-              ["[M"] = "@function.declaration",
-            },
-          },
-        },
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("nvim-treesitter-start", {}),
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("nvim-treesitter-indent", {}),
+        callback = function()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+
+      require("nvim-treesitter-textobjects").setup {
+        select = { lookahead = true },
+        move = { set_jumps = true },
       }
+
+      vim.keymap.set({ "x", "o" }, "af", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@function.declaration", "textobjects")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "]m", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@function.declaration", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "]M", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@function.declaration", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[m", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@function.declaration", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[M", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@function.declaration", "textobjects")
+      end)
 
       require("ts_context_commentstring").setup {}
     end,
@@ -257,36 +242,6 @@ return {
       require("treesitter-context").setup {
         enable = true,
       }
-    end
-  },
-
-  {
-    "mfussenegger/nvim-treehopper",
-    enabled = false,
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      local tsht = require("tsht")
-
-      tsht.config.hint_keys = {
-        "e", "t", "u", "h", "o", "n", "a", "s", "i", "d", "p", "g", "y", "f", "c", "r", "l",
-        "k", "m", "x", "b", "j", "w", "q", "v",
-      }
-
-      vim.keymap.set("o", "n", tsht.nodes, { desc = "Select treesitter node" })
-      vim.keymap.set("v", "n", [[:lua require("tsht").nodes()<CR>]], { desc = "Select treesitter node" })
-    end
-  },
-
-  {
-    "David-Kunz/treesitter-unit",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      local unit = require("treesitter-unit")
-
-      vim.keymap.set("x", "iu", [[:lua require("treesitter-unit").select()<CR>]], { desc = "Select treesitter unit" })
-      vim.keymap.set("x", "au", [[:lua require("treesitter-unit").select(true)<CR>]], { desc = "Select treesitter unit" })
-      vim.keymap.set("o", "iu", function() unit.select() end, { desc = "Select treesitter unit" })
-      vim.keymap.set("o", "au", function() unit.select(true) end, { desc = "Select treesitter unit" })
     end
   },
 
@@ -305,6 +260,19 @@ return {
 
       vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
       vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
+    end,
+  },
+
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      local treesj = require("treesj")
+      treesj.setup {
+        use_default_keymaps = false,
+      }
+
+      vim.keymap.set("n", "<leader>j", treesj.toggle, { desc = "Togggle between split and join" })
     end,
   },
 
@@ -955,20 +923,6 @@ return {
 
   { "tpope/vim-repeat" },
   {
-    "mizlan/iswap.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      local iswap = require("iswap")
-      iswap.setup {
-        keys = "etuhonasidpgyfcrlkmxbjwqv"
-      }
-
-      vim.keymap.set("n", "gs", iswap.iswap_with, { desc = "Swap treesitter nodes" })
-      vim.keymap.set("n", "gn", [[^<cmd>lua require("iswap").iswap_node_with()<cr>]], { desc = "Swap treesitter nodes" })
-    end
-  },
-
-  {
     "utilyre/barbecue.nvim",
     dependencies = {
       "neovim/nvim-lspconfig",
@@ -1027,19 +981,6 @@ return {
           },
         },
       }
-    end,
-  },
-
-  {
-    "Wansmer/treesj",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      local treesj = require("treesj")
-      treesj.setup {
-        use_default_keymaps = false,
-      }
-
-      vim.keymap.set("n", "<leader>j", treesj.toggle, { desc = "Togggle between split and join" })
     end,
   },
 
