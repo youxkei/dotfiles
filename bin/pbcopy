@@ -1,2 +1,2 @@
 #!/bin/sh
-win32yank.exe -i --crlf
+wl-copy

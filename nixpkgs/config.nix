@@ -86,6 +86,7 @@
         brotli
         arp-scan-rs
         tree
+        wl-clipboard
 
         yt-dlp
         protols
