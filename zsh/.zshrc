@@ -10,9 +10,10 @@ HISTSIZE=100000
 SAVEHIST=100000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
-[[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
-
-autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/compdump
+if [[ -n $XDG_CACHE_HOME ]]; then
+  [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
+  autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/compdump
+fi
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
