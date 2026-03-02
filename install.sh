@@ -47,7 +47,6 @@ declare -A PATHS=(
 
 # source path (relative to $SCRIPT_DIR) -> destination path
 declare -A TEMPLATE_PATHS=(
-    [.Xresources.template]=$HOME/.Xresources
     [.profile_host.template]=$HOME/.profile_host
 )
 
