@@ -66,6 +66,16 @@
       "kind": "Exe",
       "id": "VBAudioMatrix_x64.exe",
       "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Wispr Flow.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Wispr Flow Helper.exe",
+      "matching_strategy": "Equals"
     }
   ],
   "float_rules": [
@@ -97,6 +107,16 @@
     {
       "kind": "Exe",
       "id": "th07.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Wispr Flow.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Wispr Flow Helper.exe",
       "matching_strategy": "Equals"
     }
   ],
