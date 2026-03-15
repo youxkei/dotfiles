@@ -47,8 +47,8 @@ fi
 if [ -x "$(which op.exe)" ] && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
     _i=0
     while [ "$_i" -lt 5 ]; do
-        if _password="$(op.exe read -n "op://development/wsl/password")"; then
-            printf '%s' "$_password" | gnome-keyring-daemon --replace --unlock
+        if _password="$(op.exe read -n "op://development/wsl/password" 2>/dev/null)"; then
+            printf '%s' "$_password" | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
             touch /dev/shm/gnome-keyring-daemon-launched
             break
         fi
