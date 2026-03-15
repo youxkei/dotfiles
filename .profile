@@ -23,6 +23,8 @@ export PNPM_HOME=$XDG_DATA_HOME/pnpm
 
 export OP_ACCOUNT=my.1password.com
 
+export CLAUDE_CODE_SKIP_WINDOWS_PROFILE=1
+
 if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
@@ -34,8 +36,12 @@ fi
 PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH
 export PATH
 
-if [ ! -e ~/windows ] && [ -x "$(which wslvar)" ]; then
-    ln -s "$(wslpath "$(wslvar USERPROFILE)")" ~/windows
+if [ -x "$(which wslvar)" ]; then
+    export USERPROFILE="$(wslpath "$(wslvar USERPROFILE)")"
+fi
+
+if [ -n "$USERPROFILE" ] && [ ! -e ~/windows ]; then
+    ln -s "$USERPROFILE" ~/windows
 fi
 
 if [ -x "$(which op.exe)" ] && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
