@@ -1140,6 +1140,9 @@ return {
         desc = "Toggle toggleterm in Claude"
       },
     },
+    opts = {
+      terminal_cmd = "claude --dangerously-skip-permissions",
+    },
     config = function(_, opts)
       require("claudecode").setup(opts)
 
