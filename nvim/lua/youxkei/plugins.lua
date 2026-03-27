@@ -1157,6 +1157,14 @@ return {
     end
   },
 
+  {
+    "A7Lavinraj/fyler.nvim",
+    dependencies = { "nvim-mini/mini.icons" },
+    branch = "stable",
+    lazy = false,
+    opts = {},
+  },
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
