@@ -3,9 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    gws.url = "github:googleworkspace/cli";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, gws }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -100,6 +101,7 @@
           wl-clipboard
           libtree
           tree
+          gws.packages.${system}.default
 
           # editor
           nvim
