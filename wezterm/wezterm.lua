@@ -1,39 +1,51 @@
-local wezterm = require("wezterm")
+local wezterm = require "wezterm"
+local act = wezterm.action
 
-return {
-  default_prog = { "/Windows/System32/wsl.exe", "-u", "youxkei", "--cd", "~", "-e", "zsh", "-l", "-c", "nvim" },
-  font = wezterm.font("UDEV Gothic NF"),
-  font_size = 8.5,
-  -- cell_width = 0.9,
-  -- line_height = 0.95,
+local config = wezterm.config_builder()
 
-  enable_tab_bar = false,
+config.font = wezterm.font("Moralerspace Krypton HWNF")
+config.font_size = 9.0
+config.color_scheme = "nord"
+config.warn_about_missing_glyphs = false
 
-  key_map_preference = "Physical",
-  keys = {
-    -- disable default assignments
-    { mods = "CTRL", key = "C", action = wezterm.action.DisableDefaultAssignment },
-    { mods = "CTRL", key = "V", action = wezterm.action.DisableDefaultAssignment },
-    { mods = "CTRL|SHIFT", key = "C", action = wezterm.action.DisableDefaultAssignment },
-    { mods = "CTRL|SHIFT", key = "V", action = wezterm.action.DisableDefaultAssignment },
+config.initial_cols = 400
+config.initial_rows = 80
 
-    -- font size change
-    { mods = "CTRL", key = "0", action = wezterm.action.ResetFontSize },
-    { mods = "CTRL", key = "=", action = wezterm.action.IncreaseFontSize },
-    { mods = "CTRL|SHIFT", key = "=", action = wezterm.action.IncreaseFontSize },
-    { mods = "CTRL", key = "-", action = wezterm.action.DecreaseFontSize },
+config.enable_tab_bar = false
+config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+config.scrollback_lines = 100000
 
-    -- for neovim
-    { mods = "CTRL", key = "Tab", action = wezterm.action.SendString("\x11\x09") },
-    { mods = "CTRL|SHIFT", key = "Tab", action = wezterm.action.SendString("\x11s\x09") },
-    { mods = "CTRL", key = "1", action = wezterm.action.SendString("\x111") },
-    { mods = "CTRL", key = "2", action = wezterm.action.SendString("\x112") },
-    { mods = "CTRL", key = "3", action = wezterm.action.SendString("\x113") },
-    { mods = "CTRL", key = "4", action = wezterm.action.SendString("\x114") },
-    { mods = "CTRL", key = "5", action = wezterm.action.SendString("\x115") },
-    { mods = "CTRL", key = "6", action = wezterm.action.SendString("\x116") },
-    { mods = "CTRL", key = "7", action = wezterm.action.SendString("\x117") },
-    { mods = "CTRL", key = "8", action = wezterm.action.SendString("\x118") },
-    { mods = "CTRL", key = "9", action = wezterm.action.SendString("\x119") },
-  },
+config.max_fps = 120
+config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
+
+config.default_prog = { "wsl.exe", "-u", "youxkei", "--cd", "~", "-e", "zsh", "-l", "-c", "nvim" }
+
+config.keys = {
+  { key = "c", mods = "CTRL", action = act.SendKey { key = "c", mods = "CTRL" } },
+  { key = "v", mods = "CTRL", action = act.SendKey { key = "v", mods = "CTRL" } },
+  { key = "c", mods = "CTRL|SHIFT", action = act.SendKey { key = "c", mods = "CTRL|SHIFT" } },
+  { key = "v", mods = "CTRL|SHIFT", action = act.SendKey { key = "v", mods = "CTRL|SHIFT" } },
+
+  { key = "0", mods = "CTRL", action = act.ResetFontSize },
+  { key = "=", mods = "CTRL|SHIFT", action = act.IncreaseFontSize },
+  { key = "=", mods = "CTRL", action = act.IncreaseFontSize },
+  { key = "-", mods = "CTRL", action = act.DecreaseFontSize },
+
+  { key = "t", mods = "CTRL|SHIFT", action = act.SpawnWindow },
+
+  { key = "Tab", mods = "CTRL", action = act.SendString "\x11\t" },
+  { key = "Tab", mods = "CTRL|SHIFT", action = act.SendString "\x11s\t" },
+
+  { key = "1", mods = "CTRL", action = act.SendString "\x111" },
+  { key = "2", mods = "CTRL", action = act.SendString "\x112" },
+  { key = "3", mods = "CTRL", action = act.SendString "\x113" },
+  { key = "4", mods = "CTRL", action = act.SendString "\x114" },
+  { key = "5", mods = "CTRL", action = act.SendString "\x115" },
+  { key = "6", mods = "CTRL", action = act.SendString "\x116" },
+  { key = "7", mods = "CTRL", action = act.SendString "\x117" },
+  { key = "8", mods = "CTRL", action = act.SendString "\x118" },
+  { key = "9", mods = "CTRL", action = act.SendString "\x119" },
 }
+
+return config
