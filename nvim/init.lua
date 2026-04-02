@@ -1,2 +1,2 @@
 require("youxkei.init")
-require("youxkei.lazy")
+require("youxkei.plugins.load").setup()

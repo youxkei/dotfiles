@@ -161,7 +161,6 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    lazy = false,
     build = ":TSUpdate",
     dependencies = {
       {
@@ -642,22 +641,23 @@ return {
 
   {
     "rmagatti/auto-session",
-    lazy = false,
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "neovim/nvim-lspconfig",
     },
-    opts = {
-      auto_session_suppress_dirs = { "~/repo" },
-      lsp_stop_on_restore = true,
-      auto_delete_empty_sessions = false,
-      pre_save_cmds = { "%argd" },
-      post_restore_cmds = {
-        function()
-          vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-        end,
-      },
-    },
+    config = function()
+      require("auto-session").setup {
+        auto_session_suppress_dirs = { "~/repo" },
+        lsp_stop_on_restore = true,
+        auto_delete_empty_sessions = false,
+        pre_save_cmds = { "%argd" },
+        post_restore_cmds = {
+          function()
+            vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+          end,
+        },
+      }
+    end,
     keys = {
       { "<leader>ts", function() vim.cmd.AutoSession("search") end, desc = "Select from sessions with telescope" },
     },
@@ -810,14 +810,15 @@ return {
 
   {
     "akinsho/toggleterm.nvim",
-    lazy = false,
-    opts = {
-      open_mapping = "<c-t>",
-      direction = "float",
-      float_opts = {
-        border = "double",
-      },
-    },
+    config = function()
+      require("toggleterm").setup {
+        open_mapping = "<c-t>",
+        direction = "float",
+        float_opts = {
+          border = "double",
+        },
+      }
+    end,
     keys = {
       {
         "gf",
@@ -1088,8 +1089,9 @@ return {
 
   {
     "stevearc/quicker.nvim",
-    event = "FileType qf",
-    opts = {},
+    config = function()
+      require("quicker").setup {}
+    end,
   },
 
   {
@@ -1097,7 +1099,6 @@ return {
     dependencies = {
       "folke/snacks.nvim",
     },
-    lazy = false,
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
@@ -1140,11 +1141,10 @@ return {
         desc = "Toggle toggleterm in Claude"
       },
     },
-    opts = {
-      terminal_cmd = "claude --dangerously-skip-permissions",
-    },
-    config = function(_, opts)
-      require("claudecode").setup(opts)
+    config = function()
+      require("claudecode").setup({
+        terminal_cmd = "claude --dangerously-skip-permissions",
+      })
 
       local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
@@ -1161,8 +1161,6 @@ return {
     "A7Lavinraj/fyler.nvim",
     dependencies = { "nvim-mini/mini.icons" },
     branch = "stable",
-    lazy = false,
-    opts = {},
   },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
