@@ -29,8 +29,8 @@ if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
 
-if [ -x "$(which nix-build)" ]; then
-    export LD_PRELOAD="$(nix-build '<nixpkgs>' -A stderred --no-out-link)/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+if [ -e ~/.nix-profile/lib/libstderred.so ]; then
+    export LD_PRELOAD="$HOME/.nix-profile/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
 PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH

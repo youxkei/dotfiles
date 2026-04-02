@@ -9,7 +9,7 @@ declare -A PATHS=(
 
     [zsh]=$XDG_CONFIG_HOME/zsh
     [fontconfig]=$XDG_CONFIG_HOME/fontconfig
-    [nixpkgs]=$XDG_CONFIG_HOME/nixpkgs
+    [nix]=$XDG_CONFIG_HOME/nix
     [nvim]=$XDG_CONFIG_HOME/nvim
     [i3]=$XDG_CONFIG_HOME/i3
     [i3status-rust]=$XDG_CONFIG_HOME/i3status-rust
