@@ -1071,16 +1071,6 @@ return {
       },
 
       { "<c-l>", "<cmd>ClaudeCodeFocus<cr>", desc = "Toggle Claude", mode = "n" },
-      {
-        "<c-t>",
-        function()
-          vim.cmd.ClaudeCode()
-          require("toggleterm").toggle()
-        end,
-        mode = "t",
-        ft = "snacks_terminal",
-        desc = "Toggle toggleterm in Claude"
-      },
     },
     config = function()
       require("claudecode").setup {
@@ -1091,13 +1081,22 @@ return {
             width = 0.95,
             height = 0.95,
             keys = {
-              claude_hide = {
+              {
                 "<c-l>",
                 function(self)
                   self:hide()
                 end,
                 mode = "t",
                 desc = "Hide",
+              },
+              {
+                "<c-t>",
+                function(self)
+                  self:hide()
+                  require("toggleterm").toggle()
+                end,
+                mode = "t",
+                desc = "Toggle toggleterm in Claude",
               },
             },
           },
