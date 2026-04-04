@@ -585,13 +585,17 @@ return {
           on_quit = true,
         },
         plugins = {
-          delete_hidden_buffers = false,
+          delete_hidden_buffers = true,
           stop_lsp_clients = true,
         },
         hooks = {
           before_save = function(name)
             vim.cmd("%argd")
             return {}
+          end,
+          before_load = function(name, user_data)
+            vim.cmd("%bdelete!")
+            return true
           end,
           after_load = function(name, user_data)
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
