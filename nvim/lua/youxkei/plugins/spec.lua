@@ -601,6 +601,7 @@ return {
     end,
     keys = {
       { "<leader>ts", "<cmd>PossessionPick<cr>", desc = "Select from sessions" },
+      { "<leader>r", "<cmd>restart PossessionLoadCwd<cr>", desc = "Restart and restore cwd session" },
     },
   },
 
@@ -788,6 +789,7 @@ return {
 
   {
     "folke/trouble.nvim",
+    enabled = false,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local trouble = require("trouble")
