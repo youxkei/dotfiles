@@ -550,7 +550,6 @@ return {
         explorer = {},
         notifier = {},
       }
-
     end,
     keys = {
       { "<leader>tf", function() require("snacks").picker.files { hidden = true } end, desc = "Select from files" },
@@ -1066,8 +1065,7 @@ return {
         desc = "Send to Claude",
       },
 
-      { "<c-l>", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
-      { "<c-l>", "<cmd>ClaudeCode<cr>", mode = "t", ft = "snacks_terminal", desc = "Toggle Claude" },
+      { "<c-l>", "<cmd>ClaudeCodeFocus<cr>", desc = "Toggle Claude", mode = "n" },
       {
         "<c-t>",
         function()
@@ -1082,6 +1080,23 @@ return {
     config = function()
       require("claudecode").setup {
         terminal_cmd = "claude --dangerously-skip-permissions",
+        terminal = {
+          snacks_win_opts = {
+            position = "float",
+            width = 0.95,
+            height = 0.95,
+            keys = {
+              claude_hide = {
+                "<c-l>",
+                function(self)
+                  self:hide()
+                end,
+                mode = "t",
+                desc = "Hide",
+              },
+            },
+          },
+        },
       }
 
       local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
