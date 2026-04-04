@@ -92,14 +92,30 @@ end
 local function deduplicate(specs)
   local index = {}
   local result = {}
+  local unique_fields = { "config", "init", "build", "version", "enabled" }
+  local merge_fields = { "keys", "deps" }
 
   for _, spec in ipairs(specs) do
     local pos = index[spec.name]
     if pos then
       local existing = result[pos]
-      for k, v in pairs(spec) do
-        if existing[k] == nil then
-          existing[k] = v
+
+      for _, k in ipairs(unique_fields) do
+        if spec[k] ~= nil then
+          if existing[k] ~= nil then
+            vim.notify(("duplicate field '%s' for plugin '%s'"):format(k, spec.name), vim.log.levels.WARN)
+          end
+          existing[k] = spec[k]
+        end
+      end
+
+      for _, k in ipairs(merge_fields) do
+        if spec[k] then
+          if existing[k] then
+            vim.list_extend(existing[k], spec[k])
+          else
+            existing[k] = spec[k]
+          end
         end
       end
     else

@@ -77,6 +77,9 @@ return {
       vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
       vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
       vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
+      vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = "#616E88" })
+      vim.api.nvim_set_hl(0, "SnacksPickerCursorLine", { bg = "#3B4252" })
+      vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = "#3B4252" })
       vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
     end
   },
@@ -278,18 +281,6 @@ return {
   },
 
   {
-    "rcarriga/nvim-notify",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    config = function()
-      vim.keymap.set(
-        "n", "<leader>tn",
-        require("telescope").extensions.notify.notify,
-        { desc = "Select from notifications with telescope" }
-      )
-    end
-  },
-
-  {
     "kevinhwang91/nvim-hlslens",
     config = function()
       require("hlslens").setup {
@@ -476,6 +467,7 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
+    enabled = false,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-path",
@@ -541,134 +533,81 @@ return {
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
+    "folke/snacks.nvim",
     config = function()
-      local telescope = require("telescope")
+      local snacks = require("snacks")
 
-      telescope.setup {
-        pickers = {
-          buffers = {
-            mappings = {
-              n = {
-                d = "delete_buffer",
+      snacks.setup {
+        picker = {
+          sources = {
+            buffers = {
+              win = {
+                list = { keys = { ["d"] = "bufdelete" } },
               },
             },
           },
         },
+        explorer = {},
+        notifier = {},
       }
 
-      local builtin = require("telescope.builtin")
-
-      vim.keymap.set(
-        "n", "<leader>tf",
-        function() builtin.find_files { find_command = { "fd", "-t", "f", "-H" } } end,
-        { desc = "Select from files with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>tF",
-        function() builtin.find_files { find_command = { "fd", "-t", "f", "-u" } } end,
-        { desc = "Select from all files with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>tg",
-        function() builtin.live_grep { additional_args = { "-.", "-g", "!/.git" } } end,
-        { desc = "Grep from files with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>tG",
-        function() builtin.live_grep { additional_args = { "-uuu" } } end,
-        { desc = "Grep from all files with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>tb",
-        builtin.buffers,
-        { desc = "Select from buffers with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>tr",
-        builtin.resume,
-        { desc = "Select from previous selections with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>lr",
-        builtin.lsp_references,
-        { desc = "Select from references with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>li",
-        builtin.lsp_implementations,
-        { desc = "Select from implementations with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>ls",
-        function() builtin.lsp_document_symbols { symbol_width = 80 } end,
-        { desc = "Select from symbols in buffer with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>lS",
-        function() builtin.lsp_dynamic_workspace_symbols { symbol_width = 80 } end,
-        { desc = "Select from symbols in project with teselcope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>le",
-        builtin.diagnostics,
-        { desc = "Select from diagnostics with telescope" }
-      )
-      vim.keymap.set(
-        "n", "<leader>ld",
-        builtin.lsp_definitions,
-        { desc = "Select from definitions with telescope" }
-      )
     end,
+    keys = {
+      { "<leader>tf", function() require("snacks").picker.files { hidden = true } end, desc = "Select from files" },
+      { "<leader>tF", function() require("snacks").picker.files { hidden = true, ignored = true } end, desc = "Select from all files" },
+      { "<leader>tg", function() require("snacks").picker.grep { hidden = true } end, desc = "Grep from files" },
+      { "<leader>tG", function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Grep from all files" },
+      { "<leader>tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers" },
+      { "<leader>tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections" },
+      { "<leader>lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references" },
+      { "<leader>li", function() require("snacks").picker.lsp_implementations() end, desc = "Select from implementations" },
+      { "<leader>ls", function() require("snacks").picker.lsp_symbols() end, desc = "Select from symbols in buffer" },
+      { "<leader>lS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "Select from symbols in project" },
+      { "<leader>le", function() require("snacks").picker.diagnostics() end, desc = "Select from diagnostics" },
+      { "<leader>ld", function() require("snacks").picker.lsp_definitions() end, desc = "Select from definitions" },
+      { "<leader>te", function() require("snacks").picker.explorer() end, desc = "Select with file browser" },
+      { "<leader>tn", function() require("snacks").picker.notifications() end, desc = "Select from notifications" },
+    },
   },
 
   {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    config = function()
-      local telescope = require("telescope")
-
-      telescope.load_extension("file_browser")
-
-      vim.keymap.set(
-        "n", "<leader>te",
-        telescope.extensions.file_browser.file_browser,
-        { desc = "Select with file browser" }
-      )
-    end,
-  },
-
-  {
-    "rmagatti/auto-session",
+    "jedrzejboczar/possession.nvim",
     dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "neovim/nvim-lspconfig",
+      "nvim-lua/plenary.nvim",
+      "folke/snacks.nvim",
     },
     config = function()
-      require("auto-session").setup {
-        auto_session_suppress_dirs = { "~/repo" },
-        lsp_stop_on_restore = true,
-        auto_delete_empty_sessions = false,
-        pre_save_cmds = { "%argd" },
-        post_restore_cmds = {
-          function()
+      require("possession").setup {
+        autosave = {
+          current = true,
+          cwd = true,
+          on_load = true,
+          on_quit = true,
+        },
+        plugins = {
+          delete_hidden_buffers = false,
+          stop_lsp_clients = true,
+        },
+        hooks = {
+          before_save = function(name)
+            vim.cmd("%argd")
+            return {}
+          end,
+          after_load = function(name, user_data)
             vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
           end,
         },
       }
     end,
     keys = {
-      { "<leader>ts", function() vim.cmd.AutoSession("search") end, desc = "Select from sessions with telescope" },
+      { "<leader>ts", "<cmd>PossessionPick<cr>", desc = "Select from sessions" },
     },
   },
 
   {
     "nvim-lualine/lualine.nvim",
     dependencies = {
-      "rmagatti/auto-session",
+      "jedrzejboczar/possession.nvim",
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
@@ -679,7 +618,7 @@ return {
         },
         sections = {
           lualine_b = {
-            require("auto-session.lib").current_session_name,
+            function() return require("possession.session").get_session_name() or "" end,
             { "branch", icon = "" },
             "diff",
             "diagnostics",
@@ -730,13 +669,6 @@ return {
     end
   },
 
-
-  {
-    "iamcco/markdown-preview.nvim",
-    build = function()
-      vim.fn["mkdp#util#install"]()
-    end
-  },
 
   {
     "nacro90/numb.nvim",
@@ -974,7 +906,7 @@ return {
     "folke/noice.nvim",
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      "folke/snacks.nvim",
     },
     config = function()
       require("noice").setup {
@@ -1041,11 +973,13 @@ return {
     "pwntester/octo.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
+      "folke/snacks.nvim",
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require "octo".setup {}
+      require("octo").setup {
+        picker = "snacks",
+      }
     end
   },
 
@@ -1144,9 +1078,9 @@ return {
       },
     },
     config = function()
-      require("claudecode").setup({
+      require("claudecode").setup {
         terminal_cmd = "claude --dangerously-skip-permissions",
-      })
+      }
 
       local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
