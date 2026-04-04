@@ -230,7 +230,9 @@ return {
         require("nvim-treesitter-textobjects.move").goto_previous_end("@function.declaration", "textobjects")
       end)
 
-      require("ts_context_commentstring").setup {}
+      require("ts_context_commentstring").setup {
+        enable_autocmd = false,
+      }
     end,
   },
 
