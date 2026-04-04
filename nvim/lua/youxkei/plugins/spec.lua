@@ -565,6 +565,7 @@ return {
       { "<leader>le", function() require("snacks").picker.diagnostics() end, desc = "Select from diagnostics" },
       { "<leader>ld", function() require("snacks").picker.lsp_definitions() end, desc = "Select from definitions" },
       { "<leader>te", function() require("snacks").picker.explorer() end, desc = "Select with file browser" },
+      { "<leader>tk", function() require("snacks").picker.keymaps() end, desc = "Select from keymaps" },
       { "<leader>tn", function() require("snacks").picker.notifications() end, desc = "Select from notifications" },
     },
   },
