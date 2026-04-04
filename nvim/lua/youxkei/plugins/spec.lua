@@ -585,21 +585,21 @@ return {
           on_quit = true,
         },
         plugins = {
-          delete_hidden_buffers = true,
-          stop_lsp_clients = true,
+          delete_buffers = true,
         },
         hooks = {
           before_save = function(name)
             vim.cmd("%argd")
+            for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+              if vim.bo[buf].buftype == "terminal" or vim.fn.buflisted(buf) == 0 then
+                vim.api.nvim_buf_delete(buf, { force = true })
+              end
+            end
             return {}
           end,
-          before_load = function(name, user_data)
-            vim.cmd("%bdelete!")
-            return true
-          end,
-          after_load = function(name, user_data)
-            vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
-          end,
+          -- after_load = function(name, user_data)
+          --   vim.cmd.luafile(vim.fn.stdpath("config") .. "/lua/youxkei/init.lua")
+          -- end,
         },
       }
     end,
