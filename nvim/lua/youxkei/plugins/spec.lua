@@ -807,8 +807,14 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     requires = "nvim-lua/plenary.nvim",
+    keys = {
+      { "<leader>gp", "<cmd>Gitsigns preview_hunk_inline<cr>", desc = "Preview hunk" },
+      { "<leader>ga", "<cmd>Gitsigns stage_hunk<cr>", desc = "Stage hunk" },
+      { "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>", desc = "Reset hunk" },
+      { "<leader>gn", "<cmd>Gitsigns next_hunk<cr>", desc = "Next hunk" },
+    },
     config = function()
-      require("gitsigns").setup()
+      require("gitsigns").setup {}
     end
   },
 
