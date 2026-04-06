@@ -4,10 +4,6 @@
       "rev": "e30b7f2008e52442154b66f7c519bfd2f1e32acb",
       "src": "https://github.com/numToStr/Comment.nvim"
     },
-    "auto-session": {
-      "rev": "62437532b38495551410b3f377bcf4aaac574ebe",
-      "src": "https://github.com/rmagatti/auto-session"
-    },
     "barbecue.nvim": {
       "rev": "3e31404f0b93a2c30d151abf0648650ac811c664",
       "src": "https://github.com/utilyre/barbecue.nvim"
@@ -100,6 +96,10 @@
       "rev": "c9317c2a8629d4e39e7cf47be74cb67f3ab37cda",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
+    "nord.nvim": {
+      "rev": "80c1e5321505aeb22b7a9f23eb82f1e193c12470",
+      "src": "https://github.com/shaunsingh/nord.nvim"
+    },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
       "src": "https://github.com/MunifTanjim/nui.nvim"
@@ -107,10 +107,6 @@
     "numb.nvim": {
       "rev": "12ef3913dea8727d4632c6f2ed47957a993de627",
       "src": "https://github.com/nacro90/numb.nvim"
-    },
-    "nvcode-color-schemes.vim": {
-      "rev": "3a0e624a67ecd2c7f990bc3c25a1044e85782b10",
-      "src": "https://github.com/christianchiarulli/nvcode-color-schemes.vim"
     },
     "nvim-cmp": {
       "rev": "a1d504892f2bc56c2e79b65c6faded2fd21f3eca",
@@ -127,10 +123,6 @@
     "nvim-navic": {
       "rev": "f5eba192f39b453675d115351808bd51276d9de5",
       "src": "https://github.com/SmiteshP/nvim-navic"
-    },
-    "nvim-notify": {
-      "rev": "8701bece920b38ea289b457f902e2ad184131a5d",
-      "src": "https://github.com/rcarriga/nvim-notify"
     },
     "nvim-treesitter": {
       "rev": "6878ae017d691a0df1c49d8a091c88a33e4c2d50",
@@ -188,14 +180,6 @@
       "rev": "c492741b4679b3cdd4d9e34138209784e061d916",
       "src": "https://github.com/lambdalisue/suda.vim"
     },
-    "telescope-file-browser.nvim": {
-      "rev": "3610dc7dc91f06aa98b11dca5cc30dfa98626b7e",
-      "src": "https://github.com/nvim-telescope/telescope-file-browser.nvim"
-    },
-    "telescope.nvim": {
-      "rev": "cfb85dcf7f822b79224e9e6aef9e8c794211b20b",
-      "src": "https://github.com/nvim-telescope/telescope.nvim"
-    },
     "text-case.nvim": {
       "rev": "e898cfd46fa6cde0e83abb624a16e67d2ffc6457",
       "src": "https://github.com/johmsalas/text-case.nvim"
@@ -207,10 +191,6 @@
     "treesj": {
       "rev": "26bc2a8432ba3ea79ed6aa346fba780a3d372570",
       "src": "https://github.com/Wansmer/treesj"
-    },
-    "trouble.nvim": {
-      "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
-      "src": "https://github.com/folke/trouble.nvim"
     },
     "ts-node-action": {
       "rev": "dda34b5b440a4f1137f8e815756a19cf655b516f",

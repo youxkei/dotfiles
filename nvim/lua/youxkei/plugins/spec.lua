@@ -67,21 +67,24 @@ return {
   },
 
   {
-    "christianchiarulli/nvcode-color-schemes.vim",
-    init = function()
+    "shaunsingh/nord.nvim",
+    config = function()
       vim.cmd.colorscheme("nord")
-      vim.api.nvim_set_hl(0, "Indent1", { fg = "#BF616A" })
-      vim.api.nvim_set_hl(0, "Indent2", { fg = "#D08770" })
-      vim.api.nvim_set_hl(0, "Indent3", { fg = "#EBCB8B" })
-      vim.api.nvim_set_hl(0, "Indent4", { fg = "#A3BE8C" })
-      vim.api.nvim_set_hl(0, "Indent5", { fg = "#B48EAD" })
-      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = "#434C5E" })
-      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = "#434C5E" })
-      vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = "#616E88" })
-      vim.api.nvim_set_hl(0, "SnacksPickerCursorLine", { bg = "#3B4252" })
-      vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = "#3B4252" })
-      vim.api.nvim_set_hl(0, "Comment", { fg = "#616E88", italic = false })
-    end
+
+      local c = require("nord.named_colors")
+      vim.api.nvim_set_hl(0, "Indent1", { fg = c.red })
+      vim.api.nvim_set_hl(0, "Indent2", { fg = c.orange })
+      vim.api.nvim_set_hl(0, "Indent3", { fg = c.yellow })
+      vim.api.nvim_set_hl(0, "Indent4", { fg = c.green })
+      vim.api.nvim_set_hl(0, "Indent5", { fg = c.purple })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = c.gray })
+      vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = c.gray })
+      vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = c.blue })
+      vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = c.light_gray_bright })
+      vim.api.nvim_set_hl(0, "SnacksPickerCursorLine", { bg = c.dark_gray })
+      vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = c.dark_gray })
+      vim.api.nvim_set_hl(0, "Comment", { fg = c.light_gray_bright, italic = false })
+    end,
   },
 
   {
