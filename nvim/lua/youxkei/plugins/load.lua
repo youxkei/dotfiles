@@ -216,13 +216,22 @@ function M.setup()
   -- 6. For each plugin: init, packadd, config, build
   for _, plugin in ipairs(plugins) do
     if plugin.init then
-      plugin.init()
+      local ok, err = pcall(plugin.init)
+      if not ok then
+        vim.notify("[load] init FAILED: " .. plugin.name .. ": " .. err, vim.log.levels.ERROR)
+      end
     end
 
-    vim.cmd.packadd(plugin.name)
+    local ok, err = pcall(vim.cmd.packadd, plugin.name)
+    if not ok then
+      vim.notify("[load] packadd FAILED: " .. plugin.name .. ": " .. err, vim.log.levels.ERROR)
+    end
 
     if plugin.config then
-      plugin.config()
+      local ok2, err2 = pcall(plugin.config)
+      if not ok2 then
+        vim.notify("[load] config FAILED: " .. plugin.name .. ": " .. err2, vim.log.levels.ERROR)
+      end
     end
 
     if plugin.build and changed[plugin.name] then
