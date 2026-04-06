@@ -79,7 +79,7 @@ return {
       vim.api.nvim_set_hl(0, "Indent5", { fg = c.purple })
       vim.api.nvim_set_hl(0, "IndentBlanklineSpaceChar", { fg = c.gray })
       vim.api.nvim_set_hl(0, "IndentBlanklineSpaceCharBlankline", { fg = c.gray })
-      vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = c.blue })
+      vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = c.glacier, bold = true })
       vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = c.light_gray_bright })
       vim.api.nvim_set_hl(0, "SnacksPickerCursorLine", { bg = c.dark_gray })
       vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = c.dark_gray })
