@@ -1,113 +1,90 @@
+# Generate komorebi.json from CUE
+wsl.exe --shell-type login -- cue export ~/repo/dotfiles/komorebi/komorebi.cue -o ~/repo/dotfiles/komorebi/komorebi.json --force
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to generate komorebi.json from CUE"
+    exit 1
+}
+
 iwr https://raw.githubusercontent.com/LGUG2Z/komorebi-application-specific-configuration/master/applications.yaml -OutFile "$Env:USERPROFILE\.cache\komorebi\applications.yaml" -ProgressAction "SilentlyContinue"
 
-komorebic start -c "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" --whkd
+komorebic start -c "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" --whkd --bar --clean-state
 komorebic focus-follows-mouse enable -i windows
 
 $left_monitor = 1
 $center_monitor = 0
 $right_monitor = 2
 
-$monitors = @($left_monitor, $center_monitor, $right_monitor)
-
-$named_workspaces = @{
+$logical_monitor_to_named_workspaces = @{
     $left_monitor = @(0..2 | % { "l$_" })
     $center_monitor = @(0..7 | % { "c$_" })
     $right_monitor = @(0..5 | % { "r$_" })
 }
 
-# Display to monitors mapping
-$display_monitors = @{
-    "IOCFFFF" = @($center_monitor)
-    "GSM76F6" = @($center_monitor)
-    "DEL4187" = @($center_monitor)
-    "PHL095C" = @($center_monitor)
-    "DEL42A1" = @($center_monitor)
-    "DEL437D" = @($center_monitor)
-    "DELA0F4" = @($center_monitor)
-    "MRG4100" = @($center_monitor)
-
-    "GSM779A" = @($left_monitor)
-    "GSM7799" = @($left_monitor)
-    "SDC4178" = @($left_monitor)
-
-    "AUS272A" = @($right_monitor)
+$logical_monitor_to_displays = @{
+    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352") # , "GSM76F6", "DEL4187", "PHL095C", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
+    $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353") # , "GSM7799", "SDC4178"
+    $right_monitor  = @("AUS272A-5&2686ec95&0&UID4355")
 }
 
-# Read display indices from komorebi.json
+# Validate consistency between komorebi.json display_index_preferences and script definitions
 $komorebi_config = Get-Content "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" | ConvertFrom-Json
-$display_index_preferences = $komorebi_config.display_index_preferences
+$config_device_ids = $komorebi_config.display_index_preferences.PSObject.Properties.Value
 
-# Create display indices mapping from config
-$display_indices = @{}
-foreach ($index in $display_index_preferences.PSObject.Properties.Name) {
-    $display_id = $display_index_preferences.$index
-    $display_indices[$display_id] = [int]$index
-}
-
-# Get monitor info from komorebic
-$monitor_info_json = komorebic monitor-info
-$monitor_info = $monitor_info_json | ConvertFrom-Json
-
-# Collect displays that are present and have valid mappings
-$present_displays = @()
-foreach ($monitor in $monitor_info) {
-    if ($display_monitors.ContainsKey($monitor.device) -and $display_indices.ContainsKey($monitor.device)) {
-        $present_displays += [PSCustomObject]@{
-            DisplayId = $monitor.device
-            ConfiguredIndex = $display_indices[$monitor.device]
+# Every device_id in config must match a device name in script
+$script_displays = $logical_monitor_to_displays.Values | ForEach-Object { $_ }
+foreach ($device_id in $config_device_ids) {
+    $matched = $false
+    foreach ($display in $script_displays) {
+        if ($device_id -eq $display) {
+            $matched = $true
+            break
         }
     }
-}
-
-$sorted_present_displays = $present_displays | Sort-Object -Property ConfiguredIndex
-
-# Find the first available display for fallback
-$fallback_display = $null
-if ($sorted_present_displays.Count -gt 0) {
-    $fallback_display = $sorted_present_displays[0].DisplayId
-}
-
-# Check which monitor indices are actually used in present displays
-$used_monitors = @{}
-foreach ($display in $present_displays) {
-    $monitor_indices = $display_monitors[$display.DisplayId]
-    foreach ($monitor_index in $monitor_indices) {
-        $used_monitors[$monitor_index] = $true
+    if (-not $matched) {
+        Write-Error "device_id $device_id in komorebi.json display_index_preferences does not match any device in logical_monitor_to_displays"
+        exit 1
     }
 }
 
-foreach ($monitor in $monitors) {
-    if (-not $used_monitors.ContainsKey($monitor) -and $fallback_display) {
-        # Monitor is not used, assign to fallback display
-        $monitor_name = switch ($monitor) {
-            $center_monitor { "center monitor" }
-            $left_monitor { "left monitor" }
-            $right_monitor { "right monitor" }
-            default { "monitor index $monitor" }
+# Every device name in script must have a matching device_id in config
+foreach ($display in $script_displays) {
+    $matched = $false
+    foreach ($device_id in $config_device_ids) {
+        if ($device_id -eq $display) {
+            $matched = $true
+            break
         }
-        Write-Host "$monitor_name not found in connected displays, assigning its workspaces to fallback display $fallback_display"
-        $display_monitors[$fallback_display] += $monitor
+    }
+    if (-not $matched) {
+        Write-Error "Device $display in logical_monitor_to_displays has no matching device_id in komorebi.json display_index_preferences"
+        exit 1
     }
 }
 
-$compacted_index = 0
-foreach ($display in $present_displays) {
-    $display_id = $display.DisplayId
-    $monitor_indices = $display_monitors[$display_id]
+# Detect connected monitors and fallback missing logical monitors to center display
+$monitor_info = komorebic monitor-info | ConvertFrom-Json
+$connected_devices = $monitor_info | ForEach-Object { $_.device_id }
 
-    # Collect all workspaces for this display
-    $all_workspaces = @()
-    foreach ($monitor_index in $monitor_indices) {
-        if ($named_workspaces.ContainsKey($monitor_index)) {
-            $all_workspaces += $named_workspaces[$monitor_index]
+$fallback_ws = @()
+foreach ($logical_monitor in $logical_monitor_to_displays.Keys) {
+    $displays = $logical_monitor_to_displays[$logical_monitor]
+    $connected = $false
+
+    foreach ($display in $displays) {
+        if ($display -in $connected_devices) {
+            $connected = $true
+            break
         }
     }
 
-    # Call ensure-named-workspaces once with all workspaces
-    if ($all_workspaces.Count -gt 0) {
-        Write-Host "Ensuring workspaces for display ${compacted_index}: $($all_workspaces -join ', ')"
-        komorebic ensure-named-workspaces $compacted_index $all_workspaces
+    if (-not $connected) {
+        $ws_names = $logical_monitor_to_named_workspaces[$logical_monitor]
+        Write-Host "Logical monitor $logical_monitor not found, adding workspaces to fallback display: $($ws_names -join ', ')"
+        $fallback_ws += $ws_names
     }
+}
 
-    $compacted_index++
+if ($fallback_ws.Count -gt 0) {
+    $all_ws = $logical_monitor_to_named_workspaces[$center_monitor] + $fallback_ws
+    komorebic ensure-named-workspaces 0 @all_ws
 }

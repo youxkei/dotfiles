@@ -1,4 +1,7 @@
-komorebic stop --whkd
+$env:KOMOREBI_CONFIG_HOME = "$env:USERPROFILE\.config\komorebi"
+$env:WHKD_CONFIG_HOME = "$env:USERPROFILE\.config\whkd"
+
+komorebic stop --whkd --bar
 
 function Get-MonitorCount {
     (Get-CimInstance -Namespace root\wmi -ClassName WmiMonitorBasicDisplayParams -ErrorAction SilentlyContinue).Count
@@ -19,7 +22,7 @@ while ($true) {
 
     if ($currentCount -ne $prevCount) {
         Write-Host "Monitor count changed ($prevCount -> $currentCount), restarting komorebi..."
-        komorebic stop --whkd
+        komorebic stop --whkd --bar
         Start-Sleep -Seconds 2
         & $komorebiScript
         $prevCount = $currentCount
