@@ -244,7 +244,21 @@ function M.setup()
     end
   end
 
-  -- 7. Set up keymaps from keys specs
+  -- 7. PackUpdate command: update plugins and remove inactive ones from disk
+  vim.api.nvim_create_user_command("PackUpdate", function()
+    local inactive = vim.iter(vim.pack.get())
+      :filter(function(x) return not x.active end)
+      :map(function(x) return x.spec.name end)
+      :totable()
+
+    if #inactive > 0 then
+      vim.pack.del(inactive)
+    end
+
+    vim.pack.update()
+  end, {})
+
+  -- 8. Set up keymaps from keys specs
   for _, plugin in ipairs(plugins) do
     if plugin.keys then
       for _, key in ipairs(plugin.keys) do
