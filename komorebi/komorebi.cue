@@ -102,7 +102,7 @@ _barBase: {
 	right_widgets: [{
 		Update: {enable: true}
 	}, {
-		Media: {enable: true}
+		Media: {enable: false}
 	}, {
 		Storage: {enable: true}
 	}, {
