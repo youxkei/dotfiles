@@ -10,8 +10,8 @@ import "list"
 
 _logicalMonitors: [{
 	// center
-	unmigrated_devices: ["GSM76F6", "DEL4187", "PHL095C", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"]
-	device_ids:         ["IOCFFFF-5&2686ec95&0&UID4352"]
+	unmigrated_devices: ["GSM76F6", "DEL4187", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"]
+	device_ids:         ["IOCFFFF-5&2686ec95&0&UID4352", "PHL095C-5&39ed454c&0&UID4354"]
 	workspaces: [for i in list.Range(0, 8, 1) {"c\(i)"}]
 }, {
 	// left

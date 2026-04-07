@@ -21,7 +21,7 @@ $logical_monitor_to_named_workspaces = @{
 }
 
 $logical_monitor_to_displays = @{
-    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352") # , "GSM76F6", "DEL4187", "PHL095C", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
+    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352", "PHL095C-5&39ed454c&0&UID4354") # , "GSM76F6", "DEL4187", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
     $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688") # , "GSM7799"
     $right_monitor  = @("AUS272A-5&2686ec95&0&UID4355")
 }
