@@ -1,7 +1,7 @@
-# Generate komorebi.json from CUE
-wsl.exe --shell-type login -- cue export ~/repo/dotfiles/komorebi/komorebi.cue -o ~/repo/dotfiles/komorebi/komorebi.json --force
+# Generate komorebi.json and komorebi.bar.{0..2}.json from CUE
+wsl.exe --shell-type login -- make -C ~/repo/dotfiles komorebi
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "Failed to generate komorebi.json from CUE"
+    Write-Error "Failed to generate komorebi configs from CUE"
     exit 1
 }
 
@@ -10,9 +10,9 @@ iwr https://raw.githubusercontent.com/LGUG2Z/komorebi-application-specific-confi
 komorebic start -c "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" --whkd --bar --clean-state
 komorebic focus-follows-mouse enable -i windows
 
-$left_monitor = 1
-$center_monitor = 0
-$right_monitor = 2
+$left_monitor = "left"
+$center_monitor = "center"
+$right_monitor = "right"
 
 $logical_monitor_to_named_workspaces = @{
     $left_monitor = @(0..2 | % { "l$_" })
@@ -22,7 +22,7 @@ $logical_monitor_to_named_workspaces = @{
 
 $logical_monitor_to_displays = @{
     $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352") # , "GSM76F6", "DEL4187", "PHL095C", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
-    $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353") # , "GSM7799", "SDC4178"
+    $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688") # , "GSM7799"
     $right_monitor  = @("AUS272A-5&2686ec95&0&UID4355")
 }
 
@@ -61,30 +61,61 @@ foreach ($display in $script_displays) {
     }
 }
 
-# Detect connected monitors and fallback missing logical monitors to center display
+# Detect connected monitors and classify logical monitors
 $monitor_info = komorebic monitor-info | ConvertFrom-Json
 $connected_devices = $monitor_info | ForEach-Object { $_.device_id }
 
-$fallback_ws = @()
+$connected_logical_monitors = @()
+$disconnected_logical_monitors = @()
 foreach ($logical_monitor in $logical_monitor_to_displays.Keys) {
-    $displays = $logical_monitor_to_displays[$logical_monitor]
-    $connected = $false
-
-    foreach ($display in $displays) {
+    $is_connected = $false
+    foreach ($display in $logical_monitor_to_displays[$logical_monitor]) {
         if ($display -in $connected_devices) {
-            $connected = $true
+            $is_connected = $true
             break
         }
     }
-
-    if (-not $connected) {
-        $ws_names = $logical_monitor_to_named_workspaces[$logical_monitor]
-        Write-Host "Logical monitor $logical_monitor not found, adding workspaces to fallback display: $($ws_names -join ', ')"
-        $fallback_ws += $ws_names
+    if ($is_connected) {
+        $connected_logical_monitors += $logical_monitor
+    } else {
+        $disconnected_logical_monitors += $logical_monitor
     }
 }
 
-if ($fallback_ws.Count -gt 0) {
-    $all_ws = $logical_monitor_to_named_workspaces[$center_monitor] + $fallback_ws
-    komorebic ensure-named-workspaces 0 @all_ws
+# If some logical monitors are missing, pile their workspaces onto a primary connected monitor
+if ($disconnected_logical_monitors.Count -gt 0) {
+    if ($connected_logical_monitors.Count -eq 0) {
+        # No known logical monitors connected; fall back to monitor 0 with all workspaces
+        $primary_index = 0
+        $all_ws = @()
+        foreach ($lm in @($center_monitor, $left_monitor, $right_monitor)) {
+            $all_ws += $logical_monitor_to_named_workspaces[$lm]
+        }
+        Write-Host "No known logical monitors connected, adding all workspaces to monitor 0: $($all_ws -join ', ')"
+    } else {
+        # Pick primary: prefer center, then left, then right
+        $primary = @($center_monitor, $left_monitor, $right_monitor) |
+            Where-Object { $_ -in $connected_logical_monitors } |
+            Select-Object -First 1
+
+        # Find primary's actual monitor index from monitor-info
+        $primary_displays = $logical_monitor_to_displays[$primary]
+        $primary_index = -1
+        for ($i = 0; $i -lt $monitor_info.Count; $i++) {
+            if ($monitor_info[$i].device_id -in $primary_displays) {
+                $primary_index = $i
+                break
+            }
+        }
+
+        # Build the workspace list: primary's + all disconnected monitors'
+        $all_ws = @($logical_monitor_to_named_workspaces[$primary])
+        foreach ($lm in $disconnected_logical_monitors) {
+            $ws_names = $logical_monitor_to_named_workspaces[$lm]
+            Write-Host "$lm logical monitor not found, adding workspaces to $primary monitor: $($ws_names -join ', ')"
+            $all_ws += $ws_names
+        }
+    }
+
+    komorebic ensure-named-workspaces $primary_index @all_ws
 }
