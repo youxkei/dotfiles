@@ -27,9 +27,9 @@ _logicalMonitors: [{
 
 _allDeviceIds: list.FlattenN([for lm in _logicalMonitors {lm.device_ids}], 1)
 
-_trayApps: ["Carla.exe", "qjackctl.exe", "jackd.exe", "iTunes.exe", "DeepL.exe", "OktaVerify.exe", "VBAudioMatrix_x64.exe", "Wispr Flow.exe", "Wispr Flow Helper.exe"]
-_floatApps: ["ShellExperienceHost.exe", "DeepL.exe", "OktaVerify.exe", "steam.exe", "th15.exe", "th07.exe", "Wispr Flow.exe", "Wispr Flow Helper.exe"]
-_manageApps: ["VBAudioMatrix_x64.exe"]
+_trayApps: ["Carla.exe", "qjackctl.exe", "jackd.exe", "iTunes.exe", "DeepL.exe", "OktaVerify.exe"]
+_floatApps: ["ShellExperienceHost.exe", "DeepL.exe", "OktaVerify.exe", "steam.exe", "th15.exe", "th07.exe"]
+_manageApps: ["claude.exe"]
 
 _borderColor: {r: 232, g: 145, b: 45}
 
