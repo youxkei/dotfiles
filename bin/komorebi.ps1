@@ -119,3 +119,17 @@ if ($disconnected_logical_monitors.Count -gt 0) {
 
     komorebic ensure-named-workspaces $primary_index @all_ws
 }
+
+# Register initial workspace rules dynamically by workspace name so they work
+# regardless of which monitors are connected (workspaces may be piled onto a
+# primary monitor by ensure-named-workspaces above). enforce-workspace-rules
+# clears already_moved_window_handles and re-evaluates existing windows.
+komorebic initial-named-workspace-rule exe WindowsTerminal.exe c0
+komorebic initial-named-workspace-rule exe alacritty.exe c1
+komorebic initial-named-workspace-rule exe slack.exe l1
+komorebic initial-named-workspace-rule exe chrome.exe r0
+komorebic initial-named-workspace-rule exe firefox.exe r1
+komorebic initial-named-workspace-rule exe Notion.exe r2
+komorebic initial-named-workspace-rule exe claude.exe r3
+komorebic initial-named-workspace-rule exe Carla.exe r5
+komorebic enforce-workspace-rules
