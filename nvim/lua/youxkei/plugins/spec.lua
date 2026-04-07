@@ -1,3 +1,20 @@
+local function force_redraw_floating_terminal(win)
+  if not win or not vim.api.nvim_win_is_valid(win) then return end
+  local cfg = vim.api.nvim_win_get_config(win)
+  if cfg.relative == "" then return end
+  local buf = vim.api.nvim_win_get_buf(win)
+  if vim.bo[buf].buftype ~= "terminal" then return end
+  local orig = cfg.width
+  cfg.width = orig - 1
+  vim.api.nvim_win_set_config(win, cfg)
+  vim.defer_fn(function()
+    if vim.api.nvim_win_is_valid(win) then
+      cfg.width = orig
+      vim.api.nvim_win_set_config(win, cfg)
+    end
+  end, 50)
+end
+
 return {
   {
     "nvim-lua/plenary.nvim",
@@ -783,6 +800,7 @@ return {
           vim.cmd.ClaudeCode()
           vim.schedule(function()
             vim.cmd.startinsert()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
           end)
         end,
         mode = "t",
@@ -1064,22 +1082,25 @@ return {
         "<c-l>",
         function()
           vim.cmd.ClaudeCodeSend()
-
-          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-            if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "filetype") == "claudecode" then
-              vim.schedule(function()
-                vim.cmd.ClaudeCodeFocus()
-              end)
-
-              break
-            end
-          end
+          vim.schedule(function()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
         end,
         mode = "v",
         desc = "Send to Claude",
       },
 
-      { "<c-l>", "<cmd>ClaudeCodeFocus<cr>", desc = "Toggle Claude", mode = "n" },
+      {
+        "<c-l>",
+        function()
+          vim.cmd.ClaudeCodeFocus()
+          vim.schedule(function()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end,
+        desc = "Toggle Claude",
+        mode = "n",
+      },
     },
     config = function()
       require("claudecode").setup {
