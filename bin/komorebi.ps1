@@ -120,13 +120,22 @@ if ($disconnected_logical_monitors.Count -gt 0) {
     komorebic ensure-named-workspaces $primary_index @all_ws
 }
 
+# When the left logical monitor resolves to GSM779A, use Rows layout for l0-l2
+if ("GSM779A-5&2686ec95&0&UID4353" -in $connected_devices) {
+    komorebic named-workspace-layout l0 rows
+    komorebic named-workspace-layout l1 rows
+    komorebic named-workspace-layout l2 rows
+}
+
 # Register initial workspace rules dynamically by workspace name so they work
 # regardless of which monitors are connected (workspaces may be piled onto a
 # primary monitor by ensure-named-workspaces above). enforce-workspace-rules
 # clears already_moved_window_handles and re-evaluates existing windows.
 komorebic initial-named-workspace-rule exe WindowsTerminal.exe c0
 komorebic initial-named-workspace-rule exe alacritty.exe c1
+komorebic initial-named-workspace-rule exe obs64.exe l0
 komorebic initial-named-workspace-rule exe slack.exe l1
+komorebic initial-named-workspace-rule exe Discord.exe l2
 komorebic initial-named-workspace-rule exe chrome.exe r0
 komorebic initial-named-workspace-rule exe firefox.exe r1
 komorebic initial-named-workspace-rule exe Notion.exe r2
