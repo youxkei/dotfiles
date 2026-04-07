@@ -116,7 +116,7 @@ _barBase: {
 	}, {
 		Date: {
 			enable: true
-			format: "DayDateMonthYear"
+			format: Custom: "%Y-%m-%d（%a）"
 		}
 	}, {
 		Time: {
