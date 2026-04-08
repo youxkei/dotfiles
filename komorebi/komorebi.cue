@@ -11,17 +11,17 @@ import "list"
 _logicalMonitors: [{
 	// center
 	unmigrated_devices: ["GSM76F6", "DEL4187", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"]
-	device_ids:         ["IOCFFFF-5&2686ec95&0&UID4352", "PHL095C-5&39ed454c&0&UID4354"]
+	device_ids:         ["IOCFFFF-5&2686ec95&0&UID4352", "IOCFFFF-9&37b11675&0&UID262402", "PHL095C-5&39ed454c&0&UID4354"]
 	workspaces: [for i in list.Range(0, 8, 1) {"c\(i)"}]
 }, {
 	// left
-	unmigrated_devices: ["GSM7799"]
-	device_ids:         ["GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688"]
+	unmigrated_devices: []
+	device_ids:         ["GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688", "207NTCZA4323"]
 	workspaces: [for i in list.Range(0, 3, 1) {"l\(i)"}]
 }, {
 	// right
 	unmigrated_devices: []
-	device_ids:         ["AUS272A-5&2686ec95&0&UID4355"]
+	device_ids:         ["LCLMQS088693 "]
 	workspaces: [for i in list.Range(0, 6, 1) {"r\(i)"}]
 }]
 
