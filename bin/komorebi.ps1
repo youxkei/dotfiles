@@ -21,9 +21,9 @@ $logical_monitor_to_named_workspaces = @{
 }
 
 $logical_monitor_to_displays = @{
-    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352", "PHL095C-5&39ed454c&0&UID4354") # , "GSM76F6", "DEL4187", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
-    $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688") # , "GSM7799"
-    $right_monitor  = @("AUS272A-5&2686ec95&0&UID4355")
+    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352", "IOCFFFF-9&37b11675&0&UID262402", "PHL095C-5&39ed454c&0&UID4354") # , "GSM76F6", "DEL4187", "DEL42A1", "DEL437D", "DELA0F4", "MRG4100"
+    $left_monitor   = @("GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688", "207NTCZA4323")
+    $right_monitor  = @("LCLMQS088693 ")
 }
 
 # Validate consistency between komorebi.json display_index_preferences and script definitions
@@ -61,9 +61,18 @@ foreach ($display in $script_displays) {
     }
 }
 
-# Detect connected monitors and classify logical monitors
+# Detect connected monitors and classify logical monitors. Collect both device_id
+# and (valid) serial_number_id so matches against $logical_monitor_to_displays work
+# whether the script uses a hardware device_id or a serial_number_id. Do NOT trim
+# serial_number_id: komorebi compares display_index_preferences against the raw
+# Windows-reported value, so trailing whitespace must be preserved here too.
 $monitor_info = komorebic monitor-info | ConvertFrom-Json
-$connected_devices = $monitor_info | ForEach-Object { $_.device_id }
+$connected_devices = $monitor_info | ForEach-Object {
+    $_.device_id
+    if ($_.serial_number_id -and $_.serial_number_id.Trim() -ne "0000000000000") {
+        $_.serial_number_id
+    }
+}
 
 $connected_logical_monitors = @()
 $disconnected_logical_monitors = @()
@@ -120,8 +129,8 @@ if ($disconnected_logical_monitors.Count -gt 0) {
     komorebic ensure-named-workspaces $primary_index @all_ws
 }
 
-# When the left logical monitor resolves to GSM779A, use Rows layout for l0-l2
-if ("GSM779A-5&2686ec95&0&UID4353" -in $connected_devices) {
+# When the left logical monitor resolves to 207NTCZA4323, use Rows layout for l0-l2
+if ("207NTCZA4323" -in $connected_devices) {
     komorebic named-workspace-layout l0 rows
     komorebic named-workspace-layout l1 rows
     komorebic named-workspace-layout l2 rows
