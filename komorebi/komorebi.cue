@@ -33,7 +33,7 @@ _manageApps: ["claude.exe"]
 
 _borderColor: {r: 232, g: 145, b: 45}
 
-_barIndices: [0, 1, 2]
+_barIndices: list.Range(0, len(_allDeviceIds), 1)
 
 komorebi: {
 	display_index_preferences: {for i, d in _allDeviceIds {"\(i)": d}}

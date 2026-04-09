@@ -197,7 +197,9 @@
     "bar_configurations": [
         "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.0.json",
         "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.1.json",
-        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.2.json"
+        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.2.json",
+        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.3.json",
+        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.4.json"
     ],
     "app_specific_configuration_path": "$Env:USERPROFILE\\.cache\\komorebi\\applications.yaml",
     "resize_delta": 50,

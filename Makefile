@@ -1,7 +1,7 @@
 KOMOREBI_DIR := komorebi
 KOMOREBI_CUE := $(KOMOREBI_DIR)/komorebi.cue
 KOMOREBI_JSON := $(KOMOREBI_DIR)/komorebi.json
-KOMOREBI_BAR_INDICES := 0 1 2
+KOMOREBI_BAR_INDICES := $(shell cue export -e '[for i, _ in bars {i}]' $(KOMOREBI_CUE) | tr -d '[],' | xargs)
 KOMOREBI_BAR_JSONS := $(foreach i,$(KOMOREBI_BAR_INDICES),$(KOMOREBI_DIR)/komorebi.bar.$(i).json)
 # Workaround for komorebic v0.1.40 bug: `komorebic start --bar -c <static>` runs
 # `komorebi-bar.exe --aliases` without --config, which auto-creates an example
