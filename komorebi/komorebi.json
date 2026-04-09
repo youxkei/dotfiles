@@ -3,10 +3,9 @@
         "0": "IOCFFFF-5&2686ec95&0&UID4352",
         "1": "IOCFFFF-9&37b11675&0&UID262402",
         "2": "PHL095C-5&39ed454c&0&UID4354",
-        "3": "GSM779A-5&2686ec95&0&UID4353",
-        "4": "SDC4178-4&32ada849&0&UID8388688",
-        "5": "207NTCZA4323",
-        "6": "LCLMQS088693 "
+        "3": "SDC4178-4&32ada849&0&UID8388688",
+        "4": "207NTCZA4323",
+        "5": "LCLMQS088693 "
     },
     "monitors": [
         {
@@ -152,22 +151,6 @@
         {
             "workspaces": [
                 {
-                    "name": "l0",
-                    "layout": "BSP"
-                },
-                {
-                    "name": "l1",
-                    "layout": "BSP"
-                },
-                {
-                    "name": "l2",
-                    "layout": "BSP"
-                }
-            ]
-        },
-        {
-            "workspaces": [
-                {
                     "name": "r0",
                     "layout": "BSP"
                 },
@@ -199,7 +182,8 @@
         "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.1.json",
         "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.2.json",
         "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.3.json",
-        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.4.json"
+        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.4.json",
+        "$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.5.json"
     ],
     "app_specific_configuration_path": "$Env:USERPROFILE\\.cache\\komorebi\\applications.yaml",
     "resize_delta": 50,
