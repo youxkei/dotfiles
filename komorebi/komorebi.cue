@@ -16,7 +16,7 @@ _logicalMonitors: [{
 }, {
 	// left
 	unmigrated_devices: []
-	device_ids:         ["GSM779A-5&2686ec95&0&UID4353", "SDC4178-4&32ada849&0&UID8388688", "207NTCZA4323"]
+	device_ids:         ["SDC4178-4&32ada849&0&UID8388688", "207NTCZA4323"]
 	workspaces: [for i in list.Range(0, 3, 1) {"l\(i)"}]
 }, {
 	// right
