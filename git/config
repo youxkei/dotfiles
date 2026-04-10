@@ -37,7 +37,7 @@
 	cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'set diffopt+=iwhite' -c '$wincmd w' -c 'wincmd J'
 [merge]
 	tool = neovim
-	conflictStyle = merge
+	conflictStyle = zdiff3
 [init]
 	defaultBranch = main
 [commit]
