@@ -33,8 +33,6 @@ _manageApps: ["claude.exe"]
 
 _borderColor: {r: 232, g: 145, b: 45}
 
-_barIndices: list.Range(0, len(_allDeviceIds), 1)
-
 komorebi: {
 	display_index_preferences: {for i, d in _allDeviceIds {"\(i)": d}}
 
@@ -45,10 +43,6 @@ komorebi: {
 			},
 		]},
 	], 1)
-
-	bar_configurations: [
-		for i in _barIndices {"$Env:USERPROFILE\\.config\\komorebi\\komorebi.bar.\(i).json"},
-	]
 
 	app_specific_configuration_path:      "$Env:USERPROFILE\\.cache\\komorebi\\applications.yaml"
 	resize_delta:                         50
@@ -75,59 +69,3 @@ komorebi: {
 	float_rules: [for app in _floatApps {#ExeRule & {id: app}}]
 	manage_rules: [for app in _manageApps {#ExeRule & {id: app}}]
 }
-
-_barBase: {
-	"$schema":   "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.39/schema.bar.json"
-	font_family: "Moralerspace Krypton HWNF"
-	theme: {
-		palette: "Base16"
-		name:    "Ashes"
-		accent:  "Base0D"
-	}
-	left_widgets: [{
-		Komorebi: {
-			workspaces: {
-				enable:                false
-				hide_empty_workspaces: false
-			}
-			layout: {
-				enable: true
-			}
-			focused_window: {
-				enable:    false
-				show_icon: true
-			}
-		}
-	}]
-	right_widgets: [{
-		Update: {enable: true}
-	}, {
-		Media: {enable: false}
-	}, {
-		Storage: {enable: true}
-	}, {
-		Memory: {enable: true}
-	}, {
-		Network: {
-			enable:              true
-			show_activity:       true
-			show_total_activity: true
-		}
-	}, {
-		Date: {
-			enable: true
-			format: Custom: "%Y-%m-%d（%a）"
-		}
-	}, {
-		Time: {
-			enable: true
-			format: "TwentyFourHour"
-		}
-	}, {
-		Battery: {enable: true}
-	}]
-}
-
-bars: [for i in _barIndices {
-	_barBase & {monitor: i}
-}]
