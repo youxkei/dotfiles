@@ -44,7 +44,7 @@ if [ -n "$USERPROFILE" ] && [ ! -e ~/windows ]; then
     ln -s "$USERPROFILE" ~/windows
 fi
 
-if [ -x "$(which op.exe)" ] && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
+if command -v op.exe >/dev/null 2>&1 && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
     _i=0
     while [ "$_i" -lt 5 ]; do
         if _password="$(op.exe read -n "op://development/wsl/password" 2>/dev/null)"; then
