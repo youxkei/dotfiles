@@ -144,7 +144,12 @@
           # go
           go_1_25
           gopls
-          gotools
+          (gotools.overrideAttrs (old: {
+            # gopls also ships bin/modernize, so drop gotools' copy to avoid buildEnv collision.
+            postFixup = (old.postFixup or "") + ''
+              rm -f $out/bin/modernize
+            '';
+          }))
           gore
           errcheck
 
