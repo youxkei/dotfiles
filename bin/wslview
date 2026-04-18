@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+[ $# -ge 1 ] || { echo "usage: wslview URL_OR_PATH" >&2; exit 21; }
+
+arg="$1"
+if [ -e "$arg" ]; then
+    arg="$(wslpath -w "$(readlink -f "$arg")")"
+fi
+
+escaped=$(printf '%s' "$arg" | sed "s/'/''/g")
+exec powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass \
+    -Command "Start-Process '$escaped'"

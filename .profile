@@ -36,8 +36,8 @@ fi
 PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH
 export PATH
 
-if [ -x "$(which wslvar)" ]; then
-    export USERPROFILE="$(wslpath "$(wslvar USERPROFILE)")"
+if command -v cmd.exe >/dev/null 2>&1; then
+    export USERPROFILE="$(wslpath "$(cmd.exe /c "<nul set /p=%UserProfile%" 2>/dev/null)")"
 fi
 
 if [ -n "$USERPROFILE" ] && [ ! -e ~/windows ]; then
