@@ -147,6 +147,9 @@
           gotools
           gore
           errcheck
+
+          # java
+          jre25_minimal
         ];
       };
     };
