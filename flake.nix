@@ -91,7 +91,6 @@
           stderred
           cue
           difftastic
-          wslu
           sheldon
           colorized-logs
           podman-compose
