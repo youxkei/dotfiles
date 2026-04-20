@@ -134,6 +134,7 @@
           # javascript / typescript
           nodejs_25
           prettier
+          prettierd
           typescript
           typescript-language-server
           pnpm
