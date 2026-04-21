@@ -154,7 +154,7 @@
           errcheck
 
           # java
-          jre25_minimal
+          jdk25_headless
         ];
       };
     };
