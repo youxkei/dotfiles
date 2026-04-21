@@ -1104,7 +1104,6 @@ return {
     },
     config = function()
       require("claudecode").setup {
-        terminal_cmd = "claude --dangerously-skip-permissions",
         terminal = {
           snacks_win_opts = {
             position = "float",
