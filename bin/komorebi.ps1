@@ -107,11 +107,24 @@ if ($disconnected_logical_monitors.Count -gt 0) {
             Where-Object { $_ -in $connected_logical_monitors } |
             Select-Object -First 1
 
-        # Find primary's actual monitor index from monitor-info
+        # Find primary's actual monitor index from monitor-info. Match against both
+        # device_id and serial_number_id so a logical monitor defined by its serial
+        # (e.g. 207NTCZA4323) still resolves to an index.
         $primary_displays = $logical_monitor_to_displays[$primary]
         $primary_index = -1
         for ($i = 0; $i -lt $monitor_info.Count; $i++) {
-            if ($monitor_info[$i].device_id -in $primary_displays) {
+            $ids = @($monitor_info[$i].device_id)
+            if ($monitor_info[$i].serial_number_id -and $monitor_info[$i].serial_number_id.Trim() -ne "0000000000000") {
+                $ids += $monitor_info[$i].serial_number_id
+            }
+            $matched = $false
+            foreach ($id in $ids) {
+                if ($id -in $primary_displays) {
+                    $matched = $true
+                    break
+                }
+            }
+            if ($matched) {
                 $primary_index = $i
                 break
             }
