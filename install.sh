@@ -43,6 +43,9 @@ declare -A PATHS=(
     [bin/get-review-comments]=$HOME/bin/get-review-comments
     [bin/notify]=$HOME/bin/notify
     [bin/pbcopy]=$HOME/bin/pbcopy
+    [bin/gnome-keyring-start]=$HOME/bin/gnome-keyring-start
+
+    [systemd/user/gnome-keyring-daemon.service.d/unlock.conf]=$XDG_CONFIG_HOME/systemd/user/gnome-keyring-daemon.service.d/unlock.conf
 )
 
 # source path (relative to $SCRIPT_DIR) -> destination path
@@ -105,4 +108,21 @@ if [[ ${#copied_templates[@]} -gt 0 ]]; then
     for copied_template in "${copied_templates[@]}"; do
         echo "$copied_template"
     done
+fi
+
+# WSL: enable linger and wire gnome-keyring-daemon into default.target so the
+# login keyring is unlocked automatically by the systemd user service.
+if command -v wslvar >/dev/null 2>&1; then
+    if [[ "$(loginctl show-user "$USER" --property=Linger 2>/dev/null)" != "Linger=yes" ]]; then
+        echo "Enable linger for $USER (requires sudo)"
+        sudo loginctl enable-linger "$USER"
+    else
+        echo "Linger already enabled for $USER"
+    fi
+
+    echo "Reload systemd user manager"
+    systemctl --user daemon-reload
+
+    echo "Wire gnome-keyring-daemon.service into default.target"
+    systemctl --user add-wants default.target gnome-keyring-daemon.service
 fi
