@@ -43,20 +43,3 @@ fi
 if [ -n "$USERPROFILE" ] && [ ! -e ~/windows ]; then
     ln -s "$USERPROFILE" ~/windows
 fi
-
-if command -v op.exe >/dev/null 2>&1 && [ ! -e /dev/shm/gnome-keyring-daemon-launched ]; then
-    _i=0
-    while [ "$_i" -lt 5 ]; do
-        if _password="$(op.exe read -n "op://development/wsl/password" 2>/dev/null)"; then
-            printf '%s' "$_password" | gnome-keyring-daemon --replace --unlock >/dev/null 2>&1
-            touch /dev/shm/gnome-keyring-daemon-launched
-            break
-        fi
-        if [ "$_i" -eq 0 ]; then
-            1Password.exe >/dev/null 2>&1 & disown
-        fi
-        _i=$((_i + 1))
-        sleep 2
-    done
-    unset _i _password
-fi

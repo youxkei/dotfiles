@@ -1,0 +1,33 @@
+#!/bin/bash
+# Start gnome-keyring-daemon with the login keyring already unlocked.
+# Intended as systemd user service ExecStart.
+
+set -u
+
+if ! command -v op.exe >/dev/null 2>&1 || ! command -v 1Password.exe >/dev/null 2>&1; then
+    winuser=$(wslpath -u "$(wslvar USERPROFILE)")
+    PATH="$PATH:$winuser/AppData/Local/Microsoft/WinGet/Links:$winuser/AppData/Local/Microsoft/WindowsApps"
+fi
+
+password=''
+for i in $(seq 1 15); do
+    if password=$(op.exe read -n 'op://development/wsl/password' 2>/dev/null) && [ -n "$password" ]; then
+        break
+    fi
+    password=''
+    if [ "$i" = "1" ]; then
+        1Password.exe >/dev/null 2>&1 &
+    fi
+    sleep 2
+done
+
+if [ -z "$password" ]; then
+    echo "gnome-keyring-start: failed to read password from 1Password" >&2
+    exit 1
+fi
+
+exec /usr/bin/gnome-keyring-daemon \
+    --foreground --unlock \
+    --components=pkcs11,secrets \
+    --control-directory="${XDG_RUNTIME_DIR}/keyring" \
+    < <(printf '%s' "$password")
