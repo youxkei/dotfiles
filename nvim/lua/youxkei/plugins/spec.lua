@@ -15,6 +15,9 @@ local function force_redraw_floating_terminal(win)
   end, 50)
 end
 
+local host_ok, host = pcall(require, "youxkei.plugins.spec_host")
+if not host_ok then host = {} end
+
 return {
   {
     "nvim-lua/plenary.nvim",
@@ -405,6 +408,7 @@ return {
         settings = {
           gopls = {
             gofumpt = true,
+            buildFlags = host.gopls_build_flags,
           },
         },
       }
