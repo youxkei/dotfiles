@@ -120,4 +120,9 @@ add-zsh-hook preexec save-current-line-command-start-time
 add-zsh-hook precmd notify-long-command-exec
 
 [[ -e $ZDOTDIR/.zshrc_host ]] && source $ZDOTDIR/.zshrc_host
+
+# >>> claude-code-setup >>>
+[ -f "$HOME/.claude-code-env" ] && source "$HOME/.claude-code-env"
+# <<< claude-code-setup <<<
+
 # vim:set expandtab shiftwidth=2 softtabstop=2 tabstop=2 foldenable foldmethod=marker:
