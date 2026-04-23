@@ -14,55 +14,15 @@ $left_monitor = "left"
 $center_monitor = "center"
 $right_monitor = "right"
 
-$logical_monitor_to_named_workspaces = @{
-    $left_monitor = @(0..2 | % { "l$_" })
-    $center_monitor = @(0..7 | % { "c$_" })
-    $right_monitor = @(0..5 | % { "r$_" })
+$logical_monitors_json = wsl.exe --shell-type login -- make --no-print-directory -C ~/repo/dotfiles komorebi-logical-monitors
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to export logicalMonitors from CUE"
+    exit 1
 }
-
-$logical_monitor_to_displays = @{
-    $center_monitor = @("IOCFFFF-5&2686ec95&0&UID4352", "IOCFFFF-9&37b11675&0&UID262402", "PHL095C-5&39ed454c&0&UID4354", "6KN5834", "41JP734") # , "GSM76F6", "DEL4187", "DEL42A1", "DELA0F4", "MRG4100"
-    $left_monitor   = @("SDC4178-4&32ada849&0&UID8388688", "207NTCZA4323")
-    $right_monitor  = @("LCLMQS088693 ")
-}
-
-# Validate consistency between komorebi.json display_index_preferences and script definitions
-$komorebi_config = Get-Content "$Env:KOMOREBI_CONFIG_HOME\komorebi.json" | ConvertFrom-Json
-$config_device_ids = $komorebi_config.display_index_preferences.PSObject.Properties.Value
-
-# Every device_id in config must match a device name in script
-$script_displays = $logical_monitor_to_displays.Values | ForEach-Object { $_ }
-foreach ($device_id in $config_device_ids) {
-    $matched = $false
-    foreach ($display in $script_displays) {
-        if ($device_id -eq $display) {
-            $matched = $true
-            break
-        }
-    }
-    if (-not $matched) {
-        Write-Error "device_id $device_id in komorebi.json display_index_preferences does not match any device in logical_monitor_to_displays"
-        exit 1
-    }
-}
-
-# Every device name in script must have a matching device_id in config
-foreach ($display in $script_displays) {
-    $matched = $false
-    foreach ($device_id in $config_device_ids) {
-        if ($device_id -eq $display) {
-            $matched = $true
-            break
-        }
-    }
-    if (-not $matched) {
-        Write-Error "Device $display in logical_monitor_to_displays has no matching device_id in komorebi.json display_index_preferences"
-        exit 1
-    }
-}
+$logical_monitors = $logical_monitors_json | ConvertFrom-Json
 
 # Detect connected monitors and classify logical monitors. Collect both device_id
-# and (valid) serial_number_id so matches against $logical_monitor_to_displays work
+# and (valid) serial_number_id so matches against $logical_monitors.*.device_ids work
 # whether the script uses a hardware device_id or a serial_number_id. Do NOT trim
 # serial_number_id: komorebi compares display_index_preferences against the raw
 # Windows-reported value, so trailing whitespace must be preserved here too.
@@ -76,18 +36,18 @@ $connected_devices = $monitor_info | ForEach-Object {
 
 $connected_logical_monitors = @()
 $disconnected_logical_monitors = @()
-foreach ($logical_monitor in $logical_monitor_to_displays.Keys) {
+foreach ($lm in $logical_monitors.PSObject.Properties.Name) {
     $is_connected = $false
-    foreach ($display in $logical_monitor_to_displays[$logical_monitor]) {
-        if ($display -in $connected_devices) {
+    foreach ($device_id in $logical_monitors.$lm.device_ids) {
+        if ($device_id -in $connected_devices) {
             $is_connected = $true
             break
         }
     }
     if ($is_connected) {
-        $connected_logical_monitors += $logical_monitor
+        $connected_logical_monitors += $lm
     } else {
-        $disconnected_logical_monitors += $logical_monitor
+        $disconnected_logical_monitors += $lm
     }
 }
 
@@ -98,7 +58,7 @@ if ($disconnected_logical_monitors.Count -gt 0) {
         $primary_index = 0
         $all_ws = @()
         foreach ($lm in @($center_monitor, $left_monitor, $right_monitor)) {
-            $all_ws += $logical_monitor_to_named_workspaces[$lm]
+            $all_ws += $logical_monitors.$lm.workspaces
         }
         Write-Host "No known logical monitors connected, adding all workspaces to monitor 0: $($all_ws -join ', ')"
     } else {
@@ -110,7 +70,7 @@ if ($disconnected_logical_monitors.Count -gt 0) {
         # Find primary's actual monitor index from monitor-info. Match against both
         # device_id and serial_number_id so a logical monitor defined by its serial
         # (e.g. 207NTCZA4323) still resolves to an index.
-        $primary_displays = $logical_monitor_to_displays[$primary]
+        $primary_device_ids = $logical_monitors.$primary.device_ids
         $primary_index = -1
         for ($i = 0; $i -lt $monitor_info.Count; $i++) {
             $ids = @($monitor_info[$i].device_id)
@@ -119,7 +79,7 @@ if ($disconnected_logical_monitors.Count -gt 0) {
             }
             $matched = $false
             foreach ($id in $ids) {
-                if ($id -in $primary_displays) {
+                if ($id -in $primary_device_ids) {
                     $matched = $true
                     break
                 }
@@ -131,9 +91,9 @@ if ($disconnected_logical_monitors.Count -gt 0) {
         }
 
         # Build the workspace list: primary's + all disconnected monitors'
-        $all_ws = @($logical_monitor_to_named_workspaces[$primary])
+        $all_ws = @($logical_monitors.$primary.workspaces)
         foreach ($lm in $disconnected_logical_monitors) {
-            $ws_names = $logical_monitor_to_named_workspaces[$lm]
+            $ws_names = $logical_monitors.$lm.workspaces
             Write-Host "$lm logical monitor not found, adding workspaces to $primary monitor: $($ws_names -join ', ')"
             $all_ws += $ws_names
         }
