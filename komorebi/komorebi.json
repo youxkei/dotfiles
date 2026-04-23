@@ -3,11 +3,48 @@
         "0": "IOCFFFF-5&2686ec95&0&UID4352",
         "1": "IOCFFFF-9&37b11675&0&UID262402",
         "2": "PHL095C-5&39ed454c&0&UID4354",
-        "3": "SDC4178-4&32ada849&0&UID8388688",
-        "4": "207NTCZA4323",
-        "5": "LCLMQS088693 "
+        "3": "6KN5834",
+        "4": "SDC4178-4&32ada849&0&UID8388688",
+        "5": "207NTCZA4323",
+        "6": "LCLMQS088693 "
     },
     "monitors": [
+        {
+            "workspaces": [
+                {
+                    "name": "c0",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c1",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c2",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c3",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c4",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c5",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c6",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c7",
+                    "layout": "BSP"
+                }
+            ]
+        },
         {
             "workspaces": [
                 {
