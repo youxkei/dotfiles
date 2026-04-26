@@ -811,6 +811,20 @@ return {
         ft = "toggleterm",
         desc = "Open Claude in toggleterm",
       },
+      {
+        "<c-g>",
+        function()
+          require("toggleterm").toggle()
+          vim.cmd.Codex()
+          vim.schedule(function()
+            vim.cmd.startinsert()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end,
+        mode = "t",
+        ft = "toggleterm",
+        desc = "Open Codex in toggleterm",
+      },
     },
   },
 
@@ -1073,15 +1087,6 @@ return {
       "folke/snacks.nvim",
     },
     keys = {
-      { "<leader>a", nil, desc = "AI/Claude Code" },
-      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
-      { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
-      { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
-      { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
-
-      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr><cmd>ClaudeCodeFocus<cr>", desc = "Accept diff" },
-      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr><cmd>ClaudeCodeFocus<cr>", desc = "Deny diff" },
-
       {
         "<c-l>",
         function()
@@ -1131,12 +1136,107 @@ return {
                 mode = "t",
                 desc = "Toggle toggleterm in Claude",
               },
+              {
+                "<c-g>",
+                function(self)
+                  self:hide()
+                  vim.cmd.Codex()
+                end,
+                mode = "t",
+                desc = "Open Codex",
+              },
             },
           },
         },
       }
 
       local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = augroup,
+        pattern = "snacks_terminal",
+        callback = function(args)
+          vim.bo[args.buf].buflisted = false
+        end,
+      })
+    end
+  },
+
+  {
+    "youxkei/codex.nvim",
+    version = "fix/find-available-port-listen-check",
+    dependencies = {
+      "folke/snacks.nvim",
+    },
+    keys = {
+      {
+        "<c-g>",
+        function()
+          vim.cmd.CodexSend()
+          vim.schedule(function()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end,
+        mode = "v",
+        desc = "Send to Codex",
+      },
+
+      {
+        "<c-g>",
+        function()
+          vim.cmd.CodexFocus()
+          vim.schedule(function()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end,
+        desc = "Toggle Codex",
+        mode = "n",
+      },
+    },
+    config = function()
+      require("codex").setup {
+        terminal_cmd = "codex --yolo",
+        track_selection = true,
+        keymaps = {
+          enabled = false,
+        },
+        terminal = {
+          snacks_win_opts = {
+            position = "float",
+            width = 0.95,
+            height = 0.95,
+            keys = {
+              {
+                "<c-g>",
+                function(self)
+                  self:hide()
+                end,
+                mode = "t",
+                desc = "Hide",
+              },
+              {
+                "<c-t>",
+                function(self)
+                  self:hide()
+                  require("toggleterm").toggle()
+                end,
+                mode = "t",
+                desc = "Toggle toggleterm in Codex",
+              },
+              {
+                "<c-l>",
+                function(self)
+                  self:hide()
+                  vim.cmd.ClaudeCode()
+                end,
+                mode = "t",
+                desc = "Open Claude",
+              },
+            },
+          },
+        },
+      }
+
+      local augroup = vim.api.nvim_create_augroup("youxkei.codex", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = "snacks_terminal",
