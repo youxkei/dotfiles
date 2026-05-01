@@ -569,6 +569,23 @@ return {
                 list = { keys = { ["d"] = "bufdelete" } },
               },
             },
+            notifications = {
+              confirm = function(picker, item)
+                picker:close()
+                if not item or not item.item then
+                  return
+                end
+
+                local id = item.item.id
+                vim.schedule(function()
+                  snacks.notifier.show_history {
+                    filter = function(notif)
+                      return notif.id == id
+                    end,
+                  }
+                end)
+              end,
+            },
           },
         },
         explorer = {},
