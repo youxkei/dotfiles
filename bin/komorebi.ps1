@@ -119,6 +119,7 @@ komorebic initial-named-workspace-rule exe obs64.exe l0
 komorebic initial-named-workspace-rule exe slack.exe l1
 komorebic initial-named-workspace-rule exe Discord.exe l2
 komorebic initial-named-workspace-rule exe chrome.exe r0
+komorebic initial-named-workspace-rule exe brave.exe r0
 komorebic initial-named-workspace-rule exe firefox.exe r1
 komorebic initial-named-workspace-rule exe Notion.exe r2
 komorebic initial-named-workspace-rule exe claude.exe r3
