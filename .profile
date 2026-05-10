@@ -30,7 +30,7 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
 
 if [ -e ~/.nix-profile/lib/libstderred.so ]; then
-    export LD_PRELOAD="$HOME/.nix-profile/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+    #export LD_PRELOAD="$HOME/.nix-profile/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
 PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH
