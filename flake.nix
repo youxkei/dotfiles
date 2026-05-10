@@ -101,6 +101,7 @@
           libtree
           tree
           gws.packages.${system}.default
+          google-cloud-sdk
 
           # editor
           nvim
