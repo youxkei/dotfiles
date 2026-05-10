@@ -43,6 +43,7 @@ declare -A PATHS=(
     [bin/get-review-comments]=$HOME/bin/get-review-comments
     [bin/notify]=$HOME/bin/notify
     [bin/pbcopy]=$HOME/bin/pbcopy
+    [bin/wslview]=$HOME/bin/wslview
     [bin/gnome-keyring-start]=$HOME/bin/gnome-keyring-start
 
     [systemd/user/gnome-keyring-daemon.service.d/unlock.conf]=$XDG_CONFIG_HOME/systemd/user/gnome-keyring-daemon.service.d/unlock.conf
