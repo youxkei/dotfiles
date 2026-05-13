@@ -590,7 +590,17 @@ return {
         },
         explorer = {},
         notifier = {},
-        bigfile = {},
+        bigfile = {
+          size = 5 * 1024 * 1024,
+          setup = function(ctx)
+            if vim.fn.exists(":NoMatchParen") ~= 0 then
+              vim.cmd("NoMatchParen")
+            end
+            Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
+            vim.b.completion = false
+            vim.bo[ctx.buf].syntax = ""
+          end,
+        },
       }
     end,
     keys = {
