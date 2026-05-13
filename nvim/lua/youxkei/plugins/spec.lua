@@ -590,6 +590,7 @@ return {
         },
         explorer = {},
         notifier = {},
+        bigfile = {},
       }
     end,
     keys = {
