@@ -15,7 +15,6 @@
       };
 
       libtree = pkgs.callPackage ./nixpkgs/libtree.nix {};
-      nvim = pkgs.callPackage ./nixpkgs/nvim.nix {};
       tree = pkgs.callPackage ./nixpkgs/tree.nix {};
     in
     {
@@ -104,7 +103,7 @@
           google-cloud-sdk
 
           # editor
-          nvim
+          neovim-unwrapped
           lua-language-server
 
           # media
