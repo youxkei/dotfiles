@@ -45,11 +45,11 @@
 [gpg]
 	format = ssh
 [credential "https://github.com"]
-	helper = 
-	helper = !/home/youxkei/.nix-profile/bin/gh auth git-credential
+	helper =
+	helper = !$HOME/.nix-profile/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
-	helper = !/home/youxkei/.nix-profile/bin/gh auth git-credential
+	helper =
+	helper = !$HOME/.nix-profile/bin/gh auth git-credential
 [url "https://github.com/"]
 	insteadOf = git@github.com:
 [include]
