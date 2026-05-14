@@ -8,155 +8,164 @@
 
   outputs = { self, nixpkgs, gws }:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-
-      libtree = pkgs.callPackage ./nixpkgs/libtree.nix {};
-      tree = pkgs.callPackage ./nixpkgs/tree.nix {};
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs systems f;
     in
     {
-      packages.${system}.default = pkgs.buildEnv {
-        name = "all";
-        paths = with pkgs; [
-          # git
-          gitFull
-          tig
-          gh
-          git-lfs
+      packages = forAllSystems (system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
 
-          # nix
-          nix-prefetch-git
-          nix-tree
+          libtree = pkgs.callPackage ./nixpkgs/libtree.nix {};
+          tree = pkgs.callPackage ./nixpkgs/tree.nix {};
+        in
+        {
+          default = pkgs.buildEnv {
+            name = "all";
+            paths = with pkgs; [
+              # git
+              gitFull
+              tig
+              gh
+              git-lfs
 
-          # cli tools
-          rlwrap
-          trash-cli
-          tokei
-          ripgrep
-          fd
-          eza
-          gron
-          translate-shell
-          figlet
-          fzf
-          jq
-          yq-go
-          jo
-          jid
-          direnv
-          httpie
-          sysstat
-          universal-ctags
-          progress
-          procs
-          unar
-          grpcurl
-          pup
-          tmux
-          protobuf
-          qpdf
-          stress-ng
-          speedtest-cli
-          inotify-tools
-          starship
-          tree-sitter
-          redis
-          bandwhich
-          zoxide
-          watchexec
-          bottom
-          xcp
-          traceroute
-          tcptraceroute
-          netcat
-          shellcheck
-          multitail
-          pv
-          valgrind
-          pueue
-          dust
-          duf
-          mcfly
-          choose
-          glances
-          gping
-          doggo
-          imagemagick
-          glow
-          ouch
-          stderred
-          cue
-          difftastic
-          sheldon
-          colorized-logs
-          podman-compose
-          graphviz
-          brotli
-          arp-scan-rs
-          wl-clipboard
-          libtree
-          tree
-          gws.packages.${system}.default
-          google-cloud-sdk
+              # nix
+              nix-prefetch-git
+              nix-tree
 
-          # editor
-          neovim-unwrapped
-          lua-language-server
+              # cli tools
+              rlwrap
+              trash-cli
+              tokei
+              ripgrep
+              fd
+              eza
+              gron
+              translate-shell
+              figlet
+              fzf
+              jq
+              yq-go
+              jo
+              jid
+              direnv
+              httpie
+              universal-ctags
+              progress
+              procs
+              unar
+              grpcurl
+              pup
+              tmux
+              protobuf
+              qpdf
+              stress-ng
+              speedtest-cli
+              starship
+              tree-sitter
+              redis
+              bandwhich
+              zoxide
+              watchexec
+              bottom
+              xcp
+              tcptraceroute
+              netcat
+              shellcheck
+              multitail
+              pv
+              pueue
+              dust
+              duf
+              mcfly
+              choose
+              glances
+              gping
+              doggo
+              imagemagick
+              glow
+              ouch
+              cue
+              difftastic
+              sheldon
+              colorized-logs
+              podman-compose
+              graphviz
+              brotli
+              gws.packages.${system}.default
+              google-cloud-sdk
 
-          # media
-          yt-dlp
-          python3Packages.yt-dlp-ejs
+              # editor
+              neovim-unwrapped
+              lua-language-server
 
-          # protobuf
-          protols
+              # media
+              yt-dlp
+              python3Packages.yt-dlp-ejs
 
-          # prolog
-          swi-prolog
+              # protobuf
+              protols
 
-          # python
-          pipenv
-          pyenv
-          uv
-          pyright
+              # prolog
+              swi-prolog
 
-          # rust
-          rust-analyzer
-          wasm-pack
-          wasm-bindgen-cli
-          cargo-edit
-          cargo-insta
-          cargo-generate
-          cargo-cross
+              # python
+              pipenv
+              pyenv
+              uv
+              pyright
 
-          # javascript / typescript
-          nodejs_25
-          prettier
-          prettierd
-          typescript
-          typescript-language-server
-          pnpm
-          deno
-          bun
-          fnm
+              # rust
+              rust-analyzer
+              wasm-pack
+              wasm-bindgen-cli
+              cargo-edit
+              cargo-insta
+              cargo-generate
+              cargo-cross
 
-          # go
-          go_1_25
-          gopls
-          (gotools.overrideAttrs (old: {
-            # gopls also ships bin/modernize, so drop gotools' copy to avoid buildEnv collision.
-            postFixup = (old.postFixup or "") + ''
-              rm -f $out/bin/modernize
-            '';
-          }))
-          gore
-          errcheck
+              # javascript / typescript
+              nodejs_25
+              prettier
+              prettierd
+              typescript
+              typescript-language-server
+              pnpm
+              deno
+              bun
+              fnm
 
-          # java
-          jdk25_headless
-        ];
-      };
+              # go
+              go_1_25
+              gopls
+              (gotools.overrideAttrs (old: {
+                # gopls also ships bin/modernize, so drop gotools' copy to avoid buildEnv collision.
+                postFixup = (old.postFixup or "") + ''
+                  rm -f $out/bin/modernize
+                '';
+              }))
+              gore
+              errcheck
+
+              # java
+              jdk25_headless
+            ] ++ lib.optionals stdenv.isLinux [
+              # Linux-only: kernel-specific APIs, Wayland, LD_PRELOAD, or
+              # custom derivations that fetch Linux x86_64 binaries.
+              sysstat
+              inotify-tools
+              valgrind
+              traceroute
+              arp-scan-rs
+              stderred
+              wl-clipboard
+              libtree
+              tree
+            ];
+          };
+        });
     };
 }

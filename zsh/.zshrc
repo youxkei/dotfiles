@@ -10,6 +10,11 @@ HISTSIZE=100000
 SAVEHIST=100000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
+if [[ -n $XDG_DATA_HOME ]]; then
+  [[ ! -d $XDG_DATA_HOME/zsh ]] && mkdir -p $XDG_DATA_HOME/zsh
+  [[ ! -f $HISTFILE ]] && touch $HISTFILE
+fi
+
 if [[ -n $XDG_CACHE_HOME ]]; then
   [[ ! -d $XDG_CACHE_HOME/zsh ]] && mkdir -p $XDG_CACHE_HOME/zsh
   autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/compdump
@@ -53,7 +58,7 @@ alias zmv='noglob zmv -W'
 
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
+[[ -x "$(which dircolors)" ]] && eval "$(dircolors -b | perl -pe 's/\b01\b/1/g; s/\b00\b/0/g')"
 export EXA_COLORS="lp=1;36"
 export FZF_DEFAULT_OPTS="--reverse --ansi"
 
@@ -68,6 +73,10 @@ export MCFLY_RESULTS_SORT=LAST_RUN
 
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+fi
+
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 
 
