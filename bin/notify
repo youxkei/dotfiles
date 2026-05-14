@@ -4,4 +4,13 @@
 title="${1:-Notification}"
 message="${2:-}"
 
-pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'notify' -Text '$title','$message'"
+case "$(uname -s)" in
+    Darwin)
+        esc_title=$(printf '%s' "$title" | sed 's/\\/\\\\/g; s/"/\\"/g')
+        esc_message=$(printf '%s' "$message" | sed 's/\\/\\\\/g; s/"/\\"/g')
+        osascript -e "display notification \"$esc_message\" with title \"$esc_title\""
+        ;;
+    *)
+        pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'notify' -Text '$title','$message'"
+        ;;
+esac
