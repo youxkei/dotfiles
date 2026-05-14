@@ -1,0 +1,52 @@
+{
+    "display_index_preferences": {
+        "0": "4251086178"
+    },
+    "monitors": [
+        {
+            "workspaces": [
+                {
+                    "name": "l0",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "l1",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "l2",
+                    "layout": "BSP"
+                }
+            ]
+        }
+    ],
+    "manage_rules": [],
+    "floating_applications": [],
+    "ignore_rules": [],
+    "resize_delta": 50,
+    "window_container_behaviour": "Create",
+    "cross_monitor_move_behaviour": "Insert",
+    "unmanaged_window_operation_behaviour": "Op",
+    "mouse_follows_focus": true,
+    "border": true,
+    "border_width": 20,
+    "border_colours": {
+        "single": {
+            "r": 232,
+            "g": 145,
+            "b": 45
+        },
+        "stack": {
+            "r": 232,
+            "g": 145,
+            "b": 45
+        },
+        "monocle": {
+            "r": 232,
+            "g": 145,
+            "b": 45
+        }
+    },
+    "default_workspace_padding": 10,
+    "default_container_padding": 10
+}
