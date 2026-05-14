@@ -65,6 +65,14 @@ if [[ "$OSTYPE" != darwin* ]]; then
     )
 fi
 
+# macOS-only entries: configs for macOS-specific tools (karabiner-elements,
+# komorebi-for-mac).
+if [[ "$OSTYPE" == darwin* ]]; then
+    PATHS+=(
+        bin/auto-komorebi $HOME/bin/auto-komorebi
+    )
+fi
+
 # source path (relative to $SCRIPT_DIR) -> destination path
 typeset -A TEMPLATE_PATHS
 TEMPLATE_PATHS=(

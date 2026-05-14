@@ -1,0 +1,174 @@
+#!/usr/bin/env zsh
+# auto-komorebi: macOS equivalent of bin/auto-komorebi.ps1.
+# Starts komorebi-for-mac with the CUE-generated config, runs the same
+# "pile workspaces from disconnected logical monitors onto a primary
+# connected monitor" reconciliation as the Windows komorebi.ps1, and
+# re-runs that reconciliation whenever komorebi reports a display
+# connection change via its subscription socket.
+
+set -euo pipefail
+# Inherited xtrace/verbose from .zshenv leaks variable assignments into stdout
+# and interferes with `$(...)` captures; force it off for this script.
+setopt no_xtrace no_verbose 2>/dev/null || true
+
+REPO_DIR="${REPO_DIR:-$HOME/repo/dotfiles}"
+CONFIG_DIR="$HOME/Library/Application Support/komorebi"
+CONFIG="$REPO_DIR/komorebi/komorebi.mac.json"
+SOCK_NAME="auto-komorebi.sock"
+SOCK="$CONFIG_DIR/$SOCK_NAME"
+
+PRIORITY_ORDER=(center left right)
+
+configure_workspaces() {
+    local monitor_info logical_monitors
+    monitor_info=$(komorebic monitor-info)
+    logical_monitors=$(make --no-print-directory -C "$REPO_DIR" komorebi-logical-monitors-mac)
+
+    local connected_devices
+    connected_devices=$(
+        print -r -- "$monitor_info" \
+            | jq -r '.[].serial_number_id
+                | select(. != null and . != "" and (gsub("\\s"; "") != "0000000000000"))'
+    )
+
+    local lm connected=() disconnected=()
+    for lm in "${PRIORITY_ORDER[@]}"; do
+        local matched
+        matched=$(
+            print -r -- "$logical_monitors" \
+                | jq --arg lm "$lm" --arg ids "$connected_devices" '
+                    ($ids | split("\n") | map(select(length > 0))) as $cd
+                    | .[$lm].device_ids
+                    | any(. as $d | $cd | index($d) != null)
+                '
+        )
+        if [[ "$matched" == "true" ]]; then
+            connected+=("$lm")
+        else
+            disconnected+=("$lm")
+        fi
+    done
+
+    if (( ${#disconnected[@]} == 0 )); then
+        echo "[auto-komorebi] all logical monitors connected; no piling needed"
+        register_workspace_rules
+        return 0
+    fi
+
+    local primary primary_index workspaces=()
+    if (( ${#connected[@]} == 0 )); then
+        primary=""
+        primary_index=0
+        for lm in "${PRIORITY_ORDER[@]}"; do
+            local ws
+            ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$lm" '.[$lm].workspaces[]')
+            workspaces+=(${(f)ws})
+        done
+        echo "[auto-komorebi] no known logical monitors connected; piling all workspaces onto monitor 0"
+    else
+        primary="${connected[1]}"
+        local primary_device_ids
+        primary_device_ids=$(
+            print -r -- "$logical_monitors" | jq -r --arg lm "$primary" '.[$lm].device_ids[]'
+        )
+        primary_index=$(
+            print -r -- "$monitor_info" \
+                | jq --arg ids "$primary_device_ids" '
+                    ($ids | split("\n") | map(select(length > 0))) as $pd
+                    | to_entries
+                    | map(select(.value.serial_number_id as $s | $pd | index($s) != null))
+                    | .[0].key // -1
+                '
+        )
+        if [[ "$primary_index" == "-1" ]]; then
+            echo "[auto-komorebi] primary logical monitor '$primary' has no matching connected monitor; aborting reconciliation" >&2
+            return 1
+        fi
+
+        local ws
+        ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$primary" '.[$lm].workspaces[]')
+        workspaces+=(${(f)ws})
+
+        for lm in "${disconnected[@]}"; do
+            ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$lm" '.[$lm].workspaces[]')
+            workspaces+=(${(f)ws})
+            echo "[auto-komorebi] $lm logical monitor not connected; piling workspaces onto $primary (monitor $primary_index): ${ws//$'\n'/, }"
+        done
+    fi
+
+    komorebic ensure-named-workspaces "$primary_index" "${workspaces[@]}"
+    register_workspace_rules
+}
+
+# Register initial-workspace-rules so that newly opened windows land on the
+# right workspace. Workspace rules get reset when ensure-named-workspaces is
+# called, so this must be re-applied on every reconciliation (mirrors
+# bin/komorebi.ps1 on Windows).
+register_workspace_rules() {
+    komorebic initial-named-workspace-rule exe Chrome r0
+    komorebic initial-named-workspace-rule exe Ghostty c0
+    komorebic initial-named-workspace-rule exe Slack l1
+    komorebic initial-named-workspace-rule exe Claude r5
+    komorebic enforce-workspace-rules
+}
+
+cleanup() {
+    if [[ -n "${KOMOREBI_PID:-}" ]]; then
+        kill -INT "$KOMOREBI_PID" 2>/dev/null || true
+    fi
+    rm -f "$SOCK"
+}
+trap cleanup EXIT INT TERM
+
+echo "[auto-komorebi] regenerating $CONFIG from CUE"
+make -C "$REPO_DIR" komorebi-mac >/dev/null
+
+echo "[auto-komorebi] stopping any running komorebi"
+komorebic stop --bar 2>/dev/null || true
+
+# Bypass `komorebic start -c <path>`: it spawns the daemon with a broken
+# `'--config="<path>"'` argument (komorebic/src/main.rs:1772 in komorebi-for-mac)
+# which clap rejects. Invoke the daemon directly with the correct flag instead.
+echo "[auto-komorebi] starting komorebi with $CONFIG"
+komorebi --config "$CONFIG" >/dev/null 2>&1 &
+KOMOREBI_PID=$!
+
+for _ in $(seq 1 30); do
+    if komorebic state >/dev/null 2>&1; then
+        echo "[auto-komorebi] komorebi started (pid $KOMOREBI_PID)"
+        break
+    fi
+    if ! kill -0 "$KOMOREBI_PID" 2>/dev/null; then
+        echo "[auto-komorebi] komorebi daemon exited before becoming ready" >&2
+        exit 1
+    fi
+    sleep 0.5
+done
+
+if ! komorebic state >/dev/null 2>&1; then
+    echo "[auto-komorebi] komorebi did not become ready in time" >&2
+    exit 1
+fi
+
+configure_workspaces || true
+
+mkdir -p "$CONFIG_DIR"
+rm -f "$SOCK"
+
+# Register the subscription once nc has had a chance to bind the socket.
+( sleep 1
+  echo "[auto-komorebi] subscribing to komorebi events via $SOCK_NAME"
+  komorebic subscribe-socket "$SOCK_NAME"
+) &
+
+# nc -lkU keeps accepting new connections after each one closes, so a single
+# invocation can sit there for the lifetime of the script. Stays in the
+# foreground so Ctrl-C tears the whole pipeline down cleanly.
+nc -lkU "$SOCK" | while IFS= read -r line; do
+    case "$line" in
+        *DisplayConnectionChange*)
+            echo "[auto-komorebi] display connection change detected; reconfiguring workspaces"
+            configure_workspaces || true
+            ;;
+    esac
+done
