@@ -51,6 +51,7 @@ opt.ignorecase = true
 opt.smartcase = true
 
 opt.termguicolors = true
+opt.background = "dark"
 opt.ambiwidth = "single"
 opt.hidden = true
 opt.number = true
