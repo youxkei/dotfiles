@@ -27,6 +27,7 @@ export CLAUDE_CODE_SKIP_WINDOWS_PROFILE=1
 
 if [ -e ~/.profile_host ]; then . ~/.profile_host; fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh; fi
 if [ -e ~/.cargo/env ]; then . ~/.cargo/env; fi
 
 if [ -e ~/.nix-profile/lib/libstderred.so ]; then
