@@ -93,6 +93,10 @@
       "rev": "5a37ec9d1faab7c90e8a85bba83d97ea359b6d84",
       "src": "https://github.com/echasnovski/mini.jump2d"
     },
+    "neov-ime.nvim": {
+      "rev": "dbfb6d8cd8da0fa74ecf8ef8984f793910b7f874",
+      "src": "https://github.com/sevenc-nanashi/neov-ime.nvim"
+    },
     "noice.nvim": {
       "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
       "src": "https://github.com/folke/noice.nvim"

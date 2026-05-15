@@ -1281,6 +1281,9 @@ return {
     branch = "stable",
   },
 
+  { "sevenc-nanashi/neov-ime.nvim" },
+
+
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },
 
