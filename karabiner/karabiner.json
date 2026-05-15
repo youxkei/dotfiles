@@ -13,7 +13,20 @@
       "virtual_hid_keyboard": {
         "country_code": 15,
         "keyboard_type_v2": "ansi"
-      }
+      },
+      "devices": [
+        {
+          "identifiers": {
+            "vendor_id": 1241,
+            "product_id": 1330,
+            "is_keyboard": true,
+            "is_pointing_device": true
+          },
+          "ignore": false,
+          "mouse_flip_vertical_wheel": true,
+          "mouse_flip_horizontal_wheel": true
+        }
+      ]
     }
   ]
 }
