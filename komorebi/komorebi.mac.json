@@ -22,7 +22,18 @@
     ],
     "manage_rules": [],
     "floating_applications": [],
-    "ignore_rules": [],
+    "ignore_rules": [
+        {
+            "kind": "Exe",
+            "id": "コントロールセンター",
+            "matching_strategy": "Equals"
+        },
+        {
+            "kind": "Exe",
+            "id": "通知センター",
+            "matching_strategy": "Equals"
+        }
+    ],
     "resize_delta": 50,
     "titleless_applications": [
         "Rejysten"

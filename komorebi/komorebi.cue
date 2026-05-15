@@ -67,6 +67,12 @@ _trayApps: ["Carla.exe", "qjackctl.exe", "jackd.exe", "iTunes.exe", "DeepL.exe",
 _floatApps: ["ShellExperienceHost.exe", "DeepL.exe", "OktaVerify.exe", "steam.exe", "th15.exe", "th07.exe"]
 _manageApps: ["claude.exe"]
 
+// macOS menu bar popups expose AX windows that komorebi otherwise tries to
+// tile (Control Center: Wi-Fi/battery/sound/etc; Notification Center: clock
+// widgets). komorebi reads the AX title, which is localized, so the Japanese
+// system UI must be matched by its Japanese name.
+_macIgnoreApps: ["コントロールセンター", "通知センター"]
+
 _borderColor: {r: 232, g: 145, b: 45}
 
 // Settings whose name, type, and value are accepted by both Windows komorebi
@@ -110,7 +116,7 @@ komorebiMac: _shared & {
 
 	manage_rules: []
 	floating_applications: []
-	ignore_rules: []
+	ignore_rules: [for app in _macIgnoreApps {#ExeRule & {id: app}}]
 
 	// Chrome PWAs whose AX window exposes no title; komorebi refuses to manage
 	// titleless windows unless their app name is listed here.
