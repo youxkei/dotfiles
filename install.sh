@@ -70,6 +70,8 @@ fi
 # komorebi-for-mac).
 if [[ "$OSTYPE" == darwin* ]]; then
     PATHS+=(
+        karabiner $XDG_CONFIG_HOME/karabiner
+
         bin/auto-komorebi $HOME/bin/auto-komorebi
     )
 fi
