@@ -657,7 +657,7 @@ return {
     end,
     keys = {
       { "<leader>ts", "<cmd>PossessionPick<cr>", desc = "Select from sessions" },
-      { "<leader>r", "<cmd>PossessionSaveCwd<cr><cmd>restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
+      { "<leader>r", "<cmd>silent! PossessionSaveCwd!<cr><cmd>silent! restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
     },
   },
 
