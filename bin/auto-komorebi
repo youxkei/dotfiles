@@ -107,6 +107,7 @@ configure_workspaces() {
 register_workspace_rules() {
     komorebic initial-named-workspace-rule exe Chrome r0
     komorebic initial-named-workspace-rule exe Ghostty c0
+    komorebic initial-named-workspace-rule exe Neovide c1
     komorebic initial-named-workspace-rule exe Slack l1
     komorebic initial-named-workspace-rule exe Claude r5
     komorebic enforce-workspace-rules
