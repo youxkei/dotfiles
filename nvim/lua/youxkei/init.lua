@@ -78,6 +78,11 @@ opt.sessionoptions = {
   "blank", "buffers", "curdir", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
 }
 
+if g.neovide then
+  opt.guifont = "Moralerspace Krypton:h12"
+  g.neovide_theme = "dark"
+end
+
 g.mapleader = ","
 
 local augroup = vim.api.nvim_create_augroup("youxkei", { clear = true })
