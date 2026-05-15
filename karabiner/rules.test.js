@@ -175,6 +175,9 @@ expectKey("builtin tab -> left_command",
 expectKey("builtin left_command -> left_shift",
   { device: "builtin", key_code: "left_command" },
   { key_code: "left_shift" });
+expectKey("builtin fn -> left_command",
+  { device: "builtin", key_code: "fn" },
+  { key_code: "left_command" });
 
 // ---------- Dudrack neutral (built-in, no henkan) ----------
 

@@ -262,6 +262,7 @@
   manipulators.push(builtinRemap("caps_lock",    "left_control"));
   manipulators.push(builtinRemap("tab",          "left_command"));
   manipulators.push(builtinRemap("left_command", "left_shift"));
+  manipulators.push(builtinRemap("fn",           "left_command"));
 
   // Right Command activates the Henkan layer while held.
   manipulators.push({
