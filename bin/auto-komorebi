@@ -117,7 +117,13 @@ cleanup() {
     if [[ -n "${KOMOREBI_PID:-}" ]]; then
         kill -INT "$KOMOREBI_PID" 2>/dev/null || true
     fi
-    rm -f "$SOCK"
+    if [[ -n "${WAKE_LISTENER_PID:-}" ]]; then
+        kill "$WAKE_LISTENER_PID" 2>/dev/null || true
+    fi
+    if [[ -n "${WAKE_READER_PID:-}" ]]; then
+        kill "$WAKE_READER_PID" 2>/dev/null || true
+    fi
+    rm -f "$SOCK" "${WAKE_PIPE:-}"
 }
 trap cleanup EXIT INT TERM
 
@@ -161,6 +167,33 @@ rm -f "$SOCK"
   echo "[auto-komorebi] subscribing to komorebi events via $SOCK_NAME"
   komorebic subscribe-socket "$SOCK_NAME"
 ) &
+
+# The Swift helper drives pause/unpause directly via komorebi's socket so it
+# can race the reaper effectively (komorebi/src/reaper.rs reaps managed
+# windows whenever AX queries fail during display sleep — see the long
+# comment in bin/komorebi-wake-listener for the rationale). The shell side
+# only handles retile + logging once the helper signals that AX is back.
+WAKE_PIPE="$CONFIG_DIR/auto-komorebi.wake"
+rm -f "$WAKE_PIPE"
+mkfifo "$WAKE_PIPE"
+
+# Set KOMOREBI_WAKE_DEBUG=1 in the environment when launching auto-komorebi
+# to get IOKit message timing dumped to stderr (visible in the terminal).
+"$REPO_DIR/bin/komorebi-wake-listener" >"$WAKE_PIPE" &
+WAKE_LISTENER_PID=$!
+
+( while IFS= read -r line; do
+    case "$line" in
+        will-sleep)
+            echo "[auto-komorebi] pre-sleep: komorebi paused"
+            ;;
+        wake)
+            echo "[auto-komorebi] post-wake: komorebi unpaused; retiling"
+            komorebic retile 2>/dev/null || true
+            ;;
+    esac
+done <"$WAKE_PIPE" ) &
+WAKE_READER_PID=$!
 
 # nc -lkU keeps accepting new connections after each one closes, so a single
 # invocation can sit there for the lifetime of the script. Stays in the

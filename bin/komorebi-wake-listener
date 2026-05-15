@@ -1,0 +1,351 @@
+#!/usr/bin/env swift
+//
+// komorebi-wake-listener: drive komorebi's pause state across macOS sleep
+// transitions so its reaper does not permanently remove ("reap") managed
+// windows whenever AX queries fail.
+//
+// Pause-before-sleep
+//
+//   - komorebi-for-mac's reaper removes managed windows whenever AX returns
+//     InvalidUIElement (window.rs:376, reaper.rs:67). AX starts failing the
+//     instant the display turns off, so any AX-failure notification that
+//     reaches the reaper while komorebi is unpaused is acted on.
+//   - reaper.rs:62 skips notifications while wm.is_paused, so we just need
+//     to flip komorebi paused before AX starts failing.
+//   - NSWorkspace.screensDidSleepNotification fires AFTER display-off — too
+//     late. We use IOKit IORegisterForSystemPower (kIOMessageSystemWillSleep)
+//     and IOServiceAddInterestNotification on IODisplayWrangler
+//     (kIOMessageDeviceWillPowerOff), both of which fire before the kernel
+//     completes the power transition.
+//   - We talk to komorebi directly over its Unix socket inside the IOKit
+//     callback (no `komorebic` fork+exec) so the pause arrives in ~15ms.
+//
+// Unpause-when-ax-ready
+//
+//   - Even after the display powers back on, accessibility takes some
+//     variable time (~100ms-1s, depending on running apps) before AX
+//     queries succeed reliably. Unpausing too early lets komorebi process
+//     queued events whose Window operations still fail, which re-triggers
+//     the reaper.
+//   - We don't trust fixed timers for this. Instead we wait for a positive
+//     signal from macOS that AX has settled: any of `screenIsUnlocked`,
+//     loginwindow deactivation, or a non-loginwindow app activation. macOS
+//     does not dispatch app focus events nor allow the lock UI to dismiss
+//     until AX is responsive, so the first such event after a wake is a
+//     reliable "AX is back" indicator.
+
+import Foundation
+import AppKit
+import IOKit
+import IOKit.pwr_mgt
+
+setbuf(stdout, nil)
+setbuf(stderr, nil)
+
+// Diagnostic logging to stderr — auto-komorebi swallows stderr to /dev/null
+// by default; flip this to true and redirect stderr to a file via the shell
+// pipeline to investigate IOKit message timing during a sleep test.
+private let debugLog = ProcessInfo.processInfo.environment["KOMOREBI_WAKE_DEBUG"] != nil
+
+private let timestampFormatter: DateFormatter = {
+    let f = DateFormatter()
+    f.dateFormat = "HH:mm:ss.SSS"
+    return f
+}()
+
+private func debug(_ message: @autoclosure () -> String) {
+    guard debugLog else { return }
+    FileHandle.standardError.write(
+        "[\(timestampFormatter.string(from: Date()))] \(message())\n".data(using: .utf8)!
+    )
+}
+
+// IOKit message constants — Swift can't import the C function-like macros
+// `iokit_common_msg(...)` from <IOKit/IOMessage.h>. Each value is
+// `sys_iokit | sub_iokit_common | code` = `0xE0000000 | code`.
+private let kIOMessageCanSystemSleepValue: UInt32     = 0xE0000270
+private let kIOMessageSystemWillSleepValue: UInt32    = 0xE0000280
+private let kIOMessageSystemHasPoweredOnValue: UInt32 = 0xE0000300
+private let kIOMessageDeviceWillPowerOffValue: UInt32 = 0xE0000210
+private let kIOMessageDeviceHasPoweredOnValue: UInt32 = 0xE0000230
+
+// Talk to komorebi via its Unix socket directly instead of shelling out to the
+// `komorebic` CLI. The CLI roundtrip adds ~30-50ms (fork + exec + socket
+// connect), and we need to pause komorebi within ~10ms of receiving the
+// IOKit power-off notification to beat the reaper. Direct socket comm is
+// typically <5ms.
+//
+// Protocol (komorebi-client/src/lib.rs:46): connect to komorebi.sock, write
+// the serde-JSON of SocketMessage (`{"type":"TogglePause"}` for unit variants,
+// adjacent tagging per komorebi/src/core/mod.rs:270). For queries, shutdown
+// the write side and read until EOF.
+
+private let komorebiSocketPath =
+    "\(NSHomeDirectory())/Library/Application Support/komorebi/komorebi.sock"
+
+private func sendKomorebiSocket(_ message: String, readResponse: Bool) -> String? {
+    let sock = socket(AF_UNIX, SOCK_STREAM, 0)
+    if sock < 0 { return nil }
+    defer { close(sock) }
+
+    var addr = sockaddr_un()
+    addr.sun_family = sa_family_t(AF_UNIX)
+    let pathBytes = Array(komorebiSocketPath.utf8) + [0]
+    if pathBytes.count > MemoryLayout.size(ofValue: addr.sun_path) {
+        return nil
+    }
+    withUnsafeMutableBytes(of: &addr.sun_path) { dst in
+        pathBytes.withUnsafeBufferPointer { src in
+            dst.copyMemory(from: UnsafeRawBufferPointer(src))
+        }
+    }
+
+    let connectResult = withUnsafePointer(to: &addr) { addrPtr in
+        addrPtr.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPtr in
+            connect(sock, sockaddrPtr, socklen_t(MemoryLayout<sockaddr_un>.size))
+        }
+    }
+    if connectResult < 0 { return nil }
+
+    let msgData = Array(message.utf8)
+    let written = msgData.withUnsafeBufferPointer { ptr in
+        write(sock, ptr.baseAddress, ptr.count)
+    }
+    if written != msgData.count { return nil }
+
+    if !readResponse { return "" }
+
+    shutdown(sock, SHUT_WR)
+
+    var buffer = [UInt8](repeating: 0, count: 65536)
+    var response = Data()
+    while true {
+        let n = buffer.withUnsafeMutableBufferPointer { ptr in
+            read(sock, ptr.baseAddress, ptr.count)
+        }
+        if n <= 0 { break }
+        response.append(buffer, count: n)
+    }
+    return String(data: response, encoding: .utf8)
+}
+
+private func komorebiIsPaused() -> Bool {
+    guard let response = sendKomorebiSocket("{\"type\":\"State\"}", readResponse: true) else {
+        return false
+    }
+    return response.range(
+        of: "\"is_paused\"\\s*:\\s*true",
+        options: .regularExpression
+    ) != nil
+}
+
+private func pauseKomorebiIfNeeded() {
+    if !komorebiIsPaused() {
+        _ = sendKomorebiSocket("{\"type\":\"TogglePause\"}", readResponse: false)
+    }
+}
+
+private func unpauseKomorebiIfNeeded() {
+    if komorebiIsPaused() {
+        _ = sendKomorebiSocket("{\"type\":\"TogglePause\"}", readResponse: false)
+    }
+}
+
+// At wake time the AX-ready signal we observe (e.g. loginwindow deactivation)
+// is the same event that drives komorebi's own auto-unpause path. A single
+// `is_paused` query racing alongside komorebi's ScreenUnlock processing can
+// return the stale pre-unpause value, and a naive "if paused then toggle"
+// then flips komorebi back to paused — the exact bug visible in the log
+// when the second TogglePause says `pausing` instead of `resuming`. Poll
+// until two consecutive queries agree; only then is the state safely
+// observable. Each query is ~14ms, so a typical converge is one extra
+// 30ms wait.
+private func waitForStablePauseState(maxAttempts: Int = 10, interval: useconds_t = 30_000) -> Bool {
+    var previous: Bool? = nil
+    for _ in 0..<maxAttempts {
+        let current = komorebiIsPaused()
+        if previous == current { return current }
+        previous = current
+        usleep(interval)
+    }
+    return previous ?? false
+}
+
+// Track whether we have an outstanding pause that should be released once we
+// see a positive AX-ready signal. Two threads observe state changes (the
+// IOKit run-loop thread for power events, and the NSNotification queues for
+// AppKit / DistributedNotificationCenter events), so guard the flag with a
+// lock.
+private let pendingWakeLock = NSLock()
+private var pendingWake = false
+
+private func markPendingWake() {
+    pendingWakeLock.lock()
+    pendingWake = true
+    pendingWakeLock.unlock()
+}
+
+private func consumePendingWakeIfAny() -> Bool {
+    pendingWakeLock.lock()
+    defer { pendingWakeLock.unlock() }
+    if pendingWake {
+        pendingWake = false
+        return true
+    }
+    return false
+}
+
+// Fired when macOS has dispatched an event that implies AX is responsive
+// again (any of: screen unlock, loginwindow deactivation, or a non-
+// loginwindow app receiving focus). We can't probe AX directly from this
+// script (it would require accessibility permissions on /usr/bin/swift), so
+// we rely on these system events as the readiness signal. The first event
+// after a wake unlocks komorebi; subsequent events are no-ops until the next
+// will-sleep / wake cycle.
+private func onAxLikelyReady() {
+    guard consumePendingWakeIfAny() else { return }
+    debug("AX-ready signal -> wait for stable state then unpause")
+    if waitForStablePauseState() {
+        debug("stable=true -> toggle to unpause")
+        _ = sendKomorebiSocket("{\"type\":\"TogglePause\"}", readResponse: false)
+    } else {
+        debug("stable=false -> already unpaused")
+    }
+    print("wake")
+}
+
+// MARK: - IOKit system power notifications
+// IORegisterForSystemPower delivers kIOMessageSystemWillSleep synchronously
+// before the system goes to full sleep; the kernel waits up to ~30s for
+// IOAllowPowerChange before forcing the transition.
+
+private var systemPowerConnect: io_connect_t = 0
+private var systemPowerNotifyPort: IONotificationPortRef?
+private var systemPowerNotifier: io_object_t = 0
+
+private let systemPowerCallback: IOServiceInterestCallback = { _, _, messageType, messageArgument in
+    let notificationID = Int(bitPattern: messageArgument)
+    debug("system power msg: 0x\(String(messageType, radix: 16))")
+    switch messageType {
+    case kIOMessageCanSystemSleepValue:
+        IOAllowPowerChange(systemPowerConnect, notificationID)
+    case kIOMessageSystemWillSleepValue:
+        debug("SystemWillSleep -> pause")
+        pauseKomorebiIfNeeded()
+        debug("SystemWillSleep -> pause done")
+        print("will-sleep")
+        IOAllowPowerChange(systemPowerConnect, notificationID)
+    case kIOMessageSystemHasPoweredOnValue:
+        debug("SystemHasPoweredOn -> mark pending")
+        markPendingWake()
+    default:
+        break
+    }
+}
+
+systemPowerConnect = IORegisterForSystemPower(
+    nil,
+    &systemPowerNotifyPort,
+    systemPowerCallback,
+    &systemPowerNotifier
+)
+
+if let port = systemPowerNotifyPort {
+    let source = IONotificationPortGetRunLoopSource(port).takeUnretainedValue()
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, CFRunLoopMode.commonModes)
+}
+
+// MARK: - IOKit display power notifications
+// Catches display-off transitions that never progress to full system sleep
+// (e.g. menu bar > Sleep on a system with a sleep-preventing assertion ends
+// up only turning off the display). kIOMessageDeviceWillPowerOff is the
+// IODisplayWrangler equivalent of WillSleep.
+
+private var displayNotifier: io_object_t = 0
+
+private let displayCallback: IOServiceInterestCallback = { _, _, messageType, _ in
+    debug("display msg: 0x\(String(messageType, radix: 16))")
+    switch messageType {
+    case kIOMessageDeviceWillPowerOffValue:
+        debug("DeviceWillPowerOff -> pause")
+        pauseKomorebiIfNeeded()
+        debug("DeviceWillPowerOff -> pause done")
+        print("will-sleep")
+    case kIOMessageDeviceHasPoweredOnValue:
+        debug("DeviceHasPoweredOn -> mark pending")
+        markPendingWake()
+    default:
+        break
+    }
+}
+
+let displayService = IOServiceGetMatchingService(
+    kIOMainPortDefault,
+    IOServiceMatching("IODisplayWrangler")
+)
+
+if displayService != 0, let port = systemPowerNotifyPort {
+    IOServiceAddInterestNotification(
+        port,
+        displayService,
+        "IOGeneralInterest",
+        displayCallback,
+        nil,
+        &displayNotifier
+    )
+    IOObjectRelease(displayService)
+}
+
+// MARK: - AX-ready signals
+// macOS dispatches the events below only after the AX subsystem has settled
+// post-wake (a non-loginwindow app cannot legitimately receive focus, and
+// the lock UI cannot be dismissed, while AX is still in transition). The
+// first such event after a `markPendingWake()` releases komorebi.
+
+let workspaceCenter = NSWorkspace.shared.notificationCenter
+let distributedCenter = DistributedNotificationCenter.default()
+
+distributedCenter.addObserver(
+    forName: NSNotification.Name("com.apple.screenIsLocked"),
+    object: nil,
+    queue: nil
+) { _ in
+    debug("screenIsLocked")
+    pauseKomorebiIfNeeded()
+    print("will-sleep")
+}
+
+distributedCenter.addObserver(
+    forName: NSNotification.Name("com.apple.screenIsUnlocked"),
+    object: nil,
+    queue: nil
+) { _ in
+    debug("screenIsUnlocked -> readiness signal")
+    onAxLikelyReady()
+}
+
+workspaceCenter.addObserver(
+    forName: NSWorkspace.didDeactivateApplicationNotification,
+    object: nil,
+    queue: nil
+) { notification in
+    let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+    if app?.bundleIdentifier == "com.apple.loginwindow" {
+        debug("loginwindow deactivated -> readiness signal")
+        onAxLikelyReady()
+    }
+}
+
+workspaceCenter.addObserver(
+    forName: NSWorkspace.didActivateApplicationNotification,
+    object: nil,
+    queue: nil
+) { notification in
+    let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
+    if app?.bundleIdentifier != "com.apple.loginwindow" {
+        debug("non-loginwindow app activated -> readiness signal")
+        onAxLikelyReady()
+    }
+}
+
+RunLoop.main.run()
