@@ -24,6 +24,9 @@
     "floating_applications": [],
     "ignore_rules": [],
     "resize_delta": 50,
+    "titleless_applications": [
+        "Rejysten"
+    ],
     "window_container_behaviour": "Create",
     "cross_monitor_move_behaviour": "Insert",
     "unmanaged_window_operation_behaviour": "Op",

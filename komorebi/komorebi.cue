@@ -111,4 +111,8 @@ komorebiMac: _shared & {
 	manage_rules: []
 	floating_applications: []
 	ignore_rules: []
+
+	// Chrome PWAs whose AX window exposes no title; komorebi refuses to manage
+	// titleless windows unless their app name is listed here.
+	titleless_applications: ["Rejysten"]
 }
