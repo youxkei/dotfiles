@@ -110,7 +110,64 @@ register_workspace_rules() {
     komorebic initial-named-workspace-rule exe Neovide c1
     komorebic initial-named-workspace-rule exe Slack l1
     komorebic initial-named-workspace-rule exe Claude r5
+    # Rejysten is titleless; enforce_workspace_rules (window_manager.rs)
+    # skips windows whose `window.title()` is None, so this rule never
+    # actually applies. place_titleless_apps below handles the move.
+    # Re-enable once upstream allows matching when title is None.
+    # komorebic initial-named-workspace-rule exe Rejysten l0
     komorebic enforce-workspace-rules
+}
+
+# komorebi-for-mac's load_workspace_information (macos_api.rs) matches CGS
+# window list entries to AX elements via window_by_title (application.rs).
+# Apps whose CGS-reported title differs from their AX title get skipped at
+# startup and never managed. Clicking such a window later triggers
+# ShowOnInputEvent (input_event_listener.rs) which manages it correctly.
+# Workaround: activate each running GUI app once and issue `komorebic manage`
+# to force-trigger the Show/Manage handler for its main window. ignored apps
+# are filtered out by should_manage (window.rs).
+force_manage_running_apps() {
+    # `name of process` returns the executable filename, which collapses Chrome
+    # PWAs (Rejysten, etc.) onto a single "app_mode_loader" entry that doesn't
+    # match the per-PWA process. `displayed name` matches what komorebi sees as
+    # the application name, so resolve and activate by that.
+    local original apps app
+    original=$(osascript -e 'tell application "System Events" to get displayed name of first process whose frontmost is true' 2>/dev/null)
+    apps=$(osascript <<'EOF' 2>/dev/null
+tell application "System Events"
+    set names to {}
+    repeat with p in (every process whose background only is false)
+        set end of names to displayed name of p
+    end repeat
+    return names
+end tell
+EOF
+)
+
+    local -a app_array
+    IFS=$',\n' read -A app_array <<<"$apps"
+    for app in "${app_array[@]}"; do
+        app="${app## }"
+        app="${app%% }"
+        [[ -z "$app" ]] && continue
+        osascript -e "tell application \"System Events\" to set frontmost of (first process whose displayed name is \"$app\") to true" 2>/dev/null || continue
+        komorebic manage 2>/dev/null || true
+    done
+
+    if [[ -n "$original" ]]; then
+        osascript -e "tell application \"System Events\" to set frontmost of (first process whose displayed name is \"$original\") to true" 2>/dev/null || true
+    fi
+}
+
+# Workspace rules don't fire for titleless apps: enforce_workspace_rules
+# (window_manager.rs) requires `Some(title)` from `window.title()` before
+# matching, but Chrome PWAs in `titleless_applications` return None from
+# kAXTitleAttribute. Manually activate each known titleless app and move
+# it to its rule's workspace.
+place_titleless_apps() {
+    osascript -e 'tell application "System Events" to set frontmost of (first process whose displayed name is "Rejysten") to true' 2>/dev/null || return 0
+    sleep 0.3
+    komorebic move-to-named-workspace l0 2>/dev/null || true
 }
 
 cleanup() {
@@ -158,6 +215,8 @@ if ! komorebic state >/dev/null 2>&1; then
 fi
 
 configure_workspaces || true
+force_manage_running_apps
+place_titleless_apps
 
 mkdir -p "$CONFIG_DIR"
 rm -f "$SOCK"
