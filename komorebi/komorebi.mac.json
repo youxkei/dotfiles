@@ -58,7 +58,13 @@
         }
     ],
     "manage_rules": [],
-    "floating_applications": [],
+    "floating_applications": [
+        {
+            "kind": "Exe",
+            "id": "Okta Verify",
+            "matching_strategy": "Equals"
+        }
+    ],
     "ignore_rules": [
         {
             "kind": "Exe",

@@ -72,6 +72,7 @@ _manageApps: ["claude.exe"]
 // widgets). komorebi reads the AX title, which is localized, so the Japanese
 // system UI must be matched by its Japanese name.
 _macIgnoreApps: ["コントロールセンター", "通知センター"]
+_macFloatApps: ["Okta Verify"]
 
 _borderColor: {r: 232, g: 145, b: 45}
 
@@ -115,7 +116,7 @@ komorebiMac: _shared & {
 	monitors:                  (_monitors & {src:                  logicalMonitorsMac}).out
 
 	manage_rules: []
-	floating_applications: []
+	floating_applications: [for app in _macFloatApps {#ExeRule & {id: app}}]
 	ignore_rules: [for app in _macIgnoreApps {#ExeRule & {id: app}}]
 
 	// Chrome PWAs whose AX window exposes no title; komorebi refuses to manage
