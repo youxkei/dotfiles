@@ -11,6 +11,7 @@
 //   4. Dudrack Neutral Dvorak layer (built-in, always).
 //   5. External keyboard remaps (PC-JIS IME keys and JIS label behavior).
 //   6. External: swallow unbound alt+key to block macOS option dead-keys.
+//   7. Home/End -> Cmd+Left/Right (both keyboards, macOS line-nav).
 
 (function () {
   var KOMOREBIC = "/opt/homebrew/bin/komorebic";
@@ -66,8 +67,9 @@
   function toKeyEntry(spec) {
     var toEntry = { key_code: spec.key_code };
     var toMods = [];
-    if (spec.shift)  toMods.push("left_shift");
-    if (spec.option) toMods.push("left_option");
+    if (spec.shift)   toMods.push("left_shift");
+    if (spec.option)  toMods.push("left_option");
+    if (spec.command) toMods.push("left_command");
     if (toMods.length) toEntry.modifiers = toMods;
     return toEntry;
   }
@@ -331,8 +333,8 @@
     { from: "b",         shift: false, to: keyStroke("x") },
     { from: "n",         shift: false, to: keyStroke("japanese_kana") },
     { from: "m",         shift: false, to: keyStroke("japanese_eisuu") },
-    { from: "comma",     shift: false, to: keyStroke("home") },
-    { from: "period",    shift: false, to: keyStroke("end") },
+    { from: "comma",     shift: false, to: { key_code: "left_arrow",  command: true } },
+    { from: "period",    shift: false, to: { key_code: "right_arrow", command: true } },
     { from: "slash",     shift: true,  to: charKey("~") },
     { from: "slash",     shift: false, to: charKey("^") }
   ];
@@ -505,6 +507,26 @@
       to: [{ key_code: "vk_none" }]
     });
   }
+
+  // ============================================================
+  // 7. Home/End -> Cmd+Left/Right (both keyboards)
+  // ============================================================
+  //
+  // macOS uses Cmd+Left/Right for line navigation; the bare Home/End keys are
+  // app-dependent (often "scroll to top/bottom" rather than "beginning/end of
+  // line"). Remap them globally so they always mean line-nav, with extra
+  // modifiers (e.g. shift for selection) passed through.
+
+  manipulators.push({
+    type: "basic",
+    from: { key_code: "home", modifiers: ANY_MODS },
+    to: [{ key_code: "left_arrow", modifiers: ["left_command"] }]
+  });
+  manipulators.push({
+    type: "basic",
+    from: { key_code: "end", modifiers: ANY_MODS },
+    to: [{ key_code: "right_arrow", modifiers: ["left_command"] }]
+  });
 
   return {
     description: "Custom rules: Dudrack + Komorebi + external JIS",

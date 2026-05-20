@@ -258,11 +258,29 @@ expectKeyCases("builtin henkan", [
   keyCase("b -> x", "b", { key_code: "x" }, { henkan: true }),
   keyCase("n -> japanese_kana", "n", { key_code: "japanese_kana" }, { henkan: true }),
   keyCase("m -> japanese_eisuu", "m", { key_code: "japanese_eisuu" }, { henkan: true }),
-  keyCase("comma -> home", "comma", { key_code: "home" }, { henkan: true }),
-  keyCase("period -> end", "period", { key_code: "end" }, { henkan: true }),
+  keyCase("comma -> cmd+left", "comma", { key_code: "left_arrow", modifiers: ["left_command"] }, { henkan: true }),
+  keyCase("period -> cmd+right", "period", { key_code: "right_arrow", modifiers: ["left_command"] }, { henkan: true }),
   keyCase("slash -> '^'", "slash", { key_code: "6", modifiers: ["left_shift"] }, { henkan: true }),
   keyCase("shift+slash -> '~'", "slash", { key_code: "grave_accent_and_tilde", modifiers: ["left_shift"] }, { henkan: true, shift: true }),
 ]);
+
+// ---------- home/end -> cmd+left/right (both devices) ----------
+
+expectKey("builtin home -> cmd+left",
+  { device: "builtin", key_code: "home" },
+  { key_code: "left_arrow", modifiers: ["left_command"] });
+expectKey("builtin end -> cmd+right",
+  { device: "builtin", key_code: "end" },
+  { key_code: "right_arrow", modifiers: ["left_command"] });
+expectKey("external home -> cmd+left",
+  { device: "external", key_code: "home" },
+  { key_code: "left_arrow", modifiers: ["left_command"] });
+expectKey("external end -> cmd+right",
+  { device: "external", key_code: "end" },
+  { key_code: "right_arrow", modifiers: ["left_command"] });
+expectKey("shift+home -> shift+cmd+left (passthrough)",
+  { device: "external", key_code: "home", modifiers: ["shift"] },
+  { key_code: "left_arrow", modifiers: ["left_command"] });
 
 // ---------- komorebi shell commands ----------
 
