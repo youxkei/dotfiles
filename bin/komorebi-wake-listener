@@ -42,7 +42,7 @@ import IOKit.pwr_mgt
 setbuf(stdout, nil)
 setbuf(stderr, nil)
 
-// Diagnostic logging to stderr — auto-komorebi swallows stderr to /dev/null
+// Diagnostic logging to stderr — watch-komorebi swallows stderr to /dev/null
 // by default; flip this to true and redirect stderr to a file via the shell
 // pipeline to investigate IOKit message timing during a sleep test.
 private let debugLog = ProcessInfo.processInfo.environment["KOMOREBI_WAKE_DEBUG"] != nil

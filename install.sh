@@ -72,7 +72,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
     PATHS+=(
         karabiner $XDG_CONFIG_HOME/karabiner
 
-        bin/auto-komorebi $HOME/bin/auto-komorebi
+        bin/watch-komorebi $HOME/bin/watch-komorebi
+        bin/start-komorebi $HOME/bin/start-komorebi
     )
 fi
 

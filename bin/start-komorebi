@@ -1,0 +1,380 @@
+#!/usr/bin/env zsh
+# start-komorebi: macOS equivalent of bin/start-komorebi.ps1.
+# Regenerates the komorebi config from CUE, stops any existing
+# komorebi-for-mac daemon, starts a fresh one, applies the workspace
+# layout (piling workspaces from disconnected logical monitors onto a
+# primary connected monitor), then force-manages any app windows that
+# load_workspace_information missed and finally pins the titleless ones
+# (Rejysten) to their workspaces.
+#
+# Intended to be invoked from bin/watch-komorebi at startup and on
+# restart, but is fully standalone and can be run manually for testing
+# or for a one-shot re-init without the watch-komorebi supervisor.
+
+set -euo pipefail
+# Inherited xtrace/verbose from .zshenv leaks variable assignments into stdout
+# and interferes with `$(...)` captures; force it off for this script.
+setopt no_xtrace no_verbose 2>/dev/null || true
+
+REPO_DIR="${REPO_DIR:-$HOME/repo/dotfiles}"
+CONFIG="$REPO_DIR/komorebi/komorebi.mac.json"
+PRIORITY_ORDER=(center left right)
+
+debug_log() {
+    [[ -n "${KOMOREBI_DEBUG:-}" ]] || return 0
+    step_log "$1"
+}
+
+# Dump komorebi state at key bootstrap points. `[[ -n "$x" ]] && cmd`
+# is a trap here: when the test fails, the whole pipeline exits
+# non-zero and `set -e` kills the script — use early return instead.
+log_layout() {
+    [[ -n "${KOMOREBI_DEBUG:-}" ]] || return 0
+    local label="$1" state summary windows
+    if ! state=$(komorebic state 2>/dev/null); then
+        echo "[start-komorebi:$label] komorebic state failed"
+        return 0
+    fi
+    summary=$(print -r -- "$state" | jq -r '
+        "monitors=\(.monitors.elements | length) " +
+        "workspaces=\([.monitors.elements[].workspaces.elements[]] | length) " +
+        "containers=\([.monitors.elements[].workspaces.elements[].containers.elements[]?] | length) " +
+        "windows=\([.monitors.elements[].workspaces.elements[].containers.elements[]?.windows.elements[]?] | length) " +
+        "floating=\([.monitors.elements[].workspaces.elements[].floating_windows.elements[]?] | length)"
+    ' 2>/dev/null) || summary=""
+    if [[ -z "$summary" ]]; then
+        echo "[start-komorebi:$label] jq summary failed; state ${#state} chars; first 300:"
+        print -r -- "${state:0:300}"
+        return 0
+    fi
+    echo "[start-komorebi:$label] $summary"
+    windows=$(print -r -- "$state" | jq -r '
+        .monitors.elements as $ms
+        | range(0; $ms | length) as $mi
+        | $ms[$mi].workspaces.elements as $wss
+        | range(0; $wss | length) as $wi
+        | $wss[$wi] as $ws
+        | ($ws.containers.elements // []) as $cs
+        | ($ws.floating_windows.elements // []) as $fs
+        | (
+            ($cs[]? | (.windows.elements // [])[]? | "  tile  m\($mi)/ws\($wi)[\($ws.name // "?")] id=\(.id // 0) exe=\(.details.exe // "?") title=\(.details.title // "?")"),
+            ($fs[]? | "  float m\($mi)/ws\($wi)[\($ws.name // "?")] id=\(.id // 0) exe=\(.details.exe // "?") title=\(.details.title // "?")")
+        )
+    ' 2>/dev/null) || windows=""
+    if [[ -n "$windows" ]]; then
+        print -r -- "$windows"
+    fi
+}
+
+# `osascript ... set frontmost true` is fire-and-forget; macOS dispatches
+# the activation request and returns long before the focus switch has
+# actually completed. komorebic manage / move commands that race against
+# this read stale foreground state. Poll until AppKit reports the target
+# as frontmost rather than relying on a fixed sleep. ~8 iterations is
+# enough for any sane focus switch (~1s upper bound); Finder and a few
+# other apps can never become frontmost from this code path and would
+# burn the full timeout otherwise.
+wait_for_frontmost() {
+    local target="$1" current
+    local _
+    for _ in $(seq 1 8); do
+        current=$(osascript -e 'tell application "System Events" to get displayed name of first process whose frontmost is true' 2>/dev/null) || current=""
+        [[ "$current" == "$target" ]] && return 0
+        sleep 0.05
+    done
+    return 1
+}
+
+configure_workspaces() {
+    local monitor_info logical_monitors
+    monitor_info=$(komorebic monitor-info)
+    logical_monitors=$(make --no-print-directory -C "$REPO_DIR" komorebi-logical-monitors-mac)
+
+    local connected_devices
+    connected_devices=$(
+        print -r -- "$monitor_info" \
+            | jq -r '.[].serial_number_id
+                | select(. != null and . != "" and (gsub("\\s"; "") != "0000000000000"))'
+    )
+
+    local lm connected=() disconnected=()
+    for lm in "${PRIORITY_ORDER[@]}"; do
+        local matched
+        matched=$(
+            print -r -- "$logical_monitors" \
+                | jq --arg lm "$lm" --arg ids "$connected_devices" '
+                    ($ids | split("\n") | map(select(length > 0))) as $cd
+                    | .[$lm].device_ids
+                    | any(. as $d | $cd | index($d) != null)
+                '
+        )
+        if [[ "$matched" == "true" ]]; then
+            connected+=("$lm")
+        else
+            disconnected+=("$lm")
+        fi
+    done
+
+    if (( ${#disconnected[@]} == 0 )); then
+        echo "[start-komorebi] all logical monitors connected; no piling needed"
+        register_workspace_rules
+        return 0
+    fi
+
+    local primary primary_index workspaces=()
+    if (( ${#connected[@]} == 0 )); then
+        primary=""
+        primary_index=0
+        for lm in "${PRIORITY_ORDER[@]}"; do
+            local ws
+            ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$lm" '.[$lm].workspaces[]')
+            workspaces+=(${(f)ws})
+        done
+        echo "[start-komorebi] no known logical monitors connected; piling all workspaces onto monitor 0"
+    else
+        primary="${connected[1]}"
+        local primary_device_ids
+        primary_device_ids=$(
+            print -r -- "$logical_monitors" | jq -r --arg lm "$primary" '.[$lm].device_ids[]'
+        )
+        primary_index=$(
+            print -r -- "$monitor_info" \
+                | jq --arg ids "$primary_device_ids" '
+                    ($ids | split("\n") | map(select(length > 0))) as $pd
+                    | to_entries
+                    | map(select(.value.serial_number_id as $s | $pd | index($s) != null))
+                    | .[0].key // -1
+                '
+        )
+        if [[ "$primary_index" == "-1" ]]; then
+            echo "[start-komorebi] primary logical monitor '$primary' has no matching connected monitor; aborting reconciliation" >&2
+            return 1
+        fi
+
+        local ws
+        ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$primary" '.[$lm].workspaces[]')
+        workspaces+=(${(f)ws})
+
+        for lm in "${disconnected[@]}"; do
+            ws=$(print -r -- "$logical_monitors" | jq -r --arg lm "$lm" '.[$lm].workspaces[]')
+            workspaces+=(${(f)ws})
+            echo "[start-komorebi] $lm logical monitor not connected; piling workspaces onto $primary (monitor $primary_index): ${ws//$'\n'/, }"
+        done
+    fi
+
+    komorebic ensure-named-workspaces "$primary_index" "${workspaces[@]}"
+    register_workspace_rules
+}
+
+# Register initial-workspace-rules so that newly opened windows land on the
+# right workspace. Workspace rules get reset when ensure-named-workspaces is
+# called, so this must be re-applied on every reconciliation (mirrors
+# bin/start-komorebi.ps1 on Windows).
+register_workspace_rules() {
+    komorebic initial-named-workspace-rule exe Chrome r0
+    komorebic initial-named-workspace-rule exe Ghostty c0
+    komorebic initial-named-workspace-rule exe Neovide c1
+    komorebic initial-named-workspace-rule exe Slack l1
+    komorebic initial-named-workspace-rule exe Notion r2
+    komorebic initial-named-workspace-rule exe Claude r3
+    # Rejysten is titleless; enforce_workspace_rules (window_manager.rs)
+    # skips windows whose `window.title()` is None, so this rule never
+    # actually applies. place_titleless_apps below handles the move.
+    # Re-enable once upstream allows matching when title is None.
+    # komorebic initial-named-workspace-rule exe Rejysten l0
+    komorebic enforce-workspace-rules
+}
+
+# komorebi-for-mac's load_workspace_information (macos_api.rs) matches CGS
+# window list entries to AX elements via window_by_title (application.rs).
+# Apps whose CGS-reported title differs from their AX title get skipped at
+# startup and never managed. Clicking such a window later triggers
+# ShowOnInputEvent (input_event_listener.rs) which manages it correctly.
+# Workaround: activate each running GUI app once and issue `komorebic manage`
+# to force-trigger the Show/Manage handler for its main window. ignored apps
+# are filtered out by should_manage (window.rs).
+force_manage_running_apps() {
+    log_layout "before-force-manage"
+    # `name of process` returns the executable filename, which collapses Chrome
+    # PWAs (Rejysten, etc.) onto a single "app_mode_loader" entry that doesn't
+    # match the per-PWA process. `displayed name` matches what komorebi sees as
+    # the application name, so resolve and activate by that.
+    local original apps app
+    original=$(osascript -e 'tell application "System Events" to get displayed name of first process whose frontmost is true' 2>/dev/null)
+    debug_log "originally focused app: '${original}'"
+    apps=$(osascript <<'EOF' 2>/dev/null
+tell application "System Events"
+    set names to {}
+    repeat with p in (every process whose background only is false)
+        set end of names to displayed name of p
+    end repeat
+    return names
+end tell
+EOF
+)
+
+    local -a app_array
+    IFS=$',\n' read -A app_array <<<"$apps"
+    debug_log "force_manage: enumerated ${#app_array[@]} apps"
+
+    # komorebi may have already picked up most apps via
+    # load_workspace_information at startup. The activate + manage loop
+    # is only needed for apps whose CGS-reported title didn't match
+    # their AX title (window_by_title failed). Skip apps that already
+    # appear in komorebi's state — each iteration costs ~300ms of
+    # osascript and AppKit focus-switch, and a few of them (Finder
+    # especially) trigger wait_for_frontmost's full timeout when
+    # System Events never reports the requested process as frontmost.
+    local managed_exes
+    managed_exes=$(komorebic state 2>/dev/null | jq -r '
+        [.monitors.elements[].workspaces.elements[].containers.elements[]?.windows.elements[]?.details.exe // empty]
+        | unique
+        | .[]
+    ' 2>/dev/null) || managed_exes=""
+    debug_log "force_manage: queried managed exes"
+
+    local -a managed_list
+    # `read -A` only reads ONE line and then splits it by IFS — it
+    # silently drops all but the first managed exe. Use zsh's `(f)`
+    # parameter expansion flag, which splits a string on newlines, to
+    # build the array correctly.
+    managed_list=("${(f)managed_exes}")
+
+    # The AppleScript "displayed name" (e.g. "Google Chrome") doesn't
+    # always match komorebi's "exe" string (e.g. "Chrome"; komorebi-for-
+    # mac reads the AX parent's title, which for Chrome happens to be
+    # the short name). Use substring matching either way so the
+    # already-managed check catches both forms.
+    is_managed() {
+        local needle="$1" m
+        for m in "${managed_list[@]}"; do
+            [[ -z "$m" ]] && continue
+            [[ "$needle" == *"$m"* || "$m" == *"$needle"* ]] && return 0
+        done
+        return 1
+    }
+
+    for app in "${app_array[@]}"; do
+        app="${app## }"
+        app="${app%% }"
+        [[ -z "$app" ]] && continue
+        # Finder is always in the running-app list but has no managed
+        # windows and never reports `frontmost is true` via osascript
+        # when activated this way — it just burns wait_for_frontmost's
+        # whole timeout. Skip it explicitly.
+        [[ "$app" == "Finder" ]] && continue
+        if is_managed "$app"; then
+            debug_log "force_manage: skipping $app (already managed)"
+            continue
+        fi
+        osascript -e "tell application \"System Events\" to set frontmost of (first process whose displayed name is \"$app\") to true" 2>/dev/null || continue
+        # Wait until macOS actually reports $app as frontmost before
+        # issuing `komorebic manage` — the manage handler queries the live
+        # foreground window, so racing against a still-stale focus would
+        # manage the previous app instead.
+        wait_for_frontmost "$app" || true
+        komorebic manage 2>/dev/null || true
+        debug_log "force_manage: managed $app"
+    done
+
+    if [[ -n "$original" ]]; then
+        # Restore user-visible focus to whatever was frontmost when the
+        # script was invoked. The loop above probably left some other
+        # app activated (Rejysten or Tailscale, last in iteration).
+        # We don't need to re-manage or re-enforce here: $original is
+        # either already in komorebi's state (it was skipped above) or
+        # was just managed in the loop, and the explicit
+        # `komorebic enforce-workspace-rules` below catches workspace-
+        # rule placements regardless.
+        osascript -e "tell application \"System Events\" to set frontmost of (first process whose displayed name is \"$original\") to true" 2>/dev/null || true
+        debug_log "force_manage: re-activated original ($original)"
+    fi
+
+    log_layout "before-final-enforce"
+
+    # Re-run enforce-workspace-rules now that all running apps have been
+    # manage'd. configure_workspaces called enforce earlier, but at that
+    # point most of the rule-matching apps weren't on komorebi's known
+    # list yet — each in-process Manage event only runs enforce once
+    # (before adding the window), so the rule never fires for the window
+    # being added in that event. An explicit enforce here catches them
+    # all in one pass. EnforceWorkspaceRules clears
+    # already_moved_window_handles, so initial-only rules re-fire.
+    komorebic enforce-workspace-rules 2>/dev/null || true
+
+    log_layout "after-final-enforce"
+}
+
+# Workspace rules don't fire for titleless apps: enforce_workspace_rules
+# (window_manager.rs) requires `Some(title)` from `window.title()` before
+# matching, but Chrome PWAs in `titleless_applications` return None from
+# kAXTitleAttribute. Manually focus the known titleless app via
+# `komorebic eager-focus` (which focuses the first managed window
+# matching an executable name, bypassing macOS focus / komorebi
+# FocusChange entirely) and then move it.
+place_titleless_apps() {
+    komorebic eager-focus Rejysten 2>/dev/null || return 0
+    komorebic move-to-named-workspace l0 2>/dev/null || true
+}
+
+debug_log "regenerating $CONFIG from CUE"
+echo "[start-komorebi] regenerating $CONFIG from CUE"
+make -C "$REPO_DIR" komorebi-mac >/dev/null
+
+debug_log "stopping any running komorebi"
+echo "[start-komorebi] stopping any running komorebi"
+komorebic stop --bar 2>/dev/null || true
+
+# Wait for any pre-existing komorebi to actually exit before starting a new
+# one. Starting the new daemon while the old one still holds its control
+# socket leads to the new process exiting on bind failure while the old one
+# briefly answers `komorebic state` — the wait loop below would think it
+# sees the new daemon come up, then the post-loop check would fail when
+# both are gone.
+for _ in $(seq 1 50); do
+    pgrep -x komorebi >/dev/null 2>&1 || break
+    sleep 0.1
+done
+if pgrep -x komorebi >/dev/null 2>&1; then
+    echo "[start-komorebi] previous komorebi did not exit within 5s; force-killing" >&2
+    pkill -KILL -x komorebi 2>/dev/null || true
+    for _ in $(seq 1 20); do
+        pgrep -x komorebi >/dev/null 2>&1 || break
+        sleep 0.05
+    done
+fi
+
+# Bypass `komorebic start -c <path>`: it spawns the daemon with a broken
+# `'--config="<path>"'` argument (komorebic/src/main.rs:1772 in komorebi-for-mac)
+# which clap rejects. Invoke the daemon directly with the correct flag instead.
+# `&` detaches komorebi from this script; the supervisor (watch-komorebi)
+# tracks it by PID via `pgrep` afterward.
+debug_log "starting komorebi with $CONFIG"
+echo "[start-komorebi] starting komorebi with $CONFIG"
+komorebi --config "$CONFIG" >/dev/null 2>&1 &
+KOMOREBI_PID=$!
+
+for _ in $(seq 1 30); do
+    if komorebic state >/dev/null 2>&1; then
+        debug_log "komorebi started (pid $KOMOREBI_PID)"
+        echo "[start-komorebi] komorebi started (pid $KOMOREBI_PID)"
+        break
+    fi
+    if ! kill -0 "$KOMOREBI_PID" 2>/dev/null; then
+        echo "[start-komorebi] komorebi daemon exited before becoming ready" >&2
+        exit 1
+    fi
+    sleep 0.5
+done
+
+if ! komorebic state >/dev/null 2>&1; then
+    echo "[start-komorebi] komorebi did not become ready in time" >&2
+    exit 1
+fi
+
+configure_workspaces || true
+debug_log "configure_workspaces done"
+force_manage_running_apps
+debug_log "force_manage_running_apps done"
+place_titleless_apps
+debug_log "place_titleless_apps done"

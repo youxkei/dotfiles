@@ -8,7 +8,7 @@ function Get-MonitorCount {
 }
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$komorebiScript = Join-Path $scriptDir "komorebi.ps1"
+$komorebiScript = Join-Path $scriptDir "start-komorebi.ps1"
 
 Write-Host "Starting komorebi..."
 & $komorebiScript
