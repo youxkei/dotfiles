@@ -172,12 +172,26 @@ expectKey("builtin caps_lock -> left_control",
 expectKey("builtin tab -> left_command",
   { device: "builtin", key_code: "tab" },
   { key_code: "left_command" });
-expectKey("builtin left_command -> left_shift",
+expectKey("builtin left_command -> left_option",
   { device: "builtin", key_code: "left_command" },
-  { key_code: "left_shift" });
+  { key_code: "left_option" });
+expectKey("builtin left_option -> left_command",
+  { device: "builtin", key_code: "left_option" },
+  { key_code: "left_command" });
 expectKey("builtin fn -> left_command",
   { device: "builtin", key_code: "fn" },
   { key_code: "left_command" });
+
+// SandS: spacebar -> lazy left_shift (hold), to_if_alone spacebar (tap).
+const spaceMatch = findMatch({ device: "builtin", key_code: "spacebar" });
+assert(spaceMatch && spaceMatch.to && spaceMatch.to[0].key_code === "left_shift" &&
+       spaceMatch.to[0].lazy === true,
+       "builtin spacebar -> lazy left_shift on hold");
+assert(spaceMatch && Array.isArray(spaceMatch.to_if_alone) &&
+       spaceMatch.to_if_alone[0].key_code === "spacebar",
+       "builtin spacebar -> spacebar on tap (to_if_alone)");
+const spaceExtMatch = findMatch({ device: "external", key_code: "spacebar" });
+assert(spaceExtMatch === null, "external spacebar untouched");
 
 // ---------- Dudrack neutral (built-in, no henkan) ----------
 

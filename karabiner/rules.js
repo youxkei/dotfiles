@@ -6,7 +6,7 @@
 //
 // Sections (manipulator order matters -- first match wins within the rule):
 //   1. Komorebi shortcuts (option + key, both keyboards).
-//   2. Built-in keyboard modifier remaps (Caps/Tab/L Cmd/R Cmd).
+//   2. Built-in keyboard modifier remaps (Caps/Tab/L Cmd/L Opt/Fn/R Cmd/Space SandS).
 //   3. Dudrack Henkan layer (built-in, while Right Command is held).
 //   4. Dudrack Neutral Dvorak layer (built-in, always).
 //   5. External keyboard remaps (PC-JIS IME keys and JIS label behavior).
@@ -263,8 +263,29 @@
 
   manipulators.push(builtinRemap("caps_lock",    "left_control"));
   manipulators.push(builtinRemap("tab",          "left_command"));
-  manipulators.push(builtinRemap("left_command", "left_shift"));
+  manipulators.push(builtinRemap("left_command", "left_option"));
+  manipulators.push(builtinRemap("left_option",  "left_command"));
   manipulators.push(builtinRemap("fn",           "left_command"));
+
+  // SandS (Space and Shift): hold space as shift, tap space outputs space.
+  // Built-in only; the external PC-JIS keyboard keeps space as space.
+  //
+  // `lazy: true` on left_shift means the modifier is set internally but the
+  // shift key event is not emitted to the OS until another non-modifier key
+  // needs it, so tapping space alone fires `to_if_alone` without producing a
+  // stray shift down/up.
+  //
+  // Rationale: the previous left_command -> left_shift remap left the user
+  // unable to type ~ via left_cmd + right_cmd + slash on the built-in
+  // keyboard because pressing both command keys triggers NKRO ghosting on
+  // MacBook keyboards and the slash press is never reported by the hardware.
+  manipulators.push({
+    type: "basic",
+    conditions: [BUILTIN],
+    from: { key_code: "spacebar", modifiers: ANY_MODS },
+    to: [{ key_code: "left_shift", lazy: true }],
+    to_if_alone: [{ key_code: "spacebar" }]
+  });
 
   // Right Command activates the Henkan layer while held.
   manipulators.push({
