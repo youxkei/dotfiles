@@ -172,6 +172,7 @@ configure_workspaces() {
 # bin/start-komorebi.ps1 on Windows).
 register_workspace_rules() {
     komorebic initial-named-workspace-rule exe Chrome r0
+    komorebic initial-named-workspace-rule exe Brave r1
     komorebic initial-named-workspace-rule exe Ghostty c0
     komorebic initial-named-workspace-rule exe Neovide c1
     komorebic initial-named-workspace-rule exe Slack l1
