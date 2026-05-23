@@ -2,7 +2,6 @@
 	ui = auto
 [core]
 	editor = nvim
-	sshCommand = ssh.exe
 [alias]
 	tree = log --graph --oneline --decorate
 	rg = !git ls-files | xargs rg
