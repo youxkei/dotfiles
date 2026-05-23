@@ -81,6 +81,18 @@ opt.sessionoptions = {
 if g.neovide then
   opt.guifont = "Moralerspace Krypton:h12"
   g.neovide_theme = "dark"
+
+  -- Neovide forwards Cmd (sent by Karabiner from Home/End) as <D-...>, which has
+  -- no default mapping; wire Cmd+Left/Right to start/end of line. Terminal nvim
+  -- never sees these keys (the terminal emulator handles Cmd), hence neovide-only.
+  for _, mode in ipairs { "n", "x", "i", "c" } do
+    vim.keymap.set(mode, "<D-Left>", "<Home>")
+    vim.keymap.set(mode, "<D-Right>", "<End>")
+  end
+  -- In :terminal the keys reach the shell, not Neovim. zsh runs the emacs keymap
+  -- (bindkey -e) but does not bind Home/End, so send readline's beginning/end-of-line.
+  vim.keymap.set("t", "<D-Left>", "<C-a>")
+  vim.keymap.set("t", "<D-Right>", "<C-e>")
 end
 
 g.mapleader = ","
