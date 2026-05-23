@@ -33,7 +33,7 @@ logicalMonitors: {
 }
 
 // Reshape logicalMonitors so the mac device IDs sit under `device_ids`. Exported
-// for bin/auto-komorebi to parse; also reused below to build komorebiMac.
+// for bin/watch-komorebi to parse; also reused below to build komorebiMac.
 logicalMonitorsMac: {
 	for name, lm in logicalMonitors {
 		"\(name)": {

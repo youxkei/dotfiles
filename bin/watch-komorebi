@@ -1,0 +1,200 @@
+#!/usr/bin/env zsh
+# watch-komorebi: macOS equivalent of bin/watch-komorebi.ps1.
+# Supervisor for komorebi-for-mac. Runs bin/start-komorebi to do the
+# initial bootstrap (regenerate config, start the daemon, configure
+# workspaces and rules, force-manage running apps), then subscribes to
+# komorebi's event stream and watches for monitor connection changes
+# and wake-from-sleep events. Whenever the connected monitor count
+# changes, re-runs start-komorebi to re-bootstrap komorebi — the
+# supervisor itself stays alive, so the Python event listener, wake
+# listener, and event subscription socket are reused across restarts.
+
+set -euo pipefail
+# Inherited xtrace/verbose from .zshenv leaks variable assignments into stdout
+# and interferes with `$(...)` captures; force it off for this script.
+setopt no_xtrace no_verbose 2>/dev/null || true
+
+SCRIPT_DIR="${0:A:h}"
+CONFIG_DIR="$HOME/Library/Application Support/komorebi"
+SOCK_NAME="watch-komorebi.sock"
+SOCK="$CONFIG_DIR/$SOCK_NAME"
+
+count_connected_monitors() {
+    komorebic monitor-info | jq '
+        [.[] | select(.serial_number_id != null
+                      and .serial_number_id != ""
+                      and (.serial_number_id | gsub("\\s"; "") != "0000000000000"))]
+        | length'
+}
+
+cleanup() {
+    if [[ -n "${LISTENER_PID:-}" ]]; then
+        kill "$LISTENER_PID" 2>/dev/null || true
+    fi
+    if [[ -n "${KOMOREBI_PID:-}" ]]; then
+        kill -INT "$KOMOREBI_PID" 2>/dev/null || true
+    fi
+    if [[ -n "${WAKE_LISTENER_PID:-}" ]]; then
+        kill "$WAKE_LISTENER_PID" 2>/dev/null || true
+    fi
+    if [[ -n "${WAKE_READER_PID:-}" ]]; then
+        kill "$WAKE_READER_PID" 2>/dev/null || true
+    fi
+    rm -f "$SOCK" "${WAKE_PIPE:-}"
+}
+trap cleanup EXIT INT TERM
+
+# Re-bootstrap komorebi without restarting the supervisor. The Python
+# event listener, wake listener, and subscription socket file are all
+# unaffected by komorebi restarting — only komorebi itself needs to be
+# rebooted (and re-told to send events to us).
+KOMOREBI_PID=""
+INITIAL_MONITOR_COUNT=""
+restart_komorebi() {
+    local reason="${1:-restart requested}"
+    echo "[watch-komorebi] $reason; re-running start-komorebi"
+    "$SCRIPT_DIR/start-komorebi"
+    KOMOREBI_PID=$(pgrep -x komorebi | head -1)
+    if [[ -z "$KOMOREBI_PID" ]]; then
+        echo "[watch-komorebi] failed to locate komorebi after start-komorebi" >&2
+        exit 1
+    fi
+    # `komorebi` was just stopped + restarted, which clears its
+    # subscriber list. Re-register our socket so events flow again.
+    komorebic subscribe-socket "$SOCK_NAME"
+    INITIAL_MONITOR_COUNT=$(count_connected_monitors)
+    echo "[watch-komorebi] komorebi pid=$KOMOREBI_PID, connected monitor count=$INITIAL_MONITOR_COUNT"
+}
+
+# SIGUSR1 is used by the wake reader subshell to ask the main shell to
+# re-bootstrap komorebi. We can't run start-komorebi from inside the
+# subshell and update the parent's $KOMOREBI_PID — the subshell has its
+# own copy of the variables — so the wake reader signals here and the
+# trap does the work in the main shell context.
+trap 'restart_komorebi "post-wake monitor change"' USR1
+
+mkdir -p "$CONFIG_DIR"
+rm -f "$SOCK"
+
+# komorebi-for-mac's notify_subscribers (lib.rs) writes each notification as a
+# JSON blob with no trailing newline and closes the connection. A `nc -lkU |
+# read` pipeline blocks forever (read needs a newline); a `nc | jq` pipeline
+# doesn't help either because both use stdio block buffering on their fifo
+# I/O — 50-byte notifications sit in the kernel buffer until ~8KB accumulate
+# or the writer closes, and macOS `stdbuf` can't override this under SIP.
+# Use a small Python listener that explicitly flushes after each
+# notification.
+#
+# Wire it up as a zsh coprocess rather than `python &  >fifo` because the
+# fifo's write-side open blocks the child until something opens the read end,
+# meaning Python wouldn't bind $SOCK until the main-shell while loop opened
+# the fifo for reading — which happens *after* `subscribe-socket`, so
+# komorebi's first send attempt would fail and komorebi would drop the
+# subscription as stale. Coproc uses a regular pipe whose write end is open
+# from the start, letting Python bind immediately. The main shell drains the
+# coproc via `read -p`. The listener outlives komorebi restarts — only the
+# subscription itself needs to be re-registered, which restart_komorebi
+# handles.
+coproc python3 -u -c '
+import socket, sys, json
+srv = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+srv.bind(sys.argv[1])
+srv.listen(8)
+while True:
+    conn, _ = srv.accept()
+    buf = b""
+    while True:
+        chunk = conn.recv(65536)
+        if not chunk:
+            break
+        buf += chunk
+    conn.close()
+    try:
+        notification = json.loads(buf)
+        print(json.dumps(notification.get("event", notification)), flush=True)
+    except Exception as exc:
+        print(f"[watch-komorebi] event parse error: {exc}", file=sys.stderr, flush=True)
+' "$SOCK"
+LISTENER_PID=$!
+
+# Wait for the listener to bind $SOCK before letting restart_komorebi
+# (which calls subscribe-socket) run.
+for _ in $(seq 1 50); do
+    [[ -S "$SOCK" ]] && break
+    sleep 0.05
+done
+
+# The Swift helper drives pause/unpause directly via komorebi's socket so it
+# can race the reaper effectively (komorebi/src/reaper.rs reaps managed
+# windows whenever AX queries fail during display sleep — see the long
+# comment in bin/komorebi-wake-listener for the rationale). The shell side
+# only handles retile + logging once the helper signals that AX is back.
+WAKE_PIPE="$CONFIG_DIR/watch-komorebi.wake"
+rm -f "$WAKE_PIPE"
+mkfifo "$WAKE_PIPE"
+
+# Set KOMOREBI_WAKE_DEBUG=1 in the environment when launching watch-komorebi
+# to get IOKit message timing dumped to stderr (visible in the terminal).
+"$SCRIPT_DIR/komorebi-wake-listener" >"$WAKE_PIPE" &
+WAKE_LISTENER_PID=$!
+
+MAIN_PID=$$
+( while IFS= read -r line; do
+    case "$line" in
+        will-sleep)
+            echo "[watch-komorebi] pre-sleep: komorebi paused"
+            ;;
+        wake)
+            # The display can be unplugged or plugged in while the system
+            # was asleep. komorebi's DisplayConnectionChange callback
+            # doesn't fire while the wm is paused for sleep, so check the
+            # connected monitor count here and ask the main shell to
+            # re-bootstrap komorebi if it changed — that's the only way
+            # to get `komorebi --config` to re-bind to the new monitor
+            # layout. We can't run start-komorebi from this subshell
+            # because it would update its own KOMOREBI_PID copy, not the
+            # parent's. SIGUSR1 has the main shell's trap do it instead.
+            current_count=$(count_connected_monitors 2>/dev/null || echo "")
+            if [[ -n "$current_count" && "$current_count" != "$INITIAL_MONITOR_COUNT" ]]; then
+                echo "[watch-komorebi] post-wake: monitor count changed ($INITIAL_MONITOR_COUNT -> $current_count); signaling main shell"
+                kill -USR1 "$MAIN_PID" 2>/dev/null || true
+            else
+                echo "[watch-komorebi] post-wake: komorebi unpaused; retiling"
+                komorebic retile 2>/dev/null || true
+            fi
+            ;;
+    esac
+done <"$WAKE_PIPE" ) &
+WAKE_READER_PID=$!
+
+# Initial bootstrap. Same code path as restart, just with no prior
+# komorebi to clean up.
+restart_komorebi "initial bootstrap"
+
+# Event loop. `while true` rather than `while read` so that a SIGUSR1
+# trap interrupting the read (or any other transient read failure)
+# doesn't exit the loop — the trap already ran restart_komorebi, we
+# just need to resume waiting for events.
+while true; do
+    if IFS= read -rp line; then
+        case "$line" in
+            *DisplayConnectionChange*)
+                # komorebi-for-mac's display_reconfiguration_listener only
+                # emits DisplayConnectionChange on Add/Remove flags, so by
+                # construction the connected monitor count has changed —
+                # but check anyway in case our filter (which excludes
+                # serial-less and "0000000000000" monitors) disagrees with
+                # the kernel's. If the count is unchanged there's nothing
+                # for us to do; komorebi's own monitor_reconciliator will
+                # have updated its state.
+                current_count=$(count_connected_monitors)
+                if [[ "$current_count" != "$INITIAL_MONITOR_COUNT" ]]; then
+                    restart_komorebi "connected monitor count changed ($INITIAL_MONITOR_COUNT -> $current_count)"
+                fi
+                ;;
+        esac
+    elif ! kill -0 "$LISTENER_PID" 2>/dev/null; then
+        echo "[watch-komorebi] event listener coproc died; exiting" >&2
+        exit 1
+    fi
+done
