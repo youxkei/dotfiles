@@ -42,7 +42,18 @@ cleanup() {
     fi
     rm -f "$SOCK" "${WAKE_PIPE:-}"
 }
-trap cleanup EXIT INT TERM
+# Run cleanup on EXIT, and make the signal traps exit explicitly. A bare
+# `trap cleanup INT` handler does NOT terminate the script: zsh runs the
+# handler and then *resumes* execution, so a Ctrl-C would fire cleanup once
+# but leave the supervisor (and its reparented listener children) running —
+# exactly how the pre-rename auto-komorebi instances ended up orphaned to
+# launchd. Exiting from the signal trap triggers the EXIT trap, which runs
+# cleanup exactly once. HUP is trapped too so closing the terminal tears
+# everything down as well.
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+trap 'exit 129' HUP
 
 # Re-bootstrap komorebi without restarting the supervisor. The Python
 # event listener, wake listener, and subscription socket file are all
@@ -139,7 +150,12 @@ mkfifo "$WAKE_PIPE"
 WAKE_LISTENER_PID=$!
 
 MAIN_PID=$$
-( while IFS= read -r line; do
+# Reset the inherited traps in this subshell: it must not run cleanup itself
+# (that would tear down the shared python listener / komorebi if the FIFO ever
+# hits EOF), and it should just die on the SIGTERM the main shell's cleanup
+# sends it via WAKE_READER_PID.
+( trap - EXIT INT TERM HUP USR1
+  while IFS= read -r line; do
     case "$line" in
         will-sleep)
             echo "[watch-komorebi] pre-sleep: komorebi paused"
@@ -154,6 +170,7 @@ MAIN_PID=$$
             # layout. We can't run start-komorebi from this subshell
             # because it would update its own KOMOREBI_PID copy, not the
             # parent's. SIGUSR1 has the main shell's trap do it instead.
+            # Otherwise a plain retile is enough to restore the layout.
             current_count=$(count_connected_monitors 2>/dev/null || echo "")
             if [[ -n "$current_count" && "$current_count" != "$INITIAL_MONITOR_COUNT" ]]; then
                 echo "[watch-komorebi] post-wake: monitor count changed ($INITIAL_MONITOR_COUNT -> $current_count); signaling main shell"
