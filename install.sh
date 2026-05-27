@@ -67,10 +67,13 @@ if [[ "$OSTYPE" != darwin* ]]; then
 fi
 
 # macOS-only entries: configs for macOS-specific tools (karabiner-elements,
-# komorebi-for-mac).
+# komorebi-for-mac, linearmouse). The tools themselves are installed out of
+# band (e.g. Homebrew); this only links their config and verifies the source
+# exists, the same as the nix entry above.
 if [[ "$OSTYPE" == darwin* ]]; then
     PATHS+=(
         karabiner $XDG_CONFIG_HOME/karabiner
+        linearmouse $XDG_CONFIG_HOME/linearmouse
 
         bin/watch-komorebi $HOME/bin/watch-komorebi
         bin/start-komorebi $HOME/bin/start-komorebi

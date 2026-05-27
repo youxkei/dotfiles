@@ -47,12 +47,21 @@ for (let i = 0; i < rule.manipulators.length; i++) {
 
 // ---------- matcher ----------
 
+// Map a single device_identifiers entry to the synthetic device names used by
+// the test cases ("builtin", "external", "tpkb2"). TrackPoint Keyboard II is
+// vendor_id 6127 / product_id 24801.
+function identifierMatches(id, device) {
+  if (id.is_built_in_keyboard) return device === "builtin";
+  if (id.vendor_id === 6127 && id.product_id === 24801) return device === "tpkb2";
+  return false;
+}
+
 function deviceOK(conds, device) {
   for (const c of conds || []) {
-    if (c.type === "device_if" && c.identifiers && c.identifiers[0].is_built_in_keyboard)
-      return device === "builtin";
-    if (c.type === "device_unless" && c.identifiers && c.identifiers[0].is_built_in_keyboard)
-      return device === "external";
+    if (c.type === "device_if" && c.identifiers)
+      return c.identifiers.some((id) => identifierMatches(id, device));
+    if (c.type === "device_unless" && c.identifiers)
+      return !c.identifiers.some((id) => identifierMatches(id, device));
   }
   return true;
 }
@@ -277,6 +286,94 @@ expectKeyCases("builtin henkan", [
   keyCase("slash -> '^'", "slash", { key_code: "6", modifiers: ["left_shift"] }, { henkan: true }),
   keyCase("shift+slash -> '~'", "slash", { key_code: "grave_accent_and_tilde", modifiers: ["left_shift"] }, { henkan: true, shift: true }),
 ]);
+
+// ---------- TrackPoint Keyboard II: Dudrack neutral + henkan ----------
+
+// Rides the same Dudrack layers as the built-in, selected via vendor/product.
+expectKeyCases("tpkb2 neutral", [
+  keyCase("q -> ':'", "q", { key_code: "semicolon", modifiers: ["left_shift"] }, { device: "tpkb2" }),
+  keyCase("shift+q -> '*'", "q", { key_code: "8", modifiers: ["left_shift"] }, { device: "tpkb2", shift: true }),
+  keyCase("w -> comma", "w", { key_code: "comma" }, { device: "tpkb2" }),
+  keyCase("j -> h", "j", { key_code: "h" }, { device: "tpkb2" }),
+  keyCase("k -> t", "k", { key_code: "t" }, { device: "tpkb2" }),
+  // quote goes through Dudrack (-> hyphen), NOT the raw-JIS remap (-> ':').
+  keyCase("quote -> hyphen (not raw JIS)", "quote", { key_code: "hyphen" }, { device: "tpkb2" }),
+]);
+
+expectKeyCases("tpkb2 henkan", [
+  keyCase("q -> 1", "q", { key_code: "1" }, { device: "tpkb2", henkan: true }),
+  keyCase("h -> '@'", "h", { key_code: "2", modifiers: ["left_shift"] }, { device: "tpkb2", henkan: true }),
+  keyCase("k -> '['", "k", { key_code: "open_bracket" }, { device: "tpkb2", henkan: true }),
+]);
+
+// ---------- TrackPoint Keyboard II: JIS modifier keys ----------
+
+expectKey("tpkb2 caps_lock -> left_control",
+  { device: "tpkb2", key_code: "caps_lock" },
+  { key_code: "left_control" });
+expectKey("tpkb2 tab -> left_command",
+  { device: "tpkb2", key_code: "tab" },
+  { key_code: "left_command" });
+expectKey("tpkb2 muhenkan (無変換) -> left_shift",
+  { device: "tpkb2", key_code: "japanese_pc_nfer" },
+  { key_code: "left_shift" });
+expectKey("tpkb2 katakana/hiragana (カタカナひらがな) -> left_command",
+  { device: "tpkb2", key_code: "japanese_pc_katakana" },
+  { key_code: "left_command" });
+expectKey("tpkb2 right_option (右Alt) disabled",
+  { device: "tpkb2", key_code: "right_option" },
+  { key_code: "vk_none" });
+
+// 変換 (henkan) key holds the Henkan layer via the shared dudrack_henkan var.
+const tpkbHenkan = findMatch({ device: "tpkb2", key_code: "japanese_pc_xfer" });
+assert(tpkbHenkan && tpkbHenkan.to[0].set_variable &&
+       tpkbHenkan.to[0].set_variable.name === "dudrack_henkan" &&
+       tpkbHenkan.to[0].set_variable.value === 1,
+       "tpkb2 henkan key sets dudrack_henkan=1");
+assert(Array.isArray(tpkbHenkan.to_after_key_up) &&
+       tpkbHenkan.to_after_key_up[0].set_variable.value === 0,
+       "tpkb2 henkan key clears dudrack_henkan on release");
+
+// The other external keyboard still gets the raw-JIS IME remap on 変換.
+expectKey("external pc_xfer -> japanese_kana (unaffected by tpkb2)",
+  { device: "external", key_code: "japanese_pc_xfer" },
+  { key_code: "japanese_kana" });
+
+// ---------- TrackPoint Keyboard II: komorebi + no alt-suppress ----------
+
+// dudrackInverse.h = "j": physical 'j' under Dudrack = whkd 'h' = "focus left".
+expectShell("tpkb2 alt+j -> komorebic focus left",
+  { device: "tpkb2", key_code: "j", modifiers: ["option"] },
+  "focus left");
+// Henkan-aware: physical 'q' with option+henkan = whkd '1' = focus-named-workspace l2.
+expectShell("tpkb2 alt+q under henkan -> focus-named-workspace l2",
+  { device: "tpkb2", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
+  "focus-named-workspace l2");
+
+// Dudrack keyboards are not alt-suppressed (they emit Dudrack output instead).
+const altXTpkb = findMatch({ device: "tpkb2", key_code: "x", modifiers: ["option"] });
+assert(!altXTpkb || altXTpkb.to[0].key_code !== "vk_none",
+       "tpkb2 alt+x is not suppressed");
+
+// Komorebi yields to the Henkan layer. Physical 'c' = whkd 'j' = "focus down"
+// when Henkan is off, but must map to up_arrow under Henkan (option/shift pass
+// through at runtime), so 無変換+alt+変換+c -> option+shift+up_arrow works.
+expectShell("tpkb2 alt+c without henkan -> komorebic focus down",
+  { device: "tpkb2", key_code: "c", modifiers: ["option"] },
+  "focus down");
+const cHenkan = findMatch({
+  device: "tpkb2", key_code: "c",
+  modifiers: ["option", "shift"], variables: { dudrack_henkan: 1 },
+});
+assert(cHenkan && cHenkan.to[0].key_code === "up_arrow",
+       "tpkb2 option+shift+c under henkan -> up_arrow (komorebi yields)");
+// Built-in behaves identically (the guard lives in the shared DUDRACK scope).
+const cHenkanBuiltin = findMatch({
+  device: "builtin", key_code: "c",
+  modifiers: ["option"], variables: { dudrack_henkan: 1 },
+});
+assert(cHenkanBuiltin && cHenkanBuiltin.to[0].key_code === "up_arrow",
+       "builtin option+c under henkan -> up_arrow (komorebi yields)");
 
 // ---------- home/end -> cmd+left/right (both devices) ----------
 

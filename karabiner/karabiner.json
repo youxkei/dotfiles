@@ -22,9 +22,16 @@
             "is_keyboard": true,
             "is_pointing_device": true
           },
-          "ignore": false,
-          "mouse_flip_vertical_wheel": true,
-          "mouse_flip_horizontal_wheel": true
+          "ignore": false
+        },
+        {
+          "identifiers": {
+            "vendor_id": 6127,
+            "product_id": 24801,
+            "is_keyboard": true,
+            "is_pointing_device": true
+          },
+          "ignore": false
         }
       ]
     }

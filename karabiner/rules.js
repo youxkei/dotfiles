@@ -49,8 +49,22 @@
     "|":  { key_code: "backslash",           shift: true }
   };
 
+  // Lenovo TrackPoint Keyboard II (Bluetooth). A plain JIS QWERTY keyboard the
+  // user types in Dudrack, exactly like the built-in keyboard.
+  var TPKB2 = { vendor_id: 6127, product_id: 24801 };
+
   var BUILTIN  = { type: "device_if",     identifiers: [{ is_built_in_keyboard: true }] };
-  var EXTERNAL = { type: "device_unless", identifiers: [{ is_built_in_keyboard: true }] };
+  // Dudrack scope: built-in OR TrackPoint Keyboard II. `device_if` identifiers
+  // are OR'd, so this matches either keyboard. Drives the Neutral/Henkan layers
+  // and the Dudrack-side komorebi shortcuts.
+  var DUDRACK  = { type: "device_if",     identifiers: [{ is_built_in_keyboard: true }, TPKB2] };
+  // Raw-JIS external scope: every external keyboard EXCEPT the TrackPoint
+  // Keyboard II. `device_unless` identifiers are NONE-of, so this excludes both
+  // the built-in and the TrackPoint Keyboard II. Drives the PC-JIS label
+  // remaps, IME-key remaps and alt-suppress.
+  var EXTERNAL = { type: "device_unless", identifiers: [{ is_built_in_keyboard: true }, TPKB2] };
+  // TrackPoint Keyboard II alone: used for its dedicated JIS modifier keys.
+  var TPKB2_ONLY = { type: "device_if",   identifiers: [TPKB2] };
   var ANY_MODS = { optional: ["any"] };
 
   function keyStroke(name, shift) {
@@ -88,10 +102,10 @@
   //
   // Bindings mirror whkd/whkdrc on Windows. The whkdrc key refers to the
   // **Dvorak letter** the user types (e.g. `alt + h` = the key that produces
-  // 'h' in Dvorak). On built-in keyboards Dudrack remaps physical keys to
-  // Dvorak output, so this inverts that map to bind option+<physical key>.
-  // On external keyboards Dudrack is not active, so the whkdrc letter is used
-  // directly as the karabiner key_code.
+  // 'h' in Dvorak). On Dudrack-scope keyboards (built-in + TrackPoint Keyboard
+  // II) Dudrack remaps physical keys to Dvorak output, so this inverts that map
+  // to bind option+<physical key>. On raw-JIS external keyboards Dudrack is not
+  // active, so the whkdrc letter is used directly as the karabiner key_code.
 
   // whkdrc is written for a JIS keyboard, so its VK_OEM_* codes resolve to
   // JIS positions (e.g. VK_OEM_1 is the `:` key, not `;`). Keys in the
@@ -201,9 +215,20 @@
   function komorebiManip(keyCode, withShift, device, command) {
     var mods = ["option"];
     if (withShift) mods.push("shift");
+    var conditions = [device];
+    // On Dudrack keyboards the Henkan layer owns these physical keys while the
+    // Henkan key is held (e.g. physical 'c' = whkd 'j' = focus down, but
+    // Henkan maps it to up_arrow). Guard the komorebi rule so it yields to the
+    // Henkan layer. Number-row keys keep working under Henkan via the
+    // Henkan-aware rules pushed earlier; everything else falls through to the
+    // Henkan layer (arrows/symbols). External keyboards have no Henkan layer,
+    // so they are left unguarded.
+    if (device === DUDRACK) {
+      conditions.unshift({ type: "variable_unless", name: "dudrack_henkan", value: 1 });
+    }
     return {
       type: "basic",
-      conditions: [device],
+      conditions: conditions,
       from: { key_code: keyCode, modifiers: { mandatory: mods, optional: ["caps_lock"] } },
       to: [{ shell_command: KOMOREBIC + " " + command }]
     };
@@ -216,16 +241,18 @@
       type: "basic",
       conditions: [
         { type: "variable_if", name: "dudrack_henkan", value: 1 },
-        BUILTIN
+        DUDRACK
       ],
       from: { key_code: physicalKey, modifiers: { mandatory: mods, optional: ["caps_lock"] } },
       to: [{ shell_command: KOMOREBIC + " " + command }]
     };
   }
 
-  // Henkan-aware built-in rules first: they carry `variable_if dudrack_henkan
-  // == 1`, so the regular rules below (no variable condition) only fire when
-  // Henkan is not active.
+  // Henkan-aware rules first: they carry `variable_if dudrack_henkan == 1` and
+  // cover the number-row keys (q/w/e/r/t/d) that still drive komorebi under
+  // Henkan. The regular Dudrack rules below carry `variable_unless
+  // dudrack_henkan == 1` (see komorebiManip), so under Henkan any key without a
+  // Henkan-aware rule yields to the Henkan layer instead of firing komorebi.
   for (var ihk = 0; ihk < komorebiBindings.length; ihk++) {
     var hBinding = komorebiBindings[ihk];
     var hKey = hBinding.key;
@@ -244,12 +271,12 @@
     var command = binding.command;
     requireMapKey(dudrackInverse, "dudrackInverse", whkdKey);
     requireMapKey(externalKey, "externalKey", whkdKey);
-    manipulators.push(komorebiManip(dudrackInverse[whkdKey], withShift, BUILTIN, command));
+    manipulators.push(komorebiManip(dudrackInverse[whkdKey], withShift, DUDRACK, command));
     manipulators.push(komorebiManip(externalKey[whkdKey], withShift, EXTERNAL, command));
   }
 
   // ============================================================
-  // 2. Built-in keyboard modifier remaps
+  // 2. Modifier remaps (built-in, then TrackPoint Keyboard II)
   // ============================================================
 
   function builtinRemap(fromKey, toKey) {
@@ -261,8 +288,21 @@
     };
   }
 
-  manipulators.push(builtinRemap("caps_lock",    "left_control"));
-  manipulators.push(builtinRemap("tab",          "left_command"));
+  // Caps Lock -> Control and Tab -> Command on every Dudrack keyboard (built-in
+  // + TrackPoint Keyboard II). The remaining swaps below are MacBook-physical-
+  // specific and stay built-in only.
+  manipulators.push({
+    type: "basic",
+    conditions: [DUDRACK],
+    from: { key_code: "caps_lock", modifiers: ANY_MODS },
+    to: [{ key_code: "left_control" }]
+  });
+  manipulators.push({
+    type: "basic",
+    conditions: [DUDRACK],
+    from: { key_code: "tab", modifiers: ANY_MODS },
+    to: [{ key_code: "left_command" }]
+  });
   manipulators.push(builtinRemap("left_command", "left_option"));
   manipulators.push(builtinRemap("left_option",  "left_command"));
   manipulators.push(builtinRemap("fn",           "left_command"));
@@ -294,6 +334,44 @@
     from: { key_code: "right_command", modifiers: ANY_MODS },
     to: [{ set_variable: { name: "dudrack_henkan", value: 1 } }],
     to_after_key_up: [{ set_variable: { name: "dudrack_henkan", value: 0 } }]
+  });
+
+  // TrackPoint Keyboard II modifier keys. Caps Lock -> Control and Tab ->
+  // Command are shared via the Dudrack scope above; the other built-in remaps
+  // are MacBook-specific and excluded. This keyboard's JIS thumb keys carry the
+  // rest:
+  //   - 変換 (japanese_pc_xfer)   -> hold to activate the Henkan layer (the
+  //     built-in uses Right Command; this keyboard has a real 変換 key).
+  //   - 無変換 (japanese_pc_nfer) -> Shift.
+  //   - カタカナひらがな (japanese_pc_katakana) -> Command.
+  // And Right Option / 右Alt (right_option) is disabled (vk_none) to avoid
+  // accidental presses.
+  // The same dudrack_henkan variable is shared, so the Henkan layer (section 3)
+  // and Henkan-aware komorebi (section 1) fire for this keyboard too.
+  manipulators.push({
+    type: "basic",
+    conditions: [TPKB2_ONLY],
+    from: { key_code: "japanese_pc_xfer", modifiers: ANY_MODS },
+    to: [{ set_variable: { name: "dudrack_henkan", value: 1 } }],
+    to_after_key_up: [{ set_variable: { name: "dudrack_henkan", value: 0 } }]
+  });
+  manipulators.push({
+    type: "basic",
+    conditions: [TPKB2_ONLY],
+    from: { key_code: "japanese_pc_nfer", modifiers: ANY_MODS },
+    to: [{ key_code: "left_shift" }]
+  });
+  manipulators.push({
+    type: "basic",
+    conditions: [TPKB2_ONLY],
+    from: { key_code: "japanese_pc_katakana", modifiers: ANY_MODS },
+    to: [{ key_code: "left_command" }]
+  });
+  manipulators.push({
+    type: "basic",
+    conditions: [TPKB2_ONLY],
+    from: { key_code: "right_option", modifiers: ANY_MODS },
+    to: [{ key_code: "vk_none" }]
   });
 
   // ============================================================
@@ -360,7 +438,7 @@
     { from: "slash",     shift: false, to: charKey("^") }
   ];
 
-  var henkanConds = [{ type: "variable_if", name: "dudrack_henkan", value: 1 }, BUILTIN];
+  var henkanConds = [{ type: "variable_if", name: "dudrack_henkan", value: 1 }, DUDRACK];
   var HENKAN_SHIFT_OPTIONAL_MODS = ["caps_lock", "command", "control", "option"];
   for (var ih = 0; ih < HENKAN.length; ih++) {
     manipulators.push(layerManip(henkanConds, HENKAN[ih], HENKAN_SHIFT_OPTIONAL_MODS));
@@ -370,7 +448,7 @@
   // 4. Dudrack Neutral Dvorak layer
   // ============================================================
   //
-  // Neutral rules come after Henkan rules so Right Command can override the
+  // Neutral rules come after Henkan rules so the Henkan key can override the
   // same physical keys while the Henkan variable is set.
 
   var NEUTRAL = [
@@ -413,7 +491,7 @@
 
   var NEUTRAL_SHIFT_OPTIONAL_MODS = ["any"];
   for (var iN = 0; iN < NEUTRAL.length; iN++) {
-    manipulators.push(layerManip([BUILTIN], NEUTRAL[iN], NEUTRAL_SHIFT_OPTIONAL_MODS));
+    manipulators.push(layerManip([DUDRACK], NEUTRAL[iN], NEUTRAL_SHIFT_OPTIONAL_MODS));
   }
 
   // ============================================================
