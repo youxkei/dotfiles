@@ -375,6 +375,38 @@ const cHenkanBuiltin = findMatch({
 assert(cHenkanBuiltin && cHenkanBuiltin.to[0].key_code === "up_arrow",
        "builtin option+c under henkan -> up_arrow (komorebi yields)");
 
+// ---------- disable Cmd+H (both keyboards) ----------
+
+// Dudrack: physical 'j' yields 'h', so cmd+j is swallowed -- but only outside
+// Henkan, where 'j' is '\' and must pass through.
+const cmdJBuiltin = findMatch({ device: "builtin", key_code: "j", modifiers: ["command"] });
+assert(cmdJBuiltin && cmdJBuiltin.to[0].key_code === "vk_none",
+       "builtin cmd+j (post-conversion cmd+h) is swallowed");
+const cmdJTpkb = findMatch({ device: "tpkb2", key_code: "j", modifiers: ["command"] });
+assert(cmdJTpkb && cmdJTpkb.to[0].key_code === "vk_none",
+       "tpkb2 cmd+j (post-conversion cmd+h) is swallowed");
+const cmdJHenkan = findMatch({
+  device: "builtin", key_code: "j",
+  modifiers: ["command"], variables: { dudrack_henkan: 1 },
+});
+assert(cmdJHenkan && cmdJHenkan.to[0].key_code === "backslash",
+       "builtin cmd+j under Henkan stays '\\' (not swallowed)");
+// Cmd+Opt+H (Hide Others) is swallowed too (option is optional in the rule).
+const cmdOptJBuiltin = findMatch({ device: "builtin", key_code: "j", modifiers: ["command", "option"] });
+assert(cmdOptJBuiltin && cmdOptJBuiltin.to[0].key_code === "vk_none",
+       "builtin cmd+option+j (Hide Others) is swallowed");
+// External raw-JIS: 'h' is physical 'h'.
+const cmdHExternal = findMatch({ device: "external", key_code: "h", modifiers: ["command"] });
+assert(cmdHExternal && cmdHExternal.to[0].key_code === "vk_none",
+       "external cmd+h is swallowed");
+const cmdOptHExternal = findMatch({ device: "external", key_code: "h", modifiers: ["command", "option"] });
+assert(cmdOptHExternal && cmdOptHExternal.to[0].key_code === "vk_none",
+       "external cmd+option+h (Hide Others) is swallowed");
+// alt+j (komorebi) is unaffected by the cmd+h guard.
+expectShell("builtin alt+j still -> komorebic focus left",
+  { device: "builtin", key_code: "j", modifiers: ["option"] },
+  "focus left");
+
 // ---------- home/end -> cmd+left/right (both devices) ----------
 
 expectKey("builtin home -> cmd+left",

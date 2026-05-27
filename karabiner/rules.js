@@ -4,14 +4,26 @@
 //
 // Run `make karabiner` after editing to re-embed this file into karabiner.json.
 //
+// Device scopes (see definitions below): BUILTIN, DUDRACK (built-in + the
+// Lenovo TrackPoint Keyboard II), EXTERNAL (other external keyboards), and
+// TPKB2_ONLY (the TrackPoint Keyboard II alone). The TrackPoint Keyboard II is
+// a plain JIS QWERTY keyboard typed in Dudrack just like the built-in, so it
+// rides the Dudrack Neutral/Henkan layers and is excluded from the raw-JIS
+// external remaps.
+//
 // Sections (manipulator order matters -- first match wins within the rule):
-//   1. Komorebi shortcuts (option + key, both keyboards).
-//   2. Built-in keyboard modifier remaps (Caps/Tab/L Cmd/L Opt/Fn/R Cmd/Space SandS).
-//   3. Dudrack Henkan layer (built-in, while Right Command is held).
-//   4. Dudrack Neutral Dvorak layer (built-in, always).
-//   5. External keyboard remaps (PC-JIS IME keys and JIS label behavior).
-//   6. External: swallow unbound alt+key to block macOS option dead-keys.
-//   7. Home/End -> Cmd+Left/Right (both keyboards, macOS line-nav).
+//   1. Komorebi shortcuts (option + key; Dudrack scope + external scope).
+//   2. Modifier remaps: Caps -> Control and Tab -> Command (Dudrack scope:
+//      built-in + TrackPoint Keyboard II); built-in-only (L Cmd/L Opt/Fn/R Cmd/
+//      Space SandS); and TrackPoint Keyboard II (変換 -> Henkan layer, 無変換 ->
+//      Shift, カタカナひらがな -> Cmd, 右Alt disabled).
+//   3. Disable Cmd+H / Cmd+Opt+H (Hide / Hide Others, both keyboards), caught
+//      on the post-conversion 'h' key.
+//   4. Dudrack Henkan layer (Dudrack scope, while the Henkan key is held).
+//   5. Dudrack Neutral Dvorak layer (Dudrack scope, always).
+//   6. External keyboard remaps (PC-JIS IME keys and JIS label behavior).
+//   7. External: swallow unbound alt+key to block macOS option dead-keys.
+//   8. Home/End -> Cmd+Left/Right (both keyboards, macOS line-nav).
 
 (function () {
   var KOMOREBIC = "/opt/homebrew/bin/komorebic";
@@ -346,7 +358,7 @@
   //   - カタカナひらがな (japanese_pc_katakana) -> Command.
   // And Right Option / 右Alt (right_option) is disabled (vk_none) to avoid
   // accidental presses.
-  // The same dudrack_henkan variable is shared, so the Henkan layer (section 3)
+  // The same dudrack_henkan variable is shared, so the Henkan layer (section 4)
   // and Henkan-aware komorebi (section 1) fire for this keyboard too.
   manipulators.push({
     type: "basic",
@@ -375,7 +387,36 @@
   });
 
   // ============================================================
-  // 3. Dudrack Henkan layer
+  // 3. Disable Cmd+H / Cmd+Opt+H (Hide / Hide Others, both keyboards)
+  // ============================================================
+  //
+  // Cmd+H (Hide) and Cmd+Opt+H (Hide Others) hide windows, which the user
+  // triggers by accident. Karabiner does not re-process its own output, so this
+  // catches the *physical* key that yields 'h' after layout conversion, while
+  // command is held (option optional, covering Hide Others):
+  //   - Dudrack scope (built-in + TrackPoint Keyboard II): physical 'j' -> 'h'
+  //     in the Neutral layer. Guarded by `variable_unless dudrack_henkan` so it
+  //     only fires outside Henkan, where 'j' is '\' (not 'h').
+  //   - External raw-JIS: 'h' is physical 'h'.
+  // `option` is in the optional list (not mandatory) so plain Cmd+H matches too,
+  // while plain alt+key (no command) still falls through to komorebi.
+  // Must precede the Neutral layer (section 5) so it wins the physical-'j' match.
+
+  manipulators.push({
+    type: "basic",
+    conditions: [{ type: "variable_unless", name: "dudrack_henkan", value: 1 }, DUDRACK],
+    from: { key_code: "j", modifiers: { mandatory: ["command"], optional: ["caps_lock", "option"] } },
+    to: [{ key_code: "vk_none" }]
+  });
+  manipulators.push({
+    type: "basic",
+    conditions: [EXTERNAL],
+    from: { key_code: "h", modifiers: { mandatory: ["command"], optional: ["caps_lock", "option"] } },
+    to: [{ key_code: "vk_none" }]
+  });
+
+  // ============================================================
+  // 4. Dudrack Henkan layer
   // ============================================================
   //
   // Symbol outputs flow through CHAR_TO_KEYSTROKE so the ANSI virtual HID
@@ -445,7 +486,7 @@
   }
 
   // ============================================================
-  // 4. Dudrack Neutral Dvorak layer
+  // 5. Dudrack Neutral Dvorak layer
   // ============================================================
   //
   // Neutral rules come after Henkan rules so the Henkan key can override the
@@ -495,7 +536,7 @@
   }
 
   // ============================================================
-  // 5. External keyboard remaps
+  // 6. External keyboard remaps
   // ============================================================
 
   // PC-JIS IME keys -> Apple-JIS Eisuu/Kana. Some Windows JIS keyboards on
@@ -523,7 +564,7 @@
   // Order within the table doesn't matter: shifted entries use mandatory
   // shift; unshifted entries' optional list excludes shift, so the two never
   // overlap. `option` is also excluded from optional so that alt+key still
-  // hits the section 6 ALT_SUPPRESS rules.
+  // hits the section 7 ALT_SUPPRESS rules.
   var JIS_EXTERNAL = [
     // Number row -- shifted symbols differ from ANSI.
     { from: "2",              shift: true,  to: charKey("\"") },
@@ -576,7 +617,7 @@
   }
 
   // ============================================================
-  // 6. External keyboard: suppress unbound alt+key combinations
+  // 7. External keyboard: suppress unbound alt+key combinations
   // ============================================================
   //
   // macOS's option layer (e.g. "U.S." input source) inserts dead-key
@@ -608,7 +649,7 @@
   }
 
   // ============================================================
-  // 7. Home/End -> Cmd+Left/Right (both keyboards)
+  // 8. Home/End -> Cmd+Left/Right (both keyboards)
   // ============================================================
   //
   // macOS uses Cmd+Left/Right for line navigation; the bare Home/End keys are
