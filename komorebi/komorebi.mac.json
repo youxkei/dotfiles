@@ -2,9 +2,46 @@
     "display_index_preferences": {
         "0": "0",
         "1": "BQRR834",
-        "2": "4251086178"
+        "2": "CRRR834",
+        "3": "4251086178"
     },
     "monitors": [
+        {
+            "workspaces": [
+                {
+                    "name": "c0",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c1",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c2",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c3",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c4",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c5",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c6",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "c7",
+                    "layout": "BSP"
+                }
+            ]
+        },
         {
             "workspaces": [
                 {
