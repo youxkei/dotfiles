@@ -8,6 +8,7 @@ import "list"
 	matching_strategy: "Equals"
 }
 
+// device_ids / device_ids_mac are append-only.
 logicalMonitors: {
 	center: {
 		unmigrated_devices: ["GSM76F6", "DEL4187", "DEL42A1", "DELA0F4", "MRG4100"]
@@ -15,6 +16,7 @@ logicalMonitors: {
 		device_ids_mac: [
 			"0",       // PHL 346B1C (CGDisplaySerialNumber returns 0)
 			"BQRR834", // DELL P3223QE
+			"CRRR834", // DELL P3223QE
 		]
 		workspaces: [for i in list.Range(0, 8, 1) {"c\(i)"}]
 	}
