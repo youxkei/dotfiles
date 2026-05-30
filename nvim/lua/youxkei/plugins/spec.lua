@@ -1283,6 +1283,14 @@ return {
 
   { "sevenc-nanashi/neov-ime.nvim" },
 
+  {
+    "Julian/lean.nvim",
+    config = function()
+      require("lean").setup {
+        mappings = false
+      }
+    end
+  },
 
   { "sgur/vim-textobj-parameter", dependencies = { "kana/vim-textobj-user" } },
   { "kana/vim-textobj-entire", dependencies = { "kana/vim-textobj-user" } },

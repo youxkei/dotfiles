@@ -152,6 +152,9 @@
 
               # java
               jdk25_headless
+
+              # lean
+              elan
             ] ++ lib.optionals stdenv.isLinux [
               # Linux-only: kernel-specific APIs, Wayland, LD_PRELOAD, or
               # custom derivations that fetch Linux x86_64 binaries.

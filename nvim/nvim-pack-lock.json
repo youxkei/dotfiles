@@ -69,6 +69,10 @@
       "rev": "764da1f30b5bb4a49035c3abc9a586322296b812",
       "src": "https://github.com/Darazaki/indent-o-matic"
     },
+    "lean.nvim": {
+      "rev": "7c2fb9879f7fee8d4c4a58f1b51b396f4b02dee9",
+      "src": "https://github.com/Julian/lean.nvim"
+    },
     "lsp_signature.nvim": {
       "rev": "af7e4074d85d785cf6614352ba9ad3b28a1f8a56",
       "src": "https://github.com/ray-x/lsp_signature.nvim"
