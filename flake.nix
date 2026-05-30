@@ -128,7 +128,7 @@
               cargo-cross
 
               # javascript / typescript
-              nodejs_25
+              nodejs_26
               prettier
               prettierd
               typescript
