@@ -34,7 +34,7 @@ if [ -e ~/.nix-profile/lib/libstderred.so ]; then
     : #export LD_PRELOAD="$HOME/.nix-profile/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
 
-PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME:$PATH
+PATH=:~/bin:~/go/bin:~/.local/bin:$PNPM_HOME/bin:$PNPM_HOME:$PATH
 export PATH
 
 if command -v cmd.exe >/dev/null 2>&1; then
