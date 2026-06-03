@@ -17,6 +17,7 @@ logicalMonitors: {
 			"0",       // PHL 346B1C (CGDisplaySerialNumber returns 0)
 			"BQRR834", // DELL P3223QE
 			"CRRR834", // DELL P3223QE
+			"UK02601002319", // Philips 34B2U3600C
 		]
 		workspaces: [for i in list.Range(0, 8, 1) {"c\(i)"}]
 	}
