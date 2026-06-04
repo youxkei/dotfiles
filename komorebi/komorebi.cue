@@ -18,6 +18,7 @@ logicalMonitors: {
 			"BQRR834", // DELL P3223QE
 			"CRRR834", // DELL P3223QE
 			"UK02601002319", // Philips 34B2U3600C
+			"F7S2B34", // DELL P3225QE
 		]
 		workspaces: [for i in list.Range(0, 8, 1) {"c\(i)"}]
 	}
