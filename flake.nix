@@ -119,7 +119,8 @@
               pyright
 
               # rust
-              rust-analyzer
+              rustup
+              #rust-analyzer
               wasm-pack
               wasm-bindgen-cli
               cargo-edit
