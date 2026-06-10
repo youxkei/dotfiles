@@ -86,8 +86,9 @@ logical_monitors:
   left:
     physical_monitors: ["GSM779A"]
     workspaces:
-      # OBS (Windows) / Rejysten — a Chrome PWA, com.google.Chrome.app.<id> (macOS)
-      "0": { apps: ["obs64.exe", "com.google.Chrome.app.bgggdcicpbejchdjahfibmilohfebbbl"] }
+      # OBS (Windows) / Rejysten — a Brave PWA matched by window title (Windows),
+      # a Chrome PWA com.google.Chrome.app.<id> (macOS)
+      "0": { apps: ["obs64.exe", { app: "brave.exe", title: "^Rejysten$" }, "com.google.Chrome.app.bgggdcicpbejchdjahfibmilohfebbbl"] }
       "1": { apps: ["slack.exe", "com.tinyspeck.slackmacgap"] }   # Slack
       "2": { apps: ["Discord.exe"] }                              # Discord (Windows)
 
