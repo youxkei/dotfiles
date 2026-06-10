@@ -126,13 +126,6 @@ function expectKeyCases(section, cases) {
   }
 }
 
-function expectShell(label, ev, substr) {
-  const m = findMatch(ev);
-  if (!m) { assert(false, `${label}: no rule matched`); return; }
-  const cmd = (m.to && m.to[0] && m.to[0].shell_command) || "";
-  assert(cmd.indexOf(substr) !== -1, `${label}: expected shell containing "${substr}", got "${cmd}"`);
-}
-
 function expectNone(label, ev) {
   assert(findMatch(ev) === null, `${label}: expected no match`);
 }
@@ -342,13 +335,13 @@ expectKey("external pc_xfer -> japanese_kana (unaffected by tpkb2)",
 // ---------- TrackPoint Keyboard II: komorebi + no alt-suppress ----------
 
 // dudrackInverse.h = "j": physical 'j' under Dudrack = whkd 'h' = "focus left".
-expectShell("tpkb2 alt+j -> komorebic focus left",
+expectKey("tpkb2 alt+j -> option+h (focus left)",
   { device: "tpkb2", key_code: "j", modifiers: ["option"] },
-  "focus left");
-// Henkan-aware: physical 'q' with option+henkan = whkd '1' = focus-named-workspace l2.
-expectShell("tpkb2 alt+q under henkan -> focus-named-workspace l2",
+  { key_code: "h", modifiers: ["left_option"] });
+// Henkan-aware: physical 'q' with option+henkan = whkd '1' -> option+1 (katnas focus l2).
+expectKey("tpkb2 alt+q under henkan -> option+1 (focus l2)",
   { device: "tpkb2", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
-  "focus-named-workspace l2");
+  { key_code: "1", modifiers: ["left_option"] });
 
 // Dudrack keyboards are not alt-suppressed (they emit Dudrack output instead).
 const altXTpkb = findMatch({ device: "tpkb2", key_code: "x", modifiers: ["option"] });
@@ -358,9 +351,9 @@ assert(!altXTpkb || altXTpkb.to[0].key_code !== "vk_none",
 // Komorebi yields to the Henkan layer. Physical 'c' = whkd 'j' = "focus down"
 // when Henkan is off, but must map to up_arrow under Henkan (option/shift pass
 // through at runtime), so 無変換+alt+変換+c -> option+shift+up_arrow works.
-expectShell("tpkb2 alt+c without henkan -> komorebic focus down",
+expectKey("tpkb2 alt+c without henkan -> option+j (focus down)",
   { device: "tpkb2", key_code: "c", modifiers: ["option"] },
-  "focus down");
+  { key_code: "j", modifiers: ["left_option"] });
 const cHenkan = findMatch({
   device: "tpkb2", key_code: "c",
   modifiers: ["option", "shift"], variables: { dudrack_henkan: 1 },
@@ -403,9 +396,9 @@ const cmdOptHExternal = findMatch({ device: "external", key_code: "h", modifiers
 assert(cmdOptHExternal && cmdOptHExternal.to[0].key_code === "vk_none",
        "external cmd+option+h (Hide Others) is swallowed");
 // alt+j (komorebi) is unaffected by the cmd+h guard.
-expectShell("builtin alt+j still -> komorebic focus left",
+expectKey("builtin alt+j still -> option+h (focus left)",
   { device: "builtin", key_code: "j", modifiers: ["option"] },
-  "focus left");
+  { key_code: "h", modifiers: ["left_option"] });
 
 // ---------- home/end -> cmd+left/right (both devices) ----------
 
@@ -425,32 +418,34 @@ expectKey("shift+home -> shift+cmd+left (passthrough)",
   { device: "external", key_code: "home", modifiers: ["shift"] },
   { key_code: "left_arrow", modifiers: ["left_command"] });
 
-// ---------- komorebi shell commands ----------
+// ---------- komorebi -> katnas key emission ----------
+// Each WM chord now emits `option(+shift)+<key>` for katnas's own hot keys
+// (katnas.yaml `keys:`), instead of running komorebic via shell_command.
 
-// dudrackInverse.h = "j": physical 'j' on built-in = whkd 'h' = "focus left".
-expectShell("builtin alt+j -> komorebic focus left",
+// dudrackInverse.h = "j": physical 'j' on built-in = whkd 'h' -> option+h (focus left).
+expectKey("builtin alt+j -> option+h (focus left)",
   { device: "builtin", key_code: "j", modifiers: ["option"] },
-  "focus left");
+  { key_code: "h", modifiers: ["left_option"] });
 
-// externalKey.h = "h": physical 'h' on external = "focus left".
-expectShell("external alt+h -> komorebic focus left",
+// externalKey.h = "h": physical 'h' on external -> option+h (focus left).
+expectKey("external alt+h -> option+h (focus left)",
   { device: "external", key_code: "h", modifiers: ["option"] },
-  "focus left");
+  { key_code: "h", modifiers: ["left_option"] });
 
-// Henkan-aware komorebi: physical 'q' with option+henkan = whkd '1' = "focus-named-workspace l2".
-expectShell("builtin alt+q under henkan -> focus-named-workspace l2",
+// Henkan-aware: physical 'q' with option+henkan = whkd '1' -> option+1 (focus l2).
+expectKey("builtin alt+q under henkan -> option+1 (focus l2)",
   { device: "builtin", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
-  "focus-named-workspace l2");
+  { key_code: "1", modifiers: ["left_option"] });
 
-// Without henkan, same physical 'q' (whkd ':') = "focus-named-workspace l1".
-expectShell("builtin alt+q without henkan -> focus-named-workspace l1",
+// Without henkan, same physical 'q' (whkd 'colon') -> option+semicolon (focus l1).
+expectKey("builtin alt+q without henkan -> option+semicolon (focus l1)",
   { device: "builtin", key_code: "q", modifiers: ["option"] },
-  "focus-named-workspace l1");
+  { key_code: "semicolon", modifiers: ["left_option"] });
 
-// Shifted komorebi: alt+shift+h on external -> "move left".
-expectShell("external alt+shift+h -> komorebic move left",
+// Shifted: alt+shift+h on external -> option+shift+h (move/swap left).
+expectKey("external alt+shift+h -> option+shift+h (move left)",
   { device: "external", key_code: "h", modifiers: ["option", "shift"] },
-  "move left");
+  { key_code: "h", modifiers: ["left_option", "left_shift"] });
 
 // ---------- alt suppress ----------
 

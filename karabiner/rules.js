@@ -26,8 +26,6 @@
 //   8. Home/End -> Cmd+Left/Right (both keyboards, macOS line-nav).
 
 (function () {
-  var KOMOREBIC = "/opt/homebrew/bin/komorebic";
-
   // Character -> ANSI keycode combination. Used by the Dudrack layers and the
   // external-JIS remap to emit specific characters.
   //
@@ -224,7 +222,23 @@
     { key: "r",      shift: true, command: "reload-configuration" }
   ];
 
-  function komorebiManip(keyCode, withShift, device, command) {
+  // whkd logical key -> the Karabiner key_code katnas registers its hot key on.
+  // Identity for every key except "colon", which katnas binds as `semicolon`
+  // (the shift is carried by the binding's own `shift` flag).
+  function whkdToKeyCode(whkdKey) {
+    return whkdKey === "colon" ? "semicolon" : whkdKey;
+  }
+
+  // Emit `option(+shift)+<key>` so katnas's own hot key (katnas.yaml `keys:`)
+  // handles it — katnas is the single source of truth for the binding, and any
+  // input source that produces the chord drives it (option B).
+  function komorebiTo(whkdKey, withShift) {
+    var toMods = ["left_option"];
+    if (withShift) toMods.push("left_shift");
+    return [{ key_code: whkdToKeyCode(whkdKey), modifiers: toMods }];
+  }
+
+  function komorebiManip(keyCode, withShift, device, whkdKey) {
     var mods = ["option"];
     if (withShift) mods.push("shift");
     var conditions = [device];
@@ -242,11 +256,11 @@
       type: "basic",
       conditions: conditions,
       from: { key_code: keyCode, modifiers: { mandatory: mods, optional: ["caps_lock"] } },
-      to: [{ shell_command: KOMOREBIC + " " + command }]
+      to: komorebiTo(whkdKey, withShift)
     };
   }
 
-  function komorebiHenkanManip(physicalKey, withShift, command) {
+  function komorebiHenkanManip(physicalKey, withShift, whkdKey) {
     var mods = ["option"];
     if (withShift) mods.push("shift");
     return {
@@ -256,7 +270,7 @@
         DUDRACK
       ],
       from: { key_code: physicalKey, modifiers: { mandatory: mods, optional: ["caps_lock"] } },
-      to: [{ shell_command: KOMOREBIC + " " + command }]
+      to: komorebiTo(whkdKey, withShift)
     };
   }
 
@@ -272,7 +286,7 @@
     manipulators.push(komorebiHenkanManip(
       henkanInverse[hKey],
       hBinding.shift,
-      hBinding.command
+      hBinding.key
     ));
   }
 
@@ -280,11 +294,10 @@
     var binding = komorebiBindings[ib];
     var whkdKey = binding.key;
     var withShift = binding.shift;
-    var command = binding.command;
     requireMapKey(dudrackInverse, "dudrackInverse", whkdKey);
     requireMapKey(externalKey, "externalKey", whkdKey);
-    manipulators.push(komorebiManip(dudrackInverse[whkdKey], withShift, DUDRACK, command));
-    manipulators.push(komorebiManip(externalKey[whkdKey], withShift, EXTERNAL, command));
+    manipulators.push(komorebiManip(dudrackInverse[whkdKey], withShift, DUDRACK, whkdKey));
+    manipulators.push(komorebiManip(externalKey[whkdKey], withShift, EXTERNAL, whkdKey));
   }
 
   // ============================================================
