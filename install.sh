@@ -23,6 +23,7 @@ PATHS=(
     sheldon $XDG_CONFIG_HOME/sheldon
     starship.toml $XDG_CONFIG_HOME/starship.toml
     ghostty $XDG_CONFIG_HOME/ghostty
+    katnas $XDG_CONFIG_HOME/katnas
 
     bin/git-fixup $HOME/bin/git-fixup
     bin/git-wa $HOME/bin/git-wa
