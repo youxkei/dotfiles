@@ -114,5 +114,5 @@ logical_monitors:
       "1": { apps: ["firefox.exe", "com.brave.Browser"] }             # firefox / Brave
       "2": { apps: ["Notion.exe", "notion.id"] }                      # Notion
       "3": { apps: ["claude.exe", "com.anthropic.claudefordesktop"] } # Claude
-      "4": {}
+      "4": { apps: ["Time.exe"] }                                     # Clock (UWP, Windows)
       "5": { apps: ["Carla.exe"] }                                    # Carla (Windows)
