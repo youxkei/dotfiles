@@ -67,7 +67,7 @@ reconcile:
 
 border:
   enabled: true
-  width: 20
+  width: 10
   color: "#e8912d"
   inactive_color: "#808080"
   radius: 8
