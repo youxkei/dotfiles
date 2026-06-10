@@ -1,0 +1,106 @@
+general:
+  layout: dwindle
+  gaps: { inner: 8, outer: 8 }
+  mouse_follows_focus: true
+  workspaces: []
+
+keys:
+  # --- focus movement ---
+  "alt+h": "focus left"
+  "alt+j": "focus down"
+  "alt+k": "focus up"
+  "alt+l": "focus right"
+  # --- move the focused window ---
+  "alt+shift+h": "swap left"
+  "alt+shift+j": "swap down"
+  "alt+shift+k": "swap up"
+  "alt+shift+l": "swap right"
+  # --- switch to a workspace ---
+  "alt+a": "workspace left 0"
+  "alt+semicolon": "workspace left 1"
+  "alt+1": "workspace left 2"
+  "alt+o": "workspace center 0"
+  "alt+e": "workspace center 1"
+  "alt+comma": "workspace center 2"
+  "alt+period": "workspace center 3"
+  "alt+2": "workspace center 4"
+  "alt+3": "workspace center 5"
+  "alt+t": "workspace center 6"
+  "alt+n": "workspace center 7"
+  "alt+u": "workspace right 0"
+  "alt+i": "workspace right 1"
+  "alt+p": "workspace right 2"
+  "alt+y": "workspace right 3"
+  "alt+4": "workspace right 4"
+  "alt+5": "workspace right 5"
+  # --- send the focused window to a workspace ---
+  "alt+shift+a": "move-to-workspace left 0"
+  "alt+shift+semicolon": "move-to-workspace left 1"
+  "alt+shift+1": "move-to-workspace left 2"
+  "alt+shift+o": "move-to-workspace center 0"
+  "alt+shift+e": "move-to-workspace center 1"
+  "alt+shift+comma": "move-to-workspace center 2"
+  "alt+shift+period": "move-to-workspace center 3"
+  "alt+shift+2": "move-to-workspace center 4"
+  "alt+shift+3": "move-to-workspace center 5"
+  "alt+shift+t": "move-to-workspace center 6"
+  "alt+shift+n": "move-to-workspace center 7"
+  "alt+shift+u": "move-to-workspace right 0"
+  "alt+shift+i": "move-to-workspace right 1"
+  "alt+shift+p": "move-to-workspace right 2"
+  "alt+shift+y": "move-to-workspace right 3"
+  "alt+shift+4": "move-to-workspace right 4"
+  "alt+shift+5": "move-to-workspace right 5"
+  # --- management & layout ---
+  "alt+s": "toggle-pause"
+  "alt+m": "manage"
+  "alt+f": "focus-fullscreen"
+  "alt+r": "retile"
+  "alt+w": "layout rows"
+  "alt+v": "layout columns"
+  "alt+b": "layout dwindle"
+  "alt+shift+return": "toggle-float"
+  "alt+shift+r": "reload"
+
+reconcile:
+  tick_ms: 2000
+
+border:
+  enabled: true
+  width: 20
+  color: "#e8912d"
+  inactive_color: "#808080"
+  radius: 8
+
+logical_monitors:
+  # left monitor (LG UltraGear+, portrait)
+  left:
+    physical_monitors: ["GSM779A"]
+    workspaces:
+      "0": { apps: ["obs64.exe"] }
+      "1": { apps: ["slack.exe"] }
+      "2": { apps: ["Discord.exe"] }
+
+  # center / primary (27M2V)
+  center:
+    physical_monitors: ["IOCFFFF"]
+    workspaces:
+      "0": { apps: ["WindowsTerminal.exe"] }
+      "1": { apps: ["alacritty.exe"] }
+      "2": {}
+      "3": {}
+      "4": {}
+      "5": {}
+      "6": {}
+      "7": {}
+
+  # right (ASUS ROG XG27UQ; AUS272A over DisplayPort/Windows, AUS278B over HDMI/macOS)
+  right:
+    physical_monitors: ["AUS272A", "AUS278B"]
+    workspaces:
+      "0": { apps: ["chrome.exe", "brave.exe"] }
+      "1": { apps: ["firefox.exe"] }
+      "2": { apps: ["Notion.exe"] }
+      "3": { apps: ["claude.exe"] }
+      "4": {}
+      "5": { apps: ["Carla.exe"] }
