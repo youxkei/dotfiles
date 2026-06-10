@@ -73,21 +73,32 @@ border:
   radius: 8
 
 logical_monitors:
+  # Cross-platform app→workspace assignment. katnas regex-matches each pattern
+  # against the window's `app_name`: the **exe basename** on Windows, the
+  # **bundle id** on macOS. The two never overlap, so both live in the same list
+  # (a window matches if ANY pattern does). The macOS bundle ids mirror
+  # bin/start-komorebi's register_workspace_rules. Only Chrome carries a trailing
+  # `$`, so it won't also match the Chrome PWA (Rejysten,
+  # com.google.Chrome.app.<id>); everything else has no prefix clash and stays
+  # plain.
+
   # left monitor (LG UltraGear+, portrait)
   left:
     physical_monitors: ["GSM779A"]
     workspaces:
-      "0": { apps: ["obs64.exe"] }
-      "1": { apps: ["slack.exe"] }
-      "2": { apps: ["Discord.exe"] }
+      # OBS (Windows) / Rejysten — a Chrome PWA, com.google.Chrome.app.<id> (macOS)
+      "0": { apps: ["obs64.exe", "com.google.Chrome.app.bgggdcicpbejchdjahfibmilohfebbbl"] }
+      "1": { apps: ["slack.exe", "com.tinyspeck.slackmacgap"] }   # Slack
+      "2": { apps: ["Discord.exe"] }                              # Discord (Windows)
 
   # center / primary (27M2V)
   center:
     physical_monitors: ["IOCFFFF"]
     workspaces:
-      "0": { apps: ["WindowsTerminal.exe"] }
-      "1": { apps: ["alacritty.exe"] }
-      "2": {}
+      "0": { apps: ["WindowsTerminal.exe", "com.mitchellh.ghostty"] } # terminal: WT / Ghostty
+      "1": { apps: ["alacritty.exe", "com.neovide.neovide"] }         # alacritty / Neovide
+      # Google Meet (a Chrome PWA → com.google.Chrome.app.<id>, macOS)
+      "2": { apps: ["com.google.Chrome.app.kjgfgldnnfoeklkmfkjfagphfepbbdan"] }
       "3": {}
       "4": {}
       "5": {}
@@ -98,9 +109,9 @@ logical_monitors:
   right:
     physical_monitors: ["AUS272A", "AUS278B"]
     workspaces:
-      "0": { apps: ["chrome.exe", "brave.exe"] }
-      "1": { apps: ["firefox.exe"] }
-      "2": { apps: ["Notion.exe"] }
-      "3": { apps: ["claude.exe"] }
+      "0": { apps: ["chrome.exe", "brave.exe", "com.google.Chrome$"] } # Chrome (not the PWA)
+      "1": { apps: ["firefox.exe", "com.brave.Browser"] }             # firefox / Brave
+      "2": { apps: ["Notion.exe", "notion.id"] }                      # Notion
+      "3": { apps: ["claude.exe", "com.anthropic.claudefordesktop"] } # Claude
       "4": {}
-      "5": { apps: ["Carla.exe"] }
+      "5": { apps: ["Carla.exe"] }                                    # Carla (Windows)
