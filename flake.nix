@@ -143,7 +143,7 @@
               fnm
 
               # go
-              go_1_25
+              go
               gopls
               (gotools.overrideAttrs (old: {
                 # gopls also ships bin/modernize, so drop gotools' copy to avoid buildEnv collision.
