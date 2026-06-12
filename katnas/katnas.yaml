@@ -4,6 +4,14 @@ general:
   mouse_follows_focus: true
   workspaces: []
 
+reconcile:
+  tick_ms: 2000
+
+border:
+  enabled: true
+  color: "#e8912d"
+  inactive_color: "#808080"
+
 keys:
   # --- focus movement ---
   "alt+h": "focus left"
@@ -62,14 +70,6 @@ keys:
   "alt+shift+return": "toggle-float"
   "alt+shift+r": "reload"
 
-reconcile:
-  tick_ms: 2000
-
-border:
-  enabled: true
-  color: "#e8912d"
-  inactive_color: "#808080"
-
 logical_monitors:
   # apps patterns match the exe basename on Windows, the bundle id on macOS.
 
@@ -105,7 +105,7 @@ logical_monitors:
     workspaces:
       "0": { apps: ["chrome.exe", "brave.exe", "com.google.Chrome$"] } # "$": not the PWAs
       "1": { apps: ["firefox.exe", "com.brave.Browser"] }
-      "2": { apps: ["Notion.exe", "notion.id"] }
+      "2": { apps: ["Notion.exe", "notion.id", "AppleMusic.exe", "com.apple.Music"] }
       "3": { apps: ["claude.exe", "com.anthropic.claudefordesktop"] }
       "4": { apps: ["Time.exe"] } # the Clock app (UWP)
       "5": { apps: ["Carla.exe"] }
