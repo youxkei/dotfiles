@@ -82,9 +82,9 @@ logical_monitors:
   # com.google.Chrome.app.<id>); everything else has no prefix clash and stays
   # plain.
 
-  # left monitor (LG UltraGear+, portrait)
+  # left monitor (LG UltraGear+, portrait; falls back to the built-in display)
   left:
-    physical_monitors: ["GSM779A"]
+    physical_monitors: ["GSM779A", "APPA05C"]
     workspaces:
       # OBS (Windows) / Rejysten — a Brave PWA matched by window title (Windows),
       # a Chrome PWA com.google.Chrome.app.<id> (macOS)
