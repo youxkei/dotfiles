@@ -112,8 +112,8 @@ logical_monitors:
 
 windows:
   border:
-    width: 18
-    radius: 8
+    width: 15
+    radius: 20
 
 macos:
   border:
