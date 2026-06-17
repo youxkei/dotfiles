@@ -428,6 +428,21 @@
     to: [{ key_code: "vk_none" }]
   });
 
+  // Built-in keyboard: neutralize the misfire where both physical command keys
+  // are held while reaching for '@'. left_command -> left_option leaks `option`,
+  // and the Henkan layer turns physical 'h' into '@' (= shift+2), so the chord
+  // surfaces as option+shift+2 -- which collides with katnas's "send window to a
+  // workspace" hot key and flings the focused window off to another workspace.
+  // Swallow option-contaminated physical 'h' under Henkan so the stray chord is
+  // a no-op; '@' typed via Right Command + 'h' alone (no option) is untouched.
+  // Must precede the Henkan layer (section 4) so it wins the physical-'h' match.
+  manipulators.push({
+    type: "basic",
+    conditions: [{ type: "variable_if", name: "dudrack_henkan", value: 1 }, BUILTIN],
+    from: { key_code: "h", modifiers: { mandatory: ["option"], optional: ["caps_lock", "shift"] } },
+    to: [{ key_code: "vk_none" }]
+  });
+
   // ============================================================
   // 4. Dudrack Henkan layer
   // ============================================================

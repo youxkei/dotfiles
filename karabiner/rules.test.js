@@ -400,6 +400,31 @@ expectKey("builtin alt+j still -> option+h (focus left)",
   { device: "builtin", key_code: "j", modifiers: ["option"] },
   { key_code: "h", modifiers: ["left_option"] });
 
+// Built-in: both command keys held while reaching for '@' would surface as
+// option+shift+2 (left_command -> option plus the Henkan '@' = shift+2), which
+// collides with katnas's "send window to workspace" hot key. Option-contaminated
+// physical 'h' under Henkan is swallowed so the misfire is a no-op.
+const optHHenkan = findMatch({
+  device: "builtin", key_code: "h",
+  modifiers: ["option"], variables: { dudrack_henkan: 1 },
+});
+assert(optHHenkan && optHHenkan.to[0].key_code === "vk_none",
+       "builtin option+h under Henkan is swallowed (no stray workspace move)");
+const optShiftHHenkan = findMatch({
+  device: "builtin", key_code: "h",
+  modifiers: ["option", "shift"], variables: { dudrack_henkan: 1 },
+});
+assert(optShiftHHenkan && optShiftHHenkan.to[0].key_code === "vk_none",
+       "builtin option+shift+h under Henkan is swallowed");
+// '@' via Right Command + 'h' alone (no option contamination) still types.
+expectKey("builtin h under Henkan (no option) still -> '@'",
+  { device: "builtin", key_code: "h", variables: { dudrack_henkan: 1 } },
+  { key_code: "2", modifiers: ["left_shift"] });
+// Outside Henkan, option+h is unaffected (falls through to the Neutral layer).
+expectKey("builtin option+h outside Henkan still -> 'd' (Neutral)",
+  { device: "builtin", key_code: "h", modifiers: ["option"] },
+  { key_code: "d" });
+
 // ---------- home/end -> cmd+left/right (both devices) ----------
 
 expectKey("builtin home -> cmd+left",
