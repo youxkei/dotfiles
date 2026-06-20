@@ -25,7 +25,7 @@ keys:
   "alt+shift+l": "swap right"
   # --- switch to a workspace ---
   "alt+a": "workspace left 0"
-  "alt+semicolon": "workspace left 1"
+  "alt+colon": "workspace left 1"
   "alt+1": "workspace left 2"
   "alt+o": "workspace center 0"
   "alt+e": "workspace center 1"
@@ -43,7 +43,7 @@ keys:
   "alt+5": "workspace right 5"
   # --- send the focused window to a workspace ---
   "alt+shift+a": "move-to-workspace left 0"
-  "alt+shift+semicolon": "move-to-workspace left 1"
+  "alt+shift+colon": "move-to-workspace left 1"
   "alt+shift+1": "move-to-workspace left 2"
   "alt+shift+o": "move-to-workspace center 0"
   "alt+shift+e": "move-to-workspace center 1"

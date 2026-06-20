@@ -332,41 +332,42 @@ expectKey("external pc_xfer -> japanese_kana (unaffected by tpkb2)",
   { device: "external", key_code: "japanese_pc_xfer" },
   { key_code: "japanese_kana" });
 
-// ---------- TrackPoint Keyboard II: komorebi + no alt-suppress ----------
+// ---------- TrackPoint Keyboard II: option falls through to the layout ----------
+//
+// option+<key> hits the Neutral/Henkan rule for that physical key, and Karabiner
+// forwards the option modifier at runtime. The harness models only the literal
+// layout output, so option is not shown in the expected results below.
 
-// dudrackInverse.h = "j": physical 'j' under Dudrack = whkd 'h' = "focus left".
-expectKey("tpkb2 alt+j -> option+h (focus left)",
+// physical 'j' under Dudrack -> Neutral 'h' (runtime: option+h = focus left).
+expectKey("tpkb2 option+j -> Neutral 'h'",
   { device: "tpkb2", key_code: "j", modifiers: ["option"] },
-  { key_code: "h", modifiers: ["left_option"] });
-// Henkan-aware: physical 'q' with option+henkan = whkd '1' -> option+1 (katnas focus l2).
-expectKey("tpkb2 alt+q under henkan -> option+1 (focus l2)",
+  { key_code: "h" });
+// physical 'q' + henkan -> Henkan '1' (runtime: option+1 = focus l2).
+expectKey("tpkb2 option+q under henkan -> Henkan '1'",
   { device: "tpkb2", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
-  { key_code: "1", modifiers: ["left_option"] });
-
-// Dudrack keyboards are not alt-suppressed (they emit Dudrack output instead).
-const altXTpkb = findMatch({ device: "tpkb2", key_code: "x", modifiers: ["option"] });
-assert(!altXTpkb || altXTpkb.to[0].key_code !== "vk_none",
-       "tpkb2 alt+x is not suppressed");
-
-// Komorebi yields to the Henkan layer. Physical 'c' = whkd 'j' = "focus down"
-// when Henkan is off, but must map to up_arrow under Henkan (option/shift pass
-// through at runtime), so 無変換+alt+変換+c -> option+shift+up_arrow works.
-expectKey("tpkb2 alt+c without henkan -> option+j (focus down)",
+  { key_code: "1" });
+// physical 'x' hits the Neutral 'q' rule.
+expectKey("tpkb2 option+x -> Neutral 'q'",
+  { device: "tpkb2", key_code: "x", modifiers: ["option"] },
+  { key_code: "q" });
+// Henkan still wins over Neutral for the same physical key: 'c' is Neutral 'j'
+// but Henkan 'up_arrow'.
+expectKey("tpkb2 option+c without henkan -> Neutral 'j'",
   { device: "tpkb2", key_code: "c", modifiers: ["option"] },
-  { key_code: "j", modifiers: ["left_option"] });
+  { key_code: "j" });
 const cHenkan = findMatch({
   device: "tpkb2", key_code: "c",
   modifiers: ["option", "shift"], variables: { dudrack_henkan: 1 },
 });
 assert(cHenkan && cHenkan.to[0].key_code === "up_arrow",
-       "tpkb2 option+shift+c under henkan -> up_arrow (komorebi yields)");
-// Built-in behaves identically (the guard lives in the shared DUDRACK scope).
+       "tpkb2 option+shift+c under henkan -> Henkan up_arrow");
+// Built-in behaves identically (the layers live in the shared DUDRACK scope).
 const cHenkanBuiltin = findMatch({
   device: "builtin", key_code: "c",
   modifiers: ["option"], variables: { dudrack_henkan: 1 },
 });
 assert(cHenkanBuiltin && cHenkanBuiltin.to[0].key_code === "up_arrow",
-       "builtin option+c under henkan -> up_arrow (komorebi yields)");
+       "builtin option+c under henkan -> Henkan up_arrow");
 
 // ---------- disable Cmd+H (both keyboards) ----------
 
@@ -395,14 +396,14 @@ assert(cmdHExternal && cmdHExternal.to[0].key_code === "vk_none",
 const cmdOptHExternal = findMatch({ device: "external", key_code: "h", modifiers: ["command", "option"] });
 assert(cmdOptHExternal && cmdOptHExternal.to[0].key_code === "vk_none",
        "external cmd+option+h (Hide Others) is swallowed");
-// alt+j (komorebi) is unaffected by the cmd+h guard.
-expectKey("builtin alt+j still -> option+h (focus left)",
+// option+j (no command) is unaffected by the cmd+h guard: it hits Neutral 'h'.
+expectKey("builtin option+j -> Neutral 'h' (not the cmd+h guard)",
   { device: "builtin", key_code: "j", modifiers: ["option"] },
-  { key_code: "h", modifiers: ["left_option"] });
+  { key_code: "h" });
 
 // Built-in: both command keys held while reaching for '@' would surface as
 // option+shift+2 (left_command -> option plus the Henkan '@' = shift+2), which
-// collides with katnas's "send window to workspace" hot key. Option-contaminated
+// collides with the external handler's "send window to workspace" chord. Option-contaminated
 // physical 'h' under Henkan is swallowed so the misfire is a no-op.
 const optHHenkan = findMatch({
   device: "builtin", key_code: "h",
@@ -443,45 +444,63 @@ expectKey("shift+home -> shift+cmd+left (passthrough)",
   { device: "external", key_code: "home", modifiers: ["shift"] },
   { key_code: "left_arrow", modifiers: ["left_command"] });
 
-// ---------- komorebi -> katnas key emission ----------
-// Each WM chord now emits `option(+shift)+<key>` for katnas's own hot keys
-// (katnas.yaml `keys:`), instead of running komorebic via shell_command.
+// ---------- option passthrough to the layout ----------
+// option+<key> hits the layout rule for that physical key; Karabiner forwards
+// the option modifier at runtime. The harness shows only the literal layout
+// output (option not shown). A window manager binds option+<layout output>.
 
-// dudrackInverse.h = "j": physical 'j' on built-in = whkd 'h' -> option+h (focus left).
-expectKey("builtin alt+j -> option+h (focus left)",
+// built-in physical 'j' -> Neutral 'h' (runtime option+h = focus left).
+expectKey("builtin option+j -> Neutral 'h'",
   { device: "builtin", key_code: "j", modifiers: ["option"] },
-  { key_code: "h", modifiers: ["left_option"] });
+  { key_code: "h" });
 
-// externalKey.h = "h": physical 'h' on external -> option+h (focus left).
-expectKey("external alt+h -> option+h (focus left)",
-  { device: "external", key_code: "h", modifiers: ["option"] },
-  { key_code: "h", modifiers: ["left_option"] });
+// external 'h' has no remap, so option+h passes straight through to macOS
+// (runtime option+h = focus left); Karabiner adds no rule.
+expectNone("external option+h passes through (no rule)",
+  { device: "external", key_code: "h", modifiers: ["option"] });
 
-// Henkan-aware: physical 'q' with option+henkan = whkd '1' -> option+1 (focus l2).
-expectKey("builtin alt+q under henkan -> option+1 (focus l2)",
-  { device: "builtin", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
-  { key_code: "1", modifiers: ["left_option"] });
-
-// Without henkan, same physical 'q' (whkd 'colon') -> option+semicolon (focus l1).
-expectKey("builtin alt+q without henkan -> option+semicolon (focus l1)",
+// colon: built-in physical 'q' -> Neutral ':' (= shift+semicolon); runtime
+// option+shift+semicolon = "focus l1".
+expectKey("builtin option+q without henkan -> Neutral ':' (shift+semicolon)",
   { device: "builtin", key_code: "q", modifiers: ["option"] },
-  { key_code: "semicolon", modifiers: ["left_option"] });
+  { key_code: "semicolon", modifiers: ["left_shift"] });
 
-// Shifted: alt+shift+h on external -> option+shift+h (move/swap left).
-expectKey("external alt+shift+h -> option+shift+h (move left)",
-  { device: "external", key_code: "h", modifiers: ["option", "shift"] },
-  { key_code: "h", modifiers: ["left_option", "left_shift"] });
+// colon under henkan: physical 'q' -> Henkan '1'; runtime option+1 = "focus l2".
+expectKey("builtin option+q under henkan -> Henkan '1'",
+  { device: "builtin", key_code: "q", modifiers: ["option"], variables: { dudrack_henkan: 1 } },
+  { key_code: "1" });
 
-// ---------- alt suppress ----------
+// colon on external: physical 'quote' -> JIS ':' (= shift+semicolon); runtime
+// option+shift+semicolon = "focus l1". The JIS remap applies under option.
+expectKey("external option+quote -> JIS ':' (shift+semicolon)",
+  { device: "external", key_code: "quote", modifiers: ["option"] },
+  { key_code: "semicolon", modifiers: ["left_shift"] });
 
-// 'x' has no whkd binding, so external alt+x should be swallowed.
-const altX = findMatch({ device: "external", key_code: "x", modifiers: ["option"] });
-assert(altX && altX.to && altX.to[0].key_code === "vk_none", "external alt+x -> vk_none");
+// colon move on external: physical shift+'quote' -> JIS '*' (= shift+8); runtime
+// option+shift+8 = "move-to l1" (the asymmetric focus/move pair for the colon key).
+expectKey("external option+shift+quote -> JIS '*' (shift+8)",
+  { device: "external", key_code: "quote", modifiers: ["option", "shift"] },
+  { key_code: "8", modifiers: ["left_shift"] });
 
-// Built-in keyboards do not suppress (they have Dudrack output instead).
-const altXBuiltin = findMatch({ device: "builtin", key_code: "x", modifiers: ["option"] });
-assert(!altXBuiltin || altXBuiltin.to[0].key_code !== "vk_none",
-       "builtin alt+x is not suppressed");
+// toggle-float: physical 'd' + shift under henkan -> Henkan 'return_or_enter';
+// runtime option+shift+return. The layout emits the key_code `return_or_enter`
+// (the literal "return" is not a key_code macOS turns into the Return keycode).
+expectKey("builtin option+shift+d under henkan -> Henkan 'return_or_enter'",
+  { device: "builtin", key_code: "d", modifiers: ["option", "shift"], variables: { dudrack_henkan: 1 } },
+  { key_code: "return_or_enter" });
+
+// ---------- unbound option+key passes through ----------
+
+// external 'x' has no remap, so option+x reaches macOS untouched (Karabiner adds
+// no rule; its option-layer dead-key is handled at the input-source / .keylayout
+// level).
+expectNone("external option+x passes through (no rule)",
+  { device: "external", key_code: "x", modifiers: ["option"] });
+
+// built-in option+x hits the Neutral 'q' rule (runtime option+q).
+expectKey("builtin option+x -> Neutral 'q'",
+  { device: "builtin", key_code: "x", modifiers: ["option"] },
+  { key_code: "q" });
 
 // ---------- built-in keys not handled (pass-through) ----------
 
