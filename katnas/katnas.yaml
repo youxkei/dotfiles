@@ -64,6 +64,7 @@ keys:
   "alt+s": "toggle-pause"
   "alt+m": "manage"
   "alt+f": "focus-fullscreen"
+  "alt+shift+f": "move-to-fullscreen"
   "alt+r": "retile"
   "alt+w": "layout rows"
   "alt+v": "layout columns"
