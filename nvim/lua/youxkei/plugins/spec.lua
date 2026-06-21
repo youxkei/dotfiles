@@ -15,22 +15,13 @@ local function force_redraw_floating_terminal(win)
   end, 50)
 end
 
--- Per-task work dir for gtd's /do. /do works inside a per-task worktree
--- (~/repo/gtd/.claude/worktrees/do-<slug>/) and puts clones and scratch
--- under that worktree's todo/<slug>/ (clones in todo/<slug>/repo/, gitignored).
--- The worktree stays until /done merges it. Being inside a worktree + gitignored, plain
--- ,tf/,tg won't surface them → ,tw/,tW/,tp below search them with ignored files included (.git excluded).
+-- gtd /do works inside a per-task worktree (~/repo/gtd/.claude/worktrees/do-<slug>/) and
+-- puts clones + scratch under that worktree's todo/<slug>/ (main repo in repo/, reference
+-- clones in ref/, both gitignored). nvim enters a worktree via ,dt (cd + possession session);
+-- the current task is identified by cwd, so ,df/,dF/,dg/,dG search the cwd's worktree with
+-- ignored files included (.git excluded; ,df/,dg also exclude ref/).
 local function gtd_wt_root()
   return vim.fn.expand("~/repo/gtd/.claude/worktrees")
-end
-
--- List of task slugs for active /do worktrees ("do-foo" dir -> "foo").
-local function gtd_wt_tasks(root)
-  if vim.fn.isdirectory(root) == 0 then return {} end
-  local dirs = vim.fn.readdir(root, function(name)
-    return (name:match("^do%-") and vim.fn.isdirectory(root .. "/" .. name) == 1) and 1 or 0
-  end)
-  return vim.tbl_map(function(name) return (name:gsub("^do%-", "")) end, dirs)
 end
 
 -- slug -> the task work dir inside the worktree
@@ -42,40 +33,28 @@ local function gtd_wt_task_dir(root, slug)
   return wt
 end
 
--- Resolve the task slug and call open(dir). Order: pin > auto (single match) > select.
--- The choice is remembered in vim.g.gtd_work_task (this nvim instance only).
--- With two nvims each running a different task, vim.g is per-instance so each stays sticky to its own.
--- When force_select=true (= ,tp), always prompt to select even if pinned/single.
-local function gtd_work_pick(open, force_select)
+-- The current task's work dir, derived from cwd: if we're inside a do-<slug> worktree,
+-- return its todo/<slug>/ (or the worktree root). Otherwise nil.
+local function gtd_cwd_task_dir()
   local root = gtd_wt_root()
-  local pinned = vim.g.gtd_work_task
-  if not force_select and pinned and vim.fn.isdirectory(root .. "/do-" .. pinned) == 1 then
-    return open(gtd_wt_task_dir(root, pinned))
-  end
-  local tasks = gtd_wt_tasks(root)
-  if #tasks == 0 then
-    return vim.notify("no active /do worktrees", vim.log.levels.WARN)
-  elseif #tasks == 1 and not force_select then
-    vim.g.gtd_work_task = tasks[1]
-    return open(gtd_wt_task_dir(root, tasks[1]))
-  end
-  vim.ui.select(tasks, { prompt = "gtd /do task: " }, function(choice)
-    if not choice then return end
-    vim.g.gtd_work_task = choice -- remember it for this instance
-    open(gtd_wt_task_dir(root, choice))
-  end)
+  local slug = vim.fn.getcwd():match("^" .. vim.pesc(root) .. "/do%-([^/]+)")
+  if not slug then return nil end
+  return gtd_wt_task_dir(root, slug)
 end
 
--- Called by the host neovim (via $NVIM RPC) right after gtd's /do starts creating work
--- in a task's worktree (do-<slug>/todo/<slug>/). Pins this instance to that task
--- → ,tw/,tW immediately open that worktree's todo/<slug>/.
--- Parallel tasks each have their Claude terminal's $NVIM point at a different instance, so each nvim gets pinned to its own task.
-function _G.GtdPinWork(slug)
-  vim.g.gtd_work_task = slug
-  vim.schedule(function()
-    vim.notify("gtd: pinned /do task → " .. tostring(slug))
-  end)
-  return slug
+-- ,df/,dF/,dg/,dG: search the current task (resolved from cwd). kind = "files" | "grep".
+-- with_ref=false → main repo + notes (exclude ref/); true → everything (main + ref + notes).
+local function gtd_search(kind, with_ref)
+  local dir = gtd_cwd_task_dir()
+  if not dir then
+    return vim.notify("not in a gtd /do worktree — ,dt first", vim.log.levels.WARN)
+  end
+  require("snacks").picker[kind] {
+    cwd = dir,
+    hidden = true,
+    ignored = true,
+    exclude = with_ref and { ".git" } or { ".git", "ref" },
+  }
 end
 
 -- Parse ~/repo/gtd/list.md and return an array of {title, slug} (higher = higher priority).
@@ -112,16 +91,29 @@ local function gtd_ensure_worktree(slug)
   return wt, true
 end
 
--- Pick a gtd task from list.md (priority order) and pin it to this nvim instance (,tt).
--- Creates the do-<slug> worktree first if missing, so the following ,tw/,tW work right away.
--- Does not load the session (to avoid closing the terminal buffer where Claude runs) — only pin + worktree creation.
-local function gtd_pin_task()
+-- True if any real, named file buffer is open (not a terminal / scratch). Used to decide
+-- whether saving the outgoing possession session is worthwhile: the before_save hook strips
+-- terminal buffers, so saving a terminal-only view (e.g. just the Claude terminal) would
+-- overwrite that session with an empty one.
+local function gtd_has_file_buffer()
+  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.fn.buflisted(b) == 1 and vim.bo[b].buftype == "" and vim.api.nvim_buf_get_name(b) ~= "" then
+      return true
+    end
+  end
+  return false
+end
+
+-- ,dt: pick a gtd task from list.md (priority order), create its do-<slug> worktree if
+-- missing, then cd into the worktree root and switch the possession session to it. The task
+-- is identified by cwd afterward, so a Claude launched here runs inside the worktree.
+local function gtd_enter_task()
   local tasks = gtd_list_tasks()
   if #tasks == 0 then
     return vim.notify("no gtd tasks in list.md", vim.log.levels.WARN)
   end
   vim.ui.select(tasks, {
-    prompt = "gtd task to pin: ",
+    prompt = "gtd task: ",
     format_item = function(t) return t.title end,
   }, function(choice)
     if not choice then return end
@@ -129,9 +121,55 @@ local function gtd_pin_task()
     if not wt then
       return vim.notify("gtd: failed to create worktree → " .. tostring(err), vim.log.levels.ERROR)
     end
-    vim.g.gtd_work_task = choice.slug
-    vim.notify((created and "gtd: created worktree + pinned → " or "gtd: pinned → ") .. choice.title)
+    -- Switch the possession session to the worktree without clobbering the one we leave.
+    -- Order matters: save the outgoing session (only if it has real files — see below), then
+    -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
+    -- we cd'd while the outgoing session was still "current", a later autosave (or load's
+    -- on_load autosave) would write the worktree's buffers/cwd into that session.
+    if gtd_has_file_buffer() then -- skip when only a terminal is open, else we'd save an empty session over it
+      pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
+    end
+    pcall(function() vim.cmd("silent! PossessionClose") end)
+    vim.cmd("cd " .. vim.fn.fnameescape(wt)) -- global cd into the worktree root (no session is current now)
+    local paths = require("possession.paths")
+    if paths.session(paths.cwd_session_name()):exists() then
+      pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- existing worktree session → load it (current = this worktree)
+    else
+      -- Fresh worktree: PossessionClose above is a no-op when nothing was "current" (e.g. only a
+      -- terminal was open), so the previous task's buffers can linger and no session gets created.
+      -- Force a clean slate, then create + activate this worktree's session so it shows up in
+      -- possession and future autosaves target it (not the previous task).
+      pcall(function() require("possession.utils").delete_all_buffers(true) end)
+      pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
+    end
+    vim.notify((created and "gtd: created + entered → " or "gtd: entered → ") .. choice.title)
   end)
+end
+
+-- Called by /done (via $NVIM RPC) right after it removes a do-<slug> worktree. If this nvim
+-- was inside that worktree, return to the main gtd checkout + its session; then drop the
+-- worktree's now-dangling cwd-session so autosave can't resurrect it.
+function _G.GtdDoneCleanup(slug)
+  local wt = gtd_wt_root() .. "/do-" .. slug
+  local wt_name = vim.fn.fnamemodify(wt, ":~") -- == paths.cwd_session_name() when cwd == wt
+  local paths = require("possession.paths")
+  local function drop()
+    if paths.session(wt_name):exists() then
+      require("possession.session").delete(wt_name, { no_confirm = true })
+    end
+  end
+  if vim.fn.getcwd():sub(1, #wt) == wt then
+    -- Leave the (now-removed) worktree session first so cd'ing out can't autosave it back,
+    -- then return to the main checkout and load its session.
+    pcall(function() vim.cmd("silent! PossessionClose") end)
+    vim.cmd("cd " .. vim.fn.fnameescape(vim.fn.expand("~/repo/gtd")))
+    if paths.session(paths.cwd_session_name()):exists() then
+      pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- back to main's session (closes /done terminal)
+    end
+    vim.schedule(drop) -- delete the worktree's dangling cwd-session file
+  else
+    drop()
+  end
 end
 
 local host_ok, host = pcall(require, "youxkei.plugins.spec_host")
@@ -727,22 +765,11 @@ return {
       { "<leader>tF", function() require("snacks").picker.files { hidden = true, ignored = true } end, desc = "Select from all files" },
       { "<leader>tg", function() require("snacks").picker.grep { hidden = true } end, desc = "Grep from files" },
       { "<leader>tG", function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Grep from all files" },
-      { "<leader>tw", function()
-          gtd_work_pick(function(dir)
-            require("snacks").picker.files { cwd = dir, hidden = true, ignored = true, exclude = { ".git" } }
-          end)
-        end, desc = "Find in gtd /do worktree (pinned task)" },
-      { "<leader>tW", function()
-          gtd_work_pick(function(dir)
-            require("snacks").picker.grep { cwd = dir, hidden = true, ignored = true, exclude = { ".git" } }
-          end)
-        end, desc = "Grep in gtd /do worktree (pinned task)" },
-      { "<leader>tp", function()
-          gtd_work_pick(function(dir)
-            vim.notify("pinned gtd work: " .. vim.fn.fnamemodify(dir, ":t"))
-          end, true) -- force_select: re-pick this nvim's task
-        end, desc = "Pin gtd /do worktree task (active worktrees)" },
-      { "<leader>tt", function() gtd_pin_task() end, desc = "Pick gtd task: create worktree if needed + pin (this nvim)" },
+      { "<leader>df", function() gtd_search("files", false) end, desc = "Find in current gtd task: main repo + notes (no ref)" },
+      { "<leader>dF", function() gtd_search("files", true) end, desc = "Find in current gtd task: everything (main + ref + notes)" },
+      { "<leader>dg", function() gtd_search("grep", false) end, desc = "Grep in current gtd task: main repo + notes (no ref)" },
+      { "<leader>dG", function() gtd_search("grep", true) end, desc = "Grep in current gtd task: everything (main + ref + notes)" },
+      { "<leader>dt", function() gtd_enter_task() end, desc = "Enter a gtd task: create worktree if needed + cd + session" },
       { "<leader>tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers" },
       { "<leader>tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections" },
       { "<leader>lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references" },
