@@ -818,7 +818,60 @@ return {
       }
     end,
     keys = {
-      { "<leader>ts", "<cmd>PossessionPick<cr>", desc = "Select from sessions" },
+      -- snacks picker over sessions (replaces PossessionPick's vim.ui.select so we can add keys):
+      -- <cr> loads the session, `dd` deletes it and refreshes in place. preview pane disabled.
+      {
+        "<leader>ts",
+        function()
+          local query = require("possession.query")
+          local session = require("possession.session")
+          local count = #query.as_list()
+          require("snacks").picker.pick {
+            source = "possession",
+            title = "Sessions",
+            format = "text",
+            -- match the old PossessionPick (vim.ui.select) size: compact "select" preset
+            -- (hides preview) with the list height fitted to the number of sessions.
+            layout = {
+              preset = "select",
+              config = function(layout)
+                for _, box in ipairs(layout.layout) do
+                  if box.win == "list" and not box.height then
+                    box.height = math.max(math.min(count, math.floor(vim.o.lines * 0.8 - 10)), 2)
+                  end
+                end
+              end,
+            },
+            finder = function()
+              local sessions = query.as_list()
+              query.sort_by(sessions, "mtime", true)
+              return vim.tbl_map(function(s)
+                return { text = s.name, name = s.name, file = s.file }
+              end, sessions)
+            end,
+            confirm = function(picker, item)
+              picker:close()
+              if item then
+                vim.schedule(function() session.load(item.name) end)
+              end
+            end,
+            actions = {
+              delete_session = function(picker, item)
+                if not item then return end
+                session.delete(item.name, { no_confirm = true })
+                picker:refresh()
+              end,
+            },
+            win = {
+              -- the picker opens in the input box (insert): <Esc> to normal mode (j/k still move
+              -- the selection) then `dd`, or `/` to focus the list and `dd` there.
+              input = { keys = { ["dd"] = { "delete_session", mode = { "n" } } } },
+              list = { keys = { ["dd"] = "delete_session" } },
+            },
+          }
+        end,
+        desc = "Select from sessions (dd to delete)",
+      },
       { "<leader>r", "<cmd>silent! PossessionSaveCwd!<cr><cmd>silent! restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
     },
   },
