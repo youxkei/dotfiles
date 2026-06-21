@@ -158,7 +158,10 @@ function _G.GtdDoneCleanup(slug)
       require("possession.session").delete(wt_name, { no_confirm = true })
     end
   end
-  if vim.fn.getcwd():sub(1, #wt) == wt then
+  -- /done removes the worktree before calling this, so if the host nvim was sitting in it,
+  -- getcwd() now returns "" (its dir is gone). Treat empty cwd + missing worktree as "was here".
+  local cwd = vim.fn.getcwd()
+  if cwd:sub(1, #wt) == wt or (cwd == "" and vim.fn.isdirectory(wt) == 0) then
     -- Leave the (now-removed) worktree session first so cd'ing out can't autosave it back,
     -- then return to the main checkout and load its session.
     pcall(function() vim.cmd("silent! PossessionClose") end)
