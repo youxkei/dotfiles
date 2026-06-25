@@ -2,6 +2,7 @@ general:
   layout: dwindle
   gaps: { inner: 8, outer: 8 }
   mouse_follows_focus: true
+  focus_follows_mouse: true
   workspaces: []
 
 reconcile:
