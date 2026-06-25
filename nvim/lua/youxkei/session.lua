@@ -176,6 +176,10 @@ local function build_opts(config, env_table, focus)
   }
 end
 
+-- Every provider built by make_provider, so wipe_current_session_terminals can reach each
+-- session's claudecode/codex terminal buffer via the provider's get_active_bufnr.
+local provider_registry = {}
+
 -- Build a per-session terminal provider for an MCP-style agent plugin (claudecode / codex).
 -- opts.server_module is that plugin's "<plugin>.server.init" module, used to target a sent
 -- @mention at only the current session's agent instead of broadcasting to every live one.
@@ -345,7 +349,34 @@ function M.make_provider(opts)
     return cur()
   end
 
+  provider_registry[#provider_registry + 1] = provider
   return provider
+end
+
+-- Wipe the current session's managed terminals (claudecode + codex snacks terminals and the
+-- toggleterm float). Used by gtd's GtdDoneCleanup to tear a finished task's session down in
+-- place without switching to another session. Resolve the key while the session is still
+-- current (term_key falls back to cwd once it's closed). Each provider's BufWipeout hook clears
+-- its own terminals[key] when we delete the buffer.
+function M.wipe_current_session_terminals()
+  local key = M.term_key()
+  for _, provider in ipairs(provider_registry) do
+    local buf = provider.get_active_bufnr and provider.get_active_bufnr()
+    if buf and vim.api.nvim_buf_is_valid(buf) then
+      pcall(vim.api.nvim_buf_delete, buf, { force = true })
+    end
+  end
+  local id = toggleterm_ids[key]
+  if id then
+    local ok, tt = pcall(require, "toggleterm.terminal")
+    if ok then
+      local term = tt.get(id, true) -- include hidden
+      if term and term.bufnr and vim.api.nvim_buf_is_valid(term.bufnr) then
+        pcall(vim.api.nvim_buf_delete, term.bufnr, { force = true })
+      end
+    end
+    toggleterm_ids[key] = nil
+  end
 end
 
 return M

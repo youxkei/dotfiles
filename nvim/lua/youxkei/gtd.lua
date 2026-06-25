@@ -132,8 +132,13 @@ function M.enter_task()
 end
 
 -- Called by /done (via $NVIM RPC) right after it removes a do-<slug> worktree. If this nvim
--- was inside that worktree, return to the main gtd checkout + its session; then drop the
--- worktree's now-dangling cwd-session so autosave can't resurrect it.
+-- was inside that worktree, tear the finished task's session down IN PLACE: do NOT switch to
+-- another session (that would reload main's session and close /done's own terminal), and do NOT
+-- PossessionClose it (close keeps the session file and wipes file buffers / stops LSP). Instead
+-- wipe this session's claudecode/codex/toggleterm terminals, then DELETE the session. Deleting
+-- the current session also clears it as current (possession's delete sets session_name = nil),
+-- so autosave can't resurrect it. The cwd stays the now-removed worktree dir (getcwd() == "") —
+-- that's fine, the session is gone either way.
 function _G.GtdDoneCleanup(slug)
   local wt = wt_root() .. "/do-" .. slug
   local wt_name = vim.fn.fnamemodify(wt, ":~") -- == paths.cwd_session_name() when cwd == wt
@@ -147,14 +152,12 @@ function _G.GtdDoneCleanup(slug)
   -- getcwd() now returns "" (its dir is gone). Treat empty cwd + missing worktree as "was here".
   local cwd = vim.fn.getcwd()
   if cwd:sub(1, #wt) == wt or (cwd == "" and vim.fn.isdirectory(wt) == 0) then
-    -- Leave the (now-removed) worktree session first so cd'ing out can't autosave it back,
-    -- then return to the main checkout and load its session.
-    pcall(function() vim.cmd("silent! PossessionClose") end)
-    vim.cmd("cd " .. vim.fn.fnameescape(vim.fn.expand("~/repo/gtd")))
-    if paths.session(paths.cwd_session_name()):exists() then
-      pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- back to main's session (closes /done terminal)
-    end
-    vim.schedule(drop) -- delete the worktree's dangling cwd-session file
+    -- Defer so this RPC returns to /done before we wipe its own terminal. Wipe the terminals
+    -- first (term_key still resolves to this session's name), then delete the session.
+    vim.schedule(function()
+      require("youxkei.session").wipe_current_session_terminals()
+      drop()
+    end)
   else
     drop()
   end
