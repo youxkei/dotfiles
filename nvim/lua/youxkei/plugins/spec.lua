@@ -616,7 +616,15 @@ return {
       { "<leader>dF", function() gtd.search("files", true) end, desc = "Find in current gtd task: everything (main + ref + notes)" },
       { "<leader>dg", function() gtd.search("grep", false) end, desc = "Grep in current gtd task: main repo + notes (no ref)" },
       { "<leader>dG", function() gtd.search("grep", true) end, desc = "Grep in current gtd task: everything (main + ref + notes)" },
-      { "<leader>dt", function() gtd.enter_task() end, desc = "Enter a gtd task: create worktree if needed + cd + session" },
+      { "<leader>dt", function()
+        gtd.enter_task(function()
+          vim.cmd.ClaudeCodeOpen()
+          vim.schedule(function()
+            vim.cmd.startinsert()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end)
+      end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude" },
       { "<leader>tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers" },
       { "<leader>tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections" },
       { "<leader>lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references" },
