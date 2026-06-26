@@ -1,7 +1,7 @@
 -- gtd /do works inside a per-task worktree (~/repo/gtd/.claude/worktrees/do-<slug>/) and
 -- puts clones + scratch under that worktree's todo/<slug>/ (main repo in repo/, reference
--- clones in ref/, both gitignored). nvim enters a worktree via ,dt (cd + possession session);
--- the current task is identified by cwd, so ,df/,dF/,dg/,dG search the cwd's worktree with
+-- clones in ref/, both gitignored). nvim enters a worktree via ,dt (cd into todo/<slug>/ +
+-- possession session); the current task is identified by cwd, so ,df/,dF/,dg/,dG search it with
 -- ignored files included (.git excluded; ,df/,dg also exclude ref/).
 local M = {}
 
@@ -90,9 +90,10 @@ local function has_file_buffer()
 end
 
 -- ,dt: pick a gtd task from list.md (priority order), create its do-<slug> worktree if
--- missing, then cd into the worktree root and switch the possession session to it. The task
--- is identified by cwd afterward, so a Claude launched here runs inside the worktree.
-function M.enter_task()
+-- missing, then cd into the worktree's todo/<slug>/ work dir and switch the possession session
+-- to it. The task is identified by cwd afterward, so a Claude launched here runs inside the worktree.
+-- on_entered (optional) runs once the session has been switched (e.g. to open Claude for the task).
+function M.enter_task(on_entered)
   local tasks = list_tasks()
   if #tasks == 0 then
     return vim.notify("no gtd tasks in list.md", vim.log.levels.WARN)
@@ -106,6 +107,7 @@ function M.enter_task()
     if not wt then
       return vim.notify("gtd: failed to create worktree → " .. tostring(err), vim.log.levels.ERROR)
     end
+    local td = wt_task_dir(wt_root(), choice.slug) -- cd target: worktree's todo/<slug>/ (root if absent)
     -- Switch the possession session to the worktree without clobbering the one we leave.
     -- Order matters: save the outgoing session (only if it has real files — see below), then
     -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
@@ -115,7 +117,7 @@ function M.enter_task()
       pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
     end
     pcall(function() vim.cmd("silent! PossessionClose") end)
-    vim.cmd("cd " .. vim.fn.fnameescape(wt)) -- global cd into the worktree root (no session is current now)
+    vim.cmd("cd " .. vim.fn.fnameescape(td)) -- global cd into the task work dir (no session is current now)
     local paths = require("possession.paths")
     if paths.session(paths.cwd_session_name()):exists() then
       pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- existing worktree session → load it (current = this worktree)
@@ -128,6 +130,7 @@ function M.enter_task()
       pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
     end
     vim.notify((created and "gtd: created + entered → " or "gtd: entered → ") .. choice.title)
+    if on_entered then on_entered() end -- now that the session is current, open Claude for the task
   end)
 end
 
@@ -141,11 +144,17 @@ end
 -- that's fine, the session is gone either way.
 function _G.GtdDoneCleanup(slug)
   local wt = wt_root() .. "/do-" .. slug
-  local wt_name = vim.fn.fnamemodify(wt, ":~") -- == paths.cwd_session_name() when cwd == wt
   local paths = require("possession.paths")
+  -- ,dt cd's into the worktree's todo/<slug>/, so the session name == fnamemodify(that dir, ":~").
+  -- The worktree (and its todo/) is already removed by /done here, so we can't isdirectory-probe it;
+  -- just try both candidate names (task dir, and the worktree root for pre-change sessions) and
+  -- delete whichever session file exists.
   local function drop()
-    if paths.session(wt_name):exists() then
-      require("possession.session").delete(wt_name, { no_confirm = true })
+    for _, p in ipairs({ wt .. "/todo/" .. slug, wt }) do
+      local name = vim.fn.fnamemodify(p, ":~")
+      if paths.session(name):exists() then
+        require("possession.session").delete(name, { no_confirm = true })
+      end
     end
   end
   -- /done removes the worktree before calling this, so if the host nvim was sitting in it,
