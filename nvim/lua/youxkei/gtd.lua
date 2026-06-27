@@ -134,6 +134,38 @@ function M.enter_task(on_entered)
   end)
 end
 
+-- <leader>dc: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering its
+-- worktree, list the possession sessions that already have a live Claude terminal running and
+-- jump to the chosen one, then run on_entered (e.g. to reveal Claude) once it's current. Only
+-- sessions other than the current one that exist as loadable named sessions are offered (the gtd
+-- flow keys each session's Claude terminal by its possession session name).
+function M.enter_claudecode_session(on_entered)
+  local session = require("youxkei.session")
+  local psession = require("possession.session")
+  local paths = require("possession.paths")
+  local current = psession.get_session_name()
+  local choices = {}
+  for _, key in ipairs(session.active_session_keys("claudecode.server.init")) do
+    if key ~= current and paths.session(key):exists() then
+      choices[#choices + 1] = key
+    end
+  end
+  if #choices == 0 then
+    return vim.notify("no other session has an active Claude", vim.log.levels.WARN)
+  end
+  vim.ui.select(choices, {
+    prompt = "Claude session: ",
+    format_item = function(name) return vim.fn.fnamemodify(name, ":t") .. "  (" .. name .. ")" end,
+  }, function(choice)
+    if not choice then return end
+    -- session.load autosaves the outgoing session and restores the chosen one's cwd/buffers; our
+    -- keep_term guards keep both sessions' Claude terminals alive across the switch.
+    psession.load(choice)
+    vim.notify("gtd: switched to → " .. choice)
+    if on_entered then on_entered() end -- now current → reveal this session's Claude
+  end)
+end
+
 -- Called by /done (via $NVIM RPC) right after it removes a do-<slug> worktree. If this nvim
 -- was inside that worktree, tear the finished task's session down IN PLACE: do NOT switch to
 -- another session (that would reload main's session and close /done's own terminal), and do NOT

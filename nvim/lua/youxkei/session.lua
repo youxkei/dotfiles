@@ -337,6 +337,19 @@ function M.make_provider(opts)
   end
 
   local provider = {}
+  provider.__server_module = server_module -- so active_session_keys can pick this provider out
+
+  -- Session keys that currently have a live terminal for this provider (claudecode/codex).
+  -- Used by gtd's <leader>dc to list the sessions where a Claude is already up.
+  function provider.active_keys()
+    local keys = {}
+    for key, t in pairs(terminals) do
+      if t and t:buf_valid() then
+        keys[#keys + 1] = key
+      end
+    end
+    return keys
+  end
 
   function provider.is_available()
     local Snacks = get_snacks()
@@ -426,6 +439,24 @@ function M.make_provider(opts)
 
   provider_registry[#provider_registry + 1] = provider
   return provider
+end
+
+-- Session keys that currently have a live terminal for the given server_module (e.g.
+-- "claudecode.server.init"). Unions across every provider registered for that module (normally
+-- one). Used by gtd's <leader>dc to jump to a session where Claude is already running.
+function M.active_session_keys(server_module)
+  local seen, keys = {}, {}
+  for _, provider in ipairs(provider_registry) do
+    if provider.__server_module == server_module and provider.active_keys then
+      for _, key in ipairs(provider.active_keys()) do
+        if not seen[key] then
+          seen[key] = true
+          keys[#keys + 1] = key
+        end
+      end
+    end
+  end
+  return keys
 end
 
 -- Wipe the current session's managed terminals (claudecode + codex snacks terminals and the

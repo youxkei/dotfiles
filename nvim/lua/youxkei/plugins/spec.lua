@@ -636,6 +636,15 @@ return {
           end)
         end)
       end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude", term = true },
+      { "dc", function()
+        gtd.enter_claudecode_session(function()
+          vim.cmd.ClaudeCodeOpen()
+          vim.schedule(function()
+            vim.cmd.startinsert()
+            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+          end)
+        end)
+      end, desc = "Jump to a session that has an active Claude running + open it", term = true },
       { "tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers", term = true },
       { "tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections", term = true },
       { "lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references", term = true },
