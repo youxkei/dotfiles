@@ -73,6 +73,24 @@ opt.synmaxcol = 512
 opt.updatetime = 100
 opt.iskeyword = { "@", "48-57", "_", "192-255", "$", "@-@", "-" }
 opt.clipboard = "unnamedplus"
+
+-- Under WSLg the Windows clipboard is bridged to Wayland, so wl-paste returns
+-- CRLF line endings when text was copied from a Windows app. nvim splits on \n
+-- and leaves a trailing \r on every line, which pastes as doubled newlines (^M).
+-- Keep the fast wl-clipboard path but strip \r on paste.
+if (vim.env.WAYLAND_DISPLAY or "") ~= "" and fn.executable("wl-copy") == 1 and fn.executable("wl-paste") == 1 then
+  g.clipboard = {
+    name = "wl-clipboard-strip-cr",
+    copy = {
+      ["+"] = { "wl-copy", "--type", "text/plain" },
+      ["*"] = { "wl-copy", "--primary", "--type", "text/plain" },
+    },
+    paste = {
+      ["+"] = { "sh", "-c", "wl-paste --no-newline | tr -d '\\r'" },
+      ["*"] = { "sh", "-c", "wl-paste --no-newline --primary | tr -d '\\r'" },
+    },
+  }
+end
 opt.joinspaces = false
 opt.sessionoptions = {
   "blank", "buffers", "curdir", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
