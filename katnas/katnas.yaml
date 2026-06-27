@@ -12,6 +12,7 @@ border:
   enabled: true
   color: "#e8912d"
   inactive_color: "#808080"
+  floating_color: "#f5f5a5"
 
 keys:
   # --- focus movement ---
