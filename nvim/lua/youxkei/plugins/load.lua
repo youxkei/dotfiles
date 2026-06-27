@@ -55,6 +55,7 @@ local function normalize(spec)
     init = spec.init,
     config = spec.config,
     keys = spec.keys,
+    leader_keys = spec.leader_keys,
     build = spec.build,
     version = version,
     enabled = spec.enabled,
@@ -100,7 +101,7 @@ local function deduplicate(specs)
   local index = {}
   local result = {}
   local unique_fields = { "config", "init", "build", "version", "enabled" }
-  local merge_fields = { "keys", "deps" }
+  local merge_fields = { "keys", "leader_keys", "deps" }
 
   for _, spec in ipairs(specs) do
     local pos = index[spec.name]
@@ -265,29 +266,64 @@ function M.setup()
     vim.pack.update()
   end, {})
 
-  -- 8. Set up keymaps from keys specs
+  -- 8. Set up keymaps. `keys` entries carry a full lhs; `leader_keys` entries carry only the
+  -- suffix after <leader> (so { "tf", ... } binds <leader>tf). A leader_keys entry flagged
+  -- `term = true` is additionally bound in terminal mode under <C-,> (the terminal-mode leader):
+  -- <leader> is "," so a literal <leader> map would eat comma input in :terminal / Claude / Codex
+  -- floats. Neovide delivers <C-,> to nvim as a real chord, so <C-,>tf mirrors normal-mode <leader>tf.
+  local function set_key(mode, lhs, rhs, desc, ft)
+    if rhs == nil then
+      pcall(function()
+        require("which-key").add { { lhs, group = desc } }
+      end)
+    elseif ft then
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = ft,
+        callback = function(ev)
+          vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, desc = desc })
+        end,
+      })
+    else
+      vim.keymap.set(mode, lhs, rhs, { desc = desc })
+    end
+  end
+
+  -- Terminal-mode <C-,> leader variants for a suffix: ctrl may stay held for any leading run of
+  -- the suffix keys and then be released for the rest (you never re-press it mid-sequence). So
+  -- suffix "dt" yields <C-,>dt, <C-,><C-d>t and <C-,><C-d><C-t>. A held uppercase char is ctrl+shift
+  -- (<C-S-x>), keeping e.g. "tF" distinct from "tf" (whose held form is <C-f>).
+  local function term_leader_variants(suffix)
+    local variants = {}
+    for held = 0, #suffix do
+      local lhs = "<C-,>"
+      for i = 1, #suffix do
+        local c = suffix:sub(i, i)
+        if i > held then
+          lhs = lhs .. c
+        elseif c:match("%u") then
+          lhs = lhs .. "<C-S-" .. c:lower() .. ">"
+        else
+          lhs = lhs .. "<C-" .. c .. ">"
+        end
+      end
+      variants[#variants + 1] = lhs
+    end
+    return variants
+  end
+
   for _, plugin in ipairs(plugins) do
     if plugin.keys then
       for _, key in ipairs(plugin.keys) do
-        local lhs = key[1]
-        local rhs = key[2]
-        local mode = key.mode or "n"
-        local desc = key.desc
-        local ft = key.ft
-
-        if rhs == nil then
-          pcall(function()
-            require("which-key").add { { lhs, group = desc } }
-          end)
-        elseif ft then
-          vim.api.nvim_create_autocmd("FileType", {
-            pattern = ft,
-            callback = function(ev)
-              vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, desc = desc })
-            end,
-          })
-        else
-          vim.keymap.set(mode, lhs, rhs, { desc = desc })
+        set_key(key.mode or "n", key[1], key[2], key.desc, key.ft)
+      end
+    end
+    if plugin.leader_keys then
+      for _, key in ipairs(plugin.leader_keys) do
+        set_key(key.mode or "n", "<leader>" .. key[1], key[2], key.desc, key.ft)
+        if key.term then
+          for _, tlhs in ipairs(term_leader_variants(key[1])) do
+            set_key("t", tlhs, key[2], key.desc, key.ft)
+          end
         end
       end
     end

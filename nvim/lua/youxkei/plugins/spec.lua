@@ -618,16 +618,16 @@ return {
         },
       }
     end,
-    keys = {
-      { "<leader>tf", function() require("snacks").picker.files { hidden = true } end, desc = "Select from files" },
-      { "<leader>tF", function() require("snacks").picker.files { hidden = true, ignored = true } end, desc = "Select from all files" },
-      { "<leader>tg", function() require("snacks").picker.grep { hidden = true } end, desc = "Grep from files" },
-      { "<leader>tG", function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Grep from all files" },
-      { "<leader>df", function() gtd.search("files", false) end, desc = "Find in current gtd task: main repo + notes (no ref)" },
-      { "<leader>dF", function() gtd.search("files", true) end, desc = "Find in current gtd task: everything (main + ref + notes)" },
-      { "<leader>dg", function() gtd.search("grep", false) end, desc = "Grep in current gtd task: main repo + notes (no ref)" },
-      { "<leader>dG", function() gtd.search("grep", true) end, desc = "Grep in current gtd task: everything (main + ref + notes)" },
-      { "<leader>dt", function()
+    leader_keys = {
+      { "tf", function() require("snacks").picker.files { hidden = true } end, desc = "Select from files", term = true },
+      { "tF", function() require("snacks").picker.files { hidden = true, ignored = true } end, desc = "Select from all files", term = true },
+      { "tg", function() require("snacks").picker.grep { hidden = true } end, desc = "Grep from files", term = true },
+      { "tG", function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Grep from all files", term = true },
+      { "df", function() gtd.search("files", false) end, desc = "Find in current gtd task: main repo + notes (no ref)", term = true },
+      { "dF", function() gtd.search("files", true) end, desc = "Find in current gtd task: everything (main + ref + notes)", term = true },
+      { "dg", function() gtd.search("grep", false) end, desc = "Grep in current gtd task: main repo + notes (no ref)", term = true },
+      { "dG", function() gtd.search("grep", true) end, desc = "Grep in current gtd task: everything (main + ref + notes)", term = true },
+      { "dt", function()
         gtd.enter_task(function()
           vim.cmd.ClaudeCodeOpen()
           vim.schedule(function()
@@ -635,18 +635,18 @@ return {
             force_redraw_floating_terminal(vim.api.nvim_get_current_win())
           end)
         end)
-      end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude" },
-      { "<leader>tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers" },
-      { "<leader>tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections" },
-      { "<leader>lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references" },
-      { "<leader>li", function() require("snacks").picker.lsp_implementations() end, desc = "Select from implementations" },
-      { "<leader>ls", function() require("snacks").picker.lsp_symbols() end, desc = "Select from symbols in buffer" },
-      { "<leader>lS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "Select from symbols in project" },
-      { "<leader>le", function() require("snacks").picker.diagnostics() end, desc = "Select from diagnostics" },
-      { "<leader>ld", function() require("snacks").picker.lsp_definitions() end, desc = "Select from definitions" },
-      { "<leader>te", function() require("snacks").picker.explorer() end, desc = "Select with file browser" },
-      { "<leader>tk", function() require("snacks").picker.keymaps() end, desc = "Select from keymaps" },
-      { "<leader>tn", function() require("snacks").picker.notifications() end, desc = "Select from notifications" },
+      end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude", term = true },
+      { "tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers", term = true },
+      { "tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections", term = true },
+      { "lr", function() require("snacks").picker.lsp_references() end, desc = "Select from references", term = true },
+      { "li", function() require("snacks").picker.lsp_implementations() end, desc = "Select from implementations", term = true },
+      { "ls", function() require("snacks").picker.lsp_symbols() end, desc = "Select from symbols in buffer", term = true },
+      { "lS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "Select from symbols in project", term = true },
+      { "le", function() require("snacks").picker.diagnostics() end, desc = "Select from diagnostics", term = true },
+      { "ld", function() require("snacks").picker.lsp_definitions() end, desc = "Select from definitions", term = true },
+      { "te", function() require("snacks").picker.explorer() end, desc = "Select with file browser", term = true },
+      { "tk", function() require("snacks").picker.keymaps() end, desc = "Select from keymaps", term = true },
+      { "tn", function() require("snacks").picker.notifications() end, desc = "Select from notifications", term = true },
     },
   },
 
@@ -681,11 +681,11 @@ return {
       -- per-session.
       session.install_possession_guards()
     end,
-    keys = {
+    leader_keys = {
       -- snacks picker over sessions (replaces PossessionPick's vim.ui.select so we can add keys):
       -- <cr> loads the session, `dd` deletes it and refreshes in place. preview pane disabled.
       {
-        "<leader>ts",
+        "ts",
         function()
           local query = require("possession.query")
           local session = require("possession.session")
@@ -735,8 +735,9 @@ return {
           }
         end,
         desc = "Select from sessions (dd to delete)",
+        term = true,
       },
-      { "<leader>r", "<cmd>silent! PossessionSaveCwd!<cr><cmd>silent! restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
+      { "r", "<cmd>silent! PossessionSaveCwd!<cr><cmd>silent! restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
     },
   },
 
