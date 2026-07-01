@@ -106,6 +106,7 @@
               lua-language-server
 
               # media
+              ffmpeg
               yt-dlp
               python3Packages.yt-dlp-ejs
 
@@ -153,6 +154,9 @@
               }))
               gore
               errcheck
+
+              # c / c++
+              clang
 
               # java
               jdk25_headless
