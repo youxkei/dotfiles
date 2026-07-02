@@ -82,7 +82,9 @@ fi
 
 alias ll='ls -al'
 alias tmux="tmux -2"
-alias op=op.exe
+if [[ "$OSTYPE" != darwin* ]]; then
+  alias op=op.exe
+fi
 
 autoload -Uz add-zsh-hook 
 
