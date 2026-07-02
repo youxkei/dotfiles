@@ -144,10 +144,19 @@ function M.enter_claudecode_session(on_entered)
   local psession = require("possession.session")
   local paths = require("possession.paths")
   local current = psession.get_session_name()
+  -- slug -> title from list.md, so we can label each session with its task title (like ,dt)
+  -- instead of the raw session path. Sessions that aren't task worktrees (or whose task is no
+  -- longer in list.md) fall back to the session name's basename.
+  local titles = {}
+  for _, t in ipairs(list_tasks()) do
+    titles[t.slug] = t.title
+  end
   local choices = {}
   for _, key in ipairs(session.active_session_keys("claudecode.server.init")) do
     if key ~= current and paths.session(key):exists() then
-      choices[#choices + 1] = key
+      local slug = key:match("worktrees/do%-([^/]+)")
+      local label = (slug and titles[slug]) or vim.fn.fnamemodify(key, ":t")
+      choices[#choices + 1] = { key = key, label = label }
     end
   end
   if #choices == 0 then
@@ -155,13 +164,13 @@ function M.enter_claudecode_session(on_entered)
   end
   vim.ui.select(choices, {
     prompt = "Claude session: ",
-    format_item = function(name) return vim.fn.fnamemodify(name, ":t") .. "  (" .. name .. ")" end,
+    format_item = function(c) return c.label end,
   }, function(choice)
     if not choice then return end
     -- session.load autosaves the outgoing session and restores the chosen one's cwd/buffers; our
     -- keep_term guards keep both sessions' Claude terminals alive across the switch.
-    psession.load(choice)
-    vim.notify("gtd: switched to → " .. choice)
+    psession.load(choice.key)
+    vim.notify("gtd: switched to → " .. choice.label)
     if on_entered then on_entered() end -- now current → reveal this session's Claude
   end)
 end
