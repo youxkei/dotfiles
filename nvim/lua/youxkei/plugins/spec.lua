@@ -1219,7 +1219,7 @@ return {
         terminal = {
           -- Per-session Claude terminal: one Claude per possession session, kept alive across
           -- switches, with sent @mentions targeted at the current session's Claude only.
-          provider = session.make_provider { server_module = "claudecode.server.init" },
+          provider = session.make_provider { server_module = "claudecode.server.init", trust_project = true },
           snacks_win_opts = {
             position = "float",
             width = 0.95,

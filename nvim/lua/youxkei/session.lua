@@ -180,12 +180,47 @@ end
 -- session's claudecode/codex terminal buffer via the provider's get_active_bufnr.
 local provider_registry = {}
 
+-- claudecode.nvim launches Claude Code in IDE-integration mode (ENABLE_IDE_INTEGRATION=true),
+-- and in that mode Claude never shows its own workspace-trust dialog. Without an accepted trust
+-- the per-project ~/.claude.json flag `hasTrustDialogAccepted` stays false, and Claude then SKIPS
+-- the custom statusLine command AND all hooks for that project (both are gated on trust). So we
+-- pre-mark the project's cwd as trusted right before spawning Claude, matching how Claude keys
+-- projects (absolute, symlink-resolved, no trailing slash). Only writes when not already trusted,
+-- so the read-modify-write of this shared file happens at most once per project (rarely races
+-- Claude's own writes). Requires jq; a no-op without it.
+local function ensure_project_trusted(cwd)
+  if vim.fn.executable("jq") == 0 then return end
+  local claude_json = vim.fs.normalize("~/.claude.json")
+  if vim.fn.filereadable(claude_json) == 0 then return end
+
+  cwd = (cwd ~= nil and cwd ~= "") and cwd or vim.uv.cwd()
+  cwd = (vim.uv.fs_realpath(cwd) or vim.fs.normalize(cwd)):gsub("/+$", "")
+
+  local check = vim
+    .system({ "jq", "-r", "--arg", "p", cwd, ".projects[$p].hasTrustDialogAccepted // false", claude_json }, { text = true })
+    :wait()
+  if vim.trim(check.stdout or "") == "true" then return end
+
+  local res = vim
+    .system({ "jq", "--arg", "p", cwd, ".projects[$p].hasTrustDialogAccepted = true", claude_json }, { text = true })
+    :wait()
+  if res.code ~= 0 or not res.stdout or res.stdout == "" then return end
+
+  local tmp = claude_json .. ".trust-tmp"
+  local f = io.open(tmp, "w")
+  if not f then return end
+  f:write(res.stdout)
+  f:close()
+  os.rename(tmp, claude_json) -- atomic replace (same filesystem as ~/.claude.json)
+end
+
 -- Build a per-session terminal provider for an MCP-style agent plugin (claudecode / codex).
 -- opts.server_module is that plugin's "<plugin>.server.init" module, used to target a sent
 -- @mention at only the current session's agent instead of broadcasting to every live one.
 function M.make_provider(opts)
   opts = opts or {}
   local server_module = opts.server_module
+  local trust_project = opts.trust_project == true -- only claudecode reads ~/.claude.json trust
 
   local terminals = {}      -- session key -> snacks terminal instance
   local session_client = {} -- session key -> WS client.id of that session's agent
@@ -285,6 +320,7 @@ function M.make_provider(opts)
 
     install_connect_hook()
     pending_key = key -- the agent we are about to spawn will be this session's
+    if trust_project then ensure_project_trusted(config.cwd) end -- so Claude's statusLine + hooks run
     local term = Snacks.terminal.open(cmd_string, build_opts(config, env_table, focus))
     if term and term:buf_valid() then
       terminals[key] = term
