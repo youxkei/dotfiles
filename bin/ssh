@@ -1,2 +1,2 @@
 #!/bin/sh
-ssh.exe $@
+ssh.exe "$@"

@@ -11,6 +11,9 @@ case "$(uname -s)" in
         osascript -e "display notification \"$esc_message\" with title \"$esc_title\""
         ;;
     *)
-        pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'notify' -Text '$title','$message'"
+        # PowerShell single-quoted strings escape a literal ' by doubling it.
+        esc_title=$(printf '%s' "$title" | sed "s/'/''/g")
+        esc_message=$(printf '%s' "$message" | sed "s/'/''/g")
+        pwsh.exe -Command "New-BurntToastNotification -UniqueIdentifier 'notify' -Text '$esc_title','$esc_message'"
         ;;
 esac

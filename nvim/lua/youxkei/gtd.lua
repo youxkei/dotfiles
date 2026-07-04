@@ -160,7 +160,7 @@ function _G.GtdDoneCleanup(slug)
   -- /done removes the worktree before calling this, so if the host nvim was sitting in it,
   -- getcwd() now returns "" (its dir is gone). Treat empty cwd + missing worktree as "was here".
   local cwd = vim.fn.getcwd()
-  if cwd:sub(1, #wt) == wt or (cwd == "" and vim.fn.isdirectory(wt) == 0) then
+  if cwd == wt or cwd:sub(1, #wt + 1) == wt .. "/" or (cwd == "" and vim.fn.isdirectory(wt) == 0) then
     -- Defer so this RPC returns to /done before we wipe its own terminal. Wipe the terminals
     -- first (term_key still resolves to this session's name), then delete the session.
     vim.schedule(function()

@@ -5,11 +5,12 @@ local opt_global = vim.opt_global
 local opt_local = vim.opt_local
 
 local cache_dir = fn.stdpath("cache")
-if fn.isdirectory(cache_dir) then
-  fn.mkdir(cache_dir .. "/backup", "p")
-  fn.mkdir(cache_dir .. "/undo", "p")
-  fn.mkdir(cache_dir .. "/swap", "p")
-end
+-- mkdir with "p" is a no-op if the dir exists and creates cache_dir itself when
+-- missing, so no isdirectory guard is needed (and fn.isdirectory returns 0/1,
+-- both truthy in Lua, so the old guard was always taken anyway).
+fn.mkdir(cache_dir .. "/backup", "p")
+fn.mkdir(cache_dir .. "/undo", "p")
+fn.mkdir(cache_dir .. "/swap", "p")
 
 opt.backupdir = cache_dir .. "/backup"
 opt.undodir = cache_dir .. "/undo"

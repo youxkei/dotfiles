@@ -55,8 +55,19 @@ return {
               args = { "ls-remote", "--get-url", "origin" },
               enabled_recording = true,
               on_exit = function(ls_remote_job)
-                local url_head = "https://github.com/" ..
-                    ls_remote_job:result()[1]:match("^https://github.com/(.*).git$")
+                -- origin may be https (https://github.com/owner/repo.git) or
+                -- ssh (git@github.com:owner/repo.git); handle both, and bail
+                -- instead of concatenating nil when it isn't a github remote.
+                local origin = ls_remote_job:result()[1] or ""
+                local repo = origin:match("github%.com[:/](.-)%.git$")
+                    or origin:match("github%.com[:/](.+)$")
+                if not repo then
+                  vim.schedule(function()
+                    vim.notify("<leader>g: not a github origin: " .. origin, vim.log.levels.WARN)
+                  end)
+                  return
+                end
+                local url_head = "https://github.com/" .. repo
 
                 Job:new {
                   command = "git",

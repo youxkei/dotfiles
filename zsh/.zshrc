@@ -121,7 +121,7 @@ function notify-long-command-exec() {
       notify "Command finished" "$current_line" &!
     fi
 
-    command_start_time=0
+    COMMAND_START_TIME=0
   fi
 }
 

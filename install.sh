@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-set -eu pipefail
+set -euo pipefail
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 # Default XDG_CONFIG_HOME when unset (e.g. macOS does not set it by default).
@@ -100,7 +100,7 @@ for src_path in "${(@k)PATHS}"; do
     src=$SCRIPT_DIR/$src_path
     dst=${PATHS[$src_path]}
 
-    if [[ -e $dst ]]; then
+    if [[ -e $dst || -L $dst ]]; then
         if [[ -L $dst ]]; then
             echo "Link $dst -> $src"
             rm "$dst"

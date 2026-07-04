@@ -45,6 +45,9 @@ local function normalize(spec)
   if version == "*" then
     version = nil
   end
+  -- vim.pack has no separate `branch` field; a branch is just a version ref, so
+  -- fold spec.branch into version (an explicit version wins if both are set).
+  version = version or spec.branch
 
   return {
     name = to_name(shortname),
@@ -67,7 +70,11 @@ local function flatten(raw_specs)
       if spec:find("/") then
         table.insert(result, normalize(spec))
       end
-    else
+    elseif spec.enabled ~= false then
+      -- Skip a disabled spec *and* its dependency subtree here, before its deps
+      -- get appended as standalone entries. Deps shared with an enabled plugin
+      -- are still pulled in via that plugin, so only deps exclusive to the
+      -- disabled plugin are dropped.
       local raw_deps = spec.dependencies or spec.requires
       if raw_deps then
         if type(raw_deps) == "string" then
