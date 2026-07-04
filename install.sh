@@ -30,6 +30,7 @@ PATHS=(
     bin/nvr $HOME/bin/nvr
     bin/get-review-comments $HOME/bin/get-review-comments
     bin/notify $HOME/bin/notify
+    bin/claude-notify $HOME/bin/claude-notify
 )
 
 # Linux/WSL-only entries: configs for Linux desktop tools (i3, dunst, compton,

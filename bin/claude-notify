@@ -1,0 +1,121 @@
+#!/bin/sh
+# Claude Code hook handler for the Stop and Notification events.
+# Reads the hook JSON from stdin, tags the toast title with the basename of
+# the session cwd, and suppresses the Stop ping when the ending turn was only
+# a background-task wake-up (<task-notification>) with no real work after it.
+# Fails open: any parse failure or unknown event still notifies.
+
+input=$(cat)
+
+# Extract every field in one jq pass. @sh shell-quotes each value so eval is
+# injection-safe and preserves spaces/quotes/newlines/UTF-8. If jq is missing
+# or the input is not JSON, the pass yields nothing and the vars stay empty.
+event=''
+cwd=''
+message=''
+transcript=''
+eval "$(printf '%s' "$input" | jq -r '
+    @sh "event=\(.hook_event_name // "")",
+    @sh "cwd=\(.cwd // "")",
+    @sh "message=\(.message // "")",
+    @sh "transcript=\(.transcript_path // "")"
+' 2>/dev/null)"
+
+# Degraded mode: without jq we cannot parse the event, but we can still tell
+# Stop from Notification by matching the raw JSON, keeping the right message.
+if [ -z "$event" ]; then
+    case "$input" in
+        *'"hook_event_name":"Stop"'*) event=Stop ;;
+        *'"hook_event_name":"Notification"'*) event=Notification ;;
+    esac
+fi
+
+title='Claude Code'
+[ -n "$cwd" ] && title="Claude Code: $(basename "$cwd")"
+
+# Prints "notify" or "silent" for the transcript JSONL passed as $1, in one
+# streaming pass (O(1) memory). Records are matched by shape reverse-engineered
+# from real transcripts: a background wake-up (a completed background agent OR
+# background shell command — both use the same mechanism) is a queued_command
+# whose commandMode is "task-notification" (older sessions: a user record whose
+# string content starts with the tag); a human-typed queued message is
+# commandMode "prompt". Stays silent only when the last such wake-up was NOT
+# followed by real work (a non-read-only tool_use) or human input, AND the
+# wake-up landed while Claude was idle (the preceding real record is the previous
+# turn's assistant text, not a tool_result from an interrupted work loop).
+# Anything else notifies. Merely inspecting a finished task's output
+# (BashOutput/Read/Grep/...) then acknowledging counts as no real work.
+stop_decision() {
+    jq -nrR '
+        def is_wakeup:
+            (.type? == "attachment" and .attachment.type? == "queued_command"
+             and ((.attachment.commandMode? == "task-notification")
+                  or (((.attachment.prompt? // "") | tostring) | startswith("<task-notification>"))))
+            or (.type? == "user" and ((.message.content? | type) == "string")
+                and (.message.content | startswith("<task-notification>")));
+
+        def is_human:
+            (.type? == "attachment" and .attachment.type? == "queued_command"
+             and .attachment.commandMode? == "prompt")
+            or (.type? == "user" and (is_wakeup | not)
+                and (((.message.content? | type) == "string")
+                     or ((.message.content? | type) == "array"
+                         and any(.message.content[]?; .type? != "tool_result"))));
+
+        def is_tool_use:
+            .type? == "assistant" and any(.message.content[]?; .type? == "tool_use");
+
+        # Read-only inspection tools (reading finished task output, files, or
+        # searching) are not "real work" — a wake-up turn that only inspects
+        # results is still just an acknowledgement. Any other tool (Bash, Edit,
+        # ...) counts as work and forces a notification.
+        def has_real_work:
+            .type? == "assistant"
+            and any(.message.content[]?;
+                    .type? == "tool_use"
+                    and (((.name // "")
+                          | IN("Read","Grep","Glob","BashOutput","TaskOutput","TaskGet","NotebookRead"))
+                         | not));
+
+        reduce (inputs | fromjson?) as $v
+            ({i: -1, wake: null, human: null, work: null, before_wake: null, last: null};
+             .i += 1
+             | if   ($v | is_wakeup)    then .wake = .i | .before_wake = .last
+               elif ($v | is_human)     then .human = .i | .last = "prompt"
+               elif ($v | is_tool_use)  then .last = "work"
+                                             | (if ($v | has_real_work) then .work = .i else . end)
+               elif ($v.type? == "assistant") then .last = "text"
+               elif ($v.type? == "user" and ($v.message.content? | type) == "array")
+                                        then .last = "work"
+               else . end)
+        | if   .wake == null                    then "notify"
+          elif .human != null and .human > .wake then "notify"
+          elif .work  != null and .work  > .wake then "notify"
+          elif .before_wake != "text"           then "notify"
+          else "silent"
+          end
+    ' < "$1" 2>/dev/null
+}
+
+case "$event" in
+    Notification)
+        [ -n "$message" ] || message='通知'
+        notify "$title" "$message"
+        ;;
+    Stop)
+        decision=notify
+        # Only parse the transcript when a wake-up marker is actually present;
+        # the common (tag-free) case skips the jq scan entirely.
+        if [ -r "$transcript" ] && grep -qF '<task-notification>' "$transcript"; then
+            decision=$(stop_decision "$transcript")
+        fi
+        [ "$decision" = silent ] || notify "$title" '作業が完了しました'
+        ;;
+    *)
+        notify "$title" "${message:-通知}"
+        ;;
+esac
+
+# Never let notify's exit status leak out: a Stop hook exiting 2 would tell
+# Claude Code to block stopping, which this notify-only handler never intends.
+exit 0
