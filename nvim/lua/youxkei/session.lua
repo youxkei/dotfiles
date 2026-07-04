@@ -340,7 +340,7 @@ function M.make_provider(opts)
   provider.__server_module = server_module -- so active_session_keys can pick this provider out
 
   -- Session keys that currently have a live terminal for this provider (claudecode/codex).
-  -- Used by gtd's <leader>dc to list the sessions where a Claude is already up.
+  -- Used by gtd's <leader>dn to list the sessions where a Claude is already up.
   function provider.active_keys()
     local keys = {}
     for key, t in pairs(terminals) do
@@ -443,7 +443,7 @@ end
 
 -- Session keys that currently have a live terminal for the given server_module (e.g.
 -- "claudecode.server.init"). Unions across every provider registered for that module (normally
--- one). Used by gtd's <leader>dc to jump to a session where Claude is already running.
+-- one). Used by gtd's <leader>dn to jump to a session where Claude is already running.
 function M.active_session_keys(server_module)
   local seen, keys = {}, {}
   for _, provider in ipairs(provider_registry) do

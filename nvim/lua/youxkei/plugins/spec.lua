@@ -636,7 +636,7 @@ return {
           end)
         end)
       end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude", term = true },
-      { "dc", function()
+      { "dn", function()
         gtd.enter_claudecode_session(function()
           vim.cmd.ClaudeCodeOpen()
           vim.schedule(function()

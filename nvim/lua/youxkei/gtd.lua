@@ -200,14 +200,14 @@ end
 
 -- Switch to the chosen session: session.load autosaves the outgoing session and restores the
 -- chosen one's cwd/buffers; our keep_term guards keep both sessions' Claude terminals alive across
--- the switch. Shared by ,dc's picker confirm.
+-- the switch. Shared by ,dn's picker confirm.
 local function act_on_session(choice, on_entered)
   require("possession.session").load(choice.key)
   vim.notify("gtd: switched to → " .. choice.label)
   if on_entered then on_entered() end -- now current → reveal this session's Claude
 end
 
--- <leader>dc: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
+-- <leader>dn: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
 -- its worktree, list (in a snacks picker, same "<title> — <status>" rows + task.md preview as ,dt) the
 -- possession sessions that already have a live Claude terminal running, and jump to the chosen one,
 -- then run on_entered (e.g. to reveal Claude) once it's current. Only sessions other than the current

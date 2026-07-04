@@ -267,10 +267,15 @@ function M.setup()
   end, {})
 
   -- 8. Set up keymaps. `keys` entries carry a full lhs; `leader_keys` entries carry only the
-  -- suffix after <leader> (so { "tf", ... } binds <leader>tf). A leader_keys entry flagged
-  -- `term = true` is additionally bound in terminal mode under <C-,> (the terminal-mode leader):
-  -- <leader> is "," so a literal <leader> map would eat comma input in :terminal / Claude / Codex
-  -- floats. Neovide delivers <C-,> to nvim as a real chord, so <C-,>tf mirrors normal-mode <leader>tf.
+  -- suffix after <leader> (so { "tf", ... } binds <leader>tf). Every leader_keys entry is ALSO
+  -- reachable via the <C-,> ctrl-leader chord in normal AND insert mode, as an alternate to the
+  -- literal <leader> (","): <C-,>tf does the same as ",tf". An entry flagged `term = true` also
+  -- binds the same <C-,> variants in terminal mode, where a literal <leader> map is impossible
+  -- (<leader> is "," and would eat comma input in :terminal / Claude / Codex floats). You may keep
+  -- ctrl held across the whole suffix (see ctrl_leader_variants) EXCEPT on a key that resolves to
+  -- <C-c>: in Normal/Insert mode <C-c> interrupts the pending mapping (|map_CTRL-C|) and cannot be
+  -- caught, so no leader suffix ends in "c". Neovide and Alacritty (kitty keyboard protocol) both
+  -- deliver <C-,> and the held <C-x> chords to nvim as real chords.
   local function set_key(mode, lhs, rhs, desc, ft)
     if rhs == nil then
       pcall(function()
@@ -288,11 +293,11 @@ function M.setup()
     end
   end
 
-  -- Terminal-mode <C-,> leader variants for a suffix: ctrl may stay held for any leading run of
+  -- <C-,> leader variants for a suffix: ctrl may stay held for any leading run of
   -- the suffix keys and then be released for the rest (you never re-press it mid-sequence). So
   -- suffix "dt" yields <C-,>dt, <C-,><C-d>t and <C-,><C-d><C-t>. A held uppercase char is ctrl+shift
   -- (<C-S-x>), keeping e.g. "tF" distinct from "tf" (whose held form is <C-f>).
-  local function term_leader_variants(suffix)
+  local function ctrl_leader_variants(suffix)
     local variants = {}
     for held = 0, #suffix do
       local lhs = "<C-,>"
@@ -319,11 +324,14 @@ function M.setup()
     end
     if plugin.leader_keys then
       for _, key in ipairs(plugin.leader_keys) do
-        set_key(key.mode or "n", "<leader>" .. key[1], key[2], key.desc, key.ft)
-        if key.term then
-          for _, tlhs in ipairs(term_leader_variants(key[1])) do
-            set_key("t", tlhs, key[2], key.desc, key.ft)
-          end
+        local base = key.mode or "n"
+        set_key(base, "<leader>" .. key[1], key[2], key.desc, key.ft)
+        -- The <C-,> ctrl-leader chord reaches every leader_key in normal + insert mode; term = true
+        -- exposes it in terminal mode too.
+        local modes = { base, "i" }
+        if key.term then modes[#modes + 1] = "t" end
+        for _, clhs in ipairs(ctrl_leader_variants(key[1])) do
+          set_key(modes, clhs, key[2], key.desc, key.ft)
         end
       end
     end
