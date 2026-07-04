@@ -57,6 +57,54 @@ local function list_tasks()
   return tasks
 end
 
+-- Freshest task.md for a slug: the /do worktree's copy if it exists (that's where /do writes
+-- live progress), otherwise the main checkout's todo/<slug>/task.md. Used for the picker preview
+-- and the "what is this task doing now?" summary below.
+local function task_md_path(slug)
+  local wt_md = wt_root() .. "/do-" .. slug .. "/todo/" .. slug .. "/task.md"
+  if vim.fn.filereadable(wt_md) == 1 then return wt_md end
+  return vim.fn.expand("~/repo/gtd") .. "/todo/" .. slug .. "/task.md"
+end
+
+-- Trim a summary to `max` display columns (multibyte-safe), adding an ellipsis when cut.
+local function truncate(s, max)
+  if vim.fn.strdisplaywidth(s) <= max then return s end
+  while vim.fn.strchars(s) > 0 and vim.fn.strdisplaywidth(s) > max - 1 do
+    s = vim.fn.strcharpart(s, 0, vim.fn.strchars(s) - 1)
+  end
+  return s .. "…"
+end
+
+-- The task's one-line "what is this doing now?" status, read from the `status:` frontmatter field
+-- of its task.md (kept current by /do). This is the single defined slot the picker labels read;
+-- the preview pane shows the whole task.md. Returns nil when task.md is missing, has no
+-- frontmatter, or `status` is absent/blank.
+local function task_status(slug)
+  local f = io.open(task_md_path(slug), "r")
+  if not f then return nil end
+  if f:read("l") ~= "---" then f:close(); return nil end -- task.md always opens with frontmatter
+  local status = nil
+  for line in f:lines() do
+    if line == "---" then break end -- end of frontmatter
+    local v = line:match("^status:%s*(.-)%s*$")
+    if v then
+      if v ~= "" then status = v end
+      break
+    end
+  end
+  f:close()
+  return status
+end
+
+-- Picker label: "<title> — <status>" (status omitted when task.md has none).
+local function task_label(title, slug)
+  local s = task_status(slug)
+  if s and s ~= "" then
+    return title .. " — " .. truncate(s, 70)
+  end
+  return title
+end
+
 -- Create the do-<slug> worktree from HEAD if it doesn't exist. Returns (path, created) on
 -- success, (nil, nil, err) on failure. /do reuses this worktree by path, /done merges and cleans it up.
 local function ensure_worktree(slug)
@@ -89,56 +137,82 @@ local function has_file_buffer()
   return false
 end
 
--- ,dt: pick a gtd task from list.md (priority order), create its do-<slug> worktree if
--- missing, then cd into the worktree's todo/<slug>/ work dir and switch the possession session
--- to it. The task is identified by cwd afterward, so a Claude launched here runs inside the worktree.
--- on_entered (optional) runs once the session has been switched (e.g. to open Claude for the task).
+-- Enter the chosen task: create its do-<slug> worktree if missing, then cd into the worktree's
+-- todo/<slug>/ work dir and switch the possession session to it. Shared by ,dt's picker confirm.
+local function act_on_task(choice, on_entered)
+  local wt, created, err = ensure_worktree(choice.slug)
+  if not wt then
+    return vim.notify("gtd: failed to create worktree → " .. tostring(err), vim.log.levels.ERROR)
+  end
+  local td = wt_task_dir(wt_root(), choice.slug) -- cd target: worktree's todo/<slug>/ (root if absent)
+  -- Switch the possession session to the worktree without clobbering the one we leave.
+  -- Order matters: save the outgoing session (only if it has real files — see below), then
+  -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
+  -- we cd'd while the outgoing session was still "current", a later autosave (or load's
+  -- on_load autosave) would write the worktree's buffers/cwd into that session.
+  if has_file_buffer() then -- skip when only a terminal is open, else we'd save an empty session over it
+    pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
+  end
+  pcall(function() vim.cmd("silent! PossessionClose") end)
+  vim.cmd("cd " .. vim.fn.fnameescape(td)) -- global cd into the task work dir (no session is current now)
+  local paths = require("possession.paths")
+  if paths.session(paths.cwd_session_name()):exists() then
+    pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- existing worktree session → load it (current = this worktree)
+  else
+    -- Fresh worktree: PossessionClose above is a no-op when nothing was "current" (e.g. only a
+    -- terminal was open), so the previous task's buffers can linger and no session gets created.
+    -- Force a clean slate, then create + activate this worktree's session so it shows up in
+    -- possession and future autosaves target it (not the previous task).
+    pcall(function() require("possession.utils").delete_all_buffers(true) end)
+    pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
+  end
+  vim.notify((created and "gtd: created + entered → " or "gtd: entered → ") .. choice.title)
+  if on_entered then on_entered() end -- now that the session is current, open Claude for the task
+end
+
+-- ,dt: pick a gtd task from list.md (priority order) via a snacks picker whose rows read
+-- "<title> — <status>" (status = the task.md `status:` field, i.e. what it's doing now) and whose
+-- preview shows the whole task.md. On confirm, create its do-<slug> worktree if missing, cd into
+-- the worktree's todo/<slug>/ work dir, and switch the possession session to it — so a Claude
+-- launched here runs inside the worktree. on_entered (optional) runs once the session is current.
 function M.enter_task(on_entered)
   local tasks = list_tasks()
   if #tasks == 0 then
     return vim.notify("no gtd tasks in list.md", vim.log.levels.WARN)
   end
-  vim.ui.select(tasks, {
-    prompt = "gtd task: ",
-    format_item = function(t) return t.title end,
-  }, function(choice)
-    if not choice then return end
-    local wt, created, err = ensure_worktree(choice.slug)
-    if not wt then
-      return vim.notify("gtd: failed to create worktree → " .. tostring(err), vim.log.levels.ERROR)
-    end
-    local td = wt_task_dir(wt_root(), choice.slug) -- cd target: worktree's todo/<slug>/ (root if absent)
-    -- Switch the possession session to the worktree without clobbering the one we leave.
-    -- Order matters: save the outgoing session (only if it has real files — see below), then
-    -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
-    -- we cd'd while the outgoing session was still "current", a later autosave (or load's
-    -- on_load autosave) would write the worktree's buffers/cwd into that session.
-    if has_file_buffer() then -- skip when only a terminal is open, else we'd save an empty session over it
-      pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
-    end
-    pcall(function() vim.cmd("silent! PossessionClose") end)
-    vim.cmd("cd " .. vim.fn.fnameescape(td)) -- global cd into the task work dir (no session is current now)
-    local paths = require("possession.paths")
-    if paths.session(paths.cwd_session_name()):exists() then
-      pcall(function() vim.cmd("silent! PossessionLoadCwd") end) -- existing worktree session → load it (current = this worktree)
-    else
-      -- Fresh worktree: PossessionClose above is a no-op when nothing was "current" (e.g. only a
-      -- terminal was open), so the previous task's buffers can linger and no session gets created.
-      -- Force a clean slate, then create + activate this worktree's session so it shows up in
-      -- possession and future autosaves target it (not the previous task).
-      pcall(function() require("possession.utils").delete_all_buffers(true) end)
-      pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
-    end
-    vim.notify((created and "gtd: created + entered → " or "gtd: entered → ") .. choice.title)
-    if on_entered then on_entered() end -- now that the session is current, open Claude for the task
-  end)
+  require("snacks").picker.pick {
+    source = "gtd_tasks",
+    title = "gtd task",
+    format = "text",
+    finder = function()
+      return vim.tbl_map(function(t)
+        -- text: matched + rendered row; title: preview header; file: task.md for the preview pane.
+        return { text = task_label(t.title, t.slug), title = t.title, slug = t.slug, file = task_md_path(t.slug) }
+      end, tasks)
+    end,
+    confirm = function(picker, item)
+      picker:close()
+      if not item then return end
+      vim.schedule(function() act_on_task({ title = item.title, slug = item.slug }, on_entered) end)
+    end,
+  }
 end
 
--- <leader>dc: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering its
--- worktree, list the possession sessions that already have a live Claude terminal running and
--- jump to the chosen one, then run on_entered (e.g. to reveal Claude) once it's current. Only
--- sessions other than the current one that exist as loadable named sessions are offered (the gtd
--- flow keys each session's Claude terminal by its possession session name).
+-- Switch to the chosen session: session.load autosaves the outgoing session and restores the
+-- chosen one's cwd/buffers; our keep_term guards keep both sessions' Claude terminals alive across
+-- the switch. Shared by ,dc's picker confirm.
+local function act_on_session(choice, on_entered)
+  require("possession.session").load(choice.key)
+  vim.notify("gtd: switched to → " .. choice.label)
+  if on_entered then on_entered() end -- now current → reveal this session's Claude
+end
+
+-- <leader>dc: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
+-- its worktree, list (in a snacks picker, same "<title> — <status>" rows + task.md preview as ,dt) the
+-- possession sessions that already have a live Claude terminal running, and jump to the chosen one,
+-- then run on_entered (e.g. to reveal Claude) once it's current. Only sessions other than the current
+-- one that exist as loadable named sessions are offered (the gtd flow keys each session's Claude
+-- terminal by its possession session name).
 function M.enter_claudecode_session(on_entered)
   local session = require("youxkei.session")
   local psession = require("possession.session")
@@ -155,24 +229,34 @@ function M.enter_claudecode_session(on_entered)
   for _, key in ipairs(session.active_session_keys("claudecode.server.init")) do
     if key ~= current and paths.session(key):exists() then
       local slug = key:match("worktrees/do%-([^/]+)")
-      local label = (slug and titles[slug]) or vim.fn.fnamemodify(key, ":t")
-      choices[#choices + 1] = { key = key, label = label }
+      local title = (slug and titles[slug]) or vim.fn.fnamemodify(key, ":t")
+      choices[#choices + 1] = {
+        key = key,
+        title = title,
+        -- status row + task.md preview only for real task worktrees; bare sessions show the title.
+        text = slug and task_label(title, slug) or title,
+        file = slug and task_md_path(slug) or nil,
+      }
     end
   end
   if #choices == 0 then
     return vim.notify("no other session has an active Claude", vim.log.levels.WARN)
   end
-  vim.ui.select(choices, {
-    prompt = "Claude session: ",
-    format_item = function(c) return c.label end,
-  }, function(choice)
-    if not choice then return end
-    -- session.load autosaves the outgoing session and restores the chosen one's cwd/buffers; our
-    -- keep_term guards keep both sessions' Claude terminals alive across the switch.
-    psession.load(choice.key)
-    vim.notify("gtd: switched to → " .. choice.label)
-    if on_entered then on_entered() end -- now current → reveal this session's Claude
-  end)
+  require("snacks").picker.pick {
+    source = "gtd_sessions",
+    title = "Claude session",
+    format = "text",
+    finder = function()
+      return vim.tbl_map(function(c)
+        return { text = c.text, title = c.title, key = c.key, file = c.file }
+      end, choices)
+    end,
+    confirm = function(picker, item)
+      picker:close()
+      if not item then return end
+      vim.schedule(function() act_on_session({ key = item.key, label = item.title }, on_entered) end)
+    end,
+  }
 end
 
 -- Called by /done (via $NVIM RPC) right after it removes a do-<slug> worktree. If this nvim
