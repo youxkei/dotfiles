@@ -1,2 +1,0 @@
-#!/bin/sh
-xdotool getmouselocation | perl -ne '/window:(\d+)/; print $1' | xargs -n1 xdotool windowactivate

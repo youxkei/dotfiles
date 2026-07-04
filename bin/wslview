@@ -9,5 +9,5 @@ if [ -e "$arg" ]; then
 fi
 
 escaped=$(printf '%s' "$arg" | sed "s/'/''/g")
-exec powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass \
+exec pwsh.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass \
     -Command "Start-Process '$escaped'"

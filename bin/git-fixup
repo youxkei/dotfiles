@@ -1,7 +1,0 @@
-#!/bin/bash
-if [[ $# -ne 1 ]]; then
-    echo "Usage: git fixup <commit>"
-    exit 1
-fi
-
-git commit --fixup $1 && git rebase -i --autosquash --committer-date-is-author-date "$1^"

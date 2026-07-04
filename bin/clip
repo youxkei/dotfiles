@@ -1,2 +1,0 @@
-#!/bin/sh
-xsel -bo | xsel -bi
