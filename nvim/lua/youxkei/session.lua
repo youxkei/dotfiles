@@ -214,6 +214,34 @@ local function ensure_project_trusted(cwd)
   os.rename(tmp, claude_json) -- atomic replace (same filesystem as ~/.claude.json)
 end
 
+-- Canonicalize a directory (resolve symlinks, drop trailing slash) so a client's /proc cwd and
+-- the editor's getcwd() compare equal. Returns nil for empty input.
+local function normalize_dir(p)
+  if not p or p == "" then return nil end
+  local real = vim.uv.fs_realpath(p)
+  p = real or vim.fs.normalize(p)
+  return (p:gsub("/+$", ""))
+end
+
+-- Resolve the working directory of the process that owns a connected client, so we can tell which
+-- session's agent a client belongs to. The client socket's SOURCE port (the peer, from the
+-- server's view) belongs to the agent process; map that port to its pid with `ss`, then read the
+-- pid's cwd from /proc. Linux-only, best-effort: any failure returns nil and the caller falls
+-- back to broadcasting to every client (today's behavior). Must run in a scheduled context (it
+-- shells out), never directly inside the libuv on_connect callback.
+local function resolve_cwd_for_port(port, listen_port)
+  if not port or vim.fn.executable("ss") == 0 then return nil end
+  local filter = { "ss", "-tnpH", "state", "established", "sport", "=", ":" .. port }
+  if listen_port then
+    vim.list_extend(filter, { "dport", "=", ":" .. listen_port })
+  end
+  local ok, res = pcall(function() return vim.system(filter, { text = true }):wait() end)
+  if not ok or res.code ~= 0 or not res.stdout then return nil end
+  local pid = res.stdout:match("pid=(%d+)")
+  if not pid then return nil end
+  return normalize_dir("/proc/" .. pid .. "/cwd")
+end
+
 -- Build a per-session terminal provider for an MCP-style agent plugin (claudecode / codex).
 -- opts.server_module is that plugin's "<plugin>.server.init" module, used to target a sent
 -- @mention at only the current session's agent instead of broadcasting to every live one.
@@ -223,12 +251,14 @@ function M.make_provider(opts)
   local trust_project = opts.trust_project == true -- only claudecode reads ~/.claude.json trust
 
   local terminals = {}      -- session key -> snacks terminal instance
-  local session_client = {} -- session key -> WS client.id of that session's agent
-  local pending_key = nil   -- session whose agent is about to connect (set just before spawn)
+  local session_client = {} -- normalized cwd -> WS client.id of the agent running in that cwd
 
-  -- Install (once) a hook on the running tcp server's on_connect/on_disconnect so we can learn
-  -- which client.id belongs to which session. The server is already up by the time a terminal
-  -- spawns (the agent needs the port from env), so we install lazily from open().
+  -- Install (once) a hook on the running tcp server's on_connect/on_disconnect that records which
+  -- client.id runs in which cwd. Correlating by the connecting process's cwd (resolved from its
+  -- socket) is race-free and reconnect-safe: each connection is attributed on its own, unlike a
+  -- shared "pending" key that a reconnect or an interleaved open could mis-consume. The server is
+  -- already up by the time a terminal spawns (the agent needs the port from env), so we install
+  -- lazily from open().
   local function install_connect_hook()
     if not server_module then return end
     local ok, server = pcall(require, server_module)
@@ -239,10 +269,20 @@ function M.make_provider(opts)
 
     local orig_connect = tcp.on_connect
     tcp.on_connect = function(client)
-      if pending_key ~= nil then
-        session_client[pending_key] = client.id
-        pending_key = nil
+      -- on_connect runs in a libuv callback (fast context): grab the peer port now (libuv is safe
+      -- here), then defer the pid/cwd lookup (which shells out) to a scheduled context.
+      local port
+      local sock = client and client.tcp_handle
+      if sock and sock.getpeername then
+        local peer_ok, peer = pcall(function() return sock:getpeername() end)
+        if peer_ok and peer then port = peer.port end
       end
+      local cid = client.id
+      local listen_port = server.state and server.state.port
+      vim.schedule(function()
+        local cwd = resolve_cwd_for_port(port, listen_port)
+        if cwd then session_client[cwd] = cid end
+      end)
       if orig_connect then return orig_connect(client) end
     end
 
@@ -255,9 +295,10 @@ function M.make_provider(opts)
     end
   end
 
-  -- Install (once) a wrap on the module-level broadcast so an at_mentioned goes only to the
-  -- current session's agent when we know its (still-connected) client; else fall back to the
-  -- original broadcast (i.e. today's behavior — never an error).
+  -- Install (once) a wrap on the module-level broadcast so an at_mentioned goes only to the agent
+  -- running in the current cwd when we know its (still-connected) client; else fall back to the
+  -- original broadcast (i.e. today's behavior — never an error). Runs in a scheduled context (the
+  -- debounce timer schedule_wraps it), so vim.fn/vim.uv are safe here.
   local function install_broadcast_wrap()
     if not server_module then return end
     local ok, server = pcall(require, server_module)
@@ -266,7 +307,7 @@ function M.make_provider(opts)
     local orig_broadcast = server.broadcast
     server.broadcast = function(method, params)
       if method == "at_mentioned" then
-        local cid = session_client[M.term_key()]
+        local cid = session_client[normalize_dir(vim.fn.getcwd())]
         local tcp = server.state and server.state.server
         if cid and tcp and tcp.clients and tcp.clients[cid] then
           return server.send({ id = cid }, method, params)
@@ -318,8 +359,7 @@ function M.make_provider(opts)
       return
     end
 
-    install_connect_hook()
-    pending_key = key -- the agent we are about to spawn will be this session's
+    install_connect_hook() -- the agent we spawn is attributed to its cwd on connect (see the hook)
     if trust_project then ensure_project_trusted(config.cwd) end -- so Claude's statusLine + hooks run
     local term = Snacks.terminal.open(cmd_string, build_opts(config, env_table, focus))
     if term and term:buf_valid() then
@@ -339,7 +379,6 @@ function M.make_provider(opts)
       end, { buf = true })
     else
       terminals[key] = nil
-      pending_key = nil
       vim.notify("Failed to open terminal via Snacks.", vim.log.levels.ERROR)
     end
   end
