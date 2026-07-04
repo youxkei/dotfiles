@@ -51,7 +51,8 @@
     },
     "fyler.nvim": {
       "rev": "15fabd5d8cf6ba8afb0a404878106ba5300843b1",
-      "src": "https://github.com/A7Lavinraj/fyler.nvim"
+      "src": "https://github.com/A7Lavinraj/fyler.nvim",
+      "version": "'stable'"
     },
     "git-blame.nvim": {
       "rev": "5c536e2d4134d064aa3f41575280bc8a2a0e03d7",
@@ -139,7 +140,8 @@
     },
     "nvim-treesitter": {
       "rev": "6878ae017d691a0df1c49d8a091c88a33e4c2d50",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
     },
     "nvim-treesitter-context": {
       "rev": "b0c45cefe2c8f7b55fc46f34e563bc428ef99636",
@@ -147,7 +149,8 @@
     },
     "nvim-treesitter-textobjects": {
       "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+      "version": "'main'"
     },
     "nvim-ts-context-commentstring": {
       "rev": "1b212c2eee76d787bbea6aa5e92a2b534e7b4f8f",
