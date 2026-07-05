@@ -7,6 +7,17 @@
 
 input=$(cat)
 
+# Stay silent for headless / SDK sessions. `claude -p` and the Agent SDK spawn
+# full Claude Code sessions whose Stop/Notification hooks would otherwise flood
+# us with toasts (e.g. a script labeling N video segments = N notifications).
+# Such sessions set CLAUDE_CODE_ENTRYPOINT to sdk-* (sdk-cli for `claude -p`,
+# sdk-py / sdk-ts for the SDKs); the interactive TUI is "cli" and IDEs use
+# their own names, so only sdk-* is suppressed. Placed after the stdin drain
+# above so the parent's write to our pipe always completes (no EPIPE).
+case "$CLAUDE_CODE_ENTRYPOINT" in
+    sdk-*) exit 0 ;;
+esac
+
 # Extract every field in one jq pass. @sh shell-quotes each value so eval is
 # injection-safe and preserves spaces/quotes/newlines/UTF-8. If jq is missing
 # or the input is not JSON, the pass yields nothing and the vars stay empty.
