@@ -81,8 +81,8 @@ logical_monitors:
       - "GSM779A" # LG UltraGear+ (portrait)
       - "APPA05C" # built-in display
     workspaces:
-      # the Chrome app id is the Rejysten PWA
-      "0": { apps: ["obs64.exe", { app: "brave.exe", title: "^Rejysten$" }, "com.google.Chrome.app.bgggdcicpbejchdjahfibmilohfebbbl"] }
+      # the Brave app id is the Rejysten PWA
+      "0": { apps: ["obs64.exe", { app: "brave.exe", title: "^Rejysten$" }, "com.brave.Browser.app.bgggdcicpbejchdjahfibmilohfebbbl"] }
       "1": { apps: ["slack.exe", "com.tinyspeck.slackmacgap"] }
       "2": { apps: ["Discord.exe"] }
 
