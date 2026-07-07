@@ -97,6 +97,31 @@ opt.sessionoptions = {
   "blank", "buffers", "curdir", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
 }
 
+-- Smart terminal paste for the Claude Code / Codex TUIs. When the OS clipboard holds an
+-- image, forward a literal Ctrl-V (0x16) to the terminal job so the TUI reads the image
+-- from the clipboard itself; otherwise fall back to the normal register paste (text).
+-- Bound to <c-v> by default; macOS is the exception, where Cmd+V (<D-v>) takes the role so
+-- <c-v> stays a plain text paste. Image detection: macOS via `osascript -e 'clipboard info'`
+-- (a screenshot / copied image puts a PNGf class on the pasteboard); Wayland via
+-- `wl-paste --list-types` (image/* MIME type).
+local function clipboard_has_image()
+  if fn.has("mac") == 1 then
+    return fn.system({ "osascript", "-e", "clipboard info" }):find("PNGf", 1, true) ~= nil
+  elseif (vim.env.WAYLAND_DISPLAY or "") ~= "" and fn.executable("wl-paste") == 1 then
+    return fn.system({ "wl-paste", "--list-types" }):find("image/", 1, true) ~= nil
+  end
+  return false
+end
+
+local function smart_terminal_paste()
+  local job = vim.b.terminal_job_id
+  if job and clipboard_has_image() then
+    vim.api.nvim_chan_send(job, "\22") -- 0x16 = Ctrl-V; the TUI then pastes the clipboard image
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-\\><c-n>pi", true, false, true), "n", false)
+  end
+end
+
 if g.neovide then
   opt.guifont = "Moralerspace Krypton:h12"
   g.neovide_theme = "dark"
@@ -112,6 +137,11 @@ if g.neovide then
   -- (bindkey -e) but does not bind Home/End, so send readline's beginning/end-of-line.
   vim.keymap.set("t", "<D-Left>", "<C-a>")
   vim.keymap.set("t", "<D-Right>", "<C-e>")
+
+  -- Cmd+V smart-pastes into a terminal (Claude Code / Codex): image on the clipboard is
+  -- forwarded to the TUI, text falls back to the register paste. <c-v> stays plain text
+  -- paste on macOS (see below); Cmd+V is the macOS-native key, so it takes the image role.
+  vim.keymap.set("t", "<D-v>", smart_terminal_paste, { desc = "Smart terminal paste (image or text)" })
 end
 
 g.mapleader = ","
@@ -153,4 +183,12 @@ vim.keymap.set("n", "i", [[empty(getline(".")) ? "cc" : "i"]], { expr = true })
 vim.keymap.set("n", "a", [[empty(getline(".")) ? "cc" : "a"]], { expr = true })
 vim.keymap.set("n", "<c-j>", "<cmd>cnext<cr>")
 vim.keymap.set("n", "<c-k>", "<cmd>cabove<cr>")
-vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]])
+if fn.has("mac") == 1 then
+  -- macOS is the special case: it has a Cmd key, so Cmd+V (<D-v>, wired in the neovide
+  -- block) is the smart-paste key and <c-v> stays a plain register (text) paste.
+  vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]])
+else
+  -- Everywhere else (WSLg/Wayland, Linux) has no Cmd key, so <c-v> is the smart-paste key:
+  -- image on the clipboard is forwarded to the terminal TUI, text falls back to register paste.
+  vim.keymap.set("t", "<c-v>", smart_terminal_paste, { desc = "Smart terminal paste (image or text)" })
+end
