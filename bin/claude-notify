@@ -41,8 +41,21 @@ if [ -z "$event" ]; then
     esac
 fi
 
+# Title the toast with the project directory. Claude Code runs inside a Neovim
+# :terminal buffer, so $NVIM holds the hosting nvim's RPC socket while the hook
+# payload's cwd is merely where this session was launched (often the config dir,
+# not the project being edited). Prefer the hosting nvim's global cwd; fall back
+# to the payload cwd when not under nvim or the query fails (dead socket, no nvim
+# on PATH, ...). getcwd(-1, -1) is the global :pwd, independent of any window- or
+# tab-local :lcd/:tcd.
+name_dir=$cwd
+if [ -n "$NVIM" ]; then
+    nvim_cwd=$(nvim --server "$NVIM" --remote-expr 'getcwd(-1, -1)' 2>/dev/null)
+    [ -n "$nvim_cwd" ] && name_dir=$nvim_cwd
+fi
+
 title='Claude Code'
-[ -n "$cwd" ] && title="Claude Code: $(basename "$cwd")"
+[ -n "$name_dir" ] && title="Claude Code: $(basename "$name_dir")"
 
 # Prints "notify" or "silent" for the transcript JSONL passed as $1, in one
 # streaming pass (O(1) memory). Records are matched by shape reverse-engineered
