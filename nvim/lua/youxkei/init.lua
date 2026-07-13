@@ -113,9 +113,27 @@ local function clipboard_has_image()
   return false
 end
 
+-- WSLg bridges a copied Windows image to the Wayland clipboard only as image/bmp encoded with
+-- BI_BITFIELDS compression. Claude Code / Codex fetch those bytes (their read chain includes
+-- `wl-paste --type image/bmp`) but the bundled libvips silently fails to decode that BMP
+-- variant, so the paste yields nothing. ImageMagick decodes it, so re-encode the clipboard
+-- image to PNG -- which the TUIs decode fine -- before forwarding Ctrl-V. Skipped when a PNG is
+-- already offered, so native Wayland apps (which put image/png on the clipboard) are untouched.
+local function normalize_clipboard_image_to_png()
+  if (vim.env.WAYLAND_DISPLAY or "") == "" or fn.executable("wl-copy") == 0 or fn.executable("magick") == 0 then
+    return
+  end
+  if fn.system({ "wl-paste", "--list-types" }):find("image/png", 1, true) ~= nil then
+    return
+  end
+  fn.system({ "sh", "-c",
+    [[t=$(wl-paste --list-types | grep -m1 "^image/") && wl-paste --type "$t" | magick - png:- | wl-copy --type image/png]] })
+end
+
 local function smart_terminal_paste()
   local job = vim.b.terminal_job_id
   if job and clipboard_has_image() then
+    normalize_clipboard_image_to_png()
     vim.api.nvim_chan_send(job, "\22") -- 0x16 = Ctrl-V; the TUI then pastes the clipboard image
   else
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-\\><c-n>pi", true, false, true), "n", false)
