@@ -223,14 +223,56 @@ local function normalize_dir(p)
   return (p:gsub("/+$", ""))
 end
 
--- Resolve the working directory of the process that owns a connected client, so we can tell which
--- session's agent a client belongs to. The client socket's SOURCE port (the peer, from the
--- server's view) belongs to the agent process; map that port to its pid with `ss`, then read the
--- pid's cwd from /proc. Linux-only, best-effort: any failure returns nil and the caller falls
--- back to broadcasting to every client (today's behavior). Must run in a scheduled context (it
--- shells out), never directly inside the libuv on_connect callback.
+-- `ss` and /proc — the Linux path's tools — aren't on macOS, so shell out to lsof. Pitfall: both
+-- ends of a loopback connection are local sockets, so filtering by the agent's source port also
+-- catches the editor's OWN accepted socket. Taking the first match could hand back nvim's cwd
+-- instead of the agent's, so we pick the endpoint whose local port is that source port.
+local function resolve_cwd_for_port_macos(port, listen_port)
+  local function run(args)
+    local ok, res = pcall(function() return vim.system(args, { text = true }):wait() end)
+    -- lsof commonly exits 1 while still printing usable output, so don't gate on res.code.
+    if not ok or not res.stdout or res.stdout == "" then return nil end
+    return res.stdout
+  end
+
+  local out = run { "lsof", "-nP", "-Fpn", "-iTCP@127.0.0.1:" .. port, "-sTCP:ESTABLISHED" }
+  if not out then return nil end
+  local pid, cur
+  -- lsof -F output: a "p" line opens a process, then its sockets follow as "n" name lines.
+  for line in out:gmatch("[^\n]+") do
+    local tag, val = line:sub(1, 1), line:sub(2)
+    if tag == "p" then
+      cur = val
+    elseif tag == "n" then
+      local lport, fport = val:match("^127%.0%.0%.1:(%d+)%->127%.0%.0%.1:(%d+)$")
+      if lport == tostring(port) and (not listen_port or fport == tostring(listen_port)) then
+        pid = cur
+        break
+      end
+    end
+  end
+  if not pid then return nil end
+
+  local cwd_out = run { "lsof", "-a", "-p", pid, "-d", "cwd", "-Fn" }
+  if not cwd_out then return nil end
+  for line in cwd_out:gmatch("[^\n]+") do
+    if line:sub(1, 1) == "n" then return normalize_dir(line:sub(2)) end
+  end
+  return nil
+end
+
+-- We key on the socket's SOURCE port (the peer, from the server's view), NOT its local port: the
+-- peer port is the agent's, the local port is only our listen port. Resolved per-OS, best-effort;
+-- on any failure we return nil so the caller keeps its broadcast-to-all fallback rather than
+-- dropping the mention. Must run in a scheduled context — it shells out — never directly in the
+-- libuv on_connect callback.
 local function resolve_cwd_for_port(port, listen_port)
-  if not port or vim.fn.executable("ss") == 0 then return nil end
+  if not port then return nil end
+  if vim.fn.has("mac") == 1 then
+    if vim.fn.executable("lsof") == 0 then return nil end
+    return resolve_cwd_for_port_macos(port, listen_port)
+  end
+  if vim.fn.executable("ss") == 0 then return nil end
   local filter = { "ss", "-tnpH", "state", "established", "sport", "=", ":" .. port }
   if listen_port then
     vim.list_extend(filter, { "dport", "=", ":" .. listen_port })
