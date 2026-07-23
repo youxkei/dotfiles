@@ -208,8 +208,9 @@ local function act_on_session(choice, on_entered)
 end
 
 -- <leader>dn: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
--- its worktree, list (in a snacks picker, same "<title> — <status>" rows + task.md preview as ,dt) the
--- possession sessions that already have a live Claude terminal running, and jump to the chosen one,
+-- its worktree, list (in a snacks picker, same "<title> — <status>" rows, but previewing each session's
+-- live Claude terminal instead of ,dt's task.md) the possession sessions that already have a live Claude
+-- terminal running, and jump to the chosen one,
 -- then run on_entered (e.g. to reveal Claude) once it's current. Only sessions other than the current
 -- one that exist as loadable named sessions are offered (the gtd flow keys each session's Claude
 -- terminal by its possession session name).
@@ -233,9 +234,10 @@ function M.enter_claudecode_session(on_entered)
       choices[#choices + 1] = {
         key = key,
         title = title,
-        -- status row + task.md preview only for real task worktrees; bare sessions show the title.
+        -- status row (title — status) for real task worktrees; bare sessions show the title.
         text = slug and task_label(title, slug) or title,
-        file = slug and task_md_path(slug) or nil,
+        -- preview target: this session's live Claude terminal buffer (see the picker's preview).
+        buf = session.session_bufnr("claudecode.server.init", key),
       }
     end
   end
@@ -248,8 +250,17 @@ function M.enter_claudecode_session(on_entered)
     format = "text",
     finder = function()
       return vim.tbl_map(function(c)
-        return { text = c.text, title = c.title, key = c.key, file = c.file }
+        return { text = c.text, title = c.title, key = c.key, buf = c.buf }
       end, choices)
+    end,
+    -- Preview each session's live Claude terminal instead of ,dt's task.md. item.buf is the terminal
+    -- buffer, so the default file previewer renders it (and titles it with item.title); we then scroll
+    -- to the bottom so the preview shows the terminal's tail (latest output) like the live float would.
+    preview = function(ctx)
+      require("snacks").picker.preview.file(ctx)
+      if ctx.item.buf and ctx.preview.win:win_valid() then
+        vim.api.nvim_win_call(ctx.preview.win.win, function() vim.cmd("normal! G") end)
+      end
     end,
     confirm = function(picker, item)
       picker:close()

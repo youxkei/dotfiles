@@ -393,6 +393,16 @@ function M.make_provider(opts)
     return keys
   end
 
+  -- Buffer number of this provider's live terminal for a given session key (nil if none/invalid).
+  -- Lets gtd's <leader>dn preview each candidate session's Claude terminal buffer.
+  function provider.buf_for_key(key)
+    local t = terminals[key]
+    if t and t:buf_valid() and t.buf and vim.api.nvim_buf_is_valid(t.buf) then
+      return t.buf
+    end
+    return nil
+  end
+
   function provider.is_available()
     local Snacks = get_snacks()
     return Snacks ~= nil and Snacks.terminal ~= nil
@@ -499,6 +509,18 @@ function M.active_session_keys(server_module)
     end
   end
   return keys
+end
+
+-- Buffer number of the live terminal for `key` under the given server_module (nil if none). Used
+-- by gtd's <leader>dn to preview each session's Claude terminal instead of its task.md.
+function M.session_bufnr(server_module, key)
+  for _, provider in ipairs(provider_registry) do
+    if provider.__server_module == server_module and provider.buf_for_key then
+      local buf = provider.buf_for_key(key)
+      if buf then return buf end
+    end
+  end
+  return nil
 end
 
 -- Wipe the current session's managed terminals (claudecode + codex snacks terminals and the
