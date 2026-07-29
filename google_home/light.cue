@@ -16,9 +16,24 @@ let config = {
     }
 
     delayBetweenActions: "5sec"
+
+    // SwitchBot のクラウド連携は state を Google に報告しないので、現行の
+    // シーリングライト (W2612230) では device.state.OnOff がスクリプトエディタに
+    // 弾かれる。Matter ネイティブのライト (SwitchBot RGBICWW シーリングライト等) に
+    // 置き換えて target を差し替えたら true にする。
+    skipWhenOff: false
 }
 
 let stepSeconds = div(((#ToSeconds & {time: config.time.lightOffEnd}).out - (#ToSeconds & {time: config.time.lightOffStart}).out), 100)
+
+// BrightnessAbsolute は消灯中の照明を点けてしまうので、消えている間は各ステップを
+// 走らせないための条件が必要になる。
+let lightIsOn = {
+    type:   "device.state.OnOff"
+    device: config.target
+    state:  "on"
+    is:     true
+}
 
 metadata: {
     name: "照明オフ"
@@ -30,6 +45,10 @@ automations: [
         starters: {
             type: "time.schedule"
             at: (#FormatTime & {time: (#AddSeconds & {time: config.time.lightOffStart, seconds: stepSeconds * i}).out}).out
+        }
+
+        if config.skipWhenOff {
+            condition: lightIsOn
         }
 
         actions: [
