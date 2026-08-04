@@ -278,7 +278,10 @@ end
 -- the current session also clears it as current (possession's delete sets session_name = nil),
 -- so autosave can't resurrect it. The cwd stays the now-removed worktree dir (getcwd() == "") —
 -- that's fine, the session is gone either way.
-function _G.GtdDoneCleanup(slug)
+--
+-- msg (optional) is /done's one-line completion report, notified once the teardown is done. It stays
+-- optional because worktrees created before it existed carry a /done that calls this with one arg.
+function _G.GtdDoneCleanup(slug, msg)
   local wt = wt_root() .. "/do-" .. slug
   -- Every session at or under the worktree dir, not a fixed set of candidate paths: ,dt cd's into
   -- the worktree's todo/<slug>/, but the user can cd deeper (into a clone under repo/, say), and a
@@ -296,6 +299,9 @@ function _G.GtdDoneCleanup(slug)
         session.delete(name, { no_confirm = true }) -- delete, not raw unlink: this clears session_name when it's current
       end
     end
+    -- The terminal that printed /done's report is one of the ones this cleanup wipes, so the report
+    -- itself is not a durable channel: re-surface it through the notifier, whose history survives.
+    if msg and msg ~= "" then vim.notify(msg) end
   end
   -- /done removes the worktree before calling this, so if the host nvim was sitting in it,
   -- getcwd() now returns "" (its dir is gone). Treat empty cwd + missing worktree as "was here".
