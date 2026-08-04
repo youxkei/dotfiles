@@ -280,16 +280,20 @@ end
 -- that's fine, the session is gone either way.
 function _G.GtdDoneCleanup(slug)
   local wt = wt_root() .. "/do-" .. slug
-  local paths = require("possession.paths")
-  -- ,dt cd's into the worktree's todo/<slug>/, so the session name == fnamemodify(that dir, ":~").
-  -- The worktree (and its todo/) is already removed by /done here, so we can't isdirectory-probe it;
-  -- just try both candidate names (task dir, and the worktree root for pre-change sessions) and
-  -- delete whichever session file exists.
+  -- Every session at or under the worktree dir, not a fixed set of candidate paths: ,dt cd's into
+  -- the worktree's todo/<slug>/, but the user can cd deeper (into a clone under repo/, say), and a
+  -- session's name is whatever dir was current when it was saved, so the deep ones would survive a
+  -- candidate list. Compare against the ":~" form because that's how possession names sessions
+  -- (paths.cwd_session_name), and it's pure string work: the worktree dir is already gone here, so
+  -- anything that resolves the path on disk would come back empty.
+  -- The "/" boundary is what keeps do-foo from deleting do-foo-bar's sessions.
   local function drop()
-    for _, p in ipairs({ wt .. "/todo/" .. slug, wt }) do
-      local name = vim.fn.fnamemodify(p, ":~")
-      if paths.session(name):exists() then
-        require("possession.session").delete(name, { no_confirm = true })
+    local prefix = vim.fn.fnamemodify(wt, ":~")
+    local session = require("possession.session")
+    for _, data in pairs(session.list()) do
+      local name = data.name
+      if name == prefix or name:sub(1, #prefix + 1) == prefix .. "/" then
+        session.delete(name, { no_confirm = true }) -- delete, not raw unlink: this clears session_name when it's current
       end
     end
   end
