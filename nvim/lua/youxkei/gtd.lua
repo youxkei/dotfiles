@@ -208,9 +208,9 @@ local function act_on_session(choice, on_entered)
 end
 
 -- <leader>dn: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
--- its worktree, list (in a snacks picker, same "<title> — <status>" rows, but previewing each session's
--- live Claude terminal instead of ,dt's task.md) the possession sessions that already have a live Claude
--- terminal running, and jump to the chosen one,
+-- its worktree, list (in a snacks picker, same "<title> — <status>" rows in the same list.md priority
+-- order, but previewing each session's live Claude terminal instead of ,dt's task.md) the possession
+-- sessions that already have a live Claude terminal running, and jump to the chosen one,
 -- then run on_entered (e.g. to reveal Claude) once it's current. Only sessions other than the current
 -- one that exist as loadable named sessions are offered (the gtd flow keys each session's Claude
 -- terminal by its possession session name).
@@ -219,21 +219,24 @@ function M.enter_claudecode_session(on_entered)
   local psession = require("possession.session")
   local paths = require("possession.paths")
   local current = psession.get_session_name()
-  -- slug -> title from list.md, so we can label each session with its task title (like ,dt)
-  -- instead of the raw session path. Sessions that aren't task worktrees (or whose task is no
-  -- longer in list.md) fall back to the session name's basename.
-  local titles = {}
-  for _, t in ipairs(list_tasks()) do
-    titles[t.slug] = t.title
+  -- slug -> {title, rank} from list.md: the title labels each session with its task title (like ,dt)
+  -- instead of the raw session path, and the rank (list.md line order = priority) orders the rows.
+  -- Sessions that aren't task worktrees (or whose task is no longer in list.md) have neither.
+  local tasks = {}
+  for i, t in ipairs(list_tasks()) do
+    tasks[t.slug] = { title = t.title, rank = i }
   end
   local choices = {}
   for _, key in ipairs(session.active_session_keys("claudecode.server.init")) do
     if key ~= current and paths.session(key):exists() then
       local slug = key:match("worktrees/do%-([^/]+)")
-      local title = (slug and titles[slug]) or vim.fn.fnamemodify(key, ":t")
+      local task = slug and tasks[slug]
+      local title = (task and task.title) or vim.fn.fnamemodify(key, ":t")
       choices[#choices + 1] = {
         key = key,
         title = title,
+        -- list.md position, or math.huge for anything list.md doesn't cover (see the sort below).
+        rank = task and task.rank or math.huge,
         -- status row (title — status) for real task worktrees; bare sessions show the title.
         text = slug and task_label(title, slug) or title,
         -- preview target: this session's live Claude terminal buffer (see the picker's preview).
@@ -244,6 +247,18 @@ function M.enter_claudecode_session(on_entered)
   if #choices == 0 then
     return vim.notify("no other session has an active Claude", vim.log.levels.WARN)
   end
+  -- Order the rows here rather than leaving it to the picker: with an empty prompt snacks does not sort
+  -- (matcher.sort_empty = false) and renders the finder's order as-is, and that order is the terminal
+  -- provider's `pairs` order over its live terminals — arbitrary, and different from one run to the next.
+  -- Sessions list.md doesn't rank (non-task worktrees, or tasks already dropped from list.md) go to the
+  -- tail rather than being dropped from the picker: their Claude is running, so they must stay reachable.
+  -- Tie-break on the session key, not the displayed label, because keys are unique (active_session_keys
+  -- dedupes) while labels are not, so a label tie-break would leave same-titled tail rows in that same
+  -- arbitrary `pairs` order.
+  table.sort(choices, function(a, b)
+    if a.rank ~= b.rank then return a.rank < b.rank end
+    return a.key < b.key
+  end)
   require("snacks").picker.pick {
     source = "gtd_sessions",
     title = "Claude session",
