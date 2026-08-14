@@ -935,20 +935,6 @@ return {
         ft = "toggleterm",
         desc = "Open Claude in toggleterm",
       },
-      {
-        "<c-g>",
-        function()
-          session.toggle_term()
-          vim.cmd.Codex()
-          vim.schedule(function()
-            vim.cmd.startinsert()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
-        end,
-        mode = "t",
-        ft = "toggleterm",
-        desc = "Open Codex in toggleterm",
-      },
     },
   },
 
@@ -1240,7 +1226,7 @@ return {
         terminal = {
           -- Per-session Claude terminal: one Claude per possession session, kept alive across
           -- switches, with sent @mentions targeted at the current session's Claude only.
-          provider = session.make_provider { server_module = "claudecode.server.init", trust_project = true },
+          provider = session.make_provider { server_module = "claudecode.server.init" },
           snacks_win_opts = {
             position = "float",
             width = 0.95,
@@ -1263,109 +1249,12 @@ return {
                 mode = "t",
                 desc = "Toggle toggleterm in Claude",
               },
-              {
-                "<c-g>",
-                function(self)
-                  self:hide()
-                  vim.cmd.Codex()
-                end,
-                mode = "t",
-                desc = "Open Codex",
-              },
             },
           },
         },
       }
 
       local augroup = vim.api.nvim_create_augroup("youxkei.claudecode", { clear = true })
-      vim.api.nvim_create_autocmd("FileType", {
-        group = augroup,
-        pattern = "snacks_terminal",
-        callback = function(args)
-          vim.bo[args.buf].buflisted = false
-        end,
-      })
-    end
-  },
-
-  {
-    "youxkei/codex.nvim",
-    version = "fix/find-available-port-listen-check",
-    dependencies = {
-      "folke/snacks.nvim",
-    },
-    keys = {
-      {
-        "<c-g>",
-        function()
-          vim.cmd.CodexSend()
-          vim.schedule(function()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
-        end,
-        mode = "v",
-        desc = "Send to Codex",
-      },
-
-      {
-        "<c-g>",
-        function()
-          vim.cmd.CodexFocus()
-          vim.schedule(function()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
-        end,
-        desc = "Toggle Codex",
-        mode = "n",
-      },
-    },
-    config = function()
-      require("codex").setup {
-        terminal_cmd = "codex --yolo",
-        track_selection = true,
-        keymaps = {
-          enabled = false,
-        },
-        terminal = {
-          -- Per-session Codex terminal (same model as Claude above).
-          provider = session.make_provider { server_module = "codex.server.init" },
-          snacks_win_opts = {
-            position = "float",
-            width = 0.95,
-            height = 0.95,
-            keys = {
-              {
-                "<c-g>",
-                function(self)
-                  self:hide()
-                end,
-                mode = "t",
-                desc = "Hide",
-              },
-              {
-                "<c-t>",
-                function(self)
-                  self:hide()
-                  session.toggle_term()
-                end,
-                mode = "t",
-                desc = "Toggle toggleterm in Codex",
-              },
-              {
-                "<c-l>",
-                function(self)
-                  self:hide()
-                  vim.cmd.ClaudeCode()
-                end,
-                mode = "t",
-                desc = "Open Claude",
-              },
-            },
-          },
-        },
-      }
-
-      local augroup = vim.api.nvim_create_augroup("youxkei.codex", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = "snacks_terminal",

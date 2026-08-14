@@ -97,7 +97,7 @@ opt.sessionoptions = {
   "blank", "buffers", "curdir", "help", "tabpages", "winsize", "winpos", "terminal", "globals"
 }
 
--- Smart terminal paste for the Claude Code / Codex TUIs. When the OS clipboard holds an
+-- Smart terminal paste for the Claude Code TUI. When the OS clipboard holds an
 -- image, forward a literal Ctrl-V (0x16) to the terminal job so the TUI reads the image
 -- from the clipboard itself; otherwise fall back to the normal register paste (text).
 -- Bound to <c-v> by default; macOS is the exception, where Cmd+V (<D-v>) takes the role so
@@ -114,10 +114,10 @@ local function clipboard_has_image()
 end
 
 -- WSLg bridges a copied Windows image to the Wayland clipboard only as image/bmp encoded with
--- BI_BITFIELDS compression. Claude Code / Codex fetch those bytes (their read chain includes
+-- BI_BITFIELDS compression. Claude Code fetches those bytes (its read chain includes
 -- `wl-paste --type image/bmp`) but the bundled libvips silently fails to decode that BMP
 -- variant, so the paste yields nothing. ImageMagick decodes it, so re-encode the clipboard
--- image to PNG -- which the TUIs decode fine -- before forwarding Ctrl-V. Skipped when a PNG is
+-- image to PNG -- which the TUI decodes fine -- before forwarding Ctrl-V. Skipped when a PNG is
 -- already offered, so native Wayland apps (which put image/png on the clipboard) are untouched.
 local function normalize_clipboard_image_to_png()
   if (vim.env.WAYLAND_DISPLAY or "") == "" or fn.executable("wl-copy") == 0 or fn.executable("magick") == 0 then
@@ -156,7 +156,7 @@ if g.neovide then
   vim.keymap.set("t", "<D-Left>", "<C-a>")
   vim.keymap.set("t", "<D-Right>", "<C-e>")
 
-  -- Cmd+V smart-pastes into a terminal (Claude Code / Codex): image on the clipboard is
+  -- Cmd+V smart-pastes into a terminal (Claude Code): image on the clipboard is
   -- forwarded to the TUI, text falls back to the register paste. <c-v> stays plain text
   -- paste on macOS (see below); Cmd+V is the macOS-native key, so it takes the image role.
   vim.keymap.set("t", "<D-v>", smart_terminal_paste, { desc = "Smart terminal paste (image or text)" })

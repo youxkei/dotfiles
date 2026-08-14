@@ -271,7 +271,7 @@ function M.setup()
   -- reachable via the <C-,> ctrl-leader chord in normal AND insert mode, as an alternate to the
   -- literal <leader> (","): <C-,>tf does the same as ",tf". An entry flagged `term = true` also
   -- binds the same <C-,> variants in terminal mode, where a literal <leader> map is impossible
-  -- (<leader> is "," and would eat comma input in :terminal / Claude / Codex floats). You may keep
+  -- (<leader> is "," and would eat comma input in :terminal / Claude floats). You may keep
   -- ctrl held across the whole suffix (see ctrl_leader_variants) EXCEPT on a key that resolves to
   -- <C-c>: in Normal/Insert mode <C-c> interrupts the pending mapping (|map_CTRL-C|) and cannot be
   -- caught, so no leader suffix ends in "c". Neovide and Alacritty (kitty keyboard protocol) both

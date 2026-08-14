@@ -1,6 +1,6 @@
 -- Per-possession-session terminals + the possession buffer-protection that keeps them alive.
 --
--- toggleterm / Claude / Codex floats are normally destroyed whenever we switch possession
+-- toggleterm / Claude floats are normally destroyed whenever we switch possession
 -- sessions (the before_save hook + possession's delete_buffers both wipe terminal buffers).
 -- Here we instead keep one set of terminals *per session* (keyed by the possession session
 -- name) and protect their buffers from those wipes, so switching sessions hides the current
@@ -122,13 +122,13 @@ local function toggleterm_id(key)
 end
 
 -- Toggle the current session's toggleterm (creating it in the current cwd if absent). Used by
--- the global <c-t> and by the in-float <c-t> of Claude/Codex.
+-- the global <c-t> and by the in-float <c-t> of Claude.
 function M.toggle_term()
   require("toggleterm").toggle(toggleterm_id(M.term_key()), nil, vim.fn.getcwd())
 end
 
 --------------------------------------------------------------------------------
--- Claude / Codex: per-session snacks terminal provider (custom table provider)
+-- Claude: per-session snacks terminal provider (custom table provider)
 --------------------------------------------------------------------------------
 
 -- Resolve snacks lazily: this module is required from spec.lua's top during load.lua's parse
@@ -145,7 +145,7 @@ local function normalize_focus(focus)
 end
 
 -- Mirrors claudecode/terminal/snacks.lua build_opts: position/size + a <S-CR> newline key,
--- merged with the user's snacks_win_opts (which add the <c-l>/<c-t>/<c-g> float keys).
+-- merged with the user's snacks_win_opts (which add the <c-l>/<c-t> float keys).
 local function build_opts(config, env_table, focus)
   focus = normalize_focus(focus)
   return {
@@ -177,7 +177,7 @@ local function build_opts(config, env_table, focus)
 end
 
 -- Every provider built by make_provider, so wipe_current_session_terminals can reach each
--- session's claudecode/codex terminal buffer via the provider's get_active_bufnr.
+-- session's claudecode terminal buffer via the provider's get_active_bufnr.
 local provider_registry = {}
 
 -- claudecode.nvim launches Claude Code in IDE-integration mode (ENABLE_IDE_INTEGRATION=true),
@@ -284,13 +284,12 @@ local function resolve_cwd_for_port(port, listen_port)
   return normalize_dir("/proc/" .. pid .. "/cwd")
 end
 
--- Build a per-session terminal provider for an MCP-style agent plugin (claudecode / codex).
+-- Build a per-session terminal provider for an MCP-style agent plugin (claudecode).
 -- opts.server_module is that plugin's "<plugin>.server.init" module, used to target a sent
 -- @mention at only the current session's agent instead of broadcasting to every live one.
 function M.make_provider(opts)
   opts = opts or {}
   local server_module = opts.server_module
-  local trust_project = opts.trust_project == true -- only claudecode reads ~/.claude.json trust
 
   local terminals = {}      -- session key -> snacks terminal instance
   local session_client = {} -- normalized cwd -> WS client.id of the agent running in that cwd
@@ -381,7 +380,7 @@ function M.make_provider(opts)
   local provider = {}
   provider.__server_module = server_module -- so active_session_keys can pick this provider out
 
-  -- Session keys that currently have a live terminal for this provider (claudecode/codex).
+  -- Session keys that currently have a live terminal for this provider (claudecode).
   -- Used by gtd's <leader>dn to list the sessions where a Claude is already up.
   function provider.active_keys()
     local keys = {}
@@ -425,7 +424,7 @@ function M.make_provider(opts)
     end
 
     install_connect_hook() -- the agent we spawn is attributed to its cwd on connect (see the hook)
-    if trust_project then ensure_project_trusted(config.cwd) end -- so Claude's statusLine + hooks run
+    ensure_project_trusted(config.cwd) -- so Claude's statusLine + hooks run
     local term = Snacks.terminal.open(cmd_string, build_opts(config, env_table, focus))
     if term and term:buf_valid() then
       terminals[key] = term
@@ -523,7 +522,7 @@ function M.session_bufnr(server_module, key)
   return nil
 end
 
--- Wipe the current session's managed terminals (claudecode + codex snacks terminals and the
+-- Wipe the current session's managed terminals (the claudecode snacks terminal and the
 -- toggleterm float). Used by gtd's GtdDoneCleanup to tear a finished task's session down in
 -- place without switching to another session. Resolve the key while the session is still
 -- current (term_key falls back to cwd once it's closed). Each provider's BufWipeout hook clears

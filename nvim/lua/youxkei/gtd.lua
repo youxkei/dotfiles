@@ -289,7 +289,7 @@ end
 -- was inside that worktree, tear the finished task's session down IN PLACE: do NOT switch to
 -- another session (that would reload main's session and close /done's own terminal), and do NOT
 -- PossessionClose it (close keeps the session file and wipes file buffers / stops LSP). Instead
--- wipe this session's claudecode/codex/toggleterm terminals, then DELETE the session. Deleting
+-- wipe this session's claudecode/toggleterm terminals, then DELETE the session. Deleting
 -- the current session also clears it as current (possession's delete sets session_name = nil),
 -- so autosave can't resurrect it. The cwd stays the now-removed worktree dir (getcwd() == "") —
 -- that's fine, the session is gone either way.
