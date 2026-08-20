@@ -11,15 +11,30 @@
 -- keep_term terminals are the sole exception.
 local M = {}
 
+-- While spawn_agent_terminal revives one session's agent from another session, these pin the
+-- terminal's key and cwd and keep the float out of the way; nil/false everywhere else.
+local forced_key = nil
+local forced_cwd = nil
+local hidden_spawn = false
+
 -- The key under which the current session's terminals live: the active possession session
 -- name, or cwd when no session is current (fresh nvim, or briefly mid-switch between
 -- PossessionClose and the next load). Resolved at keypress time, when a session is active.
 function M.term_key()
+  if forced_key then return forced_key end
   local ok, name = pcall(function()
     return require("possession.session").get_session_name()
   end)
   if ok and name and name ~= "" then return name end
   return vim.fn.getcwd()
+end
+
+-- claudecode's terminal.cwd_provider hook. Only a pinned spawn answers it; nil leaves claudecode's
+-- own resolution (nvim's cwd) in charge, which is what a terminal opened in the current session
+-- wants. Its static `cwd` option can't serve here: claudecode only honours per-call overrides for
+-- options whose default is non-nil, and `cwd` defaults to nil.
+function M.spawn_cwd_provider()
+  return forced_cwd
 end
 
 --------------------------------------------------------------------------------
@@ -106,6 +121,19 @@ function M.install_possession_guards()
   end
 end
 
+-- True if any real, named file buffer is open (not a terminal / scratch). Used to decide
+-- whether saving the current possession session is worthwhile: before_save strips terminal
+-- buffers, so saving a terminal-only view (e.g. just the Claude float) would overwrite that
+-- session with an empty one.
+function M.has_file_buffer()
+  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.fn.buflisted(b) == 1 and vim.bo[b].buftype == "" and vim.api.nvim_buf_get_name(b) ~= "" then
+      return true
+    end
+  end
+  return false
+end
+
 --------------------------------------------------------------------------------
 -- toggleterm: one floating terminal id per session
 --------------------------------------------------------------------------------
@@ -147,7 +175,8 @@ end
 -- Mirrors claudecode/terminal/snacks.lua build_opts: position/size + a <S-CR> newline key,
 -- merged with the user's snacks_win_opts (which add the <c-l>/<c-t> float keys).
 local function build_opts(config, env_table, focus)
-  focus = normalize_focus(focus)
+  -- A pinned spawn belongs to a session we are not in, so it must not grab insert mode.
+  focus = normalize_focus(focus) and not hidden_spawn
   return {
     env = env_table,
     cwd = config.cwd,
@@ -402,6 +431,13 @@ function M.make_provider(opts)
     return nil
   end
 
+  -- Park a session's terminal out of sight with its job intact. hide(), never close(): snacks made
+  -- the terminal's buffer as its scratch buffer, so close() wipes it and takes the agent down.
+  function provider.hide_key(key)
+    local t = terminals[key]
+    if t and t:buf_valid() and t:win_valid() then t:hide() end
+  end
+
   function provider.is_available()
     local Snacks = get_snacks()
     return Snacks ~= nil and Snacks.terminal ~= nil
@@ -520,6 +556,88 @@ function M.session_bufnr(server_module, key)
     end
   end
   return nil
+end
+
+-- Bring up the agent terminal of a session we are NOT in: the terminal registers under `key`, its
+-- job runs in `cwd`, and the float it spawns in is parked right away. Loading each possession
+-- session to do this instead would drag its whole buffer list (and every LSP client behind it)
+-- through the revival, one session at a time.
+function M.spawn_agent_terminal(key, cwd, cmd_args)
+  if M.session_bufnr("claudecode.server.init", key) then return true end -- already running
+
+  forced_key, forced_cwd, hidden_spawn = key, cwd, true
+  local ok, err = pcall(function()
+    require("claudecode.terminal").open({}, cmd_args)
+  end)
+  for _, provider in ipairs(provider_registry) do
+    if provider.hide_key then provider.hide_key(key) end
+  end
+  forced_key, forced_cwd, hidden_spawn = nil, nil, false
+
+  if not ok then
+    vim.notify("session: could not revive " .. key .. ": " .. tostring(err), vim.log.levels.WARN)
+    return false
+  end
+  return M.session_bufnr("claudecode.server.init", key) ~= nil
+end
+
+--------------------------------------------------------------------------------
+-- Restart handoff: which sessions had an agent running
+--------------------------------------------------------------------------------
+
+-- A file rather than :restart's [command] argument, which is a single Ex command line: a dozen
+-- session paths inlined there would need quoting and length care for nothing.
+local function handoff_path()
+  return vim.fs.joinpath(vim.fn.stdpath("state"), "youxkei-restart-agents.json")
+end
+
+-- The cwd a session's agent has to be respawned in. Session keys are cwd-derived names
+-- (possession's cwd_session_name), so expanding the key is normally the directory itself; only a
+-- hand-named session has to be looked up in its session file.
+local function session_cwd(key)
+  local dir = vim.fn.expand(key)
+  if vim.fn.isdirectory(dir) == 1 then return dir end
+  local ok, cwd = pcall(function()
+    local file = require("possession.paths").session(key)
+    if not file:exists() then return nil end
+    return vim.json.decode(file:read()).cwd
+  end)
+  if ok and type(cwd) == "string" and vim.fn.isdirectory(cwd) == 1 then return cwd end
+  return nil
+end
+
+-- Record, for the Nvim that replaces this one, every session whose agent is up: `sessions` are the
+-- ones to revive out of sight, `current_live` says whether the session we sit in gets its agent
+-- back in the foreground. Sessions whose directory is gone are dropped here rather than failing
+-- one spawn at a time on the other side.
+function M.write_restart_handoff()
+  local current = M.term_key()
+  local sessions = {}
+  local current_live = false
+  for _, key in ipairs(M.active_session_keys("claudecode.server.init")) do
+    if key == current then
+      current_live = true
+    else
+      local cwd = session_cwd(key)
+      if cwd then sessions[#sessions + 1] = { key = key, cwd = cwd } end
+    end
+  end
+  local ok = pcall(vim.fn.writefile, { vim.json.encode { current_live = current_live, sessions = sessions } }, handoff_path())
+  if not ok then vim.notify("session: could not write the restart handoff", vim.log.levels.WARN) end
+end
+
+-- Read the handoff and delete it in the same breath, so a restart that never happened (a modified
+-- buffer refusing :qall) can't make a later plain start spawn agents nobody asked for.
+function M.take_restart_handoff()
+  local path = handoff_path()
+  if vim.fn.filereadable(path) == 0 then return nil end
+  local ok, handoff = pcall(function()
+    return vim.json.decode(table.concat(vim.fn.readfile(path), "\n"))
+  end)
+  vim.fn.delete(path)
+  if not ok or type(handoff) ~= "table" then return nil end
+  handoff.sessions = handoff.sessions or {}
+  return handoff
 end
 
 -- Wipe the current session's managed terminals (the claudecode snacks terminal and the

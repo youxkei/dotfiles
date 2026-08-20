@@ -124,21 +124,8 @@ local function ensure_worktree(slug)
   return wt, true
 end
 
--- True if any real, named file buffer is open (not a terminal / scratch). Used to decide
--- whether saving the outgoing possession session is worthwhile: the before_save hook strips
--- terminal buffers, so saving a terminal-only view (e.g. just the Claude terminal) would
--- overwrite that session with an empty one.
-local function has_file_buffer()
-  for _, b in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.fn.buflisted(b) == 1 and vim.bo[b].buftype == "" and vim.api.nvim_buf_get_name(b) ~= "" then
-      return true
-    end
-  end
-  return false
-end
-
 -- Enter the chosen task: create its do-<slug> worktree if missing, then cd into the worktree's
--- todo/<slug>/ work dir and switch the possession session to it. Shared by ,dt's picker confirm.
+-- todo/<slug>/ work dir and switch the possession session to it. Shared by <leader>dt's picker confirm.
 local function act_on_task(choice, on_entered)
   local wt, created, err = ensure_worktree(choice.slug)
   if not wt then
@@ -150,7 +137,7 @@ local function act_on_task(choice, on_entered)
   -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
   -- we cd'd while the outgoing session was still "current", a later autosave (or load's
   -- on_load autosave) would write the worktree's buffers/cwd into that session.
-  if has_file_buffer() then -- skip when only a terminal is open, else we'd save an empty session over it
+  if require("youxkei.session").has_file_buffer() then -- skip when only a terminal is open, else we'd save an empty session over it
     pcall(function() vim.cmd("silent! PossessionSaveCwd!") end)
   end
   pcall(function() vim.cmd("silent! PossessionClose") end)

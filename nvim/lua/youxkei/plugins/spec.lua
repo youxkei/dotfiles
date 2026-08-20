@@ -15,7 +15,18 @@ local function force_redraw_floating_terminal(win)
   end, 50)
 end
 
--- gtd worktree/task logic (,d* keys) and per-possession-session terminals + buffer-protection.
+-- Reveal (or spawn) the current session's Claude float, focused and in insert mode. `args` are
+-- appended to the claude command line and only matter when the float has to be spawned — a
+-- revealed float keeps the process it already runs, so they can't retarget a live Claude.
+local function open_claude(args)
+  vim.cmd("ClaudeCodeOpen" .. (args and (" " .. args) or ""))
+  vim.schedule(function()
+    vim.cmd.startinsert()
+    force_redraw_floating_terminal(vim.api.nvim_get_current_win())
+  end)
+end
+
+-- gtd worktree/task logic (<leader>d* keys) and per-possession-session terminals + buffer-protection.
 local gtd = require("youxkei.gtd")
 local session = require("youxkei.session")
 
@@ -627,23 +638,13 @@ return {
       { "dF", function() gtd.search("files", true) end, desc = "Find in current gtd task: everything (main + ref + notes)", term = true },
       { "dg", function() gtd.search("grep", false) end, desc = "Grep in current gtd task: main repo + notes (no ref)", term = true },
       { "dG", function() gtd.search("grep", true) end, desc = "Grep in current gtd task: everything (main + ref + notes)", term = true },
+      -- The callbacks drop their arguments: anything on_entered might hand them would land on
+      -- claude's command line as a prompt (see open_claude), not as an option.
       { "dt", function()
-        gtd.enter_task(function()
-          vim.cmd.ClaudeCodeOpen()
-          vim.schedule(function()
-            vim.cmd.startinsert()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
-        end)
+        gtd.enter_task(function() open_claude() end)
       end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude", term = true },
       { "dn", function()
-        gtd.enter_claudecode_session(function()
-          vim.cmd.ClaudeCodeOpen()
-          vim.schedule(function()
-            vim.cmd.startinsert()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
-        end)
+        gtd.enter_claudecode_session(function() open_claude() end)
       end, desc = "Jump to a session that has an active Claude running + open it", term = true },
       { "tb", function() require("snacks").picker.buffers() end, desc = "Select from buffers", term = true },
       { "tr", function() require("snacks").picker.resume() end, desc = "Select from previous selections", term = true },
@@ -695,6 +696,26 @@ return {
       -- the plugin loads, which can already be past VimEnter, and an autocmd registered then would
       -- never fire.
       vim.schedule(gtd.reap_stale_task_sessions)
+
+      -- The command <leader>r hands to :restart, which runs it on UIEnter in the fresh server. Every
+      -- Claude died with the old server, so each session listed in the handoff gets one back with
+      -- `--continue` (resumes that cwd's newest conversation — `--resume` would stop at a picker).
+      -- The revivals are staggered: a dozen Claudes booting in the same instant starve the UI we
+      -- just came back to.
+      vim.api.nvim_create_user_command("PossessionRestoreAfterRestart", function()
+        vim.cmd("silent! PossessionLoadCwd")
+        local handoff = session.take_restart_handoff()
+        if not handoff then return end
+        if handoff.current_live then open_claude("--continue") end
+        for i, s in ipairs(handoff.sessions) do
+          vim.defer_fn(function()
+            session.spawn_agent_terminal(s.key, s.cwd, "--continue")
+            if i == #handoff.sessions then
+              vim.notify(("session: revived %d background Claude%s"):format(i, i == 1 and "" or "s"))
+            end
+          end, i * 500)
+        end
+      end, { desc = "Restore the cwd session and revive every session's Claude" })
     end,
     leader_keys = {
       -- snacks picker over sessions (replaces PossessionPick's vim.ui.select so we can add keys):
@@ -752,7 +773,22 @@ return {
         desc = "Select from sessions (dd to delete)",
         term = true,
       },
-      { "r", "<cmd>silent! PossessionSaveCwd!<cr><cmd>silent! restart PossessionLoadCwd<cr>", desc = "Save, restart and restore cwd session" },
+      {
+        "r",
+        function()
+          -- Written before the save: only the dying server knows which sessions have a Claude up,
+          -- and every one of them dies with it (see PossessionRestoreAfterRestart).
+          session.write_restart_handoff()
+          -- Saving a session whose only window is the Claude float would write an empty one over it
+          -- (before_save strips terminals), so keep the session on disk as it is and just restart.
+          if session.has_file_buffer() then
+            vim.cmd("silent! PossessionSaveCwd!")
+          end
+          vim.cmd("silent! restart PossessionRestoreAfterRestart")
+        end,
+        desc = "Save, restart and restore cwd session (reviving every session's Claude)",
+        term = true,
+      },
     },
   },
 
@@ -1233,6 +1269,9 @@ return {
           -- Per-session Claude terminal: one Claude per possession session, kept alive across
           -- switches, with sent @mentions targeted at the current session's Claude only.
           provider = session.make_provider { server_module = "claudecode.server.init" },
+          -- Lets session.spawn_agent_terminal pin the cwd of an agent it revives for a session we
+          -- are not currently in; every other open resolves the cwd the usual way.
+          cwd_provider = session.spawn_cwd_provider,
           snacks_win_opts = {
             position = "float",
             width = 0.95,
