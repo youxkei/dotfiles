@@ -180,9 +180,9 @@ expectKey("builtin left_command -> left_option",
 expectKey("builtin left_option -> left_command",
   { device: "builtin", key_code: "left_option" },
   { key_code: "left_command" });
-expectKey("builtin fn -> left_command",
+expectKey("builtin fn -> right_command",
   { device: "builtin", key_code: "fn" },
-  { key_code: "left_command" });
+  { key_code: "right_command" });
 
 // SandS: spacebar -> lazy left_shift (hold), to_if_alone spacebar (tap).
 const spaceMatch = findMatch({ device: "builtin", key_code: "spacebar" });

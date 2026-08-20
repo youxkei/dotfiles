@@ -142,7 +142,10 @@
   });
   manipulators.push(builtinRemap("left_command", "left_option"));
   manipulators.push(builtinRemap("left_option",  "left_command"));
-  manipulators.push(builtinRemap("fn",           "left_command"));
+  // Fn -> Right Command. Note this is a plain right_command to macOS, not the
+  // Henkan layer key: Karabiner does not re-process its own output, so the
+  // physical-right_command -> dudrack_henkan manipulator below never sees it.
+  manipulators.push(builtinRemap("fn",           "right_command"));
 
   // SandS (Space and Shift): hold space as shift, tap space outputs space.
   // Built-in only; the external PC-JIS keyboard keeps space as space.
