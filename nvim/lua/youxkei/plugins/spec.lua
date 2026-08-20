@@ -148,8 +148,8 @@ return {
       vim.keymap.set("n", "P", "<plug>(yankround-P)", { remap = true })
       vim.keymap.set({ "n", "x" }, "gp", "<plug>(yankround-gp)", { remap = true })
       vim.keymap.set("n", "gP", "<plug>(yankround-gP)", { remap = true })
-      vim.keymap.set("n", "<C-p>", "<plug>(yankround-prev)", { remap = true })
-      vim.keymap.set("n", "<C-n>", "<plug>(yankround-next)", { remap = true })
+      vim.keymap.set("n", "<c-p>", "<plug>(yankround-prev)", { remap = true })
+      vim.keymap.set("n", "<c-n>", "<plug>(yankround-next)", { remap = true })
     end,
   },
 

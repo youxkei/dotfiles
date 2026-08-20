@@ -1,8 +1,8 @@
 -- gtd /do works inside a per-task worktree (~/repo/gtd/.claude/worktrees/do-<slug>/) and
 -- puts clones + scratch under that worktree's todo/<slug>/ (main repo in repo/, reference
--- clones in ref/, both gitignored). nvim enters a worktree via ,dt (cd into todo/<slug>/ +
--- possession session); the current task is identified by cwd, so ,df/,dF/,dg/,dG search it with
--- ignored files included (.git excluded; ,df/,dg also exclude ref/).
+-- clones in ref/, both gitignored). nvim enters a worktree via <leader>dt (cd into todo/<slug>/ +
+-- possession session); the current task is identified by cwd, so <leader>df/<leader>dF/<leader>dg/<leader>dG search it with
+-- ignored files included (.git excluded; <leader>df/<leader>dg also exclude ref/).
 local M = {}
 
 local function wt_root()
@@ -27,7 +27,7 @@ local function cwd_task_dir()
   return wt_task_dir(root, slug)
 end
 
--- ,df/,dF/,dg/,dG: search the current task (resolved from cwd). kind = "files" | "grep".
+-- <leader>df/<leader>dF/<leader>dg/<leader>dG: search the current task (resolved from cwd). kind = "files" | "grep".
 -- with_ref=false → main repo + notes (exclude ref/); true → everything (main + ref + notes).
 function M.search(kind, with_ref)
   local dir = cwd_task_dir()
@@ -170,7 +170,7 @@ local function act_on_task(choice, on_entered)
   if on_entered then on_entered() end -- now that the session is current, open Claude for the task
 end
 
--- ,dt: pick a gtd task from list.md (priority order) via a snacks picker whose rows read
+-- <leader>dt: pick a gtd task from list.md (priority order) via a snacks picker whose rows read
 -- "<title> — <status>" (status = the task.md `status:` field, i.e. what it's doing now) and whose
 -- preview shows the whole task.md. On confirm, create its do-<slug> worktree if missing, cd into
 -- the worktree's todo/<slug>/ work dir, and switch the possession session to it — so a Claude
@@ -200,7 +200,7 @@ end
 
 -- Switch to the chosen session: session.load autosaves the outgoing session and restores the
 -- chosen one's cwd/buffers; our keep_term guards keep both sessions' Claude terminals alive across
--- the switch. Shared by ,dn's picker confirm.
+-- the switch. Shared by <leader>dn's picker confirm.
 local function act_on_session(choice, on_entered)
   require("possession.session").load(choice.key)
   vim.notify("gtd: switched to → " .. choice.label)
@@ -209,7 +209,7 @@ end
 
 -- <leader>dn: a derivative of <leader>dt. Instead of picking a task from list.md and creating/entering
 -- its worktree, list (in a snacks picker, same "<title> — <status>" rows in the same list.md priority
--- order, but previewing each session's live Claude terminal instead of ,dt's task.md) the possession
+-- order, but previewing each session's live Claude terminal instead of <leader>dt's task.md) the possession
 -- sessions that already have a live Claude terminal running, and jump to the chosen one,
 -- then run on_entered (e.g. to reveal Claude) once it's current. Only sessions other than the current
 -- one that exist as loadable named sessions are offered (the gtd flow keys each session's Claude
@@ -219,7 +219,7 @@ function M.enter_claudecode_session(on_entered)
   local psession = require("possession.session")
   local paths = require("possession.paths")
   local current = psession.get_session_name()
-  -- slug -> {title, rank} from list.md: the title labels each session with its task title (like ,dt)
+  -- slug -> {title, rank} from list.md: the title labels each session with its task title (like <leader>dt)
   -- instead of the raw session path, and the rank (list.md line order = priority) orders the rows.
   -- Sessions that aren't task worktrees (or whose task is no longer in list.md) have neither.
   local tasks = {}
@@ -268,7 +268,7 @@ function M.enter_claudecode_session(on_entered)
         return { text = c.text, title = c.title, key = c.key, buf = c.buf }
       end, choices)
     end,
-    -- Preview each session's live Claude terminal instead of ,dt's task.md. item.buf is the terminal
+    -- Preview each session's live Claude terminal instead of <leader>dt's task.md. item.buf is the terminal
     -- buffer, so the default file previewer renders it (and titles it with item.title); we then scroll
     -- to the bottom so the preview shows the terminal's tail (latest output) like the live float would.
     preview = function(ctx)

@@ -153,8 +153,8 @@ if g.neovide then
   end
   -- In :terminal the keys reach the shell, not Neovim. zsh runs the emacs keymap
   -- (bindkey -e) but does not bind Home/End, so send readline's beginning/end-of-line.
-  vim.keymap.set("t", "<D-Left>", "<C-a>")
-  vim.keymap.set("t", "<D-Right>", "<C-e>")
+  vim.keymap.set("t", "<D-Left>", "<c-a>")
+  vim.keymap.set("t", "<D-Right>", "<c-e>")
 
   -- Cmd+V smart-pastes into a terminal (Claude Code): image on the clipboard is
   -- forwarded to the TUI, text falls back to the register paste. <c-v> stays plain text
