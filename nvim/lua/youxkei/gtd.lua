@@ -285,43 +285,54 @@ function M.enter_claudecode_session(on_entered)
   }
 end
 
+-- Is a possession session saved at or under `dir` (both in possession's ":~" name form)?
+-- Membership is decided as pure string work rather than by resolving the paths: callers ask about
+-- worktrees that are already removed, and anything touching the disk would come back empty. The "/"
+-- boundary is what keeps do-foo from matching do-foo-bar's sessions.
+local function session_under(name, dir)
+  return name ~= nil and (name == dir or name:sub(1, #dir + 1) == dir .. "/")
+end
+
+-- Delete every possession session saved at or under a do-<slug> worktree. Walks the whole session
+-- list instead of the one path <leader>dt cd's into (the worktree's todo/<slug>/), because the user can cd
+-- deeper — into a clone under repo/, say — and a session is named after whatever dir was current
+-- when it was saved, so those deeper ones would outlive a fixed candidate list.
+local function drop_sessions_under(wt)
+  local prefix = vim.fn.fnamemodify(wt, ":~")
+  local session = require("possession.session")
+  for _, data in pairs(session.list()) do
+    if session_under(data.name, prefix) then
+      session.delete(data.name, { no_confirm = true }) -- delete, not raw unlink: this clears session_name when it's current
+    end
+  end
+end
+
 -- Called by /done (via $NVIM RPC) right after it removes a do-<slug> worktree. If this nvim
 -- was inside that worktree, tear the finished task's session down IN PLACE: do NOT switch to
 -- another session (that would reload main's session and close /done's own terminal), and do NOT
 -- PossessionClose it (close keeps the session file and wipes file buffers / stops LSP). Instead
 -- wipe this session's claudecode/toggleterm terminals, then DELETE the session. Deleting
 -- the current session also clears it as current (possession's delete sets session_name = nil),
--- so autosave can't resurrect it. The cwd stays the now-removed worktree dir (getcwd() == "") —
--- that's fine, the session is gone either way.
+-- so autosave can't resurrect it.
 --
 -- msg (optional) is /done's one-line completion report, notified once the teardown is done. It stays
 -- optional because worktrees created before it existed carry a /done that calls this with one arg.
 function _G.GtdDoneCleanup(slug, msg)
   local wt = wt_root() .. "/do-" .. slug
-  -- Every session at or under the worktree dir, not a fixed set of candidate paths: ,dt cd's into
-  -- the worktree's todo/<slug>/, but the user can cd deeper (into a clone under repo/, say), and a
-  -- session's name is whatever dir was current when it was saved, so the deep ones would survive a
-  -- candidate list. Compare against the ":~" form because that's how possession names sessions
-  -- (paths.cwd_session_name), and it's pure string work: the worktree dir is already gone here, so
-  -- anything that resolves the path on disk would come back empty.
-  -- The "/" boundary is what keeps do-foo from deleting do-foo-bar's sessions.
+  local prefix = vim.fn.fnamemodify(wt, ":~")
+  local session = require("possession.session")
   local function drop()
-    local prefix = vim.fn.fnamemodify(wt, ":~")
-    local session = require("possession.session")
-    for _, data in pairs(session.list()) do
-      local name = data.name
-      if name == prefix or name:sub(1, #prefix + 1) == prefix .. "/" then
-        session.delete(name, { no_confirm = true }) -- delete, not raw unlink: this clears session_name when it's current
-      end
-    end
+    drop_sessions_under(wt)
     -- The terminal that printed /done's report is one of the ones this cleanup wipes, so the report
     -- itself is not a durable channel: re-surface it through the notifier, whose history survives.
     if msg and msg ~= "" then vim.notify(msg) end
   end
-  -- /done removes the worktree before calling this, so if the host nvim was sitting in it,
-  -- getcwd() now returns "" (its dir is gone). Treat empty cwd + missing worktree as "was here".
+  -- "Was this nvim in the finished task?" is answered by the current session's name as well as by
+  -- cwd, because /done removes the worktree before calling and getcwd() is therefore already ""
+  -- in the very instance we most need to recognize. Reading that empty cwd as "was here" instead
+  -- would wipe the terminals of an nvim whose cwd vanished for an unrelated reason.
   local cwd = vim.fn.getcwd()
-  if cwd == wt or cwd:sub(1, #wt + 1) == wt .. "/" or (cwd == "" and vim.fn.isdirectory(wt) == 0) then
+  if cwd == wt or cwd:sub(1, #wt + 1) == wt .. "/" or session_under(session.get_session_name(), prefix) then
     -- Defer so this RPC returns to /done before we wipe its own terminal. Wipe the terminals
     -- first (term_key still resolves to this session's name), then delete the session.
     vim.schedule(function()
@@ -330,6 +341,34 @@ function _G.GtdDoneCleanup(slug, msg)
     end)
   else
     drop()
+  end
+end
+
+-- Delete the sessions of do-<slug> worktrees that no longer exist. GtdDoneCleanup above only runs
+-- when /done remembers to fire it, and /done's own spec tells the /refresh · /sync path not to fire
+-- it at all, so sessions outlive their worktrees; gtd's Stop hook catches that at the end of a Claude
+-- turn and this catches what happened while no nvim was up. A missing worktree is the whole test: a
+-- task whose worktree stands is live even if its todo/<slug>/ was never created.
+--
+-- Unlike the Stop hook's reaper this needs no commit-lock check. It deletes session files and never
+-- wipes a terminal, so it cannot cut short a /done sitting between removing the worktree (step 6.3)
+-- and committing (step 8) — the case that rules out reaping from a timer.
+function M.reap_stale_task_sessions()
+  local root = wt_root()
+  local root_pat = "^" .. vim.pesc(vim.fn.fnamemodify(root, ":~")) .. "/(do%-[^/]+)"
+  local session = require("possession.session")
+  local stale = {}
+  for _, data in pairs(session.list()) do
+    local slug = data.name and data.name:match(root_pat)
+    if slug and vim.fn.isdirectory(root .. "/" .. slug) == 0 then
+      session.delete(data.name, { no_confirm = true })
+      stale[slug] = true -- a slug can hold several sessions (worktree root, task dir, a clone)
+    end
+  end
+  local reaped = vim.tbl_keys(stale)
+  if #reaped > 0 then
+    table.sort(reaped)
+    vim.notify("gtd: reaped stale session(s) for " .. table.concat(reaped, ", "))
   end
 end
 

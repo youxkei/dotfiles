@@ -689,6 +689,12 @@ return {
       -- keep_term terminals so they persist across session switches, while file buffers stay
       -- per-session.
       session.install_possession_guards()
+
+      -- Sweep the sessions of gtd tasks that /done finished while no nvim was up (see
+      -- gtd.reap_stale_task_sessions). Scheduled rather than hung off VimEnter: this config runs when
+      -- the plugin loads, which can already be past VimEnter, and an autocmd registered then would
+      -- never fire.
+      vim.schedule(gtd.reap_stale_task_sessions)
     end,
     leader_keys = {
       -- snacks picker over sessions (replaces PossessionPick's vim.ui.select so we can add keys):
