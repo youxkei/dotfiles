@@ -1,0 +1,89 @@
+#!/bin/sh
+# Claude Code hook handler for the Stop event, in jj repositories.
+# Reads the hook JSON from stdin and takes the working copy in, so the work of
+# every turn lands in the operation log and stays recoverable even when the turn
+# itself never ran a jj command. When that snapshot shows content in the
+# working-copy change (@), it also blocks the stop so the description of @ gets
+# brought in line with the work just done.
+# Fails open: no jj repo, a jj error, or a parse failure lets the session stop.
+
+input=$(cat)
+
+nudge=yes
+
+# Snapshot headless / SDK sessions too — `claude -p` and the Agent SDK write to
+# the tree like any other session, and the recoverability is worth as much there
+# — but never hold one back: a scripted run gets no chance to judge whether the
+# existing description still fits, and the extra turns go to a description
+# nobody asked for. Such sessions set CLAUDE_CODE_ENTRYPOINT to sdk-* (sdk-cli
+# for `claude -p`, sdk-py / sdk-ts for the SDKs); the interactive TUI is "cli".
+# Placed after the stdin drain above so the parent's write to our pipe always
+# completes (no EPIPE).
+case "$CLAUDE_CODE_ENTRYPOINT" in
+    sdk-*) nudge='' ;;
+esac
+
+# Extract both fields in one jq pass. @sh shell-quotes each value so eval is
+# injection-safe and preserves spaces/quotes/newlines/UTF-8. If jq is missing or
+# the input is not JSON the pass yields nothing and the vars stay empty.
+cwd=''
+active=''
+eval "$(printf '%s' "$input" | jq -r '
+    @sh "cwd=\(.cwd // "")",
+    @sh "active=\(.stop_hook_active // false)"
+' 2>/dev/null)"
+
+# One nudge per stop. stop_hook_active marks the stop Claude reached *because* a
+# Stop hook blocked the previous one; blocking that one too would never converge,
+# since the desc turn is itself work whose description could be revised again.
+# An unset value means the jq pass above failed, and assuming "first stop" there
+# would block every stop in exactly that loop — so it counts as active. Only the
+# nudge is dropped either way; the snapshot below still runs.
+[ "$active" = false ] || nudge=''
+
+# Hooks are launched from the session cwd already, so this only matters for the
+# odd launcher that runs them elsewhere; a cwd that no longer exists is left to
+# the jj probe below rather than treated as an error.
+if [ -n "$cwd" ] && [ -d "$cwd" ]; then
+    cd "$cwd" || exit 0
+fi
+
+# Ask jj, rather than testing for a .jj directory: only the workspace root holds
+# one, and a session's cwd is as often a subdirectory of it. --ignore-working-copy
+# keeps the probe from snapshotting until we know there is a repo to snapshot.
+jj root --ignore-working-copy >/dev/null 2>&1 || exit 0
+
+# A plain `jj st`, no --ignore-working-copy: taking the content in is the whole
+# point of this hook, and the status output doubles as the state Claude needs
+# below when it decides the existing description still stands.
+status=$(jj st 2>&1) || exit 0
+
+[ -n "$nudge" ] || exit 0
+
+# Read @ back with --ignore-working-copy, the snapshot above having already taken
+# the content in — a second snapshot here would only cost another scan of the tree.
+info=$(jj log --no-graph --ignore-working-copy -r @ \
+    -T 'if(empty, "empty", "nonempty") ++ "\n" ++ description' 2>/dev/null) || exit 0
+state=$(printf '%s\n' "$info" | head -1)
+desc=$(printf '%s\n' "$info" | tail -n +2)
+
+# An empty @ ends a turn that read but never wrote, and a description of nothing
+# is worse than none: leave the change alone and let the session stop.
+[ "$state" = nonempty ] || exit 0
+
+{
+    echo 'jj リポジトリです。停止する前に、作業中の変更 (@) の説明をいまの作業内容に合わせてください。'
+    echo
+    if [ -n "$desc" ]; then
+        echo '@ の現在の説明:'
+        printf '%s\n' "$desc" | sed 's/^/    /'
+        echo
+        echo '更新すべき点があれば jj desc -m で書き直し、既存の説明のままで正確なら何もせずそのまま終了してください。'
+    else
+        echo '@ にはまだ説明がありません。jj desc -m で説明を書いてから終了してください。'
+    fi
+    echo
+    printf '%s\n' "$status"
+} >&2
+
+exit 2

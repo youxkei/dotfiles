@@ -36,6 +36,7 @@ PATHS=(
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
     bin/claude-notify $HOME/bin/claude-notify
+    bin/claude-jj-snapshot $HOME/bin/claude-jj-snapshot
 )
 
 # WSL-only entries: bin scripts that wrap Windows executables (ssh.exe, pwsh.exe)

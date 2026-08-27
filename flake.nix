@@ -34,6 +34,7 @@
               tig
               gh
               git-lfs
+              jujutsu
 
               # nix
               nix-prefetch-git
@@ -62,7 +63,7 @@
               unar
               grpcurl
               pup
-              tmux
+              #tmux
               protobuf
               qpdf
               stress-ng
