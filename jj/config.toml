@@ -1,0 +1,11 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "youxkei"
+email = "youxkei@gmail.com"
+
+[aliases]
+# `util exec` is what lets an alias reach a script at all: jj has no equivalent of
+# Git's external subcommands, so a `jj-push` on PATH is not found by `jj push` on
+# its own.
+push = ["util", "exec", "--", "jj-push"]

@@ -24,6 +24,12 @@ PATHS=(
     nix $XDG_CONFIG_HOME/nix
     nvim $XDG_CONFIG_HOME/nvim
     git $XDG_CONFIG_HOME/git
+    # config.toml alone, not the whole jj directory: jj puts repo-level config in
+    # $XDG_CONFIG_HOME/jj/repos/<hash>/config.toml, keyed by workspace path, and
+    # that belongs to the individual repo rather than to these dotfiles. Anything
+    # host-specific goes in $XDG_CONFIG_HOME/jj/conf.d/, which jj reads on top of
+    # the file linked here.
+    jj/config.toml $XDG_CONFIG_HOME/jj/config.toml
     tig $XDG_CONFIG_HOME/tig
     tmux $XDG_CONFIG_HOME/tmux
     procs $XDG_CONFIG_HOME/procs
@@ -37,6 +43,7 @@ PATHS=(
     bin/notify $HOME/bin/notify
     bin/claude-notify $HOME/bin/claude-notify
     bin/claude-jj-snapshot $HOME/bin/claude-jj-snapshot
+    bin/jj-push $HOME/bin/jj-push
 )
 
 # WSL-only entries: bin scripts that wrap Windows executables (ssh.exe, pwsh.exe)
