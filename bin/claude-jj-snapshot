@@ -54,36 +54,33 @@ fi
 jj root --ignore-working-copy >/dev/null 2>&1 || exit 0
 
 # A plain `jj st`, no --ignore-working-copy: taking the content in is the whole
-# point of this hook, and the status output doubles as the state Claude needs
-# below when it decides the existing description still stands.
-status=$(jj st 2>&1) || exit 0
+# point of this hook. Of its two streams only stderr is kept, for the nudge
+# below: jj reports what the snapshot did to the rest of the repo there —
+# "Rebased N descendant commits onto updated working copy", refusals to snapshot
+# a file, divergent-operation resolutions — and that is a consequence the turn
+# never asked for, so it has to reach Claude. The status listing on stdout is
+# dropped instead of relayed: it is there on every single turn and would bury the
+# turn's own output in the session log, and `jj st` is Claude's own to run when
+# the listing is what it wants. Order matters — 2>&1 aims stderr at the capture
+# before stdout is sent to /dev/null.
+notices=$(jj st 2>&1 >/dev/null) || exit 0
 
 [ -n "$nudge" ] || exit 0
 
 # Read @ back with --ignore-working-copy, the snapshot above having already taken
 # the content in — a second snapshot here would only cost another scan of the tree.
-info=$(jj log --no-graph --ignore-working-copy -r @ \
-    -T 'if(empty, "empty", "nonempty") ++ "\n" ++ description' 2>/dev/null) || exit 0
-state=$(printf '%s\n' "$info" | head -1)
-desc=$(printf '%s\n' "$info" | tail -n +2)
+# Emptiness only: the description is part of `jj st`'s output, so asking for it
+# here would just be text to relay, and relaying is what the nudge avoids.
+state=$(jj log --no-graph --ignore-working-copy -r @ \
+    -T 'if(empty, "empty", "nonempty")' 2>/dev/null) || exit 0
 
 # An empty @ ends a turn that read but never wrote, and a description of nothing
 # is worse than none: leave the change alone and let the session stop.
 [ "$state" = nonempty ] || exit 0
 
 {
-    echo 'jj リポジトリです。停止する前に、作業中の変更 (@) の説明をいまの作業内容に合わせてください。'
-    echo
-    if [ -n "$desc" ]; then
-        echo '@ の現在の説明:'
-        printf '%s\n' "$desc" | sed 's/^/    /'
-        echo
-        echo '更新すべき点があれば jj desc -m で書き直し、既存の説明のままで正確なら何もせずそのまま終了してください。'
-    else
-        echo '@ にはまだ説明がありません。jj desc -m で説明を書いてから終了してください。'
-    fi
-    echo
-    printf '%s\n' "$status"
+    echo 'jj: `jj st` で作業中の変更 (@) の内容と現在の説明を確認し、説明がいまの作業と合っていなければ jj desc -m で直してから終了してください。合っていれば何もせずそのまま終了してください。'
+    [ -z "$notices" ] || printf '%s\n' "$notices"
 } >&2
 
 exit 2
