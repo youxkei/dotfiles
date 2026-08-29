@@ -39,6 +39,14 @@ PATHS=(
     ghostty $XDG_CONFIG_HOME/ghostty
     katnas $XDG_CONFIG_HOME/katnas
 
+    # One entry per skill rather than a link to $HOME/.claude/skills itself: Claude
+    # installs skills of its own into that same directory, and a link from here
+    # would leave them nowhere to live. Nothing else under ~/.claude is a candidate
+    # either, being session state and credentials rather than configuration — the
+    # same reason the jj repo-level config stays out above.
+    claude/skills/jj $HOME/.claude/skills/jj
+    claude/skills/jj-new $HOME/.claude/skills/jj-new
+
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
     bin/claude-notify $HOME/bin/claude-notify
