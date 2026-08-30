@@ -9,3 +9,12 @@ email = "youxkei@gmail.com"
 # Git's external subcommands, so a `jj-push` on PATH is not found by `jj push` on
 # its own.
 push = ["util", "exec", "--", "jj-push"]
+
+[revset-aliases]
+# builtin_immutable_heads() without its `present(trunk())` term. Under the builtin,
+# pushing a bookmark that trunk() resolves to freezes the commit it lands on, and jj
+# answers a working copy turning immutable by moving @ onto a fresh empty commit —
+# publishing a change is then also the act of leaving it, and the amend after the
+# push is refused. Tags and untracked remote bookmarks are somebody else's history
+# and stay immutable.
+"immutable_heads()" = "tags() | untracked_remote_bookmarks()"

@@ -51,7 +51,8 @@ where a message is due, and the `jj-new` skill for when another change is opened
 **NEVER `jj bookmark set` / `move` / `advance` / `track`, and NEVER `jj git push` or this machine's
 alias for it, `jj push`, unless the user explicitly says to.** Moving a bookmark is the act that says
 which change other people get, and the push is the act of handing it to them — and `jj push` here
-does both, so neither of the two is the safer half of it.
+hands over whatever bookmark is already sitting on `@`, so it needs no bookmark move of its own to
+publish work in flight.
 
 - plan approval that includes a push authorizes only that single push; it does not carry over to
   follow-up changes
@@ -68,17 +69,22 @@ The push spellings, for when one is asked for: `jj git push --remote origin -b m
 `--bookmark`; a brand-new bookmark goes up as `jj git push --named <name>=@`, and 0.44 has no
 `--allow-new`). A remote bookmark has to be tracked before it can be pushed to.
 
-**`jj push` is an alias of this machine's, and it sets bookmarks itself.** `jj/config.toml` in the
-dotfiles aliases it to `jj util exec -- jj-push`, which runs `bin/jj-push` from that same repository
-(`util exec` is what lets an alias reach a script at all: jj has no equivalent of git's external
-subcommands, so a `jj-push` on `PATH` is not found by `jj push` on its own). The script reads the
-bookmark names at `@` and **fails when `@` carries none**, where `jj git push -r @` only warns and
-exits 0; it pushes those names, and then sets each of them back onto `@`, because pushing a bookmark
-that `trunk()` resolves to — jj's name for the published main line — makes the pushed commit immutable,
-and jj answers that by moving `@` onto a fresh empty commit carrying no bookmark at all, which the
-next push would otherwise find nothing at.
+**`jj push` is an alias of this machine's.** `jj/config.toml` in the dotfiles aliases it to
+`jj util exec -- jj-push`, which runs `bin/jj-push` from that same repository (`util exec` is what
+lets an alias reach a script at all: jj has no equivalent of git's external subcommands, so a
+`jj-push` on `PATH` is not found by `jj push` on its own). The script reads the bookmark names at `@`
+and **fails when `@` carries none**, where `jj git push -r @` only warns and exits 0; it pushes those
+names and does nothing else.
 
-**So a bookmark can be sitting on `@` already.** A bookmark stays attached to its change through
+**A push leaves `@` where it is**, because `immutable_heads()` in that same `jj/config.toml` is
+`tags() | untracked_remote_bookmarks()` — jj's builtin set without its `present(trunk())` term. Under
+the builtin, pushing a bookmark that `trunk()` resolves to — jj's name for the published main line —
+makes the pushed commit immutable, and jj answers a working copy turning immutable by moving `@` onto
+a fresh empty commit carrying no bookmark at all. Here the commit stays mutable, so `@` does not
+move, the bookmark stays on it, and the change just published is the one still being worked in — an
+amend of it is allowed, and the remote then needs a force push.
+
+**So a bookmark can be sitting on `@`.** A bookmark stays attached to its change through
 every rewrite, and a snapshot rewrites `@`, so one left there follows the working copy without any
 command being run. Work in flight is then under the bookmark from the start: whatever `@` grows into
 is what the next push would send, and nothing but the push being the user's keeps it unpublished.
@@ -250,7 +256,7 @@ Rebased 5 descendant commits onto updated working copy.
 
 Every descendant keeps its change id and gets a new commit id, merge commits included. Changing only a description does the same: the content of the descendants is untouched, but they are rebuilt, because the ancestor's commit id moved.
 
-A change that has already been pushed therefore needs a force push after any rewrite. jj refuses to rewrite immutable revisions, but a feature bookmark you pushed yourself is mutable and rewrites without comment.
+A change that has already been pushed therefore needs a force push after any rewrite. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *Publishing is the user's*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
 
 ### Conflicts live in commits
 

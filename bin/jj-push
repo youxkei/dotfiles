@@ -1,13 +1,12 @@
 #!/bin/sh
 # Usage: jj-push [jj git push options...]
-# Pushes the bookmarks that point at @, then leaves them on @.
+# Pushes the bookmarks that point at @.
 # Invoked as `jj push` through the alias in jj/config.toml.
 set -e
 
 # The names are read out first rather than left to `jj git push -r @`, which only
 # warns and exits 0 when @ carries no bookmark: reaching for this and pushing
-# nothing is a mistake worth failing on. The names are also what the loop at the
-# end needs.
+# nothing is a mistake worth failing on.
 names=$(jj log -r @ --no-graph -T 'local_bookmarks.map(|b| b.name())')
 
 if [ -z "$names" ]; then
@@ -23,14 +22,8 @@ for name in $names; do
     set -- "$@" --bookmark "$name"
 done
 
+# Nothing puts the names back on @ afterwards, and nothing has to: the
+# immutable_heads() in jj/config.toml drops trunk(), so the pushed commit stays
+# mutable, jj leaves @ alone, and the bookmark stays where it already was. Restore
+# that term and the loop has to come back with it.
 jj git push "$@"
-
-# Not redundant with a bookmark that simply follows @: pushing one that trunk()
-# resolves to (main, master) makes the pushed commit immutable, and jj answers
-# that by moving @ onto a fresh empty commit carrying no bookmark at all. Putting
-# the names back on @ is what lets the next run find something to push. For a
-# bookmark outside trunk() nothing becomes immutable, @ stays put, and this is a
-# no-op.
-for name in $names; do
-    jj bookmark set "$name" -r @
-done
