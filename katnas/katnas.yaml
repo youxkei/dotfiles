@@ -36,7 +36,6 @@ keys:
   "alt+2": "workspace center 4"
   "alt+3": "workspace center 5"
   "alt+t": "workspace center 6"
-  "alt+n": "workspace center 7"
   "alt+u": "workspace right 0"
   "alt+i": "workspace right 1"
   "alt+p": "workspace right 2"
@@ -62,7 +61,6 @@ keys:
   "alt+shift+4": "move-to-workspace right 4"
   "alt+shift+5": "move-to-workspace right 5"
   # --- management & layout ---
-  "alt+s": "toggle-pause"
   "alt+m": "manage"
   "alt+f": "focus-fullscreen"
   "alt+shift+f": "move-to-fullscreen"
