@@ -30,6 +30,11 @@ end
 local gtd = require("youxkei.gtd")
 local session = require("youxkei.session")
 
+local function open_file_and_hide_claude(picker, item, action)
+  require("snacks.picker.actions").jump(picker, item, action)
+  session.hide_current_agent_terminal("claudecode.server.init")
+end
+
 local host_ok, host = pcall(require, "youxkei.plugins.spec_host")
 if not host_ok then host = {} end
 
@@ -630,7 +635,12 @@ return {
       }
     end,
     leader_keys = {
-      { "tf", function() require("snacks").picker.files { hidden = true } end, desc = "Select from files", term = true },
+      { "tf", function()
+        require("snacks").picker.files {
+          hidden = true,
+          confirm = open_file_and_hide_claude,
+        }
+      end, desc = "Select from files", term = true },
       { "tF", function() require("snacks").picker.files { hidden = true, ignored = true } end, desc = "Select from all files", term = true },
       { "tg", function() require("snacks").picker.grep { hidden = true } end, desc = "Grep from files", term = true },
       { "tG", function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Grep from all files", term = true },

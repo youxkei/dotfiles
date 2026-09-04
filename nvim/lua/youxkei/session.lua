@@ -558,6 +558,15 @@ function M.session_bufnr(server_module, key)
   return nil
 end
 
+function M.hide_current_agent_terminal(server_module)
+  local key = M.term_key()
+  for _, provider in ipairs(provider_registry) do
+    if provider.__server_module == server_module and provider.hide_key then
+      provider.hide_key(key)
+    end
+  end
+end
+
 -- Bring up the agent terminal of a session we are NOT in: the terminal registers under `key`, its
 -- job runs in `cwd`, and the float it spawns in is parked right away. Loading each possession
 -- session to do this instead would drag its whole buffer list (and every LSP client behind it)
