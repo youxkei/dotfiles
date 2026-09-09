@@ -160,7 +160,12 @@
               errcheck
 
               # c / c++
-              clang
+              (clang.override (old: {
+                # Make `-liconv` link on darwin.
+                extraBuildCommands = (old.extraBuildCommands or "") + lib.optionalString stdenv.isDarwin ''
+                  echo "-L${libiconv}/lib" >> $out/nix-support/cc-ldflags
+                '';
+              }))
 
               # java
               jdk25_headless
