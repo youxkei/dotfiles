@@ -115,8 +115,8 @@ which change the work carries on in.
 **One line over the whole change, and not a dissection.** Where the change was opened for this piece
 of work, it is one piece of work already and there is nothing to divide. Where two pieces did land in
 one, the tidying is the user's and comes later, so nothing about which files could be separated or
-which piece belongs in which commit is decided at a stopping point. Splitting needs a diff editor for
-any two pieces of work that share a file, which is the user's to drive.
+which piece belongs in which commit is decided at a stopping point. Use the `jj-move-diff` skill when
+that later tidying asks Claude to move hunks or lines between existing changes by editing both.
 
 That line is a working note: written when the change is opened, it says what the work is going to be,
 which is what makes a `jj log` of several changes readable while they are being worked on. The
@@ -236,6 +236,7 @@ Rebased 4 descendant commits.
 | Intent | Command |
 |---|---|
 | Fold `@` into its parent | `jj squash` (`-r <rev>` to move from elsewhere) |
+| Have Claude move selected diff between existing changes | Edit source and destination directly (see the `jj-move-diff` skill) |
 | Split one change in two | `jj split` (opens a diff editor) |
 | Drop a change, rebasing descendants onto its parents | `jj abandon <rev>` |
 | Push each hunk down to the mutable ancestor that last touched those lines | `jj absorb` |

@@ -46,6 +46,7 @@ PATHS=(
     # same reason the jj repo-level config stays out above.
     claude/skills/jj $HOME/.claude/skills/jj
     claude/skills/jj-new $HOME/.claude/skills/jj-new
+    claude/skills/jj-move-diff $HOME/.claude/skills/jj-move-diff
 
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
