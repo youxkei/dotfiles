@@ -161,9 +161,11 @@
 
               # c / c++
               (clang.override (old: {
-                # Make `-liconv` link on darwin.
+                # Make `-liconv` and `-lresolv` link on darwin. nixpkgs' apple-sdk ships
+                # neither libiconv.tbd nor libresolv.tbd, so take both from nixpkgs.
                 extraBuildCommands = (old.extraBuildCommands or "") + lib.optionalString stdenv.isDarwin ''
                   echo "-L${libiconv}/lib" >> $out/nix-support/cc-ldflags
+                  echo "-L${darwin.libresolv}/lib" >> $out/nix-support/cc-ldflags
                 '';
               }))
 
