@@ -7,10 +7,9 @@ SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 # Detect environment. These dotfiles target macOS and WSL; the WSL-only entries
 # wrap Windows executables (ssh.exe, pwsh.exe) and the Wayland clipboard, so they
-# must not be installed on plain Linux.
-IS_MACOS=0
+# must not be installed on plain Linux. There is no matching macOS flag because
+# every entry outside the WSL block installs on both.
 IS_WSL=0
-if [[ "$OSTYPE" == darwin* ]]; then IS_MACOS=1; fi
 if grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease 2>/dev/null || [[ -n "${WSL_DISTRO_NAME:-}" ]]; then IS_WSL=1; fi
 
 # source path (relative to $SCRIPT_DIR) -> destination path
@@ -68,17 +67,6 @@ if (( IS_WSL )); then
 
         bin/gnome-keyring-start $HOME/bin/gnome-keyring-start
         systemd/user/gnome-keyring-daemon.service.d/unlock.conf $XDG_CONFIG_HOME/systemd/user/gnome-keyring-daemon.service.d/unlock.conf
-    )
-fi
-
-# macOS-only entries: configs for macOS-specific tools (karabiner-elements,
-# linearmouse). The tools themselves are installed out of band (e.g. Homebrew);
-# this only links their config and verifies the source exists, the same as the
-# nix entry above.
-if (( IS_MACOS )); then
-    PATHS+=(
-        karabiner $XDG_CONFIG_HOME/karabiner
-        linearmouse $XDG_CONFIG_HOME/linearmouse
     )
 fi
 
