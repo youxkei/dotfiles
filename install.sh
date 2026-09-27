@@ -49,7 +49,6 @@ PATHS=(
 
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
-    bin/claude-notify $HOME/bin/claude-notify
     bin/claude-jj-snapshot $HOME/bin/claude-jj-snapshot
     bin/jj-push $HOME/bin/jj-push
 )
