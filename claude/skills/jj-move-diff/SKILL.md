@@ -10,7 +10,7 @@ be a hunk, one or more lines, or part of a line because Claude uses the normal R
 tools rather than `jj squash -i`.
 
 This skill assumes the repository-wide rules in the `jj` skill. In particular, use no git command,
-and do not move bookmarks or push while tidying changes.
+and do not push while tidying changes.
 
 ## Record the exact starting point
 

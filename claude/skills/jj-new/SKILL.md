@@ -59,19 +59,23 @@ jj new -m "<one line saying what this piece of work is going to be>"
 
 The line goes in **at the start**, before the work: it is a working note, free to rewrite as the work
 takes shape (`jj desc -m`), and it is what makes a `jj log` of a stack readable while it is being
-worked in. What that line has to *be* by the time it is published is the repository's commit-message
+worked in. What that line has to *be* by the time it is pushed is the repository's commit-message
 convention — read its `CLAUDE.md` / `CONTRIBUTING`.
 
-**`jj new` moves no bookmark.** The setting that would make it advance one,
-`experimental-advance-branches`, is not used here and is per-repository, so
-`jj config list experimental-advance-branches` is worth asking in a repository whose config is
-unknown: where it is on, `jj new` advances a bookmark sitting on `@-` onto the change just left
-behind, putting it on work nobody asked to publish, and `jj undo` takes the operation and the advance
-back together.
+**`jj new` moves no bookmark, so move it after.** A bookmark riding `@` — the state `jj push` leaves
+behind, see the `jj` skill — is on `@-` once `jj new` has run, and the change just opened is the one
+nothing points at; `jj push` would then fail for want of a bookmark at `@`. Carry it over:
 
-A bookmark already sitting on `@` is untouched either way — the state `jj push` leaves behind, see the
-`jj` skill — so after a `jj new` it is on `@-`, and the change just opened is the one nothing points
-at.
+```sh
+jj bookmark move --from @- --to @
+```
+
+`--from @-` moves exactly the bookmarks that were riding the change just left, and nothing where none
+was. This is local and needs no asking; the push stays the user's. `experimental-advance-branches` does
+not do this job — it advances a bookmark onto the change just left, the new `@-`, never onto the new
+`@` — and is not used here. `jj bookmark advance` is not used for it either: it moves the *closest*
+bookmark below `@`, so where `@-` carries none it pulls a `main` sitting further down, on the trunk,
+up onto work that was never under it.
 
 ## Folding changes back into one
 
@@ -86,7 +90,7 @@ jj squash --from <that one> --into <the first> -u
 jj edit <the first>                                      # work in it again
 ```
 
-`trunk()` names the published line, so the revset needs no bookmark spelled out and works in a
+`trunk()` names the main line, so the revset needs no bookmark spelled out and works in a
 repository whose trunk is `master`.
 
 **Adjacent, because skipping a change conflicts.** `jj squash --from <newest> --into <the first>`

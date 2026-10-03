@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, publishing being the user's alone, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
+description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, pushing being the user's alone, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
 ---
 
 # Version control with jj
@@ -46,24 +46,20 @@ when the work turns out to be something else.
 change, and that is the user's call rather than a side effect of writing a message — `jj desc -m`
 where a message is due, and the `jj-new` skill for when another change is opened.
 
-### Publishing is the user's
+### Pushing is the user's
 
-**NEVER `jj bookmark set` / `move` / `advance` / `track`, and NEVER `jj git push` or this machine's
-alias for it, `jj push`, unless the user explicitly says to.** Moving a bookmark is the act that says
-which change other people get, and the push is the act of handing it to them — and `jj push` here
-hands over whatever bookmark is already sitting on `@`, so it needs no bookmark move of its own to
-publish work in flight.
+**NEVER `jj git push` or this machine's alias for it, `jj push`, unless the user explicitly says
+to.** A push is the act that leaves this machine: it puts the change on GitHub. `jj push` here
+pushes whatever bookmark is sitting on `@`.
+
+**Moving a bookmark is not gated.** It is local, `jj undo` takes it back, and it reaches nobody
+until a push sends it, so `jj bookmark set` / `move` on the bookmark the work rides is ordinary work
+and needs no asking.
 
 - plan approval that includes a push authorizes only that single push; it does not carry over to
   follow-up changes
 - agreeing on an approach that involves a push is NOT a push instruction; push only when explicitly
   told to (e.g. "pushして"). The user pushes themselves by default.
-
-**`experimental-advance-branches` is not used here and is not to be turned on.** What it adds is a
-bookmark that moves without being asked, and moving one is the user's act. It is a per-repository
-setting, so `jj config list experimental-advance-branches` is the question to ask of a repository
-whose config is unknown: where it is on, `jj new` advances such a bookmark from `@-` onto the change
-just left behind, and `jj undo` takes that back along with the operation.
 
 The push spellings, for when one is asked for: `jj git push --remote origin -b main` (`-b` is
 `--bookmark`; a brand-new bookmark goes up as `jj git push --named <name>=@`, and 0.44 has no
@@ -78,17 +74,19 @@ names and does nothing else.
 
 **A push leaves `@` where it is**, because `immutable_heads()` in that same `jj/config.toml` is
 `tags() | untracked_remote_bookmarks()` — jj's builtin set without its `present(trunk())` term. Under
-the builtin, pushing a bookmark that `trunk()` resolves to — jj's name for the published main line —
+the builtin, pushing a bookmark that `trunk()` resolves to — jj's name for the main line —
 makes the pushed commit immutable, and jj answers a working copy turning immutable by moving `@` onto
 a fresh empty commit carrying no bookmark at all. Here the commit stays mutable, so `@` does not
-move, the bookmark stays on it, and the change just published is the one still being worked in — an
-amend of it is allowed, and the remote then needs a force push.
+move, the bookmark stays on it, and the change just pushed is the one still being worked in — an
+amend of it is allowed, and the next push updates the remote over it with no force flag, once the
+remote is checked to be where the last fetch left it.
 
 **So a bookmark can be sitting on `@`.** A bookmark stays attached to its change through
 every rewrite, and a snapshot rewrites `@`, so one left there follows the working copy without any
 command being run. Work in flight is then under the bookmark from the start: whatever `@` grows into
-is what the next push would send, and nothing but the push being the user's keeps it unpublished.
-`jj st` names the bookmarks at `@` in its own header, a `*` marking one that is ahead of its remote.
+is what the next push would send, and the push being the user's is what decides when it goes. A
+`jj new` leaves the bookmark behind on `@-`; moving it onto the change just opened is in the
+`jj-new` skill. `jj st` names the bookmarks at `@` in its own header, a `*` marking one that is ahead of its remote.
 
 ### One change is one piece of work
 
@@ -121,7 +119,7 @@ that later tidying asks Claude to move hunks or lines between existing changes b
 That line is a working note: written when the change is opened, it says what the work is going to be,
 which is what makes a `jj log` of several changes readable while they are being worked on. The
 commit-message rules in the global instructions — the two read-backs included — are for the message
-the change carries when it is **published**, and getting it there is `jj desc` on that same change in
+the change carries when it is **pushed**, and getting it there is `jj desc` on that same change in
 the user's later tidying. Say what the work is in one line and move on.
 
 **And a stopping point is never where the next change is opened.** A follow-up inside one piece of
@@ -130,8 +128,8 @@ work is that same piece of work; whose call a new change is, is in the `jj-new` 
 ### Where the work goes
 
 Work directly on the change on top of **main** in the existing checkout. A change on top of it is the
-whole of cutting a branch here: a bookmark would be a name for publishing the work and a workspace a
-second working copy, and a piece of work needs neither.
+whole of cutting a branch here: a bookmark of its own would be a second name for the line and a
+workspace a second working copy, and a piece of work needs neither.
 
 ## A repository is a set of changes
 
@@ -257,7 +255,7 @@ Rebased 5 descendant commits onto updated working copy.
 
 Every descendant keeps its change id and gets a new commit id, merge commits included. Changing only a description does the same: the content of the descendants is untouched, but they are rebuilt, because the ancestor's commit id moved.
 
-A change that has already been pushed therefore needs a force push after any rewrite. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *Publishing is the user's*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
+A change that has already been pushed is therefore replaced on the remote by the next push after any rewrite; `jj git push` needs no force flag for it. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *Pushing is the user's*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
 
 ### Conflicts live in commits
 
