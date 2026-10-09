@@ -132,6 +132,13 @@ local function act_on_task(choice, on_entered)
     return vim.notify("gtd: failed to create worktree → " .. tostring(err), vim.log.levels.ERROR)
   end
   local td = wt_task_dir(wt_root(), choice.slug) -- cd target: worktree's todo/<slug>/ (root if absent)
+  -- Claude Code reads .claude/settings.json only from the directory it starts in, never from a
+  -- parent, so a Claude started in todo/<slug>/ would run without the gtd hooks. Link the
+  -- worktree's .claude into the work dir instead of starting Claude at the worktree root, which
+  -- would lose the cwd that identifies the task.
+  if td ~= wt and not vim.uv.fs_lstat(td .. "/.claude") then
+    vim.uv.fs_symlink("../../.claude", td .. "/.claude")
+  end
   -- Switch the possession session to the worktree without clobbering the one we leave.
   -- Order matters: save the outgoing session (only if it has real files — see below), then
   -- PossessionClose (clears "current" with no autosave and no cd), and only THEN cd in. If
