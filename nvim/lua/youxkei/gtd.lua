@@ -19,13 +19,17 @@ local function wt_task_dir(root, slug)
   return wt
 end
 
+-- The task whose workspace `dir` is inside, or nil.
+local function task_slug_of(dir)
+  return dir:match("^" .. vim.pesc(wt_root()) .. "/([^/]+)")
+end
+
 -- The current task's work dir, derived from cwd: if we're inside a task workspace, return its
 -- tasks/<task>/ (or the workspace root). Otherwise nil.
 local function cwd_task_dir()
-  local root = wt_root()
-  local slug = vim.fn.getcwd():match("^" .. vim.pesc(root) .. "/([^/]+)")
+  local slug = task_slug_of(vim.fn.getcwd())
   if not slug then return nil end
-  return wt_task_dir(root, slug)
+  return wt_task_dir(wt_root(), slug)
 end
 
 -- <leader>df/<leader>dF/<leader>dg/<leader>dG: search the current task (resolved from cwd). kind = "files" | "grep".
@@ -90,6 +94,30 @@ local function list_tasks()
     return a.slug < b.slug
   end)
   return tasks
+end
+
+-- Make the window title the task's title while the cwd is inside an open task's workspace, and put
+-- back the 'titlestring' found here everywhere else. Hung off DirChanged rather than <leader>dt, because
+-- <leader>dn, :restart and a plain :cd reach a task's directory without going through it. The global
+-- cwd decides, not the current window's: an :lcd into a clone is still the same task, and the title
+-- belongs to the whole instance.
+function M.title_follows_task()
+  local default = vim.o.titlestring
+  local function update()
+    local slug = task_slug_of(vim.fn.getcwd(-1, -1))
+    local fm = slug and frontmatter(task_md_path(slug))
+    if not fm then
+      vim.o.titlestring = default
+      return
+    end
+    local title = (fm.title ~= nil and fm.title ~= "") and fm.title or slug
+    vim.o.titlestring = (title:gsub("%%", "%%%%")) -- '%' starts a statusline item in 'titlestring'
+  end
+  vim.api.nvim_create_autocmd("DirChanged", {
+    group = vim.api.nvim_create_augroup("youxkei_gtd_title", {}),
+    callback = update,
+  })
+  update() -- already in a task's directory at startup (e.g. after :restart)
 end
 
 -- Trim a summary to `max` display columns (multibyte-safe), adding an ellipsis when cut.

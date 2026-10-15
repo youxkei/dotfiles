@@ -144,6 +144,13 @@ if g.neovide then
   opt.guifont = "Moralerspace Krypton:h12"
   g.neovide_theme = "dark"
 
+  -- Neovide puts in its own window title (title + titlestring=%F) only when the config set neither
+  -- option, and title_follows_task sets 'titlestring', which would leave 'title' off. So that
+  -- default is spelled out here; it stays the title outside a task.
+  opt.title = true
+  opt.titlestring = "%F"
+  require("youxkei.gtd").title_follows_task()
+
   -- Neovide forwards Cmd (sent by Karabiner from Home/End) as <D-...>, which has
   -- no default mapping; wire Cmd+Left/Right to start/end of line. Terminal nvim
   -- never sees these keys (the terminal emulator handles Cmd), hence neovide-only.
