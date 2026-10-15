@@ -26,7 +26,7 @@ local function open_claude(args)
   end)
 end
 
--- gtd worktree/task logic (<leader>d* keys) and per-possession-session terminals + buffer-protection.
+-- gtd workspace/task logic (<leader>d* keys) and per-possession-session terminals + buffer-protection.
 local gtd = require("youxkei.gtd")
 local session = require("youxkei.session")
 
@@ -652,7 +652,7 @@ return {
       -- claude's command line as a prompt (see open_claude), not as an option.
       { "dt", function()
         gtd.enter_task(function() open_claude() end)
-      end, desc = "Enter a gtd task: create worktree if needed + cd + session + open Claude", term = true },
+      end, desc = "Enter a gtd task: cd into its workspace + session + open Claude", term = true },
       { "dn", function()
         gtd.enter_claudecode_session(function() open_claude() end)
       end, desc = "Jump to a session that has an active Claude running + open it", term = true },

@@ -76,7 +76,7 @@ end
 function M.install_possession_guards()
   local utils = require("possession.utils")
 
-  -- delete_buffers: skip keep_term (also covers gtd.enter_task's fresh-worktree call).
+  -- delete_buffers: skip keep_term (also covers gtd.enter_task's first-visit call).
   if not utils.__keep_term_guarded then
     utils.__keep_term_guarded = true
     utils.delete_all_buffers = function(force)
