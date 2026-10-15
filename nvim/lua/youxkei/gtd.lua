@@ -65,7 +65,7 @@ local function frontmatter(path)
 end
 
 -- The open tasks, in priority order: those with a deadline first, earliest deadline first, then
--- the rest by added_at. Every workspace also checks out the completed tasks under its tasks/, so
+-- the rest newest added_at first. Every workspace also checks out the completed tasks under its tasks/, so
 -- only <workspace>/tasks/<same name>/task.md counts; workspaces without one (a review skill's
 -- scratch workspace) are not tasks. Returns an array of {title, slug}.
 local function list_tasks()
@@ -86,7 +86,7 @@ local function list_tasks()
   table.sort(tasks, function(a, b)
     if (a.deadline ~= "") ~= (b.deadline ~= "") then return a.deadline ~= "" end
     if a.deadline ~= b.deadline then return a.deadline < b.deadline end
-    if a.added_at ~= b.added_at then return a.added_at < b.added_at end
+    if a.added_at ~= b.added_at then return a.added_at > b.added_at end
     return a.slug < b.slug
   end)
   return tasks
