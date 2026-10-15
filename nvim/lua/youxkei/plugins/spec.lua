@@ -794,7 +794,22 @@ return {
           if session.has_file_buffer() then
             vim.cmd("silent! PossessionSaveCwd!")
           end
+          -- noice's ui_attach handler assumes every UI event is named <group>_<kind> and errors on
+          -- :restart's bare "restart" event, so it is detached for the restart. If the restart is
+          -- refused (a modified buffer), this server lives on and gets noice back.
+          pcall(function() require("noice").disable() end)
+          -- snacks closes its terminal windows on ExitPre, and :qall gives up without an error
+          -- when ExitPre closes the current window, so step out of the Claude float first.
+          if vim.api.nvim_win_get_config(0).relative ~= "" then
+            for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if vim.api.nvim_win_get_config(win).relative == "" then
+                vim.api.nvim_set_current_win(win)
+                break
+              end
+            end
+          end
           vim.cmd("silent! restart PossessionRestoreAfterRestart")
+          pcall(function() require("noice").enable() end)
         end,
         desc = "Save, restart and restore cwd session (reviving every session's Claude)",
         term = true,
