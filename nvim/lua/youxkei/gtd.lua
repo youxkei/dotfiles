@@ -1,5 +1,5 @@
 -- Each open gtd task is a jj change checked out in its own workspace
--- (~/repo/gtd/.claude/workspaces/<task>/), with clones + scratch under that workspace's
+-- (~/repo/gtd/workspaces/<task>/), with clones + scratch under that workspace's
 -- tasks/<task>/ (main repo in repo/, reference clones in ref/, raw data in data/, all gitignored).
 -- /add creates the workspace; nvim enters it via <leader>dt (cd into tasks/<task>/ + possession
 -- session); the current task is identified by cwd, so <leader>df/<leader>dF/<leader>dg/<leader>dG search it with
@@ -7,10 +7,10 @@
 local M = {}
 
 local function wt_root()
-  return vim.fn.expand("~/repo/gtd/.claude/workspaces")
+  return vim.fn.expand("~/repo/gtd/workspaces")
 end
 
--- task -> its work dir inside its workspace (.claude/workspaces/<task>/tasks/<task>/, or the
+-- task -> its work dir inside its workspace (workspaces/<task>/tasks/<task>/, or the
 -- workspace root if absent).
 local function wt_task_dir(root, slug)
   local wt = root .. "/" .. slug
@@ -248,7 +248,7 @@ function M.enter_claudecode_session(on_entered)
   local choices = {}
   for _, key in ipairs(session.active_session_keys("claudecode.server.init")) do
     if key ~= current and paths.session(key):exists() then
-      local slug = key:match("/%.claude/workspaces/([^/]+)")
+      local slug = key:match("/repo/gtd/workspaces/([^/]+)")
       local task = slug and tasks[slug]
       local title = (task and task.title) or vim.fn.fnamemodify(key, ":t")
       choices[#choices + 1] = {
