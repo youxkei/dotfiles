@@ -130,7 +130,7 @@ local function truncate(s, max)
 end
 
 -- The task's one-line "what is this doing now?" status, read from the `status:` frontmatter field
--- of its task.md (kept current by /do). This is the single defined slot the picker labels read;
+-- of its task.md (kept current by Claude while working on the task). This is the single defined slot the picker labels read;
 -- the preview pane shows the whole task.md. Returns nil when task.md is missing, has no
 -- frontmatter, or `status` is absent/blank.
 local function task_status(slug)
