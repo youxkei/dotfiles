@@ -217,3 +217,5 @@ else
   -- image on the clipboard is forwarded to the terminal TUI, text falls back to register paste.
   vim.keymap.set("t", "<c-v>", smart_terminal_paste, { desc = "Smart terminal paste (image or text)" })
 end
+
+require("youxkei.review_bridge").start()
