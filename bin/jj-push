@@ -26,4 +26,28 @@ done
 # immutable_heads() in jj/config.toml drops trunk(), so the pushed commit stays
 # mutable, jj leaves @ alone, and the bookmark stays where it already was. Restore
 # that term and the loop has to come back with it.
-jj git push "$@"
+#
+# The output is held rather than streamed so that jj's own refusal can be
+# recognised and explained: "unexpectedly moved on the remote (reason: stale
+# info)" says neither that someone else pushed nor what to run next.
+if out=$(jj git push "$@" 2>&1); then
+    printf '%s\n' "$out"
+    exit 0
+fi
+printf '%s\n' "$out" >&2
+case $out in
+*"unexpectedly moved on the remote"*)
+    {
+        echo
+        echo "jj push: origin has commits on $names that this repository has not fetched;"
+        echo "they were pushed from somewhere else. To put this work on top of them:"
+        echo "  jj git fetch"
+        for name in $names; do
+            echo "  jj rebase -b @ -d $name@origin"
+            echo "  jj bookmark set $name -r @"
+        done
+        echo "  jj push"
+    } >&2
+    ;;
+esac
+exit 1
