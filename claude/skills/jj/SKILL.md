@@ -107,7 +107,7 @@ which change the work carries on in.
 of work, it is one piece of work already and there is nothing to divide. Where two pieces did land in
 one, the tidying is the user's and comes later, so nothing about which files could be separated or
 which piece belongs in which commit is decided at a stopping point. Use the `jj-move-diff` skill when
-that later tidying asks Claude to move hunks or lines between existing changes by editing both.
+that later tidying asks Claude to move hunks or lines between existing changes.
 
 **The message is a subject and a body, written to the commit-message rules** — the repository's
 convention and the global instructions, the two read-backs included. It is written when the change is
@@ -228,7 +228,7 @@ Rebased 4 descendant commits.
 | Intent | Command |
 |---|---|
 | Fold `@` into its parent | `jj squash` (`-r <rev>` to move from elsewhere) |
-| Have Claude move selected diff between existing changes | Edit source and destination directly (see the `jj-move-diff` skill) |
+| Have Claude move selected diff between existing changes | the `jj-move-diff` skill |
 | Split one change in two | `jj split` (opens a diff editor) |
 | Drop a change, rebasing descendants onto its parents | `jj abandon <rev>` |
 | Push each hunk down to the mutable ancestor that last touched those lines | `jj absorb` |

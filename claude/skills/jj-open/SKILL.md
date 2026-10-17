@@ -95,5 +95,4 @@ a fresh empty change; `jj edit <the first>` puts the working copy back in the fo
 work carries on there, and `jj log` says whether an empty one is left over to abandon.
 
 **A fold is not a divide.** Squashing changes together needs nothing but these commands. To move only
-part into another existing change, use the `jj-move-diff` skill: Claude edits the source and
-destination directly and verifies ownership afterward.
+part into another existing change, use the `jj-move-diff` skill.
