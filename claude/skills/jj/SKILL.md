@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, pushing being the user's alone, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
+description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, when to push being the user's call, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
 ---
 
 # Version control with jj
@@ -46,7 +46,7 @@ when the work turns out to be something else.
 change, and that is the user's call rather than a side effect of writing a message — `jj desc -m`
 where a message is due, and the `jj-open` skill for when another change is opened.
 
-### Pushing is the user's
+### When to push is the user's call
 
 **NEVER `jj git push` or `jj push` unless the user explicitly says to.** A push is the act that
 leaves this machine: it puts the change on GitHub. `jj push` pushes the bookmarks sitting on `@`,
@@ -59,7 +59,8 @@ and needs no asking.
 - plan approval that includes a push authorizes only that single push; it does not carry over to
   follow-up changes
 - agreeing on an approach that involves a push is NOT a push instruction; push only when explicitly
-  told to (e.g. "pushして"). The user pushes themselves by default.
+  told to (e.g. "pushして").
+- when told to, run `jj push` yourself; do not hand the command back for the user to type.
 
 The push spellings, for when one is asked for: `jj git push --remote origin -b main` (`-b` is
 `--bookmark`; a brand-new bookmark goes up as `jj git push --named <name>=@`, and 0.44 has no
@@ -249,7 +250,7 @@ Rebased 5 descendant commits onto updated working copy.
 
 Every descendant keeps its change id and gets a new commit id, merge commits included. Changing only a description does the same: the content of the descendants is untouched, but they are rebuilt, because the ancestor's commit id moved.
 
-A change that has already been pushed is therefore replaced on the remote by the next push after any rewrite; `jj git push` needs no force flag for it. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *Pushing is the user's*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
+A change that has already been pushed is therefore replaced on the remote by the next push after any rewrite; `jj git push` needs no force flag for it. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *When to push is the user's call*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
 
 ### Conflicts live in commits
 
