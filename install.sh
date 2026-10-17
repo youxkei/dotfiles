@@ -44,13 +44,14 @@ PATHS=(
     # either, being session state and credentials rather than configuration — the
     # same reason the jj repo-level config stays out above.
     claude/skills/jj $HOME/.claude/skills/jj
-    claude/skills/jj-new $HOME/.claude/skills/jj-new
+    claude/skills/jj-open $HOME/.claude/skills/jj-open
     claude/skills/jj-move-diff $HOME/.claude/skills/jj-move-diff
 
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
     bin/claude-jj-snapshot $HOME/bin/claude-jj-snapshot
     bin/jj-push $HOME/bin/jj-push
+    bin/jj-open $HOME/bin/jj-open
 )
 
 # WSL-only entries: bin scripts that wrap Windows executables (ssh.exe, pwsh.exe)

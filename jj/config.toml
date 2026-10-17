@@ -9,6 +9,8 @@ email = "youxkei@gmail.com"
 # Git's external subcommands, so a `jj-push` on PATH is not found by `jj push` on
 # its own.
 push = ["util", "exec", "--", "jj-push"]
+# Not `new`: jj refuses an alias that overrides a built-in command.
+open = ["util", "exec", "--", "jj-open"]
 
 [revset-aliases]
 # builtin_immutable_heads() without its `present(trunk())` term. Under the builtin,

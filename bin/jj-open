@@ -1,0 +1,25 @@
+#!/bin/sh
+# Usage: jj-open [jj new options...]
+# Opens a change right after @ and carries the bookmarks at @ onto it.
+# Invoked as `jj open` through the alias in jj/config.toml.
+set -e
+
+names=$(jj log -r @ --no-graph -T 'local_bookmarks.map(|b| b.name())')
+
+# A bookmark is expected at @, as jj push expects one there. Without it the work is
+# off the line a push would send, and opening another change would only take it
+# further; failing before anything is created leaves nothing to undo.
+if [ -z "$names" ]; then
+    echo "jj open: no bookmark at @" >&2
+    exit 1
+fi
+
+# --insert-after rather than a plain `jj new`, so that children of @ are rebased onto
+# the new change instead of being left beside it.
+jj new --insert-after @ "$@"
+
+# jj new never moves a bookmark onto the change it creates, so this script exists.
+# Splitting $names on whitespace is good enough for the same reason as in jj-push: Git
+# refuses to export a name containing a space.
+# shellcheck disable=SC2086
+jj bookmark move $names --to @

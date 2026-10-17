@@ -44,13 +44,13 @@ when the work turns out to be something else.
 
 **`jj commit` is not part of this machine's workflow.** Besides describing `@` it opens the next
 change, and that is the user's call rather than a side effect of writing a message — `jj desc -m`
-where a message is due, and the `jj-new` skill for when another change is opened.
+where a message is due, and the `jj-open` skill for when another change is opened.
 
 ### Pushing is the user's
 
-**NEVER `jj git push` or this machine's alias for it, `jj push`, unless the user explicitly says
-to.** A push is the act that leaves this machine: it puts the change on GitHub. `jj push` here
-pushes whatever bookmark is sitting on `@`.
+**NEVER `jj git push` or `jj push` unless the user explicitly says to.** A push is the act that
+leaves this machine: it puts the change on GitHub. `jj push` pushes the bookmarks sitting on `@`,
+and fails when `@` carries none.
 
 **Moving a bookmark is not gated.** It is local, `jj undo` takes it back, and it reaches nobody
 until a push sends it, so `jj bookmark set` / `move` on the bookmark the work rides is ordinary work
@@ -65,14 +65,7 @@ The push spellings, for when one is asked for: `jj git push --remote origin -b m
 `--bookmark`; a brand-new bookmark goes up as `jj git push --named <name>=@`, and 0.44 has no
 `--allow-new`). A remote bookmark has to be tracked before it can be pushed to.
 
-**`jj push` is an alias of this machine's.** `jj/config.toml` in the dotfiles aliases it to
-`jj util exec -- jj-push`, which runs `bin/jj-push` from that same repository (`util exec` is what
-lets an alias reach a script at all: jj has no equivalent of git's external subcommands, so a
-`jj-push` on `PATH` is not found by `jj push` on its own). The script reads the bookmark names at `@`
-and **fails when `@` carries none**, where `jj git push -r @` only warns and exits 0; it pushes those
-names and does nothing else.
-
-**A push leaves `@` where it is**, because `immutable_heads()` in that same `jj/config.toml` is
+**A push leaves `@` where it is**, because `immutable_heads()` in `jj/config.toml` is
 `tags() | untracked_remote_bookmarks()` — jj's builtin set without its `present(trunk())` term. Under
 the builtin, pushing a bookmark that `trunk()` resolves to — jj's name for the main line —
 makes the pushed commit immutable, and jj answers a working copy turning immutable by moving `@` onto
@@ -85,8 +78,8 @@ remote is checked to be where the last fetch left it.
 every rewrite, and a snapshot rewrites `@`, so one left there follows the working copy without any
 command being run. Work in flight is then under the bookmark from the start: whatever `@` grows into
 is what the next push would send, and the push being the user's is what decides when it goes. A
-`jj new` leaves the bookmark behind on `@-`; moving it onto the change just opened is in the
-`jj-new` skill. `jj st` names the bookmarks at `@` in its own header, a `*` marking one that is ahead of its remote.
+plain `jj new` leaves the bookmark behind on `@-`, which is why a change is opened with `jj open`
+here. `jj st` names the bookmarks at `@` in its own header, a `*` marking one that is ahead of its remote.
 
 ### One change is one piece of work
 
@@ -97,7 +90,7 @@ the change the working copy is in, which is why a turn ending is no reason to le
 
 **Whether the next piece of work has started is the user's call and not yours.** A follow-up asked
 for inside work in flight — make it also do X, that broke, check it on the real thing — is the same
-piece of work, however many turns and files it grows to. The `jj-new` skill is where that decision is
+piece of work, however many turns and files it grows to. The `jj-open` skill is where that decision is
 written out, along with how to fold changes back into one where they were opened too eagerly.
 
 ### At a stopping point
@@ -123,7 +116,7 @@ the change carries when it is **pushed**, and getting it there is `jj desc` on t
 the user's later tidying. Say what the work is in one line and move on.
 
 **And a stopping point is never where the next change is opened.** A follow-up inside one piece of
-work is that same piece of work; whose call a new change is, is in the `jj-new` skill.
+work is that same piece of work; whose call a new change is, is in the `jj-open` skill.
 
 ### Where the work goes
 
@@ -189,12 +182,12 @@ jj desc --stdin               # read the message from stdin
 
 | Intent | Command |
 |---|---|
-| Begin the next piece of work | `jj new -m "..."` |
+| Begin the next piece of work | `jj open -m "..."` (the `jj-open` skill) |
 | Begin work on a particular base | `jj new <rev> -m "..."` |
 | Describe `@` and begin the next change | `jj commit -m "..."` (alias `ci`) — exactly `describe` then `new`; **not used on this machine**, see above |
 | Resume an existing change, becoming it | `jj edit <rev>` |
 
-`jj new` opens a change, and `-m` says what the work in it is going to be — the same declaration as `jj desc`, made at the moment of starting. The change left behind needs nothing further. Whose call opening one is, and why an empty `@` takes `jj desc -m` instead, is the `jj-new` skill.
+`jj new` opens a change, and `-m` says what the work in it is going to be — the same declaration as `jj desc`, made at the moment of starting. The change left behind needs nothing further. Whose call opening one is, and why an empty `@` takes `jj desc -m` instead, is the `jj-open` skill.
 
 Its arguments are revsets, so change ids, commit ids, bookmarks, `@-`, and `root()` all work.
 

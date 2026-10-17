@@ -1,16 +1,15 @@
 ---
-name: jj-new
-description: Opening the next jj change — when a piece of work is a new one and whose call that is, why an empty `@` always wants `jj desc -m` and never `jj new -m`, what `jj new -m` does to the working copy and to a bookmark, and how to fold changes back into one where they were opened too eagerly. Use when starting work that may want a change of its own, when asked to open, cut or start a new change, when a follow-up request arrives inside work already in flight, when the working copy is an empty change needing a line, and when a stack has to be folded back down.
+name: jj-open
+description: Opening the next jj change with `jj open` — when a piece of work is a new one and whose call that is, why an empty `@` always wants `jj desc -m` and never `jj open -m`, and how to fold changes back into one where they were opened too eagerly. Use when starting work that may want a change of its own, when asked to open, cut or start a new change, when a follow-up request arrives inside work already in flight, when the working copy is an empty change needing a line, and when a stack has to be folded back down.
 ---
 
 # Opening the next change
 
-`jj new -m "<line>"` opens a change and makes it the working copy. That is the whole of cutting a
-branch in jj: no bookmark, no name, no worktree — `@` and its parents are the line of work. How jj
-itself works is the `jj` skill; what this one is about is *when* another change is opened and who
-decides.
+`jj open -m "<line>"` opens a change right after `@`, makes it the working copy and carries the
+bookmark at `@` onto it. How jj itself works is the `jj` skill; what this one is about is *when*
+another change is opened and who decides.
 
-**And `jj new` is the wrong command on an empty `@`, always: that change is `jj desc -m`'s.** Nothing
+**And `jj open` is the wrong command on an empty `@`, always: that change is `jj desc -m`'s.** Nothing
 about the work makes an exception — an empty working copy is a change to describe and not a change to
 open one on top of. `## Opening one` has why.
 
@@ -41,20 +40,20 @@ it:
 jj desc -m "<one line saying what this piece of work is going to be>"
 ```
 
-`jj new` there stacks a second change on the empty one **and the empty one stays**: in jj 0.44 an
+`jj open` there stacks a second change on the empty one **and the empty one stays**: in jj 0.44 an
 empty `@` is still in the log after a `jj new` on top of it, whether it carries a message or not. What
 that leaves is a change nobody meant, under the work, for `jj abandon` to take out later. So it is what
 `@` holds that chooses between the two commands and not whether the work is new, and that is one
 question:
 
 ```sh
-jj log -r @ --no-graph -T 'if(empty, "empty — jj desc -m", "worked in — jj new -m")'
+jj log -r @ --no-graph -T 'if(empty, "empty — jj desc -m", "worked in — jj open -m")'
 ```
 
 Where `@` holds work:
 
 ```sh
-jj new -m "<one line saying what this piece of work is going to be>"
+jj open -m "<one line saying what this piece of work is going to be>"
 ```
 
 The line goes in **at the start**, before the work: it is a working note, free to rewrite as the work
@@ -62,20 +61,10 @@ takes shape (`jj desc -m`), and it is what makes a `jj log` of a stack readable 
 worked in. What that line has to *be* by the time it is pushed is the repository's commit-message
 convention — read its `CLAUDE.md` / `CONTRIBUTING`.
 
-**`jj new` moves no bookmark, so move it after.** A bookmark riding `@` — the state `jj push` leaves
-behind, see the `jj` skill — is on `@-` once `jj new` has run, and the change just opened is the one
-nothing points at; `jj push` would then fail for want of a bookmark at `@`. Carry it over:
+**Use `jj open`, not `jj new`**: a plain `jj new` leaves the bookmark behind on `@-`.
 
-```sh
-jj bookmark move --from @- --to @
-```
-
-`--from @-` moves exactly the bookmarks that were riding the change just left, and nothing where none
-was. This is local and needs no asking; the push stays the user's. `experimental-advance-branches` does
-not do this job — it advances a bookmark onto the change just left, the new `@-`, never onto the new
-`@` — and is not used here. `jj bookmark advance` is not used for it either: it moves the *closest*
-bookmark below `@`, so where `@-` carries none it pulls a `main` sitting further down, on the trunk,
-up onto work that was never under it.
+**`jj open` fails, creating nothing, when `@` carries no bookmark.** Do not fall back to a plain
+`jj new` there: say that `@` has no bookmark and ask where the work belongs.
 
 ## Folding changes back into one
 
