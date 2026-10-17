@@ -1,13 +1,13 @@
 ---
 name: jj-open
-description: Opening the next jj change with `jj open` — when a piece of work is a new one and whose call that is, why an empty `@` always wants `jj desc -m` and never `jj open -m`, and how to fold changes back into one where they were opened too eagerly. Use when starting work that may want a change of its own, when asked to open, cut or start a new change, when a follow-up request arrives inside work already in flight, when the working copy is an empty change needing a line, and when a stack has to be folded back down.
+description: Opening the next jj change with `jj open` — when a piece of work is a new one and whose call that is, why an empty `@` always wants `jj desc -m` and never `jj open -m`, and how to fold changes back into one where they were opened too eagerly. Use when starting work that may want a change of its own, when asked to open, cut or start a new change, when a follow-up request arrives inside work already in flight, when the working copy is an empty change needing a message, and when a stack has to be folded back down.
 ---
 
 # Opening the next change
 
-`jj open -m "<line>"` opens a change right after `@`, makes it the working copy and carries the
-bookmark at `@` onto it. How jj itself works is the `jj` skill; what this one is about is *when*
-another change is opened and who decides.
+`jj open -m="<subject>" -m="<body paragraph>"` opens a change right after `@`, makes it the working
+copy and carries the bookmark at `@` onto it. How jj itself works is the `jj` skill; what this one is
+about is *when* another change is opened and who decides.
 
 **And `jj open` is the wrong command on an empty `@`, always: that change is `jj desc -m`'s.** Nothing
 about the work makes an exception — an empty working copy is a change to describe and not a change to
@@ -22,11 +22,11 @@ change until they say otherwise, however many turns it takes and however many fi
 **So do not open one on your own judgement.** Open a change when
 
 - the user says to, in whatever words: *new change for this*, *別のchangeで*, *cut a change*;
-- or the work is plainly about something the change's own line does not cover — a different
+- or the work is plainly about something the change's own message does not cover — a different
   feature, a repository-wide rename, a fix to something the current work never touched.
 
 **And when in doubt, keep working in the change.** The cost is asymmetric: a change that grew is one
-line to rewrite (`jj desc -m`), where a piece of work spread over three changes is a fold the user has
+message to rewrite (`jj desc`), where a piece of work spread over three changes is a fold the user has
 to notice and ask for. Nothing in a diffstat says which of the two a request is.
 
 ## Opening one
@@ -37,7 +37,7 @@ opened a moment ago and not yet worked in stands, and where an abandoned or reba
 it:
 
 ```sh
-jj desc -m "<one line saying what this piece of work is going to be>"
+jj desc -m="<subject>" -m="<body paragraph>"
 ```
 
 `jj open` there stacks a second change on the empty one **and the empty one stays**: in jj 0.44 an
@@ -53,13 +53,16 @@ jj log -r @ --no-graph -T 'if(empty, "empty — jj desc -m", "worked in — jj o
 Where `@` holds work:
 
 ```sh
-jj open -m "<one line saying what this piece of work is going to be>"
+jj open -m="<subject>" -m="<body paragraph>" -m="<body paragraph>"
 ```
 
-The line goes in **at the start**, before the work: it is a working note, free to rewrite as the work
-takes shape (`jj desc -m`), and it is what makes a `jj log` of a stack readable while it is being
-worked in. What that line has to *be* by the time it is pushed is the repository's commit-message
-convention — read its `CLAUDE.md` / `CONTRIBUTING`.
+**The first `-m` is the subject, and each further `-m` is a paragraph of the body**, with a blank line
+put between them. Write each as `-m="..."`: as `-m "..."` a paragraph starting with `-` is read by jj
+as an option and fails.
+
+The message goes in **at the start**, before the work, and is rewritten as the work takes shape
+(`jj desc`, which takes `-m` the same way). Write it in the repository's commit-message convention —
+read its `CLAUDE.md` / `CONTRIBUTING` — with a body and not a subject alone.
 
 **Use `jj open`, not `jj new`**: a plain `jj new` leaves the bookmark behind on `@-`.
 

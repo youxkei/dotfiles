@@ -39,7 +39,7 @@ neither is to be typed without meaning it.
 There is no committing step. `@` is a commit and every jj command takes the working copy into it, so
 nothing saves the work and nothing is pending: `jj st` takes it in and says what is in it, and
 `jj desc -m` writes or rewrites the message on `@` in place. Neither needs asking, neither shows anything to anybody, and `jj undo` reverses each. Writing
-a message is free and repeatable, so say what a piece of work is as it starts and rewrite the line
+a message is free and repeatable, so say what a piece of work is as it starts and rewrite the message
 when the work turns out to be something else.
 
 **`jj commit` is not part of this machine's workflow.** Besides describing `@` it opens the next
@@ -84,7 +84,7 @@ here. `jj st` names the bookmarks at `@` in its own header, a `*` marking one th
 ### One change is one piece of work
 
 Size a change the way a branch is sized — the piece of work a pull request would be opened for — and
-write the line saying what it is going to be at the start. Nothing else marks a line of work in jj:
+write the message saying what it is going to be at the start. Nothing else marks a line of work in jj:
 it needs no bookmark and no name, `@` and its parents being the line. Everything worked on goes into
 the change the working copy is in, which is why a turn ending is no reason to leave it.
 
@@ -97,23 +97,22 @@ written out, along with how to fold changes back into one where they were opened
 
 **The baseline is `jj st`, and `jj desc -m` only where the message needs it.** `jj st` takes the work
 in and says what is in the change, which is a restore point at a moment that matters. What decides
-whether anything more is due is the message and never the work being finished: `jj desc -m "<line>"`
-where `@` carries none or where the work has moved past the one it carries, and nothing at all where
-the line still says what the change holds. Judging when a stopping point has been reached is yours —
+whether anything more is due is the message and never the work being finished:
+`jj desc -m="<subject>" -m="<body paragraph>"` where `@` carries none or where the work has moved past the one
+it carries, and nothing at all where the message still says what the change holds. Judging when a stopping point has been reached is yours —
 a piece of work green, or confirmed on the real thing — and a stopping point decides nothing about
 which change the work carries on in.
 
-**One line over the whole change, and not a dissection.** Where the change was opened for this piece
+**One message over the whole change, and not a dissection.** Where the change was opened for this piece
 of work, it is one piece of work already and there is nothing to divide. Where two pieces did land in
 one, the tidying is the user's and comes later, so nothing about which files could be separated or
 which piece belongs in which commit is decided at a stopping point. Use the `jj-move-diff` skill when
 that later tidying asks Claude to move hunks or lines between existing changes by editing both.
 
-That line is a working note: written when the change is opened, it says what the work is going to be,
-which is what makes a `jj log` of several changes readable while they are being worked on. The
-commit-message rules in the global instructions — the two read-backs included — are for the message
-the change carries when it is **pushed**, and getting it there is `jj desc` on that same change in
-the user's later tidying. Say what the work is in one line and move on.
+**The message is a subject and a body, written to the commit-message rules** — the repository's
+convention and the global instructions, the two read-backs included. It is written when the change is
+opened, saying what the work is going to be, and rewritten at a stopping point to say what the change
+now holds. A subject alone is not a message.
 
 **And a stopping point is never where the next change is opened.** A follow-up inside one piece of
 work is that same piece of work; whose call a new change is, is in the `jj-open` skill.
@@ -172,19 +171,21 @@ $ jj desc -m "fix the parser (it was the tokenizer)"
 ```
 
 ```
-jj desc -m "..."              # describe @
-jj desc -r <rev> -m "..."     # describe any change
-jj desc                       # open $EDITOR, for multi-line messages
-jj desc --stdin               # read the message from stdin
+jj desc -m="<subject>" -m="<body paragraph>"   # describe @: first -m the subject, each further -m a body paragraph
+jj desc -r <rev> -m="..."                      # describe any change
+jj desc --stdin                                # read the message from stdin
 ```
+
+Each `-m` is written `-m="..."`: as `-m "..."` a paragraph starting with `-` is read by jj as an
+option and fails. `jj desc` with no message opens `$EDITOR`, which an agent cannot drive.
 
 ## Starting and resuming work
 
 | Intent | Command |
 |---|---|
-| Begin the next piece of work | `jj open -m "..."` (the `jj-open` skill) |
-| Begin work on a particular base | `jj new <rev> -m "..."` |
-| Describe `@` and begin the next change | `jj commit -m "..."` (alias `ci`) — exactly `describe` then `new`; **not used on this machine**, see above |
+| Begin the next piece of work | `jj open -m="..."` (the `jj-open` skill) |
+| Begin work on a particular base | `jj new <rev> -m="..."` |
+| Describe `@` and begin the next change | `jj commit -m="..."` (alias `ci`) — exactly `describe` then `new`; **not used on this machine**, see above |
 | Resume an existing change, becoming it | `jj edit <rev>` |
 
 `jj new` opens a change, and `-m` says what the work in it is going to be — the same declaration as `jj desc`, made at the moment of starting. The change left behind needs nothing further. Whose call opening one is, and why an empty `@` takes `jj desc -m` instead, is the `jj-open` skill.
