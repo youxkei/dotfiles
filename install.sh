@@ -47,6 +47,11 @@ PATHS=(
     claude/skills/jj-open $HOME/.claude/skills/jj-open
     claude/skills/jj-move-diff $HOME/.claude/skills/jj-move-diff
 
+    # One entry per hook too, and for a reason of its own beside the one above: the guard keeps the files it
+    # copies before each Bash call in $HOME/.claude/hooks/state, which a link to the whole directory would put
+    # inside this repository. Its tests are run from here and need no link.
+    claude/hooks/guard-unrecoverable.sh $HOME/.claude/hooks/guard-unrecoverable.sh
+
     bin/nvr $HOME/bin/nvr
     bin/notify $HOME/bin/notify
     bin/claude-jj-snapshot $HOME/bin/claude-jj-snapshot

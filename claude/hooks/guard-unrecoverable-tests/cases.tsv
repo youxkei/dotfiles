@@ -1,0 +1,108 @@
+deny	Bash	rm the operator log	rm -f /mnt/d/deploy/app.log
+deny	Bash	rm win spelling	cmd.exe /c del D:\deploy\app.log
+deny	Bash	bundled rm + deploy	cargo build --release && rm -f /mnt/d/deploy/app.log && cp t/app.exe /mnt/d/deploy/
+deny	Bash	rm in another repo	rm -rf /home/user/repo/other/app
+deny	Bash	rm via ..	rm -rf ../other/app
+deny	Bash	rm via ~	rm -rf ~/repo/other
+deny	Bash	rm a home dotfile	rm ~/.zshrc
+deny	Bash	mv out of the way	mv /mnt/d/deploy/app.yaml /tmp/
+deny	Bash	redirect outside	echo hi > /mnt/d/deploy/app.yaml
+deny	Bash	redirect to ~	date >> ~/notes.txt
+deny	Bash	cp over a log	cp /tmp/x.log /mnt/d/deploy/app.log
+deny	Bash	tee a log	foo | tee /mnt/d/deploy/app.log
+deny	Bash	rm -rf /	sudo rm -rf /
+deny	Bash	truncate outside	truncate -s 0 /mnt/d/deploy/app.log
+deny	Bash	find -delete outside	find /mnt/d/deploy -name *.log -delete
+ALLOW	Bash	the deploy cp	cp target/x86_64-pc-windows-gnu/release/app.exe /mnt/d/deploy/app.exe
+deny	Bash	rm inside the repo	rm -rf target/debug/incremental
+deny	Bash	rm abs inside repo	rm -f /home/user/repo/app/tmp/x
+deny	Bash	rm in the scratchpad	rm -rf /tmp/claude-1000/x/scratchpad/probe
+deny	Bash	git rm	git rm --cached crates/app/src/worker.rs
+deny	Bash	rmdir	rmdir target/empty
+deny	Bash	unlink	unlink target/x
+ALLOW	Bash	trash inside the repo	trash target/debug/incremental
+ALLOW	Bash	cargo clean	cargo clean -p app
+ALLOW	Bash	npm is not rm	npm install
+ALLOW	Bash	a path ending in -rm	cat notes-rm.txt
+ALLOW	Bash	trash outside the repo	trash /mnt/d/deploy/app-20260811-211131.log
+ALLOW	Bash	read the log	tail -n 200 /mnt/d/deploy/app.log
+ALLOW	Bash	read outside into /tmp	cat /mnt/d/deploy/app.log > /tmp/copy.log
+ALLOW	Bash	2>/dev/null	cargo check --workspace 2>/dev/null
+ALLOW	Bash	stderr redirect	ls -d /mnt/d/deploy >/dev/null 2>&1
+ALLOW	Bash	diff configs	diff /mnt/d/deploy/app.yaml crates/app/app.yaml
+ALLOW	Bash	git status	git status --short
+ALLOW	Bash	cargo test	cargo test --workspace -- --include-ignored
+ALLOW	Bash	ffmpeg from /mnt/c	/mnt/c/Users/x/ffmpeg.exe -i a.mp4 out.flv
+ALLOW	Bash	jq on /tmp	jq -r .a /tmp/x.json
+ALLOW	Bash	git commit -F	git commit -F /tmp/msg.txt
+deny	Bash	rm with a variable	rm -rf "$FAKE"
+deny	Bash	mv with a variable	mv "$FAKE" /tmp/keep
+deny	Bash	redirect to a variable	echo x > "$OUT/y.txt"
+ALLOW	Bash	run the installed exe	/mnt/d/deploy/app.exe --duration 20
+ALLOW	Bash	run the installed exe (win)	powershell.exe -Command "D:\deploy\app.exe --duration 20"
+ALLOW	Edit	edit the outside config	/mnt/d/deploy/app.yaml
+ALLOW	Edit	edit user settings	/home/user/.claude/settings.json
+ALLOW	Edit	edit a repo file	/home/user/repo/app/CLAUDE.md
+ALLOW	Write	a new file outside	/mnt/d/deploy/brand-new-file-xyz.txt
+ALLOW	Write	scratchpad write	/tmp/claude-1000/x/scratchpad/note.md
+ALLOW	Bash	awk with a dd array	ffprobe -show_entries packet=pts_time out.flv | awk '{dd[d]++} END{for (d in dd) print d}'
+ALLOW	Bash	awk ternary is not a redirect	awk '{printf "%s\n", ($1>$2?"ahead":"behind")}' /tmp/v.txt
+deny	Bash	plain relative redirect over source	cargo tree > deps.txt
+deny	Bash	dd writing outside	dd if=/dev/zero of=/mnt/d/deploy/x bs=1M count=1
+ALLOW	Bash	dd inside the repo	dd if=/dev/zero of=target/probe.bin bs=1M count=1
+deny	Bash	python heredoc writing source	python3 - <<'PY' p='src/lib.rs'; open(p,'w').write(open(p).read()) PY
+deny	Bash	python -c writing source	python3 -c "import pathlib; pathlib.Path('SPEC.md').write_text('x')"
+deny	Bash	sed -i on source	sed -i 's/a/b/' src/lib.rs
+deny	Bash	sed --in-place on source	sed --in-place 's/a/b/' SPEC.md
+deny	Bash	perl -i on source	perl -pi -e 's/a/b/' src/lib.rs
+deny	Bash	redirection over source	echo x > src/lib.rs
+deny	Bash	append to source	printf 'x' >> SPEC.md
+deny	Bash	tee into source	echo x | tee SPEC.md
+deny	Bash	cp over source	cp target/rebuilt.rs src/lib.rs
+deny	Bash	git apply on the tree	git apply /tmp/patch.diff src/lib.rs
+deny	Bash	git checkout a source path	git checkout src/lib.rs
+deny	Bash	git restore a source path	git restore --source=HEAD SPEC.md
+deny	Bash	git reset --hard	git reset --hard HEAD
+deny	Bash	git clean -fd	git clean -fd
+deny	Bash	git stash	git stash
+ALLOW	Bash	a log under tmp	cargo test > /tmp/out.log 2>&1
+ALLOW	Bash	a log under target	cargo clippy > target/clippy.log 2>&1
+ALLOW	Bash	an ignored log beside source	cargo build > build.log 2>&1
+ALLOW	Bash	reading source with grep	grep -n foo src/lib.rs
+ALLOW	Bash	sed reading source	sed -n '1,20p' src/lib.rs
+ALLOW	Bash	python reading source	python3 target/scan.py
+ALLOW	Bash	python writing under target	python3 -c "open('target/report.md','w').write('x')"
+ALLOW	Bash	copying source out to target	cp src/lib.rs target/keep.rs
+ALLOW	Bash	the build itself	cargo build --release
+ALLOW	Bash	git status	git status --short
+ALLOW	Bash	git diff	git diff src/lib.rs
+ALLOW	Bash	a redirect named inside a quoted string	jq -n --arg c "cargo tree > deps.txt" '{command:$c}'
+ALLOW	Bash	an escaped quote does not close a quoted string	jj desc -m="say jj desc -m=\"<subject>\" -m=\"<body>\" in the message"
+deny	Bash	an escaped quote does not open a quoted string	echo \" > src/lib.rs
+deny	Bash	redirect over an ignored script	echo x > scripts/deploy.sh
+deny	Bash	sed -i on an ignored script	sed -i 's/a/b/' scripts/deploy.sh
+deny	Bash	writing into node_modules	echo x > node_modules/.package-lock.json
+deny	Bash	tee into a venv	echo x | tee .venv/pyvenv.cfg
+ALLOW	Bash	a jobs scratch redirect	jj status > ~/.claude/jobs/35c60569/tmp/status.txt
+ALLOW	Bash	a script writing the jobs scratch	python3 -c "open('~/.claude/jobs/35c60569/tmp/report.md','w').write('x')"
+deny	Bash	a write beside the jobs scratch	echo x > ~/.claude/jobs/35c60569/notes.md
+ALLOW	Bash	the stash read	git stash list
+ALLOW	Bash	the stash shown	git stash show -p
+ALLOW	Bash	clean as a dry run	git clean -nd
+deny	Bash	clean with x	git clean -fdx
+deny	Bash	an issue posted	gh issue create -t "The build fails on Windows" -b "..."
+deny	Bash	an issue posted with a repo named	gh -R owner/app issue create --title x --body y
+deny	Bash	a comment posted	gh issue comment 10 -b "two corrections to the body above"
+deny	Bash	a pull request opened	gh pr create --fill
+deny	Bash	a review posted	gh pr review 3 --approve
+deny	Bash	a release cut	gh release create v0.4.0 --generate-notes
+deny	Bash	the same through the api	gh api -X POST repos/owner/app/issues -f title=x
+deny	Bash	the api with fields and no method	gh api repos/owner/app/issues -f title=x
+ALLOW	Bash	an issue read	gh issue view 2 --json body,comments
+ALLOW	Bash	the issues listed	gh issue list --state open --json number,title
+ALLOW	Bash	an issue closed as asked	gh issue close 2 -c "done in the change that added it"
+ALLOW	Bash	an issue deleted as asked	gh issue delete 10 --yes
+ALLOW	Bash	a pull request read	gh pr diff 3
+ALLOW	Bash	the api read	gh api repos/owner/app/issues
+ALLOW	Bash	the api searched	gh api -X GET search/issues -f q=state:open
+ALLOW	Bash	a comment grepped for	gh issue list --json title | grep -i comment
