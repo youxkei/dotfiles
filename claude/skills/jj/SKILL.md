@@ -110,8 +110,7 @@ one, the tidying is the user's and comes later, so nothing about which files cou
 which piece belongs in which commit is decided at a stopping point. Use the `jj-move-diff` skill when
 that later tidying asks Claude to move hunks or lines between existing changes.
 
-**The message is a subject and a body, written to the commit-message rules** — the repository's
-convention and the global instructions, the two read-backs included. It is written when the change is
+**The message is a subject and a body**, in the repository's convention. It is written when the change is
 opened, saying what the work is going to be, and rewritten at a stopping point to say what the change
 now holds. A subject alone is not a message.
 
