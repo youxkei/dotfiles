@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Usage: trash <path>...
+# trash-cli's `trash` for Git Bash on Windows: sends each path to the Recycle Bin.
+set -eu
+
+[ "$#" -gt 0 ] || {
+    echo "usage: trash <path>..." >&2
+    exit 2
+}
+
+paths=()
+for p in "$@"; do
+    [ -e "$p" ] || [ -L "$p" ] || {
+        echo "trash: $p: no such file or directory" >&2
+        exit 1
+    }
+    paths+=("$(cygpath -w -a -- "$p")")
+done
+
+# Resolved through the link install.ps1 puts in ~/bin, so trash.ps1 is found beside the real file.
+exec pwsh -NoProfile -NonInteractive -File "$(cygpath -w "$(dirname "$(readlink -f "$0")")/trash.ps1")" "${paths[@]}"

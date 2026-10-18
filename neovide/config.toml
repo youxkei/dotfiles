@@ -1,0 +1,3 @@
+# Neovide starts nvim in the directory it was launched from, which from the Start menu is its own install
+# directory.
+chdir = "~"

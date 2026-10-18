@@ -103,7 +103,8 @@ opt.sessionoptions = {
 -- Bound to <c-v> by default; macOS is the exception, where Cmd+V (<D-v>) takes the role so
 -- <c-v> stays a plain text paste. Image detection: macOS via `osascript -e 'clipboard info'`
 -- (a screenshot / copied image puts a PNGf class on the pasteboard); Wayland via
--- `wl-paste --list-types` (image/* MIME type).
+-- `wl-paste --list-types` (image/* MIME type); Windows via .NET's Clipboard.ContainsImage().
+-- On Windows the TUI takes its image paste on Alt+V and not on Ctrl-V, so that is what is sent there.
 local function clipboard_has_image()
   if fn.has("mac") == 1 then
     return fn.system({ "osascript", "-e", "clipboard info" }):find("PNGf", 1, true) ~= nil
@@ -130,18 +131,43 @@ local function normalize_clipboard_image_to_png()
     [[t=$(wl-paste --list-types | grep -m1 "^image/") && wl-paste --type "$t" | magick - png:- | wl-copy --type image/png]] })
 end
 
+-- The check runs off the main loop, so that the keypress does not hold nvim while pwsh starts.
+local function windows_clipboard_has_image(callback)
+  vim.system({
+    "pwsh.exe", "-NoProfile", "-NonInteractive", "-STA", "-Command",
+    "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::ContainsImage()",
+  }, { text = true }, function(res)
+    local has_image = res.code == 0 and (res.stdout or ""):find("True", 1, true) ~= nil
+    vim.schedule(function() callback(has_image) end)
+  end)
+end
+
+local function paste_register_text()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-\\><c-n>pi", true, false, true), "n", false)
+end
+
 local function smart_terminal_paste()
   local job = vim.b.terminal_job_id
-  if job and clipboard_has_image() then
+  if not job then
+    paste_register_text()
+  elseif fn.has("win32") == 1 then
+    windows_clipboard_has_image(function(has_image)
+      if has_image then
+        vim.api.nvim_chan_send(job, "\27v") -- ESC v = Alt+V; the TUI then pastes the clipboard image
+      else
+        paste_register_text()
+      end
+    end)
+  elseif clipboard_has_image() then
     normalize_clipboard_image_to_png()
     vim.api.nvim_chan_send(job, "\22") -- 0x16 = Ctrl-V; the TUI then pastes the clipboard image
   else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-\\><c-n>pi", true, false, true), "n", false)
+    paste_register_text()
   end
 end
 
 if g.neovide then
-  opt.guifont = "Moralerspace Krypton:h12"
+  opt.guifont = "Moralerspace Krypton HW:h" .. (fn.has("win32") == 1 and 9 or 12)
   g.neovide_theme = "dark"
 
   -- Neovide puts in its own window title (title + titlestring=%F) only when the config set neither
@@ -213,7 +239,7 @@ if fn.has("mac") == 1 then
   -- block) is the smart-paste key and <c-v> stays a plain register (text) paste.
   vim.keymap.set("t", "<c-v>", [[<c-\><c-n>pi]])
 else
-  -- Everywhere else (WSLg/Wayland, Linux) has no Cmd key, so <c-v> is the smart-paste key:
+  -- Everywhere else (Windows, WSLg/Wayland, Linux) has no Cmd key, so <c-v> is the smart-paste key:
   -- image on the clipboard is forwarded to the terminal TUI, text falls back to register paste.
   vim.keymap.set("t", "<c-v>", smart_terminal_paste, { desc = "Smart terminal paste (image or text)" })
 end

@@ -1,0 +1,10 @@
+# git/config_host for native Windows, where gh comes from winget and is on PATH rather than in a Nix profile,
+# and commits are signed through the Windows 1Password's op-ssh-sign.
+[gpg "ssh"]
+	program = "C:/Program Files/1Password/app/8/op-ssh-sign.exe"
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential

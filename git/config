@@ -43,6 +43,8 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/allowed_signers
 [credential "https://github.com"]
 	helper =
 	helper = !$HOME/.nix-profile/bin/gh auth git-credential

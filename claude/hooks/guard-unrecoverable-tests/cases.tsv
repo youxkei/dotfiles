@@ -77,6 +77,8 @@ ALLOW	Bash	the build itself	cargo build --release
 ALLOW	Bash	git status	git status --short
 ALLOW	Bash	git diff	git diff src/lib.rs
 ALLOW	Bash	a redirect named inside a quoted string	jq -n --arg c "cargo tree > deps.txt" '{command:$c}'
+ALLOW	Bash	a pipe inside a quoted pattern is not a stage	grep -E 'fetch|install ok' NOTES.md
+deny	Bash	a stage after a real pipe is still judged	cat /tmp/x | tee SPEC.md
 ALLOW	Bash	an escaped quote does not close a quoted string	jj desc -m="say jj desc -m=\"<subject>\" -m=\"<body>\" in the message"
 deny	Bash	an escaped quote does not open a quoted string	echo \" > src/lib.rs
 deny	Bash	redirect over an ignored script	echo x > scripts/deploy.sh

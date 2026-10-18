@@ -958,8 +958,18 @@ return {
   {
     "akinsho/toggleterm.nvim",
     config = function()
+      local shell = vim.o.shell
+      -- On Windows the terminal is Git Bash, taken from beside git.exe because the `bash` on PATH is WSL's.
+      -- Only toggleterm's shell is set, and 'shell' stays cmd.exe for :! and for the plugins that run it.
+      local git = vim.fn.has("win32") == 1 and vim.fn.exepath("git") or ""
+      if git ~= "" then
+        local bash = vim.fs.joinpath(vim.fs.dirname(vim.fs.dirname(vim.fs.normalize(git))), "bin", "bash.exe")
+        if vim.fn.executable(bash) == 1 then shell = '"' .. bash .. '" --login -i' end
+      end
+
       require("toggleterm").setup {
         -- No open_mapping: <c-t> is wired per-session below (session.toggle_term).
+        shell = shell,
         direction = "float",
         float_opts = {
           border = "double",

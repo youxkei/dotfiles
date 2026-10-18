@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+#
+# The tools for developing on native Windows: winget configure -f windows/configuration.winget
+#
+# Only what nvim, Claude Code and jj need to work, not the whole of flake.nix: a toolchain a project needs
+# is added when that project is worked on here.
+properties:
+  configurationVersion: 0.2.0
+  resources:
+    # install.ps1 links the configuration into place, and a symbolic link needs either Developer Mode or an
+    # elevated shell every time it runs.
+    - resource: Microsoft.Windows.Developer/DeveloperMode
+      directives:
+        description: Enable Developer Mode
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        Ensure: Present
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install PowerShell
+      settings:
+        id: Microsoft.PowerShell
+        source: winget
+    # Claude Code runs its Bash tool and its hooks in Git Bash.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Git for Windows
+      settings:
+        id: Git.Git
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install jj
+      settings:
+        id: jj-vcs.jj
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install GitHub CLI
+      settings:
+        id: GitHub.cli
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Neovim
+      settings:
+        id: Neovim.Neovim
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Neovide
+      settings:
+        id: Neovide.Neovide
+        source: winget
+    # lua_ls, for nvim's own configuration; the other servers come with their languages' toolchains.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install lua-language-server
+      settings:
+        id: LuaLS.lua-language-server
+        source: winget
+    # nvim's clipboard provider on Windows.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install win32yank
+      settings:
+        id: equalsraf.win32yank
+        source: winget
+    # nvim-treesitter builds its parsers with tree-sitter build, which compiles them with a C compiler.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install the tree-sitter CLI
+      settings:
+        id: tree-sitter.tree-sitter-cli
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Zig
+      settings:
+        id: zig.zig
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Node.js
+      settings:
+        id: OpenJS.NodeJS.LTS
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Starship
+      settings:
+        id: Starship.Starship
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install ripgrep
+      settings:
+        id: BurntSushi.ripgrep.MSVC
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install fd
+      settings:
+        id: sharkdp.fd
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install fzf
+      settings:
+        id: junegunn.fzf
+        source: winget
+    # Claude Code's hooks read their input with jq.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install jq
+      settings:
+        id: jqlang.jq
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Claude Code
+      settings:
+        id: Anthropic.ClaudeCode
+        source: winget

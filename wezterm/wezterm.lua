@@ -3,7 +3,7 @@ local act = wezterm.action
 
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("Moralerspace Krypton HWNF")
+config.font = wezterm.font("Moralerspace Krypton HW")
 config.font_size = 9.0
 config.color_scheme = "nord"
 config.warn_about_missing_glyphs = false
