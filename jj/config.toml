@@ -4,6 +4,27 @@
 name = "youxkei"
 email = "youxkei@gmail.com"
 
+# The key git/config signs with, through 1Password's op-ssh-sign, whose path differs per platform below.
+[signing]
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB++QTgmLSv6XpWqh2iQ1ub3lzVeFJo/GJucxy5HZjb"
+behavior = "own"
+
+# Shared with git, so that a signature reads as good to both.
+[signing.backends.ssh]
+allowed-signers = "~/.config/git/allowed_signers"
+
+# Linux here is WSL, signing through the Windows 1Password.
+[[--scope]]
+--when.platforms = ["linux"]
+[--scope.signing.backends.ssh]
+program = "/mnt/c/Program Files/1Password/app/8/op-ssh-sign-wsl"
+
+[[--scope]]
+--when.platforms = ["macos"]
+[--scope.signing.backends.ssh]
+program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
 [aliases]
 # `util exec` is what lets an alias reach a script at all: jj has no equivalent of
 # Git's external subcommands, so a `jj-push` on PATH is not found by `jj push` on
@@ -11,6 +32,16 @@ email = "youxkei@gmail.com"
 push = ["util", "exec", "--", "jj-push"]
 # Not `new`: jj refuses an alias that overrides a built-in command.
 open = ["util", "exec", "--", "jj-open"]
+
+# Windows runs no script by its shebang, so there the same scripts go through Git Bash, named by its path
+# because the `bash` on the Windows PATH is WSL's.
+[[--scope]]
+--when.platforms = ["windows"]
+[--scope.aliases]
+push = ["util", "exec", "--", 'C:\Program Files\Git\bin\bash.exe', "-c", 'exec "$HOME/repo/dotfiles/bin/jj-push" "$@"', "jj-push"]
+open = ["util", "exec", "--", 'C:\Program Files\Git\bin\bash.exe', "-c", 'exec "$HOME/repo/dotfiles/bin/jj-open" "$@"', "jj-open"]
+[--scope.signing.backends.ssh]
+program = 'C:\Program Files\1Password\app\8\op-ssh-sign.exe'
 
 [revset-aliases]
 # builtin_immutable_heads() without its `present(trunk())` term. Under the builtin,

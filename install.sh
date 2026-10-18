@@ -32,7 +32,6 @@ PATHS=(
     tig $XDG_CONFIG_HOME/tig
     tmux $XDG_CONFIG_HOME/tmux
     procs $XDG_CONFIG_HOME/procs
-    alacritty $XDG_CONFIG_HOME/alacritty
     sheldon $XDG_CONFIG_HOME/sheldon
     starship.toml $XDG_CONFIG_HOME/starship.toml
     ghostty $XDG_CONFIG_HOME/ghostty

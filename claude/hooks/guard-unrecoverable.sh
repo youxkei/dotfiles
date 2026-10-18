@@ -11,8 +11,8 @@
 #
 # What it refuses, and what each one is for:
 #
-# **`rm` and its aliases, everywhere.** `trash` (trash-cli) does the same job and leaves the mistake in
-# `~/.local/share/Trash`. Not because deleting inside the working tree is the hazard — it rarely is — but
+# **`rm` and its aliases, everywhere.** `trash` does the same job and leaves the mistake in the trash, to be
+# restored from there. Not because deleting inside the working tree is the hazard — it rarely is — but
 # because a delete that cannot be undone should not rest on getting a path judgement right every time.
 # `rmdir`, `unlink`, `shred` and the cmd/PowerShell spellings are the same command wearing another name.
 #
@@ -66,13 +66,30 @@
 # block every Bash call in every session on this machine. Its tests: guard-unrecoverable-tests/run-cases.sh.
 set -uo pipefail
 
+# Git Bash on Windows spells one directory three ways — `C:\x` as Claude Code and Windows programs write it,
+# `C:/x` as git prints it, `/c/x` as the shell does — and every path here is compared as a string, so each one
+# is brought to the shell's spelling before it is compared. Elsewhere a drive letter is WSL's mount of it.
+case $(uname -s) in
+MINGW* | MSYS* | CYGWIN*) msys=yes ;;
+*) msys= ;;
+esac
+unix_path() {
+  if [ -n "$msys" ] && [ -n "$1" ]; then
+    cygpath -u -- "$1" 2>/dev/null || printf '%s' "$1"
+  else
+    printf '%s' "$1"
+  fi
+}
+tmpdir=$(unix_path "${TMPDIR:-}")
+config_dir=$(unix_path "${CLAUDE_CONFIG_DIR:-$HOME/.claude}")
+
 payload=$(cat 2>/dev/null) || exit 0
 tool=$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null) || exit 0
 event=$(jq -r '.hook_event_name // "PreToolUse"' <<<"$payload" 2>/dev/null)
 
-cwd=$(jq -r '.cwd // empty' <<<"$payload" 2>/dev/null)
+cwd=$(unix_path "$(jq -r '.cwd // empty' <<<"$payload" 2>/dev/null)")
 [ -n "$cwd" ] && [ -d "$cwd" ] || cwd=$PWD
-repo=$(cd "$cwd" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)
+repo=$(unix_path "$(cd "$cwd" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)")
 if [ -n "$repo" ]; then
   in_repo=yes
 else
@@ -83,13 +100,13 @@ else
 fi
 
 session=$(jq -r '.session_id // "none"' <<<"$payload" 2>/dev/null)
-STATE=${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/state/$session
+STATE=$config_dir/hooks/state/$session
 KEPT=$STATE/kept
 LIST=$STATE/list.tsv
 
 # Roots an agent may destroy in: the working tree and the throwaway directories.
 ALLOWED=("$repo" /tmp /var/tmp /dev)
-[ -n "${TMPDIR:-}" ] && ALLOWED+=("$TMPDIR")
+[ -n "$tmpdir" ] && ALLOWED+=("$tmpdir")
 
 decide() { # decision, reason
   jq -n --arg d "$1" --arg r "$2" \
@@ -120,7 +137,7 @@ Everything under target/, /tmp and the scratchpad is yours to write with any too
 generated file, a report or a log belongs. This stops only writes into files somebody would have to recover."
 }
 
-# Absolute, normalized form of a path token, with the Windows spellings mapped into /mnt.
+# Absolute, normalized form of a path token, with the Windows spellings in the shell's.
 resolve() {
   local t=$1
   t=${t#[\"\']}
@@ -134,8 +151,12 @@ resolve() {
   '~') t=$HOME ;;
   '~/'*) t=$HOME/${t#\~/} ;;
   [A-Za-z]:[/\\]*) # D:\deploy\x, C:/tmp/x
-    local drive=${t:0:1}
-    t=/mnt/$(printf '%s' "$drive" | tr '[:upper:]' '[:lower:]')/$(printf '%s' "${t:3}" | tr '\\' /)
+    if [ -n "$msys" ]; then
+      t=$(unix_path "$t")
+    else
+      local drive=${t:0:1}
+      t=/mnt/$(printf '%s' "$drive" | tr '[:upper:]' '[:lower:]')/$(printf '%s' "${t:3}" | tr '\\' /)
+    fi
     ;;
   '\\'*) t=$(printf '%s' "$t" | tr '\\' /) ;; # UNC, e.g. \\wsl$\...
   esac
@@ -149,7 +170,7 @@ resolve() {
 # root because the job's id is in the middle of it, and only that `tmp` is disposable: the rest of a job's
 # directory is the harness's own record of it.
 scratch_of_a_job() {
-  local jobs=${CLAUDE_CONFIG_DIR:-$HOME/.claude}/jobs
+  local jobs=$config_dir/jobs
   case $1 in "$jobs"/*/tmp | "$jobs"/*/tmp/*) return 0 ;; esac
   return 1
 }
@@ -173,8 +194,9 @@ looks_like_path() {
   return 1
 }
 
-# The command with every `>` and `<` that stands inside quotes turned into a space, for the scan that reads
-# redirections rather than words.
+# The command with every `>`, `<`, `;`, `&` and `|` that stands inside quotes turned into a space, for the scans
+# that read redirections and a command's stages rather than words. A `|` left in a quoted grep pattern split
+# `grep -E 'a|install ok' NOTES.md` into a stage that installs over NOTES.md.
 #
 # **A `>` inside quotes is text, not a redirection**, and telling them apart is the difference between a guard
 # and a nuisance: `jq -n --arg c "cargo tree > deps.txt"` names a redirect it does not make, and an awk
@@ -197,12 +219,12 @@ bare() {
         c = substr($0, i, 1)
         if (q != "\047" && c == "\\") {
           n = substr($0, ++i, 1)
-          out = out c ((n == ">" || n == "<") ? " " : n)
+          out = out c ((n ~ /[<>;&|]/) ? " " : n)
           continue
         }
         if (q == "") { if (c == "\"" || c == "\047") q = c }
         else if (c == q) q = ""
-        else if (c == ">" || c == "<") c = " "
+        else if (c ~ /[<>;&|]/) c = " "
         out = out c
       }
       print out }'
@@ -262,7 +284,7 @@ is_source() {
       ;;
     esac
   fi
-  for root in /tmp /var/tmp /dev "${TMPDIR:-}"; do
+  for root in /tmp /var/tmp /dev "$tmpdir"; do
     [ -n "$root" ] || continue
     case $p in "$root" | "$root"/*) return 1 ;; esac
   done
@@ -337,15 +359,15 @@ if grep -Eq -- '(^|[^A-Za-z0-9_.-])(rm|rmdir|unlink|shred)([^A-Za-z0-9_.-]|$)' <
   decide deny "Denied: \`rm\` (and rmdir/unlink/shred/del/rd/Remove-Item) is not available in this
 session at all — inside the repository as much as outside.
 
-Use \`trash\` (trash-cli) instead: same arguments, and the file goes to ~/.local/share/Trash where it
-can be restored. For build output prefer the tool that owns it — \`cargo clean\`, \`git clean\`.
+Use \`trash\` instead: same arguments, and the file goes to the trash, where it can be restored. For build output prefer the tool that owns it — \`cargo clean\`, \`git clean\`.
 If a real \`rm\` is genuinely required, it is the user's to run."
 fi
 
-# `trash` is recoverable wherever it points, which is the whole reason it is the way to delete here:
-# `~/.local/share/Trash` still holds the file. Nothing to ask about, so nothing is asked.
+# `trash` is recoverable wherever it points, which is the whole reason it is the way to delete here: the
+# trash still holds the file. Nothing to ask about, so nothing is asked — and the pre-image is still written
+# down, or the PostToolUse after it would compare against an older call's and name an Edit made since.
 if grep -Eq -- '(^|[^A-Za-z0-9_.-])(trash|trash-put|gio[[:space:]]+trash)([^A-Za-z0-9_.-]|$)' <<<"$cmd"; then
-  exit 0
+  keep_them
 fi
 
 if grep -Eq -- "$DELETES" <<<"$cmd" || grep -Eqi -- "$DELETES_WIN" <<<"$cmd"; then
@@ -462,7 +484,7 @@ if { grep -Eq -- '(^|[^A-Za-z0-9_.-])git[[:space:]]+([^;&|]*[[:space:]])?(checko
   # nothing about the one being reached into.
   elsewhere=$(grep -oE -- 'git[[:space:]]+-C[[:space:]]+[^[:space:]]+' <<<"$cmd" | tail -1 | sed -E 's/.*-C[[:space:]]+//')
   if [ -n "$elsewhere" ]; then
-    there=$(cd "$(resolve "$elsewhere")" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)
+    there=$(unix_path "$(cd "$(resolve "$elsewhere")" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)")
     [ -n "$there" ] && repo=$there
   fi
   if [ -n "$(at_risk)" ]; then
@@ -522,7 +544,7 @@ while read -r exetok; do
 keeps its log, config and state beside itself, so a trial run started there writes into the
 operator's files. Unless that copy is deliberately the subject, run the one under target/ with a
 config of its own." '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' &&
-    exit 0
+    keep_them
 done < <(grep -oE '(^|[;&|(`]|\$\()[[:space:]]*["'\'']?[^[:space:];&|<>"'\'']*\.[Ee][Xx][Ee]|[A-Za-z]:[\\/][^[:space:];&|<>"'\'']*\.[Ee][Xx][Ee]' <<<"$cmd" | sed -E 's/^[^A-Za-z0-9_.~\/\\-]*[[:space:]]*//; s/^["'\'']//')
 
 keep_them

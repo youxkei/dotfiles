@@ -42,11 +42,10 @@ printf 'fn main() { let _ = 1; }\n' >"$fixture/src/lib.rs"
 printf 'notes\n' >"$fixture/NOTES.md"
 
 fails=0
-while IFS=$'\t' read -r want tool label value; do
-  [ -n "${want:-}" ] || continue
-  key=file_path
+judge() { # want, tool, label, value, cwd
+  local want=$1 tool=$2 label=$3 value=$4 cwd=$5 key=file_path status got
   [ "$tool" = Bash ] && key=command
-  jq -n --arg t "$tool" --arg k "$key" --arg v "$value" --arg cwd "$fixture" \
+  jq -n --arg t "$tool" --arg k "$key" --arg v "$value" --arg cwd "$cwd" \
     '{tool_name:$t, hook_event_name:"PreToolUse", session_id:"cases", cwd:$cwd, tool_input:{($k):$v}}' |
     "$G" >"$fixture/target/out.json" 2>"$fixture/target/err.txt"
   status=$?
@@ -63,7 +62,54 @@ while IFS=$'\t' read -r want tool label value; do
     printf 'FAIL  want=%-6s got=%-6s %s\n' "$want" "$got" "$label"
     fails=$((fails + 1))
   fi
+}
+
+while IFS=$'\t' read -r want tool label value; do
+  [ -n "${want:-}" ] || continue
+  judge "$want" "$tool" "$label" "$value" "$fixture"
 done <"$CASES"
+
+# Claude Code on Windows hands the guard its cwd as `C:\…`, and a command may name the same tree as `C:\…`,
+# `C:/…` or `/c/…`. These cases are judged from that cwd, with `{win}`, `{mixed}` and `{unix}` filled in as the
+# fixture spelled each way — which only Git Bash, where cygpath is, has more than one of.
+if command -v cygpath >/dev/null 2>&1; then
+  win=$(cygpath -w "$fixture")
+  mixed=$(cygpath -m "$fixture")
+  unix=$(cygpath -u "$fixture")
+  while IFS=$'\t' read -r want tool label value; do
+    [ -n "${want:-}" ] || continue
+    value=${value//\{win\}/"$win"}
+    value=${value//\{mixed\}/"$mixed"}
+    value=${value//\{unix\}/"$unix"}
+    judge "$want" "$tool" "$label" "$value" "$win"
+  done <"$(dirname "$0")/cases-windows.tsv"
+fi
+
+# PostToolUse names a file only when the Bash call itself changed it, so every PreToolUse has to write the list
+# down afresh, a call it lets through early included. Each case changes a file between two calls, the way an Edit
+# changes one, and the second call must not be blamed for it. The guard's state goes under the fixture's target/
+# rather than into this machine's own.
+reported_after() { # label, command
+  local label=$1 cmd=$2 said
+  call() { # event, command
+    jq -n --arg e "$1" --arg c "$2" --arg cwd "$fixture" \
+      '{tool_name:"Bash", hook_event_name:$e, session_id:"cases-post", cwd:$cwd, tool_input:{command:$c}}' |
+      CLAUDE_CONFIG_DIR=$fixture/target/config "$G" 2>/dev/null
+  }
+  call PreToolUse ls >/dev/null
+  printf 'fn main() { let _ = "%s"; }\n' "$label" >"$fixture/src/lib.rs"
+  call PreToolUse "$cmd" >/dev/null
+  said=$(call PostToolUse "$cmd" | jq -r '.hookSpecificOutput.additionalContext // empty' 2>/dev/null)
+  if [ -z "$said" ]; then
+    printf 'ok    quiet    %s\n' "$label"
+  else
+    printf 'FAIL  reported a change it did not make: %s\n' "$label"
+    fails=$((fails + 1))
+  fi
+}
+touch "$fixture/target/app.exe"
+reported_after "a trash call is not blamed for an edit before it" "trash target/old.txt"
+reported_after "an installed exe is not blamed for an edit before it" "/mnt/d/deploy/app.exe --duration 20"
 
 # The fixture is under $TMPDIR, which is a root anything may destroy — through `trash` where this machine has
 # it, since that is the delete this session's rules leave standing.

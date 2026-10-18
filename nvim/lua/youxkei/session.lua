@@ -223,7 +223,8 @@ local function ensure_project_trusted(cwd)
   if vim.fn.filereadable(claude_json) == 0 then return end
 
   cwd = (cwd ~= nil and cwd ~= "") and cwd or vim.uv.cwd()
-  cwd = (vim.uv.fs_realpath(cwd) or vim.fs.normalize(cwd)):gsub("/+$", "")
+  -- normalize() after realpath too: on Windows realpath answers C:\..., and Claude keys C:/...
+  cwd = vim.fs.normalize(vim.uv.fs_realpath(cwd) or cwd):gsub("/+$", "")
 
   local check = vim
     .system({ "jq", "-r", "--arg", "p", cwd, ".projects[$p].hasTrustDialogAccepted // false", claude_json }, { text = true })
@@ -313,6 +314,30 @@ local function resolve_cwd_for_port(port, listen_port)
   return normalize_dir("/proc/" .. pid .. "/cwd")
 end
 
+-- Windows has no way to read another process's working directory, so there the agent is told apart by
+-- its ancestry instead: the set of pids from the socket's owner up through its parents goes to
+-- `callback` (nil when the connection is not found), for the caller to look for a terminal's job in.
+-- Asked of pwsh off the main loop, which takes a moment to start.
+local function windows_pid_ancestry_for_port(port, listen_port, callback)
+  if not port then return callback(nil) end
+  local script = table.concat({
+    ("$c = Get-NetTCPConnection -State Established -LocalPort %d%s -ErrorAction SilentlyContinue | Select-Object -First 1")
+      :format(port, listen_port and (" -RemotePort " .. listen_port) or ""),
+    "if (-not $c) { exit 1 }",
+    "$seen = @{}",
+    "$proc = Get-Process -Id $c.OwningProcess -ErrorAction SilentlyContinue",
+    "while ($proc -and -not $seen.ContainsKey($proc.Id)) { $seen[$proc.Id] = 1; $proc.Id; $proc = $proc.Parent }",
+  }, "\n")
+  vim.system({ "pwsh.exe", "-NoProfile", "-NonInteractive", "-Command", script }, { text = true }, function(res)
+    local pids
+    if res.code == 0 and res.stdout then
+      pids = {}
+      for pid in res.stdout:gmatch("%d+") do pids[tonumber(pid)] = true end
+    end
+    vim.schedule(function() callback(pids) end)
+  end)
+end
+
 -- Build a per-session terminal provider for an MCP-style agent plugin (claudecode).
 -- opts.server_module is that plugin's "<plugin>.server.init" module, used to target a sent
 -- @mention at only the current session's agent instead of broadcasting to every live one.
@@ -321,7 +346,20 @@ function M.make_provider(opts)
   local server_module = opts.server_module
 
   local terminals = {}      -- session key -> snacks terminal instance
+  local terminal_cwd = {}   -- session key -> normalized cwd its terminal was opened in
   local session_client = {} -- normalized cwd -> WS client.id of the agent running in that cwd
+
+  -- The cwd of the terminal whose job is one of `pids`, for windows_pid_ancestry_for_port.
+  local function cwd_of_terminal_among(pids)
+    for key, t in pairs(terminals) do
+      local job = t:buf_valid() and t.buf and vim.b[t.buf].terminal_job_id
+      if job then
+        local ok, pid = pcall(vim.fn.jobpid, job)
+        if ok and pids[pid] then return terminal_cwd[key] end
+      end
+    end
+    return nil
+  end
 
   -- Install (once) a hook on the running tcp server's on_connect/on_disconnect that records which
   -- client.id runs in which cwd. Correlating by the connecting process's cwd (resolved from its
@@ -350,6 +388,13 @@ function M.make_provider(opts)
       local cid = client.id
       local listen_port = server.state and server.state.port
       vim.schedule(function()
+        if vim.fn.has("win32") == 1 then
+          windows_pid_ancestry_for_port(port, listen_port, function(pids)
+            local cwd = pids and cwd_of_terminal_among(pids)
+            if cwd then session_client[cwd] = cid end
+          end)
+          return
+        end
         local cwd = resolve_cwd_for_port(port, listen_port)
         if cwd then session_client[cwd] = cid end
       end)
@@ -464,6 +509,7 @@ function M.make_provider(opts)
     local term = Snacks.terminal.open(cmd_string, build_opts(config, env_table, focus))
     if term and term:buf_valid() then
       terminals[key] = term
+      terminal_cwd[key] = normalize_dir((config.cwd ~= nil and config.cwd ~= "") and config.cwd or vim.uv.cwd())
       if term.buf then vim.b[term.buf].keep_term = true end
       if config.auto_close then
         term:on("TermClose", function()

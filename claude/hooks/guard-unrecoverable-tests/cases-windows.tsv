@@ -1,0 +1,12 @@
+ALLOW	Bash	a Windows path into target	echo x > {win}\target\out.txt
+ALLOW	Bash	a shell-style path into target	echo x > {unix}/target/out.txt
+deny	Bash	a Windows path over source	echo x > {win}\src\lib.rs
+deny	Bash	a git-style path over source	echo x > {mixed}/src/lib.rs
+deny	Bash	a shell-style path over source	echo x > {unix}/src/lib.rs
+deny	Bash	a relative path over source from a Windows cwd	echo x > src/lib.rs
+ALLOW	Bash	a log beside source from a Windows cwd	cargo build > build.log 2>&1
+deny	Bash	sed -i on source by its Windows path	sed -i 's/a/b/' {win}\src\lib.rs
+deny	Bash	git restore from a Windows cwd	git restore src/lib.rs
+deny	Bash	a redirect onto another drive	echo x > D:\deploy\app.yaml
+ALLOW	Bash	a deploy copy onto another drive	cp target/app.exe D:\deploy\app.exe
+deny	Bash	cp over a log on another drive	cp /tmp/x.log D:\deploy\app.log

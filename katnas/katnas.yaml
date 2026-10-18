@@ -90,7 +90,7 @@ logical_monitors:
       - "!APPA05C"
     workspaces:
       "0": { apps: ["WindowsTerminal.exe", "com.mitchellh.ghostty"] }
-      "1": { apps: ["alacritty.exe", "com.neovide.neovide"] }
+      "1": { apps: ["neovide.exe", "com.neovide.neovide"] }
       # Google Meet
       "2": { apps: ["com.google.Chrome.app.kjgfgldnnfoeklkmfkjfagphfepbbdan"] }
       "3": {}
