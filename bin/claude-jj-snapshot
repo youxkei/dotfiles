@@ -9,7 +9,7 @@
 
 input=$(cat)
 
-nudge=yes
+block=yes
 
 # Snapshot headless / SDK sessions too — `claude -p` and the Agent SDK write to
 # the tree like any other session, and the recoverability is worth as much there
@@ -20,7 +20,7 @@ nudge=yes
 # Placed after the stdin drain above so the parent's write to our pipe always
 # completes (no EPIPE).
 case "$CLAUDE_CODE_ENTRYPOINT" in
-    sdk-*) nudge='' ;;
+    sdk-*) block='' ;;
 esac
 
 # Extract both fields in one jq pass. @sh shell-quotes each value so eval is
@@ -33,13 +33,14 @@ eval "$(printf '%s' "$input" | jq -r '
     @sh "active=\(.stop_hook_active // false)"
 ' 2>/dev/null)"
 
-# One nudge per stop. stop_hook_active marks the stop Claude reached *because* a
-# Stop hook blocked the previous one; blocking that one too would never converge,
-# since the desc turn is itself work whose description could be revised again.
+# Block each stop at most once. stop_hook_active marks the stop Claude reached
+# *because* a Stop hook blocked the previous one; blocking that one too would
+# never converge, since the desc turn is itself work whose description could be
+# revised again.
 # An unset value means the jq pass above failed, and assuming "first stop" there
-# would block every stop in exactly that loop — so it counts as active. Only the
-# nudge is dropped either way; the snapshot below still runs.
-[ "$active" = false ] || nudge=''
+# would block every stop in exactly that loop — so it counts as active. Only
+# blocking the stop is skipped either way; the snapshot below still runs.
+[ "$active" = false ] || block=''
 
 # Hooks are launched from the session cwd already, so this only matters for the
 # odd launcher that runs them elsewhere; a cwd that no longer exists is left to
@@ -54,7 +55,7 @@ fi
 jj root --ignore-working-copy >/dev/null 2>&1 || exit 0
 
 # A plain `jj st`, no --ignore-working-copy: taking the content in is the whole
-# point of this hook. Of its two streams only stderr is kept, for the nudge
+# point of this hook. Of its two streams only stderr is kept, for the message
 # below: jj reports what the snapshot did to the rest of the repo there —
 # "Rebased N descendant commits onto updated working copy", refusals to snapshot
 # a file, divergent-operation resolutions — and that is a consequence the turn
@@ -65,12 +66,12 @@ jj root --ignore-working-copy >/dev/null 2>&1 || exit 0
 # before stdout is sent to /dev/null.
 notices=$(jj st 2>&1 >/dev/null) || exit 0
 
-[ -n "$nudge" ] || exit 0
+[ -n "$block" ] || exit 0
 
 # Read @ back with --ignore-working-copy, the snapshot above having already taken
 # the content in — a second snapshot here would only cost another scan of the tree.
 # Emptiness only: the description is part of `jj st`'s output, so asking for it
-# here would just be text to relay, and relaying is what the nudge avoids.
+# here would just be text to relay, and relaying is what the message avoids.
 state=$(jj log --no-graph --ignore-working-copy -r @ \
     -T 'if(empty, "empty", "nonempty")' 2>/dev/null) || exit 0
 
@@ -79,7 +80,7 @@ state=$(jj log --no-graph --ignore-working-copy -r @ \
 [ "$state" = nonempty ] || exit 0
 
 {
-    echo 'jj: `jj st` で作業中の変更 (@) の内容と現在の説明を確認し、説明がいまの作業と合っていなければ jj desc -m で直してから終了してください。合っていれば何もせずそのまま終了してください。'
+    echo 'jj: `jj st` で作業中の変更 (@) の内容と現在の説明を確認し、説明がいまの作業と合っていなければ jj desc -m="<subject>" -m="<body>" で直してから終了してください。合っていれば何もせずそのまま終了してください。'
     [ -z "$notices" ] || printf '%s\n' "$notices"
 } >&2
 
