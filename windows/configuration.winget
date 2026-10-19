@@ -88,6 +88,14 @@ properties:
       settings:
         id: OpenJS.NodeJS.LTS
         source: winget
+    # Python.PythonInstallManager is python.org's recommended route, but it installs no interpreter until a
+    # second step (py install) runs, which a configuration cannot express.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Python
+      settings:
+        id: Python.Python.3.14
+        source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
         description: Install Starship
@@ -119,6 +127,13 @@ properties:
         description: Install jq
       settings:
         id: jqlang.jq
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install PresentMon
+      settings:
+        id: Intel.PresentMon.Console
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
