@@ -11,8 +11,12 @@ $links = [ordered]@{
     'starship.toml'              = "$HOME\.config\starship.toml"
     'bash\.bashrc'               = "$HOME\.bashrc"
     'bash\.bash_profile'         = "$HOME\.bash_profile"
-    # Git Bash puts ~/bin on PATH, and bin/trash finds bin/trash.ps1 through this link.
+    # Git Bash puts ~/bin on PATH and runs bin/trash, which finds bin/trash.ps1 through this link.
+    # PowerShell and cmd cannot run that extensionless script, and prefer bin/trash.cmd, which runs
+    # trash.ps1 beside itself; both are linked into the same directory for that reason.
     'bin\trash'                  = "$HOME\bin\trash"
+    'bin\trash.cmd'              = "$HOME\bin\trash.cmd"
+    'bin\trash.ps1'              = "$HOME\bin\trash.ps1"
     'bin\claude-jj-snapshot'     = "$HOME\bin\claude-jj-snapshot"
 
     # One entry per hook, as in install.sh: the guard keeps its state in ~/.claude/hooks/state.
