@@ -48,9 +48,9 @@ where a message is due, and the `jj-open` skill for when another change is opene
 
 ### When to push is the user's call
 
-**NEVER `jj git push` or `jj push` unless the user explicitly says to.** A push is the act that
-leaves this machine: it puts the change on GitHub. `jj push` pushes the bookmarks sitting on `@`,
-and fails when `@` carries none.
+**NEVER `jj push` unless the user explicitly says to.** A push is the act that leaves this machine:
+it puts the change on GitHub. `jj push` pushes the bookmarks sitting on `@`, and fails when `@`
+carries none.
 
 **Moving a bookmark is not gated.** It is local, `jj undo` takes it back, and it reaches nobody
 until a push sends it, so `jj bookmark set` / `move` on the bookmark the work rides is ordinary work
@@ -62,9 +62,10 @@ and needs no asking.
   told to (e.g. "pushして").
 - when told to, run `jj push` yourself; do not hand the command back for the user to type.
 
-The push spellings, for when one is asked for: `jj git push --remote origin -b main` (`-b` is
-`--bookmark`; a brand-new bookmark goes up as `jj git push --named <name>=@`, and 0.44 has no
-`--allow-new`). A remote bookmark has to be tracked before it can be pushed to.
+The push spelling is `jj push`, the alias in `jj/config.toml` that runs `bin/jj-push`: it pushes
+every bookmark sitting on `@`, and further options go through to the push. A new branch's bookmark is
+set at `@` first — `jj bookmark set <name> -r @` — and then pushed the same way. A remote bookmark
+has to be tracked before it can be pushed to.
 
 **A push leaves `@` where it is**, because `immutable_heads()` in `jj/config.toml` is
 `tags() | untracked_remote_bookmarks()` — jj's builtin set without its `present(trunk())` term. Under
@@ -122,6 +123,23 @@ work is that same piece of work; whose call a new change is, is in the `jj-open`
 Work directly on the change on top of **main** in the existing checkout. A change on top of it is the
 whole of cutting a branch here: a bookmark of its own would be a second name for the line and a
 workspace a second working copy, and a piece of work needs neither.
+
+**An experiment on another revision runs beside the checkout, never in it** — the user's instruction.
+Trying the parent's code to see whether a failure predates the work, comparing two versions, any
+run of something that is not `@`: use `jj run` or a workspace, and do not move `@` with `jj new <other>`
+or `jj edit` to get there. Moving it rewrites every file the work touched under the editor, the hooks
+and the build directory, and the work has to be put back afterwards.
+
+```sh
+# A command on another revision, in an isolated working copy jj keeps between runs (so its build
+# artifacts survive), with nothing written back to the revision:
+jj run -r <rev> --ignore-changes -- cargo test -p <crate> <test>
+# A second working copy to work in, in a directory of its own:
+jj workspace add "$SCRATCH/base" -r <rev> --name base
+```
+
+`--ignore-changes` is what keeps `jj run` read-only; without it the command's output is amended into
+the revision. A workspace is forgotten afterwards with `jj workspace forget base`.
 
 ## A repository is a set of changes
 
@@ -249,7 +267,7 @@ Rebased 5 descendant commits onto updated working copy.
 
 Every descendant keeps its change id and gets a new commit id, merge commits included. Changing only a description does the same: the content of the descendants is untouched, but they are rebuilt, because the ancestor's commit id moved.
 
-A change that has already been pushed is therefore replaced on the remote by the next push after any rewrite; `jj git push` needs no force flag for it. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *When to push is the user's call*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
+A change that has already been pushed is therefore replaced on the remote by the next push after any rewrite; `jj push` needs no force flag for it. jj refuses to rewrite immutable revisions, but this machine's `immutable_heads()` holds only tags and untracked remote bookmarks (see *When to push is the user's call*), so anything pushed from here — `main` included — is mutable and rewrites without comment.
 
 ### Conflicts live in commits
 
