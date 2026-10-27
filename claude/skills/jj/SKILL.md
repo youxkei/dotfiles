@@ -95,6 +95,13 @@ for inside work in flight — make it also do X, that broke, check it on the rea
 piece of work, however many turns and files it grows to. The `jj-open` skill is where that decision is
 written out, along with how to fold changes back into one where they were opened too eagerly.
 
+**An edit lands in `@`, whatever change last touched the file.** With a change stacked on top, editing
+a file the one below worked on puts that edit in the top one, the way every edit goes. That is how jj
+works and not a hazard of the arrangement, so it is no caveat to report after opening or reordering
+changes, and `jj edit` back down to the earlier change is not something to suggest: which piece of
+work the next request belongs to is the user's to say, and an edit that landed in the wrong change is
+the later tidying described under *At a stopping point*.
+
 ### At a stopping point
 
 **The baseline is `jj st`, and `jj desc -m` only where the message needs it.** `jj st` takes the work
