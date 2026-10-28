@@ -1,6 +1,6 @@
 ---
 name: jj-move-diff
-description: Moving selected hunks or lines from one existing jj change into another — with jj operations first (the source's evolog snapshots and jj restore), and Claude's own Edit only for the parts no snapshot separates — recording a rollback operation, finding the snapshot to restore from, editing locally what remains, resolving rebases, restoring the original working-copy change, and verifying ownership. Use when work landed in the wrong change or when asked to move, transfer, transplant, or redistribute part of a diff between changes without an interactive diff editor.
+description: Move selected hunks or lines between existing jj changes, using snapshots first. Use when work landed in the wrong change or part of a diff must move between changes.
 ---
 
 # Moving diff between jj changes

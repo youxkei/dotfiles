@@ -1,6 +1,6 @@
 ---
 name: jj-open
-description: Opening the next jj change with `jj open` — when a piece of work is a new one and whose call that is, why an empty `@` always wants `jj desc -m` and never `jj open -m`, and how to fold changes back into one where they were opened too eagerly. Use when starting work that may want a change of its own, when asked to open, cut or start a new change, when a follow-up request arrives inside work already in flight, when the working copy is an empty change needing a message, and when a stack has to be folded back down.
+description: Open the next jj change with `jj open`, or fold changes back down. Use when work may want its own change, when asked to open or cut a change, or when a stack must be folded down.
 ---
 
 # Opening the next change

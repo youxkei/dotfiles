@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, when to push being the user's call, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, whenever a past version of a change is being read or restored, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
+description: Jujutsu (jj) version control, covering describing, arranging and recovering changes, and this machine's rules. Use for any repo with a .jj directory, any jj command, or ending a turn on a working-copy change.
 ---
 
 # Version control with jj
