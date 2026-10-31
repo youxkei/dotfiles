@@ -1,20 +1,3 @@
-local function force_redraw_floating_terminal(win)
-  if not win or not vim.api.nvim_win_is_valid(win) then return end
-  local cfg = vim.api.nvim_win_get_config(win)
-  if cfg.relative == "" then return end
-  local buf = vim.api.nvim_win_get_buf(win)
-  if vim.bo[buf].buftype ~= "terminal" then return end
-  local orig = cfg.width
-  cfg.width = orig - 1
-  vim.api.nvim_win_set_config(win, cfg)
-  vim.defer_fn(function()
-    if vim.api.nvim_win_is_valid(win) then
-      cfg.width = orig
-      vim.api.nvim_win_set_config(win, cfg)
-    end
-  end, 50)
-end
-
 -- Reveal (or spawn) the current session's Claude float, focused and in insert mode. `args` are
 -- appended to the claude command line and only matter when the float has to be spawned — a
 -- revealed float keeps the process it already runs, so they can't retarget a live Claude.
@@ -22,7 +5,6 @@ local function open_claude(args)
   vim.cmd("ClaudeCodeOpen" .. (args and (" " .. args) or ""))
   vim.schedule(function()
     vim.cmd.startinsert()
-    force_redraw_floating_terminal(vim.api.nvim_get_current_win())
   end)
 end
 
@@ -1005,7 +987,6 @@ return {
           vim.cmd.ClaudeCode()
           vim.schedule(function()
             vim.cmd.startinsert()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
           end)
         end,
         mode = "t",
@@ -1278,9 +1259,6 @@ return {
         "<c-l>",
         function()
           vim.cmd.ClaudeCodeSend()
-          vim.schedule(function()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
         end,
         mode = "v",
         desc = "Send to Claude",
@@ -1290,9 +1268,6 @@ return {
         "<c-l>",
         function()
           vim.cmd.ClaudeCodeFocus()
-          vim.schedule(function()
-            force_redraw_floating_terminal(vim.api.nvim_get_current_win())
-          end)
         end,
         desc = "Toggle Claude",
         mode = "n",
