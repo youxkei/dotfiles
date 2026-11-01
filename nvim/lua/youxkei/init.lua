@@ -103,7 +103,8 @@ opt.sessionoptions = {
 -- Bound to <c-v> by default; macOS is the exception, where Cmd+V (<D-v>) takes the role so
 -- <c-v> stays a plain text paste. Image detection: macOS via `osascript -e 'clipboard info'`
 -- (a screenshot / copied image puts a PNGf class on the pasteboard); Wayland via
--- `wl-paste --list-types` (image/* MIME type); Windows via .NET's Clipboard.ContainsImage().
+-- `wl-paste --list-types` (image/* MIME type); Windows via user32's IsClipboardFormatAvailable,
+-- falling back to .NET's Clipboard.ContainsImage().
 -- On Windows the TUI takes its image paste on Alt+V and not on Ctrl-V, so that is what is sent there.
 local function clipboard_has_image()
   if fn.has("mac") == 1 then
@@ -131,8 +132,124 @@ local function normalize_clipboard_image_to_png()
     [[t=$(wl-paste --list-types | grep -m1 "^image/") && wl-paste --type "$t" | magick - png:- | wl-copy --type image/png]] })
 end
 
--- The check runs off the main loop, so that the keypress does not hold nvim while pwsh starts.
+-- Neovim ships no Windows clipboard of its own: `+` is served by whichever helper is on PATH, and
+-- here that is win32yank.exe, whose process start costs ~60 ms for every copy and every paste --
+-- what 'clipboard=unnamedplus' turns even a plain `p` into. The Win32 API answers the same
+-- questions in-process in microseconds, so the provider itself is replaced, not only the
+-- terminal-paste path. IsClipboardFormatAvailable asks what .NET's Clipboard.ContainsImage() asks:
+-- the clipboard offers CF_BITMAP, CF_DIB or CF_DIBV5 when it holds an image.
+local win32_has_image
+local win32_clipboard_text
+local win32_set_clipboard
+do
+  local ok, ffi = pcall(require, "ffi")
+  if ok and ffi.os == "Windows" then
+    local loaded, user32 = pcall(ffi.load, "user32")
+    local kloaded, kernel32 = pcall(ffi.load, "kernel32")
+    if loaded and kloaded then
+      ffi.cdef([[
+        int IsClipboardFormatAvailable(unsigned int format);
+        int OpenClipboard(void *hwnd);
+        int CloseClipboard(void);
+        int EmptyClipboard(void);
+        void *GetClipboardData(unsigned int format);
+        void *SetClipboardData(unsigned int format, void *mem);
+        void *GlobalAlloc(unsigned int flags, size_t bytes);
+        void *GlobalFree(void *mem);
+        void *GlobalLock(void *mem);
+        int GlobalUnlock(void *mem);
+        int MultiByteToWideChar(unsigned int codepage, unsigned long flags, const char *str,
+                                int strlen, void *widestr, int widelen);
+        int WideCharToMultiByte(unsigned int codepage, unsigned long flags, void *widestr,
+                                int widelen, char *str, int strlen, void *defchar, int *used);
+        int lstrlenW(void *lpstring);
+      ]])
+      win32_has_image = function()
+        return user32.IsClipboardFormatAvailable(2) ~= 0 -- CF_BITMAP
+          or user32.IsClipboardFormatAvailable(8) ~= 0 -- CF_DIB
+          or user32.IsClipboardFormatAvailable(17) ~= 0 -- CF_DIBV5
+      end
+      -- CF_UNICODETEXT as UTF-8, or nil where the clipboard is held open by another process.
+      win32_clipboard_text = function()
+        if user32.OpenClipboard(nil) == 0 then
+          return nil
+        end
+        local text
+        local handle = user32.GetClipboardData(13) -- CF_UNICODETEXT
+        if handle ~= nil then
+          local ptr = kernel32.GlobalLock(handle)
+          if ptr ~= nil then
+            local len = kernel32.lstrlenW(ptr)
+            if len == 0 then
+              text = ""
+            else
+              local n = kernel32.WideCharToMultiByte(65001, 0, ptr, len, nil, 0, nil, nil) -- CP_UTF8
+              if n > 0 then
+                local buf = ffi.new("char[?]", n)
+                kernel32.WideCharToMultiByte(65001, 0, ptr, len, buf, n, nil, nil)
+                text = ffi.string(buf, n)
+              end
+            end
+            kernel32.GlobalUnlock(handle)
+          end
+        end
+        user32.CloseClipboard()
+        return text
+      end
+      -- The provider hands over the register's lines with an empty last line when the register is
+      -- linewise, so joining them with CRLF writes the trailing newline a linewise yank needs.
+      win32_set_clipboard = function(lines)
+        local text = table.concat(lines, "\r\n")
+        local chars = kernel32.MultiByteToWideChar(65001, 0, text, #text, nil, 0) -- CP_UTF8
+        local mem = kernel32.GlobalAlloc(0x0042, (chars + 1) * 2) -- GMEM_MOVEABLE, with the NUL
+        if mem == nil then
+          return
+        end
+        local buf = kernel32.GlobalLock(mem)
+        if buf == nil then
+          kernel32.GlobalFree(mem)
+          return
+        end
+        if chars > 0 then
+          kernel32.MultiByteToWideChar(65001, 0, text, #text, buf, chars)
+        end
+        ffi.cast("uint16_t *", buf)[chars] = 0
+        kernel32.GlobalUnlock(mem)
+        if user32.OpenClipboard(nil) == 0 then
+          kernel32.GlobalFree(mem)
+          return
+        end
+        user32.EmptyClipboard()
+        if user32.SetClipboardData(13, mem) == nil then -- CF_UNICODETEXT
+          kernel32.GlobalFree(mem) -- the clipboard did not take ownership of the block
+        end
+        user32.CloseClipboard()
+      end
+      -- Neovim's provider wants one entry per register, each either a command list or, as here, a
+      -- function: copy gets the register's lines and regtype, paste answers with the lines.
+      local function win32_get_clipboard()
+        local text = win32_clipboard_text()
+        if not text then
+          return {}
+        end
+        return vim.split((text:gsub("\r\n", "\n")), "\n", { plain = true })
+      end
+      g.clipboard = {
+        name = "win32",
+        copy = { ["+"] = win32_set_clipboard, ["*"] = win32_set_clipboard },
+        paste = { ["+"] = win32_get_clipboard, ["*"] = win32_get_clipboard },
+      }
+    end
+  end
+end
+
+-- Reports through `callback` whichever route answered, so the caller need not know. The pwsh
+-- check runs off the main loop, so that a keypress does not hold nvim while pwsh starts.
 local function windows_clipboard_has_image(callback)
+  if win32_has_image then
+    callback(win32_has_image())
+    return
+  end
   vim.system({
     "pwsh.exe", "-NoProfile", "-NonInteractive", "-STA", "-Command",
     "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::ContainsImage()",
@@ -151,13 +268,21 @@ local function smart_terminal_paste()
   if not job then
     paste_register_text()
   elseif fn.has("win32") == 1 then
-    windows_clipboard_has_image(function(has_image)
-      if has_image then
+    if win32_has_image then
+      if win32_has_image() then
         vim.api.nvim_chan_send(job, "\27v") -- ESC v = Alt+V; the TUI then pastes the clipboard image
       else
-        paste_register_text()
+        paste_register_text() -- `p` reads the clipboard through the provider replaced above
       end
-    end)
+    else
+      windows_clipboard_has_image(function(has_image)
+        if has_image then
+          vim.api.nvim_chan_send(job, "\27v")
+        else
+          paste_register_text()
+        end
+      end)
+    end
   elseif clipboard_has_image() then
     normalize_clipboard_image_to_png()
     vim.api.nvim_chan_send(job, "\22") -- 0x16 = Ctrl-V; the TUI then pastes the clipboard image
