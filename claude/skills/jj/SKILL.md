@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, when to push being the user's call, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
+description: Version control with Jujutsu (jj) — how a repository is structured, how work is described and arranged, how history is recovered, and what this machine requires on top of the tool: no git command at all, when to push being the user's call, and what a stopping point wants. Use whenever a repo has a .jj directory, whenever a jj command is run or asked about (jj st, jj desc, jj new, jj log, jj evolog, jj op log, bookmarks, jj config, colocated git), whenever a turn is about to end on a working-copy change, whenever a past version of a change is being read or restored, and whenever reporting the state of work in such a repo. Also use when a user asks how to accomplish something they know from another version control system — switching branches, amending, rebasing, stashing, recovering lost work.
 ---
 
 # Version control with jj
@@ -399,7 +399,8 @@ Two histories exist, answering different questions.
 
 ### `jj evolog` — the past of one change
 
-Every earlier version of a change, addressable as `<change id>/N`.
+Every earlier version of a change, addressable as `<change id>/N` — where `N` counts back from the
+newest, so it names a different version every time the working copy is snapshotted.
 
 ```
 $ jj evolog
@@ -412,9 +413,70 @@ $ jj evolog
 │  the work
 ...
 
-$ jj file show -r qmooupxv/2 a.txt      # its content at that point
-$ jj diff --from qmooupxv/2 --to @
+$ jj file show -r b115d012 a.txt        # its content at qmooupxv/2
+$ jj diff --from b115d012 --to @
 ```
+
+The commit id comes from the column beside `<change id>/N`; the number in the name is not a version,
+for the reason the next section gives.
+
+#### `/N` is an offset, not a version — take the commit id instead
+
+**`<change id>/N` is relative to the newest version, and jj snapshots the working copy before almost
+every command, so `N` quietly starts pointing somewhere else between two commands.** It counts back
+from `@` as it stands when the command runs; a snapshot pushes every earlier version one further
+back. Nothing is wrong with the revision the number resolved to — it is the number that moved.
+
+That makes it unusable for a loop. `jj restore --from 'qmooupxv/19'` followed by `jj diff --from
+'qmooupxv/19'` compares against two different versions: each command snapshots first, which pushes
+every existing version one index further back, so 19 now names something else. Restore, diff, still
+different, restore again, diff, still different — and no amount of repeating makes the diff converge,
+because the target moves as fast as the restore reaches for it. Blaming the restore is the trap: it
+did its job, on a version that is not the one the diff then compares.
+
+**The same trap catches `jj file show -r '<change id>/N'`.** Its own snapshot runs before the offset
+is resolved, so it reads the version *one newer* than `N` named when the listing was printed. A path
+that appears only in that intervening version therefore shows up in a read that was meant to be of the
+older one — which reads as "the file was there all along, so the restore that did not bring it back
+must have failed".
+
+**Name a particular version by its commit id.** `jj evolog` prints each version's commit id, so read
+them once and use the id everywhere:
+
+```
+$ jj evolog -r '<change id>' --no-graph \
+  -T 'commit.commit_id().short(8) ++ "  " ++ commit.description().first_line() ++ "\n"'
+55024f59  the work (revised)
+70c221af  the work
+...
+```
+
+Each line is one version, newest first; copy the id of the one you mean.
+
+```
+jj restore --from <commit id> <paths>
+jj file show -r <commit id> <path>
+jj diff --from <commit id> --to @
+```
+
+**A superseded version's commit id still resolves** — nothing is collected — so read the id from
+`jj evolog` rather than trusting a remembered one, and `jj log -r <id> --no-graph` first if there is
+any doubt about what it resolves to.
+
+**`jj restore --from` copies content and leaves the parent alone.** The paths get X's content, and `@`
+keeps the parent it had, so where `@`'s parent is not X's parent the change now reads as a revert of
+whatever differs between them rather than as X. Look before restoring with `jj log -r '@' -r '@-' -r
+<id>`: if the three do not stand the way you assumed, the restore is aimed at the wrong thing.
+
+**`--ignore-working-copy` is what keeps an offset from moving while it is being read.** It skips the
+snapshot, so `jj --ignore-working-copy file show -r '<change id>/N'` and the `jj --ignore-working-copy
+evolog` that listed it agree with each other.
+
+**Never put it on a command that writes.** Skipping the snapshot does not stop `jj restore` from
+writing: it rewrites `@` as recorded and leaves the files on disk untouched, so the two now disagree,
+the next ordinary command answers `The working copy is stale (not updated since operation …)`, and
+`jj workspace update-stale` resolves it by overwriting the files with the restored content — which is
+where a "the file I edited by hand never came back" begins. Restore without the flag.
 
 ### `jj op log` — every operation on the repository
 
